@@ -1,0 +1,142 @@
+{% from 'bootstrap4/nav.html' import render_nav_item %}
+{% extends "base.html" %}
+
+{% macro home_nav_item() %}
+  {{ render_nav_item('home_bp.home', 'Home', use_li=True) }}
+{% endmacro %}
+
+{% macro admin_nav_item() %}
+  {% if current_user.is_the_admin %}
+    {{ render_nav_item('admin.index', 'Admin', use_li=True) }}
+    {{ render_nav_item('user_bp.create', 'Create User') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro rolling_stock_nav_item() %}
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle{% if tab and tab == "rolling_stock_collections" %} active" aria-current="page{% endif %}"
+       data-bs-toggle="dropdown" id="CollectionList" href="#" role="button"
+       aria-haspopup="true" aria-expanded="false">
+      Rolling Stock
+    </a>
+    <div class="dropdown-menu" aria-labelledby="CollectionList">
+      <h6 class="dropdown-header">Personal Rolling Stock Collections:</h6>
+      <a class="dropdown-item"
+         href="{{ url_for('rolling_stock_collection_bp.rolling_stock_collection_list', id=current_user.owner.id) }}"><span
+          class="badge bg-info">All</span></a>
+      {% for rolling_stock_collection in current_user.rolling_stock_collections %}
+        <a class="dropdown-item"
+           href="{{ url_for('rolling_stock_collection_bp.rolling_stock_collection_show', id=rolling_stock_collection.id) }}">{{ rolling_stock_collection.name }}</a>
+      {% endfor %}
+      <a class="dropdown-item" href="{{ url_for('rolling_stock_collection_bp.rolling_stock_collection_create', id=current_user.owner.id) }}"><span
+          class="badge bg-primary">Create New Rolling Stock Collection</span></a>
+      <h6 class="dropdown-header">Club Rolling Stock Collections:</h6>
+      {% for rolling_stock_collection in current_user.club_rolling_stock_collections %}
+        <a class="dropdown-item"
+           href="{{ url_for('rolling_stock_collection_bp.rolling_stock_collection_show', id=rolling_stock_collection.id) }}">{{ rolling_stock_collection.name }}</a>
+      {% endfor %}
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro clubs_nav_item() %}
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle{% if tab and tab == "clubs" %} active" aria-current="page{% endif %}"
+       data-bs-toggle="dropdown" id="ClubList" href="#" role="button"
+       aria-haspopup="true" aria-expanded="false">
+      Clubs
+    </a>
+    <div class="dropdown-menu" aria-labelledby="ClubList">
+      <a class="dropdown-item" href="{{ url_for('club_bp.club_list') }}"><span
+          class="badge bg-info">All</span></a>
+      {% for club in current_user.clubs %}
+        <a class="dropdown-item"
+           href="{{ url_for('club_bp.club_show', club_id=club.id) }}">{{ club.name }}</a>
+      {% endfor %}
+      {% if current_user.can_create_club %}
+        <a class="dropdown-item" href="{{ url_for('club_bp.club_create') }}"><span
+            class="badge bg-primary">Create New</span></a>
+      {% endif %}
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro layouts_nav_item() %}
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle{% if tab and tab == "layouts" %} active" aria-current="page{% endif %}"
+       data-bs-toggle="dropdown" id="LayoutList" href="#" role="button"
+       aria-haspopup="true" aria-expanded="false">
+      Layouts
+    </a>
+    <div class="dropdown-menu" aria-labelledby="LayoutList">
+      <h6 class="dropdown-header">Personal Layouts:</h6>
+      <a class="dropdown-item" href="{{ url_for('layout_bp.layout_list', id=current_user.owner.id) }}"><span
+          class="badge bg-info">All</span></a>
+      {% for layout in current_user.layouts %}
+        <a class="dropdown-item"
+           href="{{ url_for('layout_bp.layout_show', id=layout.id) }}">{{ layout.name }}</a>
+      {% endfor %}
+      <a class="dropdown-item" href="{{ url_for('layout_bp.layout_create', id=current_user.owner.id) }}"><span
+          class="badge bg-primary">Create New Layout</span></a>
+      <h6 class="dropdown-header">Club Layouts:</h6>
+      {% for layout in current_user.club_layouts %}
+        <a class="dropdown-item"
+           href="{{ url_for('layout_bp.layout_show', id=layout.id) }}">{{ layout.name }}</a>
+      {% endfor %}
+    </div>
+  </li>
+{% endmacro %}
+
+{% macro trackage_nav_item() %}
+  {#  {{ render_nav_item('track_collection_bp.track', 'Track', use_li=True) }}#}
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle{% if tab and tab == "track_collections" %} active" aria-current="page{% endif %}"
+       data-bs-toggle="dropdown" id="TrackCollectionList" href="#" role="button"
+       aria-haspopup="true" aria-expanded="false">
+      Track
+    </a>
+    <div class="dropdown-menu" aria-labelledby="TrackCollectionList">
+      <h6 class="dropdown-header">Personal Track Collections:</h6>
+      <a class="dropdown-item"
+         href="{{ url_for('track_collection_bp.track_collection_list', id=current_user.owner.id) }}"><span
+          class="badge bg-info">All</span></a>
+      {% for track_collection in current_user.track_collections %}
+        <a class="dropdown-item"
+           href="{{ url_for('track_collection_bp.track_collection_show', id=track_collection.id) }}">{{ track_collection.name }}</a>
+      {% endfor %}
+      <a class="dropdown-item"
+         href="{{ url_for('track_collection_bp.track_collection_create', id=current_user.owner.id) }}"><span
+          class="badge bg-primary">Create New Track Collection</span></a>
+      <h6 class="dropdown-header">Club Track Collections:</h6>
+      {% for track_collection in current_user.club_track_collections %}
+        <a class="dropdown-item"
+           href="{{ url_for('track_collection_bp.track_collection_show', id=track_collection.id) }}">{{ track_collection.name }}</a>
+      {% endfor %}
+    </div>
+  </li>
+
+{% endmacro %}
+
+{% block header_middle %}
+  <div class="col-md-8 text-center">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-content"
+              aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse nav-pills" id="nav-content">
+        <ul class="navbar-nav h3">
+          {{ home_nav_item() }}
+          {{ admin_nav_item() }}
+          {{ clubs_nav_item() }}
+          {{ layouts_nav_item() }}
+          {{ rolling_stock_nav_item() }}
+          {{ trackage_nav_item() }}
+        </ul>
+      </div>
+    </nav>
+  </div>
+{% endblock %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
