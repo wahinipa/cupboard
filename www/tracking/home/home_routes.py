@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 
 home_bp = Blueprint(
     'home_bp', __name__,
-    template_folder='templates',
+    template_folder='../templates',
     static_folder='static',
 )
 

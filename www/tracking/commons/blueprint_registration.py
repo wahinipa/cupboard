@@ -5,6 +5,7 @@ def my_url(url):
     base_url = environ.get('BASE_URL', '/dev_testing')
     return f'{base_url}{url}'
 
+
 FAKE_PREFIX = '/'  # note: not using my_url
 
 ADMIN_PREFIX = my_url('/admin')
@@ -18,8 +19,8 @@ ADMIN_URL = ADMIN_PREFIX
 HOME_PAGE_URL = HOME_PREFIX
 
 
-
 def blueprint_registration(target_application):
+    # Use local imports to avoid circular dependencies
     from www.tracking.home.home_routes import home_bp
     target_application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
 

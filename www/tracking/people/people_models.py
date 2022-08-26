@@ -2,7 +2,6 @@
 from datetime import datetime
 
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash
 
 from www.tracking import database
 
@@ -16,11 +15,10 @@ class User(database.Model, UserMixin):
 
     # User fields
     is_admin = database.Column(database.Boolean(), nullable=False, default=False)
-    first_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
-    last_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
+    first_name = database.Column(database.Unicode(50), nullable=False, server_default='')
+    last_name = database.Column(database.Unicode(50), nullable=False, server_default='')
     date_joined = database.Column(database.DateTime(), default=datetime.now())
-    about_me = database.Column(database.String(255), nullable=False, server_default=u'')
-
+    about_me = database.Column(database.String(255), nullable=False, server_default='')
 
 
 def load_user(unicode_user_id):
@@ -30,3 +28,6 @@ def load_user(unicode_user_id):
     except:
         return None
 
+
+def find_user_by_username(username):
+    return User.query.filter(User.username == username).first()
