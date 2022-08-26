@@ -1,4 +1,4 @@
-# Copyright 2022 WillyMillsLLC
+# Copyright 2022 Wahinipa LLC
 
 def my_url(url):
     from os import environ

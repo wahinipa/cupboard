@@ -1,6 +1,6 @@
-# Copyright 2022 WillyMillsLLC
+# Copyright 2022 Wahinipa LLC
 from www.testing.fixtures_for_testing import pretend_application
-from www.tracking.blueprint_registration import blueprint_registration
+from www.tracking.commons.blueprint_registration import blueprint_registration
 
 
 def _pycharm_please_keep_these_imports():

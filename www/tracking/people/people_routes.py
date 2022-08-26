@@ -1,4 +1,4 @@
-# Copyright 2022 WillyMillsLLC
+# Copyright 2022 Wahinipa LLC
 from flask import Blueprint
 
 people_bp = Blueprint(
