@@ -1,0 +1,12 @@
+{% extends "contented.html" %}
+{% from 'button_macros.html' import render_link_button %}
+{% from 'macros.html' import render_top_card, render_secondary_card %}
+{% block innards %}
+  {% call render_top_card(category='Home', target=current_user, has_owner=False) %}
+    <p>
+      <large>{{ current_user.about_me }}</large>
+    </p>
+  {% endcall %}
+  {% call render_secondary_card(title='Handy Resources') %}
+  {% endcall %}
+{% endblock %}

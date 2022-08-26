@@ -1,4 +1,4 @@
-# Copyright 2022 Wahinipa LLC
+#  Copyright (c) 2022. Wahinipa LLC
 from datetime import datetime
 
 from flask import current_app, request, url_for
@@ -8,6 +8,9 @@ from flask_admin.menu import MenuLink
 from flask_login import current_user
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
+
+from www.tracking.commons.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
+
 
 def request_info(prefix):
     url = request.url
@@ -29,11 +32,13 @@ def log_warn_about_request(prefix):
 
 
 def redirect_hacks():
+    # TODO: Add fake blueprint to redirect hackers
     log_warn_about_request('Redirect Hack')
     return redirect((url_for('fake_bp.fake')))
 
 
 def create_initial_users():
+    # TODO: implement create_app
     pass
 
 
@@ -44,7 +49,7 @@ def initialize_database(database):
 
 
 def add_flask_admin(application, database):
-    admin = Admin(application, 'Wonderful Trains', url=ADMIN_URL)
+    admin = Admin(application, 'Wahinipa Cupboard Tracker', url=ADMIN_URL)
     admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
 
     # Using local imports helps break circularity of dependencies

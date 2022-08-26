@@ -11,6 +11,8 @@ def test_registration(pretend_application):
     blueprint_registration(pretend_application)
 
     expected_blueprints = [
+        'admin_bp',
+        'fake_bp',
         'group_bp',
         'home_bp',
         'people_bp',
@@ -26,4 +28,7 @@ def test_registration(pretend_application):
         assert blueprint.name == blueprint_name
         url_prefix = registration.get("url_prefix")
         assert url_prefix is not None
-        assert url_prefix.endswith(blueprint_prefix)
+        if blueprint_name == 'fake_bp':
+            assert url_prefix == "/"
+        else:
+            assert url_prefix.endswith(blueprint_prefix)

@@ -6,11 +6,12 @@ import os
 from os import environ
 
 from flask import Flask
-from flask_bootstrap import Bootstrap5
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap5
 
+from www.tracking.admin.administration import add_flask_admin, initialize_database
 from www.tracking.commons.blueprint_registration import blueprint_registration
 
 database = SQLAlchemy()

@@ -5,17 +5,29 @@ def my_url(url):
     base_url = environ.get('BASE_URL', '/dev_testing')
     return f'{base_url}{url}'
 
+FAKE_PREFIX = '/'  # note: not using my_url
 
+ADMIN_PREFIX = my_url('/admin')
 GROUP_PREFIX = my_url('/group')
 HOME_PREFIX = my_url('/home')
 PEOPLE_PREFIX = my_url('/people')
 PLACES_PREFIX = my_url('/places')
 THINGS_PREFIX = my_url('/things')
 
+ADMIN_URL = ADMIN_PREFIX
+HOME_PAGE_URL = HOME_PREFIX
+
+
 
 def blueprint_registration(target_application):
     from www.tracking.home.home_routes import home_bp
     target_application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
+
+    from www.tracking.home.fake_routes import fake_bp
+    target_application.register_blueprint(fake_bp, url_prefix=FAKE_PREFIX)
+
+    from www.tracking.admin.admin_routes import admin_bp
+    target_application.register_blueprint(admin_bp, url_prefix=ADMIN_PREFIX)
 
     from www.tracking.groups.group_routes import group_bp
     target_application.register_blueprint(group_bp, url_prefix=GROUP_PREFIX)
