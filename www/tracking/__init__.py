@@ -1,6 +1,7 @@
 # Copyright 2022 Wahinipa LLC
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from www.tracking.commons.builder import configure_application, create_application
 
-database = SQLAlchemy()
-migrate = Migrate()
+def create_app():
+    return create_application()
+
+

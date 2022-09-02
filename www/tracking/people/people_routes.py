@@ -4,20 +4,16 @@ from flask_admin.helpers import is_safe_url
 from flask_login import login_required, current_user, login_user, logout_user
 from werkzeug.security import generate_password_hash
 
-from www.tracking import database
+from www.tracking.commons.builder import database
 from www.tracking.admin.administration import redirect_hacks
 from www.tracking.people.people_forms import LoginForm, UserCreateForm, UserProfileForm, ChangePasswordForm
-from www.tracking.people.people_models import find_user_by_username
+from www.tracking.people.people_models import find_user_by_username, find_or_create_user
 
 people_bp = Blueprint(
     'people_bp', __name__,
     template_folder='../templates',
     static_folder='static',
 )
-
-
-def find_or_create_user(data, data1, username, data2, data3):
-    pass
 
 
 @people_bp.route('/create', methods=['GET', 'POST'])

@@ -18,12 +18,12 @@ database = SQLAlchemy()
 migrate = Migrate()
 
 if os.getenv('DEBUG') != 'True':
-    logging.basicConfig(filename='/home/willy/www/wonderful_trains.log', level=logging.INFO)
+    logging.basicConfig(filename='/home/willy/www/cupboard.log', level=logging.INFO)
 
 
-def create_app():
+def create_application():
     """Create Flask application."""
-    application = Flask(__name__)
+    application = Flask(__name__, static_folder='../static')
     configure_application(application)
     database.init_app(application)
     Bootstrap5(application)

@@ -1,0 +1,51 @@
+{% macro render_button_row() %}
+  <div class="row">
+    {{ caller() }}
+  </div>
+{% endmacro %}
+
+{% macro render_expansion_button(identity, name) %}
+    <p><a class="btn btn-info" data-bs-toggle="collapse" href="#{{ identity }}" aria-expanded="false"
+          aria-controls="{{ identity }}">{{ name }}</a>
+    </p>
+    <div class="collapse" id="{{ identity }}">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro render_action_button(endpoint, text, prefix='', button_color='btn-primary') %}
+    <form action="{{ url_for(endpoint, **kwargs) }}">
+        <button class="btn-sm {{ button_color }}" type="submit">{{ prefix }}{{ text }}</button>
+    </form>
+{% endmacro %}
+
+{% macro render_link_button(href, text, button_color='btn-info') %}
+  <a class="btn btn-lg {{ button_color }} my-1" href="{{ href }}" target="_blank"><large>{{ text }}</large></a><br>
+{% endmacro %}
+
+{% macro render_create_button(endpoint, text) %}
+    {{ render_action_button(endpoint, text, prefix="Create New ", button_color='btn-primary', **kwargs) }}
+{% endmacro %}
+
+{% macro render_duplicate_button(endpoint, text) %}
+    {{ render_action_button(endpoint, text, prefix="Duplicate ", button_color='btn-primary', **kwargs) }}
+{% endmacro %}
+
+{% macro render_delete_button(endpoint, text) %}
+    <form action="{{ url_for(endpoint, **kwargs) }}" onSubmit="return confirm('Are you sure you wish to delete?');">
+        <button class="btn-sm btn-danger" type="submit">DELETE {{ text }}</button>
+    </form>
+{% endmacro %}
+
+{% macro render_edit_button(endpoint, text) %}
+    {{ render_action_button(endpoint, text, prefix="Edit ", button_color='btn-primary', **kwargs) }}
+{% endmacro %}
+
+{% macro render_top_button(grid_width=6) %}
+  <div class="col-md-{{ grid_width }}">
+    <div class="card">
+      {{ caller() }}
+    </div>
+  </div>
+{% endmacro %}
+

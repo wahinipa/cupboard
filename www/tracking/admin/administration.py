@@ -38,8 +38,13 @@ def redirect_hacks():
 
 
 def create_initial_users():
-    # TODO: implement create_app
-    pass
+    """ Create users """
+    create_initial_admin()
+
+
+def create_initial_admin():
+    from www.tracking.people.people_models import find_or_create_user
+    find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
 
 
 def initialize_database(database):

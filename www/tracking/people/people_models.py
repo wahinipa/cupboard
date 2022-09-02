@@ -2,8 +2,9 @@
 from datetime import datetime
 
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash
 
-from www.tracking import database
+from www.tracking.commons.builder import database
 
 
 class User(database.Model, UserMixin):
@@ -31,3 +32,21 @@ def load_user(unicode_user_id):
 
 def find_user_by_username(username):
     return User.query.filter(User.username == username).first()
+
+def find_or_create_user(first_name, last_name, username, password, is_admin=False, date_joined=None):
+    pass
+    """ Find existing user or create new user """
+    user = User.query.filter(User.username == username).first()
+    if not user:
+        if date_joined is None:
+            date_joined = datetime.now()
+        user = User(username=username,
+                    first_name=first_name,
+                    last_name=last_name,
+                    password=generate_password_hash(password),
+                    is_admin=is_admin,
+                    date_joined=date_joined)
+        database.session.add(user)
+    return user
+
+
