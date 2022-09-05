@@ -1,7 +1,7 @@
 # Copyright 2022 Wahinipa LLC
 from datetime import datetime
 
-from www.tracking.commons.builder import database
+from tracking import database
 
 
 class Thing(database.Model):

@@ -1,7 +1,7 @@
-# Copyright 2022 Wahinipa LLC
+#  Copyright (c) 2022. Wahinipa LLC
 import logging
 
-from www.tracking.commons.builder import create_app
+from tracking import create_app
 
 app = create_app()
 

@@ -9,7 +9,7 @@ from flask_login import current_user
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 
-from www.tracking.commons.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
+from tracking.commons.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 
 
 def request_info(prefix):
@@ -32,43 +32,22 @@ def log_warn_about_request(prefix):
 
 
 def redirect_hacks():
-    # TODO: Add fake blueprint to redirect hackers
     log_warn_about_request('Redirect Hack')
     return redirect((url_for('fake_bp.fake')))
 
 
-def create_initial_users():
-    """ Create users """
-    create_initial_admin()
-
-
-def create_initial_admin():
-    from www.tracking.people.people_models import find_or_create_user
-    find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
-
-
 def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
+    from tracking.people.people_models import create_initial_users
     create_initial_users()
     database.session.commit()
 
 
 def add_flask_admin(application, database):
-    admin = Admin(application, 'Wahinipa Cupboard Tracker', url=ADMIN_URL)
-    admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
-
+    admin = Admin(application, 'Wonderful Trains', url=ADMIN_URL)
     # Using local imports helps break circularity of dependencies
-    from www.tracking.people.people_models import User
-    admin.add_view(UserAdminModelView(User, database.session))
-
-    from www.tracking.groups.group_models import Group
-    admin.add_view(AdminModelView(Group, database.session))
-
-    from www.tracking.places.place_models import Place
-    admin.add_view(AdminModelView(Place, database.session))
-
-    from www.tracking.things.thing_models import Thing
-    admin.add_view(AdminModelView(Thing, database.session))
+    from tracking.people.people_models import User
+    admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
 
 
 class AdminModelView(ModelView):

@@ -1,12 +1,12 @@
-# Copyright 2022 Wahinipa LLC
+#  Copyright (c) 2022. Wahinipa LLC
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from werkzeug.security import check_password_hash, generate_password_hash
-from wtforms import HiddenField, StringField, PasswordField, BooleanField, SubmitField, validators
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, validators
 from wtforms.validators import DataRequired
 
-from www.tracking.commons.base_forms import cancel_button_field
-from www.tracking.people.people_models import find_user_by_username
+from tracking.commons.base_forms import cancel_button_field
+from tracking.people.people_models import find_user_by_username
 
 
 class LoginForm(FlaskForm):
@@ -45,6 +45,7 @@ class UserProfileForm(FlaskForm):
     first_name = StringField('First Name', [DataRequired('First Name is required')])
     last_name = StringField('Last Name', [DataRequired('Last Name is required')])
     about_me = StringField('About Me', [])
+    cancel_button = cancel_button_field()
     submit = SubmitField('Save')
 
 

@@ -1,13 +1,14 @@
-# Copyright 2022 Wahinipa LLC
+#  Copyright (c) 2022. Wahinipa LLC
 from datetime import datetime
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
-from www.tracking.commons.builder import database
+from tracking import database
 
 
 class User(database.Model, UserMixin):
+    """ User acts on behalf of various layouts and clubs """
     id = database.Column(database.Integer, primary_key=True)
 
     # User authentication fields
@@ -16,10 +17,21 @@ class User(database.Model, UserMixin):
 
     # User fields
     is_admin = database.Column(database.Boolean(), nullable=False, default=False)
-    first_name = database.Column(database.Unicode(50), nullable=False, server_default='')
-    last_name = database.Column(database.Unicode(50), nullable=False, server_default='')
+    first_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
+    last_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
     date_joined = database.Column(database.DateTime(), default=datetime.now())
-    about_me = database.Column(database.String(255), nullable=False, server_default='')
+    about_me = database.Column(database.String(255), nullable=False, server_default=u'')
+
+    @property
+    def is_the_admin(self):
+        return self.username == 'admin'
+
+    @property
+    def name(self):
+        return f'{self.first_name} {self.last_name}'
+
+    def user_can_create(self, target_name, user):
+        return True
 
 
 def load_user(unicode_user_id):
@@ -33,20 +45,38 @@ def load_user(unicode_user_id):
 def find_user_by_username(username):
     return User.query.filter(User.username == username).first()
 
+
+def create_initial_users():
+    """ Create users """
+    create_initial_admin()
+
+
+def create_initial_admin():
+    find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
+
+
 def find_or_create_user(first_name, last_name, username, password, is_admin=False, date_joined=None):
-    pass
     """ Find existing user or create new user """
     user = User.query.filter(User.username == username).first()
     if not user:
         if date_joined is None:
             date_joined = datetime.now()
-        user = User(username=username,
-                    first_name=first_name,
-                    last_name=last_name,
-                    password=generate_password_hash(password),
-                    is_admin=is_admin,
-                    date_joined=date_joined)
+        user = generate_uncommitted_user(username=username,
+                                                first_name=first_name,
+                                                last_name=last_name,
+                                                password=password,
+                                                is_admin=is_admin,
+                                                date_joined=date_joined
+                                                )
         database.session.add(user)
     return user
 
 
+def generate_uncommitted_user(first_name, last_name, username, password, is_admin, date_joined):
+    user = User(username=username,
+                first_name=first_name,
+                last_name=last_name,
+                password=generate_password_hash(password),
+                is_admin=is_admin,
+                date_joined=date_joined)
+    return user

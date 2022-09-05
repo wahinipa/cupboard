@@ -1,17 +1,17 @@
-# Copyright 2022 Wahinipa LLC
-from flask import Blueprint, redirect, url_for, flash, request, abort, render_template
+#  Copyright (c) 2022. Wahinipa LLC
+from flask import Blueprint, flash, request, abort, redirect, url_for, render_template
 from flask_admin.helpers import is_safe_url
-from flask_login import login_required, current_user, login_user, logout_user
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash
 
-from www.tracking.commons.builder import database
-from www.tracking.admin.administration import redirect_hacks
-from www.tracking.people.people_forms import LoginForm, UserCreateForm, UserProfileForm, ChangePasswordForm
-from www.tracking.people.people_models import find_user_by_username, find_or_create_user
+from tracking import database
+from tracking.admin.administration import redirect_hacks
+from tracking.people.people_forms import UserCreateForm, LoginForm, UserProfileForm, ChangePasswordForm
+from tracking.people.people_models import find_user_by_username, find_or_create_user
 
 people_bp = Blueprint(
     'people_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 
@@ -77,7 +77,7 @@ def profile():
 @people_bp.route('/logout', methods=['GET', 'POST'])
 def logout():
     logout_user()
-    return redirect(url_for('user_bp.login'))
+    return redirect(url_for('people_bp.login'))
 
 
 @people_bp.route('/change_password', methods=['GET', 'POST'])
@@ -92,4 +92,3 @@ def change_password():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
     return render_template('change_password.html', form=form)
-
