@@ -39,6 +39,9 @@ class PretendApplication:
             "url_prefix": url_prefix
         }
 
+@pytest.fixture
+def pretend_application():
+    return PretendApplication()
 
 
 ######################

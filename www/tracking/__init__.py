@@ -10,7 +10,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from tracking.commons.blueprint_registration import blue_print_registration
+from tracking.commons.blueprint_registration import blueprint_registration
 
 database = SQLAlchemy()
 migrate = Migrate()
@@ -29,7 +29,7 @@ def create_app():
     from tracking.admin.administration import add_flask_admin
     add_flask_admin(application, database)
     with application.app_context():
-        blue_print_registration(application)
+        blueprint_registration(application)
         if not environ.get('SKIP_MODEL_LOAD') == 'True':
             import_models_and_initialize_database(database)
         if database.engine.url.drivername == 'sqlite':
