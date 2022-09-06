@@ -10,6 +10,7 @@ from tracking import create_app, database
 #############################
 # Application Test Fixtures #
 #############################
+from tracking.groups.group_models import create_group
 from tracking.people.people_models import find_or_create_user
 
 
@@ -93,3 +94,15 @@ def moe_stooge_user(app):
     moe = generate_moe()
     database.session.commit()
     return moe
+
+#######################
+# Group Test Fixtures #
+#######################
+
+GROUP_NAME = "Knights of the Round Table"
+GROUP_DESCRIPTION = "Always rescuing thine maidens, fair or not"
+GROUP_DATE = datetime(1994, 6, 12)
+
+@pytest.fixture()
+def knights_of_the_round_table(app):
+    return create_group(GROUP_NAME, GROUP_DESCRIPTION, date_created=GROUP_DATE)
