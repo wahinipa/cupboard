@@ -5,14 +5,13 @@ from os import environ, path, remove
 import pytest
 
 from tracking import create_app, database
-
-
 #############################
 # Application Test Fixtures #
 #############################
 from tracking.groups.group_models import create_group
 from tracking.people.people_models import find_or_create_user
 from tracking.places.place_models import create_place
+from tracking.things.thing_models import create_thing
 
 
 @pytest.fixture
@@ -30,6 +29,7 @@ def client(app):
     client = app.test_client()
     yield client
 
+
 class PretendApplication:
     def __init__(self):
         self.blueprints = {}
@@ -40,6 +40,7 @@ class PretendApplication:
             "blueprint": blueprint,
             "url_prefix": url_prefix
         }
+
 
 @pytest.fixture
 def pretend_application():
@@ -90,11 +91,13 @@ def larry_stooge_user(app):
     database.session.commit()
     return larry
 
+
 @pytest.fixture()
 def moe_stooge_user(app):
     moe = generate_moe()
     database.session.commit()
     return moe
+
 
 #######################
 # Group Test Fixtures #
@@ -104,9 +107,11 @@ GROUP_NAME = "Knights of the Round Table"
 GROUP_DESCRIPTION = "Always rescuing thine maidens, fair or not"
 GROUP_DATE = datetime(1994, 6, 12)
 
+
 @pytest.fixture()
 def knights_of_the_round_table(app):
     return create_group(GROUP_NAME, GROUP_DESCRIPTION, date_created=GROUP_DATE)
+
 
 #######################
 # Place Test Fixtures #
@@ -116,6 +121,21 @@ PLACE_NAME = "Over the Rainbow"
 PLACE_DESCRIPTION = "Follow the yellow brick road."
 PLACE_DATE = datetime(2022, 6, 18)
 
+
 @pytest.fixture()
 def rainbow_place(app, knights_of_the_round_table):
     return create_place(knights_of_the_round_table, PLACE_NAME, PLACE_DESCRIPTION, date_created=PLACE_DATE)
+
+
+#######################
+# Thing Test Fixtures #
+#######################
+
+THING_NAME = "Light Saber"
+THING_DESCRIPTION = "Useful for defeating galactic tyranny."
+THING_DATE = datetime(1984, 1, 1)
+
+
+@pytest.fixture()
+def light_saber(app):
+    return create_thing(THING_NAME, THING_DESCRIPTION, date_created=THING_DATE)

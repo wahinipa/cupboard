@@ -11,3 +11,4 @@ def test_place_creation(knights_of_the_round_table, rainbow_place):
     assert rainbow_place.name == PLACE_NAME
     assert rainbow_place.description == PLACE_DESCRIPTION
     assert rainbow_place.date_created == PLACE_DATE
+    assert rainbow_place.group == knights_of_the_round_table
