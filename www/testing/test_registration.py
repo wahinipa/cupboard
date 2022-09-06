@@ -17,6 +17,7 @@ def test_registration(pretend_application):
         'home_bp',
         'people_bp',
         'places_bp',
+        'roles_bp',
         'things_bp',
     ]
     for blueprint_name in expected_blueprints:

@@ -13,6 +13,13 @@ class Group(database.Model):
     places = database.relationship('Place', backref='group', lazy=True, cascade='all, delete')
     assignments = database.relationship('Assignment', backref='group', lazy=True, cascade='all, delete')
 
+    def has_role(self, person, name_of_role):
+        for assignment in self.assignments:
+            if assignment.person == person and assignment.role.name == name_of_role:
+                return True
+        return False
+
+
 
 def create_group(name, description="", date_created=None):
     if date_created is None:

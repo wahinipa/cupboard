@@ -32,8 +32,8 @@ class User(database.Model, UserMixin):
     def name(self):
         return f'{self.first_name} {self.last_name}'
 
-    def user_can_create(self, target_name, user):
-        return True
+    def has_role(self, group, name_of_role):
+        return group.has_role(self, name_of_role)
 
 
 def load_user(unicode_user_id):
@@ -64,12 +64,12 @@ def find_or_create_user(first_name, last_name, username, password, is_admin=Fals
         if date_joined is None:
             date_joined = datetime.now()
         user = generate_uncommitted_user(username=username,
-                                                first_name=first_name,
-                                                last_name=last_name,
-                                                password=password,
-                                                is_admin=is_admin,
-                                                date_joined=date_joined
-                                                )
+                                         first_name=first_name,
+                                         last_name=last_name,
+                                         password=password,
+                                         is_admin=is_admin,
+                                         date_joined=date_joined
+                                         )
         database.session.add(user)
     return user
 

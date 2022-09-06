@@ -11,6 +11,7 @@ from tracking import create_app, database
 from tracking.groups.group_models import create_group
 from tracking.people.people_models import find_or_create_user
 from tracking.places.place_models import create_place
+from tracking.roles.role_models import create_role
 from tracking.things.thing_models import create_thing
 
 
@@ -103,28 +104,76 @@ def moe_stooge_user(app):
 # Group Test Fixtures #
 #######################
 
-GROUP_NAME = "Knights of the Round Table"
-GROUP_DESCRIPTION = "Always rescuing thine maidens, fair or not"
-GROUP_DATE = datetime(1994, 6, 12)
+ROUND_TABLE_GROUP_NAME = "Knights of the Round Table"
+ROUND_TABLE_DESCRIPTION = "Always rescuing thine maidens, fair or not"
+ROUND_TABLE_DATE = datetime(1994, 6, 12)
+
+QUEENS_TABLE_GROUP_NAME = "Queens of the Square Table"
+QUEENS_TABLE_DESCRIPTION = "Bunch of Snoots"
+QUEENS_TABLE_DATE = datetime(1993, 5, 10)
 
 
 @pytest.fixture()
 def knights_of_the_round_table(app):
-    return create_group(GROUP_NAME, GROUP_DESCRIPTION, date_created=GROUP_DATE)
+    return create_group(ROUND_TABLE_GROUP_NAME, ROUND_TABLE_DESCRIPTION, date_created=ROUND_TABLE_DATE)
 
+@pytest.fixture()
+def queens_of_the_round_table(app):
+    return create_group(QUEENS_TABLE_GROUP_NAME, QUEENS_TABLE_DESCRIPTION, date_created=QUEENS_TABLE_DATE)
+
+
+#######################
+# Role Test Fixtures #
+#######################
+
+DUNCE_ROLE_NAME = "Dunce"
+DUNCE_DESCRIPTION = "Does really stupid things."
+DUNCE_DATE = datetime(1925, 2, 5)
+
+BUFFOON_ROLE_NAME = "Buffoon"
+BUFFOON_DESCRIPTION = "Does really silly things."
+BUFFOON_DATE = datetime(1926, 3, 6)
+
+BOSSY_ROLE_NAME = "Bossy"
+BOSSY_DESCRIPTION = "Does really bossy things."
+BOSSY_DATE = datetime(1927, 7, 17)
+
+@pytest.fixture()
+def dunce(app):
+    return create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
+
+@pytest.fixture()
+def buffoon(app):
+    return create_role(BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, BUFFOON_DATE)
+
+@pytest.fixture()
+def bossy(app):
+    return create_role(BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE)
+
+@pytest.fixture()
+def light_saber(app):
+    return create_thing(THING_NAME, THING_DESCRIPTION, date_created=THING_DATE)
 
 #######################
 # Place Test Fixtures #
 #######################
 
-PLACE_NAME = "Over the Rainbow"
-PLACE_DESCRIPTION = "Follow the yellow brick road."
-PLACE_DATE = datetime(2022, 6, 18)
+RAINBOW_PLACE_NAME = "Over the Rainbow"
+RAINBOW_PLACE_DESCRIPTION = "Follow the yellow brick road."
+RAINBOW_PLACE_DATE = datetime(2022, 6, 18)
+
+WILD_PLACE_NAME = "Over on the Wild Side"
+WILD_PLACE_DESCRIPTION = "Listen to your Mama."
+WILD_PLACE_DATE = datetime(2020, 5, 18)
 
 
 @pytest.fixture()
 def rainbow_place(app, knights_of_the_round_table):
-    return create_place(knights_of_the_round_table, PLACE_NAME, PLACE_DESCRIPTION, date_created=PLACE_DATE)
+    return create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
+
+@pytest.fixture()
+def wild_place(app, knights_of_the_round_table):
+    return create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
 
 
 #######################
