@@ -12,6 +12,7 @@ from tracking import create_app, database
 #############################
 from tracking.groups.group_models import create_group
 from tracking.people.people_models import find_or_create_user
+from tracking.places.place_models import create_place
 
 
 @pytest.fixture
@@ -106,3 +107,15 @@ GROUP_DATE = datetime(1994, 6, 12)
 @pytest.fixture()
 def knights_of_the_round_table(app):
     return create_group(GROUP_NAME, GROUP_DESCRIPTION, date_created=GROUP_DATE)
+
+#######################
+# Place Test Fixtures #
+#######################
+
+PLACE_NAME = "Over the Rainbow"
+PLACE_DESCRIPTION = "Follow the yellow brick road."
+PLACE_DATE = datetime(2022, 6, 18)
+
+@pytest.fixture()
+def rainbow_place(app, knights_of_the_round_table):
+    return create_place(knights_of_the_round_table, PLACE_NAME, PLACE_DESCRIPTION, date_created=PLACE_DATE)
