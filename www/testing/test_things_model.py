@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures_for_testing import app, light_saber, THING_NAME, THING_DESCRIPTION, THING_DATE
 
 

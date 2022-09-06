@@ -1,4 +1,4 @@
-# Copyright 2022 Wahinipa LLC
+# Copyright (c) 2022, Wahinipa LLC
 from flask import Blueprint
 
 group_bp = Blueprint(

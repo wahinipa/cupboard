@@ -1,1 +1,1 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC

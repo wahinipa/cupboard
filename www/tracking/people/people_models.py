@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
 
 from flask_login import UserMixin
@@ -21,6 +21,8 @@ class User(database.Model, UserMixin):
     last_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
     date_joined = database.Column(database.DateTime(), default=datetime.now())
     about_me = database.Column(database.String(255), nullable=False, server_default=u'')
+
+    assignments = database.relationship('Assignment', backref='person', lazy=True, cascade='all, delete')
 
     @property
     def is_the_admin(self):

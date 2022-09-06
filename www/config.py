@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 # """Flask configuration variables."""
 from os import environ, path
 

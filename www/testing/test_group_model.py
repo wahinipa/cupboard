@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 
 from testing.fixtures_for_testing import app, knights_of_the_round_table, GROUP_NAME, GROUP_DESCRIPTION, GROUP_DATE
 

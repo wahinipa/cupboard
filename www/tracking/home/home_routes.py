@@ -1,4 +1,4 @@
-# Copyright 2022 Wahinipa LLC
+# Copyright (c) 2022, Wahinipa LLC
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 

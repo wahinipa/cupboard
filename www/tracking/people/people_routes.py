@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 from flask import Blueprint, flash, request, abort, redirect, url_for, render_template
 from flask_admin.helpers import is_safe_url
 from flask_login import login_user, logout_user, login_required, current_user

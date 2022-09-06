@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from werkzeug.security import check_password_hash, generate_password_hash

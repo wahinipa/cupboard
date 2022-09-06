@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 def my_url(url):
     from os import environ
     base_url = environ.get('BASE_URL', '/wahinipa')

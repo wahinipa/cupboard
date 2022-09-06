@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 from flask import Blueprint, request, render_template, redirect
 
 from www.tracking.admin.administration import log_info_about_request, log_warn_about_request

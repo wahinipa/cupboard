@@ -1,4 +1,4 @@
-#  Copyright (c) 2022. Wahinipa LLC
+#  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures_for_testing import app, curly_stooge_user, CURLY_STOOGE_USER_NAME
 
 
