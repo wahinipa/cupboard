@@ -117,6 +117,7 @@ QUEENS_TABLE_DATE = datetime(1993, 5, 10)
 def knights_of_the_round_table(app):
     return find_or_create_group(ROUND_TABLE_GROUP_NAME, ROUND_TABLE_DESCRIPTION, date_created=ROUND_TABLE_DATE)
 
+
 @pytest.fixture()
 def queens_of_the_round_table(app):
     return find_or_create_group(QUEENS_TABLE_GROUP_NAME, QUEENS_TABLE_DESCRIPTION, date_created=QUEENS_TABLE_DATE)
@@ -138,21 +139,27 @@ BOSSY_ROLE_NAME = "Bossy"
 BOSSY_DESCRIPTION = "Does really bossy things."
 BOSSY_DATE = datetime(1927, 7, 17)
 
+
 @pytest.fixture()
 def dunce(app):
     return create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
+
 
 @pytest.fixture()
 def buffoon(app):
     return create_role(BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, BUFFOON_DATE)
 
+
 @pytest.fixture()
 def bossy(app):
     return create_role(BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE)
 
+
 @pytest.fixture()
 def light_saber(app):
-    return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION, date_created=LIGHT_SABER_THING_DATE)
+    return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION,
+                                date_created=LIGHT_SABER_THING_DATE)
+
 
 #######################
 # Place Test Fixtures #
@@ -169,11 +176,14 @@ WILD_PLACE_DATE = datetime(2020, 5, 18)
 
 @pytest.fixture()
 def rainbow_place(app, knights_of_the_round_table):
-    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
+    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION,
+                                date_created=RAINBOW_PLACE_DATE)
+
 
 @pytest.fixture()
 def wild_place(app, knights_of_the_round_table):
-    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
+    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION,
+                                date_created=RAINBOW_PLACE_DATE)
 
 
 #######################
@@ -187,4 +197,5 @@ LIGHT_SABER_THING_DATE = datetime(1984, 1, 1)
 
 @pytest.fixture()
 def light_saber(app):
-    return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION, date_created=LIGHT_SABER_THING_DATE)
+    return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION,
+                                date_created=LIGHT_SABER_THING_DATE)

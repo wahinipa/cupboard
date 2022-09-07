@@ -11,6 +11,16 @@ class Place(database.Model):
     description = database.Column(database.Text(), nullable=False, server_default='')
     date_created = database.Column(database.DateTime(), default=datetime.now())
 
+    positionings = database.relationship('Positioning', backref='place', lazy=True, cascade='all, delete')
+
+    def quantity_of_things(self, thing):
+        from tracking.positionings.postioning_models import find_quantity_of_things
+        return find_quantity_of_things(self, thing)
+
+    def add_things(self, thing, quantity):
+        from tracking.positionings.postioning_models import add_quantity_of_things
+        return add_quantity_of_things(self, thing, quantity)
+
 
 def find_or_create_place(group, name, description, date_created=None):
     place = find_place(group, name)

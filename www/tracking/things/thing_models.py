@@ -12,7 +12,17 @@ class Thing(database.Model):
     name = database.Column(database.String(255), nullable=False, unique=True)
     description = database.Column(database.Text(), nullable=False, server_default='')
     date_created = database.Column(database.DateTime(), default=datetime.now())
+
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
+    positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
+
+    def quantity_at_place(self, place):
+        from tracking.positionings.postioning_models import find_quantity_of_things
+        return find_quantity_of_things(place, self)
+
+    def add_to_place(self, place, quantity):
+        from tracking.positionings.postioning_models import add_quantity_of_things
+        return add_quantity_of_things(place, self, quantity)
 
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
@@ -30,6 +40,7 @@ def find_or_create_thing(name, description, kind_of=None, date_created=None):
 
 def find_thing_by_name(name):
     return Thing.query.filter(Thing.name == name).first()
+
 
 def find_or_create_everything():
     everything = find_thing_by_name("Everything")

@@ -53,10 +53,12 @@ def add_flask_admin(application, database):
     from tracking.things.thing_models import Thing
     from tracking.roles.role_models import Role
     from tracking.roles.role_models import Assignment
+    from tracking.positionings.postioning_models import Positioning
     admin.add_view(UserAdminModelView(User, database.session))
     admin.add_view(AdminModelView(Assignment, database.session))
     admin.add_view(AdminModelView(Group, database.session))
     admin.add_view(AdminModelView(Place, database.session))
+    admin.add_view(AdminModelView(Positioning, database.session))
     admin.add_view(AdminModelView(Role, database.session))
     admin.add_view(AdminModelView(Thing, database.session))
 
