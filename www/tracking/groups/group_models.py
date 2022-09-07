@@ -20,7 +20,6 @@ class Group(database.Model):
         return False
 
 
-
 def find_or_create_group(name, description="", date_created=None):
     group = find_group_by_name(name)
     if group is None:
@@ -30,6 +29,7 @@ def find_or_create_group(name, description="", date_created=None):
         database.session.add(group)
         database.session.commit()
     return group
+
 
 def find_group_by_name(name):
     return Group.query.filter(Group.name == name).first()
