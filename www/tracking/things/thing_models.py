@@ -4,14 +4,11 @@ from datetime import datetime
 from sqlalchemy.orm import backref
 
 from tracking import database
+from tracking.commons.base_models import BaseModel
 
 
-class Thing(database.Model):
-    id = database.Column(database.Integer, primary_key=True)
+class Thing(BaseModel):
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
-    name = database.Column(database.String(255), nullable=False, unique=True)
-    description = database.Column(database.Text(), nullable=False, server_default='')
-    date_created = database.Column(database.DateTime(), default=datetime.now())
 
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
     positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')

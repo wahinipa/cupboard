@@ -2,14 +2,11 @@
 from datetime import datetime
 
 from tracking import database
+from tracking.commons.base_models import BaseModel
 
 
-class Place(database.Model):
-    id = database.Column(database.Integer, primary_key=True)
+class Place(BaseModel):
     group_id = database.Column(database.Integer, database.ForeignKey('group.id'))
-    name = database.Column(database.String(255), nullable=False)
-    description = database.Column(database.Text(), nullable=False, server_default='')
-    date_created = database.Column(database.DateTime(), default=datetime.now())
 
     positionings = database.relationship('Positioning', backref='place', lazy=True, cascade='all, delete')
 
