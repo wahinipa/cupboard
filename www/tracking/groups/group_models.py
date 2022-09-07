@@ -21,10 +21,15 @@ class Group(database.Model):
 
 
 
-def create_group(name, description="", date_created=None):
-    if date_created is None:
-        date_created = datetime.now()
-    group = Group(name=name, description=description, date_created=date_created)
-    database.session.add(group)
-    database.session.commit()
+def find_or_create_group(name, description="", date_created=None):
+    group = find_group_by_name(name)
+    if group is None:
+        if date_created is None:
+            date_created = datetime.now()
+        group = Group(name=name, description=description, date_created=date_created)
+        database.session.add(group)
+        database.session.commit()
     return group
+
+def find_group_by_name(name):
+    return Group.query.filter(Group.name == name).first()

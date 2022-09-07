@@ -8,11 +8,11 @@ from tracking import create_app, database
 #############################
 # Application Test Fixtures #
 #############################
-from tracking.groups.group_models import create_group
+from tracking.groups.group_models import find_or_create_group
 from tracking.people.people_models import find_or_create_user
-from tracking.places.place_models import create_place
+from tracking.places.place_models import find_or_create_place
 from tracking.roles.role_models import create_role
-from tracking.things.thing_models import create_thing
+from tracking.things.thing_models import find_or_create_thing
 
 
 @pytest.fixture
@@ -115,11 +115,11 @@ QUEENS_TABLE_DATE = datetime(1993, 5, 10)
 
 @pytest.fixture()
 def knights_of_the_round_table(app):
-    return create_group(ROUND_TABLE_GROUP_NAME, ROUND_TABLE_DESCRIPTION, date_created=ROUND_TABLE_DATE)
+    return find_or_create_group(ROUND_TABLE_GROUP_NAME, ROUND_TABLE_DESCRIPTION, date_created=ROUND_TABLE_DATE)
 
 @pytest.fixture()
 def queens_of_the_round_table(app):
-    return create_group(QUEENS_TABLE_GROUP_NAME, QUEENS_TABLE_DESCRIPTION, date_created=QUEENS_TABLE_DATE)
+    return find_or_create_group(QUEENS_TABLE_GROUP_NAME, QUEENS_TABLE_DESCRIPTION, date_created=QUEENS_TABLE_DATE)
 
 
 #######################
@@ -152,7 +152,7 @@ def bossy(app):
 
 @pytest.fixture()
 def light_saber(app):
-    return create_thing(THING_NAME, THING_DESCRIPTION, date_created=THING_DATE)
+    return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION, date_created=LIGHT_SABER_THING_DATE)
 
 #######################
 # Place Test Fixtures #
@@ -169,22 +169,22 @@ WILD_PLACE_DATE = datetime(2020, 5, 18)
 
 @pytest.fixture()
 def rainbow_place(app, knights_of_the_round_table):
-    return create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
+    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
 
 @pytest.fixture()
 def wild_place(app, knights_of_the_round_table):
-    return create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
+    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION, date_created=RAINBOW_PLACE_DATE)
 
 
 #######################
 # Thing Test Fixtures #
 #######################
 
-THING_NAME = "Light Saber"
-THING_DESCRIPTION = "Useful for defeating galactic tyranny."
-THING_DATE = datetime(1984, 1, 1)
+LIGHT_SABER_THING_NAME = "Light Saber"
+LIGHT_SABER_THING_DESCRIPTION = "Useful for defeating galactic tyranny."
+LIGHT_SABER_THING_DATE = datetime(1984, 1, 1)
 
 
 @pytest.fixture()
 def light_saber(app):
-    return create_thing(THING_NAME, THING_DESCRIPTION, date_created=THING_DATE)
+    return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION, date_created=LIGHT_SABER_THING_DATE)
