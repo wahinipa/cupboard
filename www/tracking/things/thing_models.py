@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.commons.base_models import UniqueNamedBaseModel
+from tracking.commons.base_models import UniqueNamedBaseModel, IdModelMixin
 
 
 class Thing(UniqueNamedBaseModel):
@@ -13,6 +13,7 @@ class Thing(UniqueNamedBaseModel):
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
     positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
+    particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
     def quantity_at_place(self, place):
         from tracking.positionings.postioning_models import find_quantity_of_things
@@ -21,6 +22,16 @@ class Thing(UniqueNamedBaseModel):
     def add_to_place(self, place, quantity):
         from tracking.positionings.postioning_models import add_quantity_of_things
         return add_quantity_of_things(place, self, quantity)
+
+
+class ParticularThing(IdModelMixin, database.Model):
+    thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
+    particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
+
+
+class Particular(IdModelMixin, database.Model):
+    particular_thing_id = database.Column(database.Integer, database.ForeignKey('particular_thing.id'), index=True)
+    choice_id = database.Column(database.Integer, database.ForeignKey('choice.id'), index=True)
 
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
