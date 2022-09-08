@@ -46,8 +46,6 @@ class Particular(IdModelMixin, database.Model):
     choice_id = database.Column(database.Integer, database.ForeignKey('choice.id'), index=True)
 
 
-
-
 def _find_or_create_particular(particular_thing, choice):
     particular = particular_thing.find_particular(choice)
     if particular is None:
