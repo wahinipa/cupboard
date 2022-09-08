@@ -11,17 +11,8 @@ class Thing(UniqueNamedBaseModel):
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
 
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
-    positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
-
-    def quantity_at_place(self, place):
-        from tracking.positionings.postioning_models import find_quantity_of_things
-        return find_quantity_of_things(place, self)
-
-    def add_to_place(self, place, quantity):
-        from tracking.positionings.postioning_models import add_quantity_of_things
-        return add_quantity_of_things(place, self, quantity)
 
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
@@ -74,10 +65,19 @@ def find_or_create_particular(particular_thing, choice):
 class ParticularThing(IdModelMixin, database.Model):
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
+    positionings = database.relationship('Positioning', backref='particular_thing', lazy=True, cascade='all, delete')
 
     @property
     def choices(self):
         return [particular.choice for particular in self.particulars]
+
+    def quantity_at_place(self, place):
+        from tracking.positionings.postioning_models import find_quantity_of_things
+        return find_quantity_of_things(place, self)
+
+    def add_to_place(self, place, quantity):
+        from tracking.positionings.postioning_models import add_quantity_of_things
+        return add_quantity_of_things(place, self, quantity)
 
 
 def find_or_create_particular_thing(thing, choices):
