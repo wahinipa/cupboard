@@ -46,19 +46,14 @@ class Particular(IdModelMixin, database.Model):
     choice_id = database.Column(database.Integer, database.ForeignKey('choice.id'), index=True)
 
 
-def find_particular(particular_thing, choice):
-    for particular in particular_thing.particulars:
-        if particular.choice == choice:
-            return particular
-    return None
 
 
-def find_or_create_particular(particular_thing, choice):
-    particular = find_particular(particular_thing, choice)
+def _find_or_create_particular(particular_thing, choice):
+    particular = particular_thing.find_particular(choice)
     if particular is None:
-        particular = Particular(particular_thing_id=particular_thing.id, choice_id=choice.id)
+        particular = Particular(particular_thing=particular_thing, choice=choice)
         database.session.add(particular)
-        database.session.commit()
+        # Do not commit yet, else database could be corrupted by duplicates.
     return particular
 
 
@@ -79,15 +74,24 @@ class ParticularThing(IdModelMixin, database.Model):
         from tracking.positionings.postioning_models import add_quantity_of_things
         return add_quantity_of_things(place, self, quantity)
 
+    def find_particular(self, choice):
+        for particular in self.particulars:
+            if particular.choice == choice:
+                return particular
+        return None
+
 
 def find_or_create_particular_thing(thing, choices):
     particular_thing = find_particular_thing(thing, choices)
     if particular_thing is None:
-        particular_thing = ParticularThing(thing_id=thing.id)
+        # Create ParticularThing...
+        particular_thing = ParticularThing(thing=thing)
         database.session.add(particular_thing)
-        database.session.commit()
         for choice in choices:
-            find_or_create_particular(particular_thing, choice)
+            # ... and one Particular to capture each choice ...
+            _find_or_create_particular(particular_thing, choice)
+        # ... then commit the whole set into the database as a single transaction.
+        database.session.commit()
     return particular_thing
 
 
