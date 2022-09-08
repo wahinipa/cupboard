@@ -15,7 +15,7 @@ def find_or_create_choice(category, name, description="", date_created=None):
     if choice is None:
         if date_created is None:
             date_created = datetime.now()
-        choice = Choice(category_id=category.id, name=name, description=description, date_created=date_created)
+        choice = Choice(category=category, name=name, description=description, date_created=date_created)
         database.session.add(choice)
         database.session.commit()
     return choice

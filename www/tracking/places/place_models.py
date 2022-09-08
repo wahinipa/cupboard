@@ -24,7 +24,7 @@ def find_or_create_place(group, name, description, date_created=None):
     if place is None:
         if date_created is None:
             date_created = datetime.now()
-        place = Place(group_id=group.id, name=name, description=description, date_created=date_created)
+        place = Place(group=group, name=name, description=description, date_created=date_created)
         database.session.add(place)
         database.session.commit()
     return place
