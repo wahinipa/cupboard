@@ -5,6 +5,7 @@ from os import environ, path, remove
 import pytest
 
 from tracking import create_app, database
+from tracking.categories.category_models import find_or_create_category
 #############################
 # Application Test Fixtures #
 #############################
@@ -199,3 +200,15 @@ LIGHT_SABER_THING_DATE = datetime(1984, 1, 1)
 def light_saber(app):
     return find_or_create_thing(LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION,
                                 date_created=LIGHT_SABER_THING_DATE)
+
+
+##########################
+# Category Test Fixtures #
+##########################
+
+PASTRY_NAME = "pastry"
+PASTRY_DESCRIPTION = "Yummy!"
+PASTRY_DATE = datetime(1989, 12, 13)
+@pytest.fixture()
+def pastry(app):
+    return find_or_create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)

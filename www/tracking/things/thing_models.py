@@ -4,10 +4,10 @@ from datetime import datetime
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.commons.base_models import BaseModel
+from tracking.commons.base_models import UniqueNamedBaseModel
 
 
-class Thing(BaseModel):
+class Thing(UniqueNamedBaseModel):
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
 
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))

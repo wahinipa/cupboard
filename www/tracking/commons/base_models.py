@@ -21,6 +21,11 @@ class NamedModelMixin():
     def name(cls):
         return database.Column(database.String(255), nullable=False, server_default=u'')
 
+class UniqueNamedModelMixin():
+    @declared_attr
+    def name(cls):
+        return database.Column(database.String(255), nullable=False, unique=True, server_default=u'')
+
 
 class DatedModelMixin():
     @declared_attr
@@ -39,4 +44,7 @@ class DescriptionModelMixin():
 
 
 class BaseModel(IdModelMixin, NamedModelMixin, DescriptionModelMixin, DatedModelMixin, database.Model):
+    __abstract__ = True
+
+class UniqueNamedBaseModel(IdModelMixin, UniqueNamedModelMixin, DescriptionModelMixin, DatedModelMixin, database.Model):
     __abstract__ = True

@@ -2,10 +2,10 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.commons.base_models import BaseModel
+from tracking.commons.base_models import UniqueNamedBaseModel
 
 
-class Group(BaseModel):
+class Group(UniqueNamedBaseModel):
 
     places = database.relationship('Place', backref='group', lazy=True, cascade='all, delete')
     assignments = database.relationship('Assignment', backref='group', lazy=True, cascade='all, delete')

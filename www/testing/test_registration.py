@@ -12,6 +12,7 @@ def test_registration(pretend_application):
 
     expected_blueprints = [
         'admin_bp',
+        'category_bp',
         'fake_bp',
         'group_bp',
         'home_bp',
