@@ -2,15 +2,14 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.commons.base_models import UniqueNamedBaseModel
+from tracking.commons.base_models import UniqueNamedBaseModel, IdModelMixin
 
 
 class Role(UniqueNamedBaseModel):
     assignments = database.relationship('Assignment', backref='role', lazy=True, cascade='all, delete')
 
 
-class Assignment(database.Model):
-    id = database.Column(database.Integer, primary_key=True)
+class Assignment(IdModelMixin, database.Model):
     group_id = database.Column(database.Integer, database.ForeignKey('group.id'))
     role_id = database.Column(database.Integer, database.ForeignKey('role.id'))
     user_id = database.Column(database.Integer, database.ForeignKey('user.id'))

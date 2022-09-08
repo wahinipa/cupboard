@@ -1,10 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from tracking import database
+from tracking.commons.base_models import IdModelMixin
 
 
-class Positioning(database.Model):
-    id = database.Column(database.Integer, primary_key=True)
+class Positioning(IdModelMixin, database.Model):
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'))
     quantity = database.Column(database.Integer, nullable=False, server_default='0')

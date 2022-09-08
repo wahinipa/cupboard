@@ -5,11 +5,11 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
 from tracking import database
+from tracking.commons.base_models import IdModelMixin
 
 
-class User(database.Model, UserMixin):
-    """ User acts on behalf of various layouts and clubs """
-    id = database.Column(database.Integer, primary_key=True)
+class User(IdModelMixin, database.Model, UserMixin):
+    """ User acts on behalf of various groups """
 
     # User authentication fields
     username = database.Column(database.String(255), nullable=False, unique=True)

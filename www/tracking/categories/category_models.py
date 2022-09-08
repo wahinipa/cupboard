@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.commons.base_models import UniqueNamedBaseModel
+from tracking.commons.base_models import UniqueNamedBaseModel, IdModelMixin
 
 
 class Category(UniqueNamedBaseModel):
@@ -10,8 +10,7 @@ class Category(UniqueNamedBaseModel):
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
 
-class Refinement(database.Model):
-    id = database.Column(database.Integer, primary_key=True)
+class Refinement(IdModelMixin, database.Model):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'))
     date_created = database.Column(database.DateTime(), default=datetime.now())
