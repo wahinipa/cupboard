@@ -7,6 +7,14 @@ from tracking.commons.base_models import UniqueNamedBaseModel
 
 class Category(UniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
+    refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
+
+
+class Refinement(database.Model):
+    id = database.Column(database.Integer, primary_key=True)
+    category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
+    thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'))
+    date_created = database.Column(database.DateTime(), default=datetime.now())
 
 
 def find_or_create_category(name, description="", date_created=None):
@@ -22,3 +30,21 @@ def find_or_create_category(name, description="", date_created=None):
 
 def find_category_by_name(name):
     return Category.query.filter(Category.name == name).first()
+
+
+def refine_thing(thing, category, date_created=None):
+    refinement = find_refinement(thing, category)
+    if refinement is None:
+        if date_created is None:
+            date_created = datetime.now()
+        refinement = Refinement(thing=thing, category=category, date_created=date_created)
+        database.session.add(refinement)
+        database.session.commit()
+    return refinement
+
+
+def find_refinement(thing, category):
+    for refinement in thing.refinements:
+        if refinement.category_id == category.id:
+            return refinement
+    return None

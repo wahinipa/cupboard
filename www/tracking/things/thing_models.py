@@ -12,6 +12,7 @@ class Thing(UniqueNamedBaseModel):
 
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
     positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
+    refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
 
     def quantity_at_place(self, place):
         from tracking.positionings.postioning_models import find_quantity_of_things

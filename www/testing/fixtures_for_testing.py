@@ -225,7 +225,16 @@ MUFFIN_NAME = "Muffin"
 MUFFIN_DESCRIPTION = "Blueberry"
 MUFFIN_DATE = datetime(1988, 11, 15)
 
+ROLL_NAME = "Roll"
+ROLL_DESCRIPTION = "Cinnamon"
+ROLL_DATE = datetime(1987, 10, 14)
+
 
 @pytest.fixture()
 def muffin(app, pastry):
     return find_or_create_choice(pastry, MUFFIN_NAME, description=MUFFIN_DESCRIPTION, date_created=MUFFIN_DATE)
+
+@pytest.fixture()
+def roll(app, pastry):
+    return find_or_create_choice(pastry, ROLL_NAME, description=ROLL_DESCRIPTION, date_created=ROLL_DATE)
+
