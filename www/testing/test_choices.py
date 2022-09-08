@@ -4,6 +4,7 @@ from testing.fixtures_for_testing import RED_COLORING_DATE, RED_COLORING_DESCRIP
     red_coloring, coloring, \
     MUFFIN_NAME, MUFFIN_DESCRIPTION, MUFFIN_DATE, \
     ROLL_NAME, ROLL_DESCRIPTION, ROLL_DATE
+from tracking.choices.choice_models import find_or_create_choice
 
 
 def _pycharm_please_keep_these_imports():
@@ -31,3 +32,9 @@ def test_choice_creation(pastry, muffin, roll, red_coloring, coloring):
     assert red_coloring.date_created == RED_COLORING_DATE
     assert red_coloring.category == coloring
     assert red_coloring in coloring.choices
+
+
+def test_choice_is_unique(pastry, muffin):
+    another_muffin = find_or_create_choice(pastry, MUFFIN_NAME, description=MUFFIN_DESCRIPTION,
+                                           date_created=MUFFIN_DATE)
+    assert muffin == another_muffin

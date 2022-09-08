@@ -13,7 +13,7 @@ from tracking.choices.choice_models import find_or_create_choice
 from tracking.groups.group_models import find_or_create_group
 from tracking.people.people_models import find_or_create_user
 from tracking.places.place_models import find_or_create_place
-from tracking.roles.role_models import create_role
+from tracking.roles.role_models import find_or_create_role
 from tracking.things.thing_models import find_or_create_thing
 
 
@@ -144,17 +144,17 @@ BOSSY_DATE = datetime(1927, 7, 17)
 
 @pytest.fixture()
 def dunce(app):
-    return create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
+    return find_or_create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
 
 
 @pytest.fixture()
 def buffoon(app):
-    return create_role(BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, BUFFOON_DATE)
+    return find_or_create_role(BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, BUFFOON_DATE)
 
 
 @pytest.fixture()
 def bossy(app):
-    return create_role(BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE)
+    return find_or_create_role(BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE)
 
 
 @pytest.fixture()

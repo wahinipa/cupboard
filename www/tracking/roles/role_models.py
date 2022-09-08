@@ -16,12 +16,18 @@ class Assignment(IdModelMixin, database.Model):
     date_created = database.Column(database.DateTime(), default=datetime.now())
 
 
-def create_role(name, description="", date_created=None):
-    if date_created is None:
-        date_created = datetime.now()
-    role = Role(name=name, description=description, date_created=date_created)
-    database.session.add(role)
-    database.session.commit()
+def find_role(name):
+    return Role.query.filter(Role.name == name).first()
+
+
+def find_or_create_role(name, description="", date_created=None):
+    role = find_role(name)
+    if role is None:
+        if date_created is None:
+            date_created = datetime.now()
+        role = Role(name=name, description=description, date_created=date_created)
+        database.session.add(role)
+        database.session.commit()
     return role
 
 

@@ -32,4 +32,3 @@ def test_creating_particulars(pastry, muffin, roll, red_coloring, coloring, ligh
 
     repeat_particular_bucket = find_or_create_particular_thing(bucket, [red_coloring, muffin])
     assert repeat_particular_bucket == particular_bucket
-

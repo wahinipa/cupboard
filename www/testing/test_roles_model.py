@@ -2,7 +2,7 @@
 from testing.fixtures_for_testing import app, dunce, buffoon, bossy, DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE, \
     BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, BUFFOON_DATE, BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE, \
     curly_stooge_user, moe_stooge_user, larry_stooge_user, knights_of_the_round_table, queens_of_the_round_table
-from tracking.roles.role_models import assign_role
+from tracking.roles.role_models import assign_role, find_or_create_role
 
 
 def _pycharm_please_keep_these_imports():
@@ -22,6 +22,10 @@ def test_role_creation(dunce, buffoon, bossy):
     assert bossy.name == BOSSY_ROLE_NAME
     assert bossy.description == BOSSY_DESCRIPTION
     assert bossy.date_created == BOSSY_DATE
+
+def test_roles_are_unique(dunce):
+    another_dunce = find_or_create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
+    assert dunce == another_dunce
 
 
 def test_role_assignment(knights_of_the_round_table, queens_of_the_round_table, dunce, buffoon, bossy,
