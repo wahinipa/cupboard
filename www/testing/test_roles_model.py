@@ -23,6 +23,7 @@ def test_role_creation(dunce, buffoon, bossy):
     assert bossy.description == BOSSY_DESCRIPTION
     assert bossy.date_created == BOSSY_DATE
 
+
 def test_roles_are_unique(dunce):
     another_dunce = find_or_create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
     assert dunce == another_dunce
@@ -99,9 +100,3 @@ def test_role_assignment(knights_of_the_round_table, queens_of_the_round_table, 
     assert knights_of_the_round_table.has_role(moe_stooge_user, "Bossy")
     assert knights_of_the_round_table.has_role(moe_stooge_user, "Buffoon")
     assert not knights_of_the_round_table.has_role(moe_stooge_user, "Nope")
-
-
-
-
-
-
