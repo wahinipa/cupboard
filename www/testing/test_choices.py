@@ -1,13 +1,16 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures_for_testing import app, pastry, muffin, roll, MUFFIN_NAME, MUFFIN_DESCRIPTION, MUFFIN_DATE, \
+from testing.fixtures_for_testing import RED_COLORING_DATE, RED_COLORING_DESCRIPTION, RED_COLORING_NAME, app, pastry, \
+    muffin, roll, \
+    red_coloring, coloring, \
+    MUFFIN_NAME, MUFFIN_DESCRIPTION, MUFFIN_DATE, \
     ROLL_NAME, ROLL_DESCRIPTION, ROLL_DATE
 
 
 def _pycharm_please_keep_these_imports():
-    return app, pastry, muffin, roll
+    return app, pastry, muffin, roll, red_coloring, coloring
 
 
-def test_choice_creation(pastry, muffin, roll):
+def test_choice_creation(pastry, muffin, roll, red_coloring, coloring):
     assert muffin is not None
     assert muffin.name == MUFFIN_NAME
     assert muffin.description == MUFFIN_DESCRIPTION
@@ -21,3 +24,10 @@ def test_choice_creation(pastry, muffin, roll):
     assert roll.date_created == ROLL_DATE
     assert roll.category == pastry
     assert roll in pastry.choices
+
+    assert red_coloring is not None
+    assert red_coloring.name == RED_COLORING_NAME
+    assert red_coloring.description == RED_COLORING_DESCRIPTION
+    assert red_coloring.date_created == RED_COLORING_DATE
+    assert red_coloring.category == coloring
+    assert red_coloring in coloring.choices

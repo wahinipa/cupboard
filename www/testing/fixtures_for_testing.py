@@ -203,6 +203,16 @@ def light_saber(app):
                                 date_created=LIGHT_SABER_THING_DATE)
 
 
+BUCKET_NAME = "Bucket"
+BUCKET_DESCRIPTION = "Useful for hauling water."
+BUCKET_DATE = datetime(1981, 5, 4)
+
+
+@pytest.fixture()
+def bucket(app):
+    return find_or_create_thing(BUCKET_NAME, BUCKET_DESCRIPTION, date_created=BUCKET_DATE)
+
+
 ##########################
 # Category Test Fixtures #
 ##########################
@@ -217,6 +227,16 @@ def pastry(app):
     return find_or_create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
 
 
+COLORING_NAME = "coloring"
+COLORING_DESCRIPTION = "hue and all that"
+COLORING_DATE = datetime(1979, 2, 17)
+
+
+@pytest.fixture()
+def coloring(app):
+    return find_or_create_category(COLORING_NAME, description=COLORING_DESCRIPTION, date_created=COLORING_DATE)
+
+
 ########################
 # Choice Test Fixtures #
 ########################
@@ -229,12 +249,22 @@ ROLL_NAME = "Roll"
 ROLL_DESCRIPTION = "Cinnamon"
 ROLL_DATE = datetime(1987, 10, 14)
 
+RED_COLORING_NAME = "Red"
+RED_COLORING_DESCRIPTION = "Dark Pink"
+RED_COLORING_DATE = datetime(1957, 11, 13)
+
 
 @pytest.fixture()
 def muffin(app, pastry):
     return find_or_create_choice(pastry, MUFFIN_NAME, description=MUFFIN_DESCRIPTION, date_created=MUFFIN_DATE)
 
+
 @pytest.fixture()
 def roll(app, pastry):
     return find_or_create_choice(pastry, ROLL_NAME, description=ROLL_DESCRIPTION, date_created=ROLL_DATE)
 
+
+@pytest.fixture()
+def red_coloring(app, coloring):
+    return find_or_create_choice(coloring, RED_COLORING_NAME, description=RED_COLORING_DESCRIPTION,
+                                 date_created=RED_COLORING_DATE)

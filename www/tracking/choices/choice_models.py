@@ -7,6 +7,7 @@ from tracking.commons.base_models import BaseModel
 
 class Choice(BaseModel):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
+    particulars = database.relationship('Particular', backref='choice', lazy=True, cascade='all, delete')
 
 
 def find_or_create_choice(category, name, description="", date_created=None):

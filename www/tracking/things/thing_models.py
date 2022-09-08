@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.commons.base_models import UniqueNamedBaseModel, IdModelMixin
+from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel
 
 
 class Thing(UniqueNamedBaseModel):
@@ -22,16 +22,6 @@ class Thing(UniqueNamedBaseModel):
     def add_to_place(self, place, quantity):
         from tracking.positionings.postioning_models import add_quantity_of_things
         return add_quantity_of_things(place, self, quantity)
-
-
-class ParticularThing(IdModelMixin, database.Model):
-    thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
-    particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
-
-
-class Particular(IdModelMixin, database.Model):
-    particular_thing_id = database.Column(database.Integer, database.ForeignKey('particular_thing.id'), index=True)
-    choice_id = database.Column(database.Integer, database.ForeignKey('choice.id'), index=True)
 
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
@@ -58,3 +48,63 @@ def find_or_create_everything():
         database.session.add(everything)
         database.session.commit()
     return everything
+
+
+class Particular(IdModelMixin, database.Model):
+    particular_thing_id = database.Column(database.Integer, database.ForeignKey('particular_thing.id'), index=True)
+    choice_id = database.Column(database.Integer, database.ForeignKey('choice.id'), index=True)
+
+
+def find_particular(particular_thing, choice):
+    for particular in particular_thing.particulars:
+        if particular.choice == choice:
+            return particular
+    return None
+
+
+def find_or_create_particular(particular_thing, choice):
+    particular = find_particular(particular_thing, choice)
+    if particular is None:
+        particular = Particular(particular_thing_id=particular_thing.id, choice_id=choice.id)
+        database.session.add(particular)
+        database.session.commit()
+    return particular
+
+
+class ParticularThing(IdModelMixin, database.Model):
+    thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
+    particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
+
+    @property
+    def choices(self):
+        return [particular.choice for particular in self.particulars]
+
+
+def find_or_create_particular_thing(thing, choices):
+    particular_thing = find_particular_thing(thing, choices)
+    if particular_thing is None:
+        particular_thing = ParticularThing(thing_id=thing.id)
+        database.session.add(particular_thing)
+        database.session.commit()
+        for choice in choices:
+            find_or_create_particular(particular_thing, choice)
+    return particular_thing
+
+
+def find_particular_thing(thing, choices):
+    count = len(choices)
+
+    def has_same_choices(particular_thing):
+        possible_choices = particular_thing.choices
+        if len(possible_choices) != count:
+            return False
+        else:
+            for choice in choices:
+                if choice not in possible_choices:
+                    return False
+            return True
+
+    for particular_thing in thing.particular_things:
+        if has_same_choices(particular_thing):
+            return particular_thing
+    return None
