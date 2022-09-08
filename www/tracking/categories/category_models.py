@@ -6,7 +6,7 @@ from tracking.commons.base_models import UniqueNamedBaseModel
 
 
 class Category(UniqueNamedBaseModel):
-    pass
+    choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
 
 
 def find_or_create_category(name, description="", date_created=None):

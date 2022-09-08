@@ -6,6 +6,7 @@ import pytest
 
 from tracking import create_app, database
 from tracking.categories.category_models import find_or_create_category
+from tracking.choices.choice_models import find_or_create_choice
 #############################
 # Application Test Fixtures #
 #############################
@@ -209,6 +210,22 @@ def light_saber(app):
 PASTRY_NAME = "pastry"
 PASTRY_DESCRIPTION = "Yummy!"
 PASTRY_DATE = datetime(1989, 12, 13)
+
+
 @pytest.fixture()
 def pastry(app):
     return find_or_create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
+
+
+########################
+# Choice Test Fixtures #
+########################
+
+MUFFIN_NAME = "Muffin"
+MUFFIN_DESCRIPTION = "Blueberry"
+MUFFIN_DATE = datetime(1988, 11, 15)
+
+
+@pytest.fixture()
+def muffin(app, pastry):
+    return find_or_create_choice(pastry, MUFFIN_NAME, description=MUFFIN_DESCRIPTION, date_created=MUFFIN_DATE)

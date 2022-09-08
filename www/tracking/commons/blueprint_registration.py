@@ -9,6 +9,7 @@ ADMIN_URL = my_url('/admin')
 HOME_PAGE_URL = my_url('/home')
 
 CATEGORY_PREFIX = my_url('/category')
+CHOICE_PREFIX = my_url('/choice')
 FAKE_PREFIX = '/'  # note: not using my_url
 GROUP_PREFIX = my_url('/group')
 HOME_PREFIX = my_url('/home')
@@ -25,6 +26,9 @@ def blueprint_registration(application):
 
     from tracking.categories.category_routes import category_bp
     application.register_blueprint(category_bp, url_prefix=CATEGORY_PREFIX)
+
+    from tracking.choices.choice_routes import choice_bp
+    application.register_blueprint(choice_bp, url_prefix=CHOICE_PREFIX)
 
     from tracking.home.fake_routes import fake_bp
     application.register_blueprint(fake_bp, url_prefix=FAKE_PREFIX)
@@ -46,7 +50,3 @@ def blueprint_registration(application):
 
     from tracking.things.thing_routes import things_bp
     application.register_blueprint(things_bp, url_prefix=THINGS_PREFIX)
-
-
-
-
