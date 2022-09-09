@@ -8,10 +8,10 @@ from tracking.commons.base_models import UniqueNamedBaseModel
 class Group(UniqueNamedBaseModel):
 
     places = database.relationship('Place', backref='group', lazy=True, cascade='all, delete')
-    assignments = database.relationship('Assignment', backref='group', lazy=True, cascade='all, delete')
+    group_assignments = database.relationship('GroupAssignment', backref='group', lazy=True, cascade='all, delete')
 
     def has_role(self, person, name_of_role):
-        for assignment in self.assignments:
+        for assignment in self.group_assignments:
             if assignment.person == person and assignment.role.name == name_of_role:
                 return True
         return False

@@ -22,7 +22,10 @@ class User(IdModelMixin, database.Model, UserMixin):
     date_joined = database.Column(database.DateTime(), default=datetime.now())
     about_me = database.Column(database.String(255), nullable=False, server_default=u'')
 
-    assignments = database.relationship('Assignment', backref='person', lazy=True, cascade='all, delete')
+    group_assignments = database.relationship('GroupAssignment', backref='person', lazy=True, cascade='all, delete')
+    place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
+    universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
+                                                  cascade='all, delete')
 
     @property
     def is_the_admin(self):
@@ -32,8 +35,14 @@ class User(IdModelMixin, database.Model, UserMixin):
     def name(self):
         return f'{self.first_name} {self.last_name}'
 
-    def has_role(self, group, name_of_role):
-        return group.has_role(self, name_of_role)
+    def has_role(self, group_or_place, name_of_role):
+        return self.has_universal_role(name_of_role) or group_or_place.has_role(self, name_of_role)
+
+    def has_universal_role(self, name_of_role):
+        for assignment in self.universal_assignments:
+            if assignment.role.name == name_of_role:
+                return True
+        return False
 
 
 def load_user(unicode_user_id):
