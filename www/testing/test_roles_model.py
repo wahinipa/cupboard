@@ -3,7 +3,7 @@ from testing.fixtures_for_testing import BOSSY_DATE, BOSSY_DESCRIPTION, BOSSY_RO
     BUFFOON_DESCRIPTION, BUFFOON_ROLE_NAME, DUNCE_DATE, DUNCE_DESCRIPTION, DUNCE_ROLE_NAME, app, bossy, buffoon, \
     curly_stooge_user, dunce, knights_of_the_round_table, larry_stooge_user, moe_stooge_user, queens_of_the_round_table, \
     rainbow_place, wild_place
-from tracking.roles.role_models import assign_group_role, assign_place_role, find_or_create_role
+from tracking.roles.role_models import assign_group_role, assign_place_role, assign_universal_role, find_or_create_role
 
 
 def _pycharm_please_keep_these_imports():
@@ -205,3 +205,15 @@ def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place,
     assert curly_stooge_user.has_role(knights_of_the_round_table, "Dunce")
     assert curly_stooge_user.has_role(rainbow_place, "Dunce")
     assert curly_stooge_user.has_role(wild_place, "Dunce")
+
+    assert not curly_stooge_user.has_universal_role("Buffoon")
+    assert not curly_stooge_user.has_role(knights_of_the_round_table, "Buffoon")
+    assert not curly_stooge_user.has_role(rainbow_place, "Buffoon")
+    assert not curly_stooge_user.has_role(wild_place, "Buffoon")
+    role_b = assign_universal_role(buffoon, curly_stooge_user)
+    assert curly_stooge_user.has_universal_role("Buffoon")
+    assert curly_stooge_user.has_role(knights_of_the_round_table, "Buffoon")
+    assert curly_stooge_user.has_role(rainbow_place, "Buffoon")
+    assert curly_stooge_user.has_role(wild_place, "Buffoon")
+    role_c = assign_universal_role(buffoon, curly_stooge_user)
+    assert role_b == role_c

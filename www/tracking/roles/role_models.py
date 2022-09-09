@@ -67,6 +67,13 @@ def find_place_assignment(place, role, user):
     return None
 
 
+def find_universal_assignment(role, user):
+    for universal_assignment in user.universal_assignments:
+        if universal_assignment.role == role:
+            return universal_assignment
+    return None
+
+
 def assign_group_role(group, role, user, date_created=None):
     assignment = find_group_assignment(group, role, user)
     if assignment is None:
@@ -84,6 +91,17 @@ def assign_place_role(place, role, user, date_created=None):
         if date_created is None:
             date_created = datetime.now()
         assignment = PlaceAssignment(place=place, role=role, person=user, date_created=date_created)
+        database.session.add(assignment)
+        database.session.commit()
+    return assignment
+
+
+def assign_universal_role(role, user, date_created=None):
+    assignment = find_universal_assignment(role, user)
+    if assignment is None:
+        if date_created is None:
+            date_created = datetime.now()
+        assignment = UniversalAssignment(role=role, person=user, date_created=date_created)
         database.session.add(assignment)
         database.session.commit()
     return assignment
