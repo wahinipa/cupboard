@@ -1,14 +1,14 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures_for_testing import app, rainbow_place, light_saber, knights_of_the_round_table, muffin, roll, \
-    pastry
+from testing.fixtures_for_testing import app, knights_of_the_round_table, light_saber, muffin, pastry, rainbow_place, \
+    roll, wild_place
 from tracking import database
-from tracking.positionings.postioning_models import find_quantity_of_things, add_quantity_of_things, Positioning, \
-    _find_positionings
+from tracking.positionings.postioning_models import Positioning, _find_positionings, add_quantity_of_things, \
+    find_quantity_of_things, move_quantity_of_things
 from tracking.things.thing_models import find_or_create_particular_thing
 
 
 def _pycharm_please_keep_these_imports():
-    return app, rainbow_place, light_saber, knights_of_the_round_table, muffin, roll, pastry
+    return app, rainbow_place, wild_place, light_saber, knights_of_the_round_table, muffin, roll, pastry
 
 
 def test_quantities(rainbow_place, light_saber, knights_of_the_round_table, muffin):
@@ -43,7 +43,7 @@ def test_handles_redundant_quantities(rainbow_place, light_saber, knights_of_the
 
     # Force a redundant entry. Should not happen if only using add_quantity_of_things
     # but worth checking that the code is robust enough to deal with it.
-    positioning = Positioning(place=rainbow_place, particular_thing=particular_light_saber, quantity=100)
+    positioning = Positioning(particular_thing=particular_light_saber, place=rainbow_place, quantity=100)
     database.session.add(positioning)
     database.session.commit()
     assert len(_find_positionings(rainbow_place, particular_light_saber)) == 2  # redundant entries
@@ -54,3 +54,12 @@ def test_handles_redundant_quantities(rainbow_place, light_saber, knights_of_the
 
     assert len(_find_positionings(rainbow_place, particular_light_saber)) == 1  # back to just one entry
 
+
+def test_change_of_place(rainbow_place, wild_place, light_saber, knights_of_the_round_table, roll):
+    particular_light_saber = find_or_create_particular_thing(light_saber, [roll])
+    assert find_quantity_of_things(rainbow_place, particular_light_saber) == 0
+    assert find_quantity_of_things(wild_place, particular_light_saber) == 0
+    assert add_quantity_of_things(rainbow_place, particular_light_saber, 7) == 7
+    assert find_quantity_of_things(rainbow_place, particular_light_saber) == 7
+    assert find_quantity_of_things(wild_place, particular_light_saber) == 0
+    assert move_quantity_of_things(wild_place, rainbow_place, particular_light_saber, 2) == (2, 5)

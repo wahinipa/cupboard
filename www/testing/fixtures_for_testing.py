@@ -184,8 +184,8 @@ def rainbow_place(app, knights_of_the_round_table):
 
 @pytest.fixture()
 def wild_place(app, knights_of_the_round_table):
-    return find_or_create_place(knights_of_the_round_table, RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION,
-                                date_created=RAINBOW_PLACE_DATE)
+    return find_or_create_place(knights_of_the_round_table, WILD_PLACE_NAME, WILD_PLACE_DESCRIPTION,
+                                date_created=WILD_PLACE_DATE)
 
 
 #######################

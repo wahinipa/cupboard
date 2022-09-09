@@ -10,9 +10,10 @@ class Positioning(IdModelMixin, database.Model):
     quantity = database.Column(database.Integer, nullable=False, server_default='0')
 
 
-def _find_positionings(place, particular_thing_id):
+def _find_positionings(place, particular_thing):
+    # return [positioning fo]
     return Positioning.query.filter(Positioning.place_id == place.id,
-                                    Positioning.particular_thing_id == particular_thing_id.id).all()
+                                    Positioning.particular_thing_id == particular_thing.id).all()
 
 
 def find_quantity_of_things(place, particular_thing):
@@ -32,3 +33,10 @@ def add_quantity_of_things(place, particular_thing, quantity):
             database.session.delete(excess_positioning)
     database.session.commit()
     return requested_quantity
+
+
+def move_quantity_of_things(destination_place, source_place, particular_thing, quantity):
+    return (
+        add_quantity_of_things(destination_place, particular_thing, quantity),
+        add_quantity_of_things(source_place, particular_thing, -quantity),
+    )
