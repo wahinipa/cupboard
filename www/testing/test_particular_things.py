@@ -35,3 +35,11 @@ def test_creating_particulars(pastry, muffin, roll, red_coloring, coloring, ligh
 
     repeat_particular_bucket = find_or_create_particular_thing(bucket, [red_coloring, muffin])
     assert repeat_particular_bucket == particular_bucket
+
+
+def test_generic(light_saber):
+    generic_light_saber = light_saber.generic
+    assert generic_light_saber is not None
+    assert len(generic_light_saber.choices) == 0
+    another_generic = find_or_create_particular_thing(light_saber, [])
+    assert another_generic == generic_light_saber

@@ -19,6 +19,10 @@ class Thing(UniqueNamedBaseModel):
             thing.quantity_at_place(place) for thing in self.kinds
         )
 
+    @property
+    def generic(self):
+        return find_or_create_particular_thing(self, [])
+
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
     thing = find_thing_by_name(name)
