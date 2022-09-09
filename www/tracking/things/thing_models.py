@@ -14,6 +14,11 @@ class Thing(UniqueNamedBaseModel):
     refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
+    def quantity_at_place(self, place):
+        return sum(particular_thing.quantity_at_place(place) for particular_thing in self.particular_things) + sum(
+            thing.quantity_at_place(place) for thing in self.kinds
+        )
+
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
     thing = find_thing_by_name(name)
@@ -60,6 +65,9 @@ class ParticularThing(IdModelMixin, database.Model):
     particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
     positionings = database.relationship('Positioning', backref='particular_thing', lazy=True, cascade='all, delete')
 
+    @property
+    def kind_of(self):
+        return self.thing
     @property
     def choices(self):
         return [particular.choice for particular in self.particulars]

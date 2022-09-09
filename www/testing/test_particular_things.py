@@ -18,6 +18,9 @@ def test_creating_particulars(pastry, muffin, roll, red_coloring, coloring, ligh
     assert red_coloring in particular_bucket_choices
     assert muffin in particular_bucket_choices
     assert roll not in particular_bucket_choices
+    assert particular_bucket in bucket.particular_things
+    assert particular_bucket.thing == bucket
+    assert particular_bucket.kind_of == bucket
 
     another_particular_bucket = find_or_create_particular_thing(bucket, [red_coloring, roll])
     assert another_particular_bucket is not None

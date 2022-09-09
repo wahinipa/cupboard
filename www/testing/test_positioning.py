@@ -26,6 +26,11 @@ def test_quantities(rainbow_place, light_saber, knights_of_the_round_table, muff
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 15
     assert particular_light_saber.add_to_place(rainbow_place, 9) == 24
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 24
+    assert particular_light_saber.quantity_at_place(rainbow_place) == 24
+    assert light_saber.quantity_at_place(rainbow_place) == 24
+    everything = light_saber.kind_of
+    assert everything is not None
+    assert everything.quantity_at_place(rainbow_place) == 24
 
 
 def test_handles_redundant_quantities(rainbow_place, light_saber, knights_of_the_round_table, roll):
@@ -48,3 +53,4 @@ def test_handles_redundant_quantities(rainbow_place, light_saber, knights_of_the
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 107
 
     assert len(_find_positionings(rainbow_place, particular_light_saber)) == 1  # back to just one entry
+
