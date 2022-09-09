@@ -14,9 +14,9 @@ class Place(BaseModel):
         from tracking.positionings.postioning_models import find_quantity_of_things
         return find_quantity_of_things(self, thing)
 
-    def add_things(self, thing, quantity):
+    def add_to_thing(self, particular_thing, quantity):
         from tracking.positionings.postioning_models import add_quantity_of_things
-        return add_quantity_of_things(self, thing, quantity)
+        return add_quantity_of_things(self, particular_thing, quantity)
 
 
 def find_or_create_place(group, name, description, date_created=None):

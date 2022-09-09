@@ -22,7 +22,7 @@ def test_quantities(rainbow_place, light_saber, knights_of_the_round_table, muff
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 5
     assert rainbow_place.quantity_of_things(particular_light_saber) == 5
     assert particular_light_saber.quantity_at_place(rainbow_place) == 5
-    assert rainbow_place.add_things(particular_light_saber, 10) == 15
+    assert rainbow_place.add_to_thing(particular_light_saber, 10) == 15
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 15
     assert particular_light_saber.add_to_place(rainbow_place, 9) == 24
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 24
