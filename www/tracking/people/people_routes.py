@@ -87,8 +87,6 @@ def change_password():
     if request.method == 'POST' and form.cancel_button.data:
         return redirect(url_for('home_bp.home'))
     if form.validate_on_submit():
-        password_new_hash = generate_password_hash(form.password_new.data)
-        current_user.password = password_new_hash
         database.session.commit()
         return redirect(url_for('home_bp.home'))
     return render_template('change_password.j2', form=form)

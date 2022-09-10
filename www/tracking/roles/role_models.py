@@ -52,6 +52,13 @@ def find_or_create_role(name, description="", date_created=None):
         database.session.commit()
     return role
 
+def find_or_create_standard_roles():
+    return [
+        find_or_create_role("Create User", "Can create new user account (i.e. login)."),
+        find_or_create_role("Delete User", "Can delete current user account."),
+        find_or_create_role("Assign Universal Roles", "Can assign user roles across all groups."),
+    ]
+
 
 def find_group_assignment(group, role, user):
     for group_assignment in user.group_assignments:

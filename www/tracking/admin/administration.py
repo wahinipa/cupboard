@@ -58,7 +58,7 @@ def add_flask_admin(application, database):
     from tracking.roles.role_models import Role
     from tracking.things.thing_models import Thing
     from tracking.roles.role_models import UniversalAssignment
-    admin.add_view(UserAdminModelView(User, database.session))
+    admin.add_view(AdminModelView(User, database.session))
     admin.add_view(AdminModelView(Group, database.session))
     admin.add_view(AdminModelView(GroupAssignment, database.session))
     admin.add_view(AdminModelView(Place, database.session))
@@ -83,8 +83,3 @@ class AdminModelView(ModelView):
         from flask import request
         return redirect(url_for('login', next=request.url))
 
-
-class UserAdminModelView(AdminModelView):
-
-    def on_model_change(self, form, model, is_created):
-        model.password = generate_password_hash(model.password)

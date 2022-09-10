@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from flask_login import UserMixin
+from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
 from tracking import database
@@ -32,8 +33,36 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.username == 'admin'
 
     @property
+    def is_an_admin(self):
+        return self.is_the_admin or self.is_admin
+
+    @property
     def name(self):
         return f'{self.first_name} {self.last_name}'
+
+    @property
+    def can_edit_database(self):
+        return self.is_the_admin
+
+    @property
+    def can_assign_universal_roles(self):
+        return self.is_an_admin
+
+    @property
+    def can_create_group(self):
+        return self.is_an_admin
+
+    @property
+    def can_delete_group(self):
+        return self.is_an_admin
+
+    @property
+    def can_create_person(self):
+        return self.is_an_admin
+
+    @property
+    def can_delete_person(self):
+        return self.is_an_admin
 
     def has_role(self, group_or_place, name_of_role):
         return self.has_universal_role(name_of_role) or group_or_place.has_role(self, name_of_role)
@@ -43,6 +72,12 @@ class User(IdModelMixin, database.Model, UserMixin):
             if assignment.role.name == name_of_role:
                 return True
         return False
+
+@event.listens_for(User.password, 'set', retval=True)
+def hash_user_password(target, value, oldvalue, initiator):
+    if value != oldvalue:
+        return generate_password_hash(value)
+    return value
 
 
 def load_user(unicode_user_id):
@@ -87,7 +122,7 @@ def generate_uncommitted_user(first_name, last_name, username, password, is_admi
     user = User(username=username,
                 first_name=first_name,
                 last_name=last_name,
-                password=generate_password_hash(password),
+                password=password,
                 is_admin=is_admin,
                 date_joined=date_joined)
     return user

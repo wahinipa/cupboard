@@ -6,8 +6,10 @@
 {% endmacro %}
 
 {% macro admin_nav_item() %}
-  {% if current_user.is_the_admin %}
+  {% if current_user.can_edit_database %}
     {{ render_nav_item('admin.index', 'Admin', use_li=True) }}
+  {% endif %}
+  {% if current_user.can_create_person %}
     {{ render_nav_item('people_bp.create', 'Create User') }}
   {% endif %}
 {% endmacro %}
