@@ -49,6 +49,7 @@ def add_flask_admin(application, database):
     # Using local imports helps break circularity of dependencies
     from tracking.people.people_models import User
     from tracking.categories.category_models import Category
+    from tracking.choices.choice_models import Choice
     from tracking.groups.group_models import Group
     from tracking.roles.role_models import GroupAssignment
     from tracking.places.place_models import Place
@@ -63,6 +64,7 @@ def add_flask_admin(application, database):
     admin.add_view(AdminModelView(Place, database.session))
     admin.add_view(AdminModelView(PlaceAssignment, database.session))
     admin.add_view(AdminModelView(Category, database.session))
+    admin.add_view(AdminModelView(Choice, database.session))
     admin.add_view(AdminModelView(Positioning, database.session))
     admin.add_view(AdminModelView(Role, database.session))
     admin.add_view(AdminModelView(Thing, database.session))
