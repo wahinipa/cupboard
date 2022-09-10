@@ -10,7 +10,7 @@ from tracking.people.people_models import find_user_by_username
 
 
 class LoginForm(FlaskForm):
-    next = HiddenField()  # for login.html
+    next = HiddenField()  # for login.j2
     reg_next = HiddenField()  # for login_or_register.html
 
     username = StringField('Username', validators=[

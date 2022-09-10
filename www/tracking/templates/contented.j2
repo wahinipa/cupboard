@@ -1,5 +1,5 @@
 {% from 'bootstrap4/nav.html' import render_nav_item %}
-{% extends "base.html" %}
+{% extends "base.j2" %}
 
 {% macro home_nav_item() %}
   {{ render_nav_item('home_bp.home', 'Home', use_li=True) }}

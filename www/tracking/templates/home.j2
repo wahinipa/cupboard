@@ -1,6 +1,6 @@
-{% extends "contented.html" %}
-{% from 'button_macros.html' import render_link_button %}
-{% from 'macros.html' import render_top_card, render_secondary_card %}
+{% extends "contented.j2" %}
+{% from 'button_macros.j2' import render_link_button %}
+{% from 'card_macros.j2' import render_top_card, render_secondary_card %}
 {% block innards %}
   {% call render_top_card(category='Home', target=current_user, has_owner=False) %}
     <p>

@@ -15,7 +15,7 @@ def fake():
     log_info_about_request('Root Request')
     if 'wahinipa' not in request.host and '127.0.0.1' not in request.host and 'localhost' not in request.host:
         return rickroll()
-    return render_template('fake_front.html')
+    return render_template('fake_front.j2')
 
 
 # Find hacker urls with:

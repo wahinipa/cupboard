@@ -36,7 +36,7 @@ def create():
                 )
                 database.session.commit()
             return redirect(url_for('home_bp.home'))
-        return render_template('user_create.html', form=form)
+        return render_template('user_create.j2', form=form)
     else:
         return redirect_hacks()
 
@@ -57,7 +57,7 @@ def login():
             return abort(400)
 
         return redirect(next_url or url_for('home_bp.home'))
-    return render_template('login.html', form=form)
+    return render_template('login.j2', form=form)
 
 
 @people_bp.route('/profile', methods=['POST', 'GET'])
@@ -71,7 +71,7 @@ def profile():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
 
-    return render_template('profile.html', form=form)
+    return render_template('profile.j2', form=form)
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -91,4 +91,4 @@ def change_password():
         current_user.password = password_new_hash
         database.session.commit()
         return redirect(url_for('home_bp.home'))
-    return render_template('change_password.html', form=form)
+    return render_template('change_password.j2', form=form)
