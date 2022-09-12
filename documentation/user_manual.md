@@ -58,7 +58,7 @@ The Description of a Place is available to observers and can be used to hold
 useful information like the street address or maybe a list of who might have the keys to
 a storage unit.
 
-### Group
+### Groups
 Places are clustered into Groups.
 A Group of Places might have an organizational connection (all run by the Such and So Society)
 or it might be geographical (North Ying, Southwest Yang). 
@@ -77,8 +77,5 @@ Should it be split first into indoor/outdoor and then by age?
 Or the other way around?
 
 The solution is Categories and Choices.
-Add two Categories to Toys: Indoor/Outdoor and Recommended Age.
-
-
-
-
+A Category has a name plus various choices with that category.
+The toy problem could by solved by adding two Categories to Toys: Indoor/Outdoor and Recommended Age.
