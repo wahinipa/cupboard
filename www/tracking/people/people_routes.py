@@ -2,7 +2,6 @@
 from flask import Blueprint, flash, request, abort, redirect, url_for, render_template
 from flask_admin.helpers import is_safe_url
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
