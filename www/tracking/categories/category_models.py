@@ -2,12 +2,15 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.commons.base_models import UniqueNamedBaseModel, IdModelMixin
+from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel
 
 
 class Category(UniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
+
+    def user_may_view(self, user):
+        return user.can_observe_things
 
 
 class Refinement(IdModelMixin, database.Model):
@@ -30,7 +33,8 @@ def find_or_create_category(name, description="", date_created=None):
 def find_category_by_name(name):
     return Category.query.filter(Category.name == name).first()
 
-def find_category_by_category_id(id):
+
+def find_category_by_id(id):
     return Category.query.filter(Category.id == id).first()
 
 

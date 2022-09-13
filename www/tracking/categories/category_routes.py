@@ -2,15 +2,13 @@
 from flask import Blueprint, render_template, url_for, redirect
 from flask_login import login_required, current_user
 
+from tracking.categories.category_models import find_category_by_id
+
 category_bp = Blueprint(
     'category_bp', __name__,
     template_folder='../templates',
     static_folder='static',
 )
-
-
-def find_category_by_id(category_id):
-    pass
 
 
 @category_bp.route('/show/<int:category_id>')
