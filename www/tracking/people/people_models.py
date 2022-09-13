@@ -29,6 +29,10 @@ class User(IdModelMixin, database.Model, UserMixin):
                                                   cascade='all, delete')
 
     @property
+    def assignments(self):
+        return self.universal_assignments + self.group_assignments + self.place_assignments
+
+    @property
     def is_the_admin(self):
         return self.username == 'admin'
 
@@ -64,14 +68,22 @@ class User(IdModelMixin, database.Model, UserMixin):
     def can_delete_person(self):
         return self.is_an_admin
 
+    @property
+    def can_observe_things(self):
+        def yes(assignment):
+            return assignment.is_observer
+
+        return any(map(yes, self.assignments))
+
     def has_role(self, group_or_place, name_of_role):
         return self.has_universal_role(name_of_role) or group_or_place.has_role(self, name_of_role)
 
     def has_universal_role(self, name_of_role):
-        for assignment in self.universal_assignments:
-            if assignment.role.name == name_of_role:
-                return True
-        return False
+        def yes(assignment):
+            return assignment.is_named(name_of_role)
+
+        return any(map(yes, self.universal_assignments))
+
 
 @event.listens_for(User.password, 'set', retval=True)
 def hash_user_password(target, value, oldvalue, initiator):

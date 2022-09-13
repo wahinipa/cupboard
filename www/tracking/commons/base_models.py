@@ -16,12 +16,18 @@ class IdModelMixin():
         return f'{self.__class__.__name__}_{self.id}'
 
 
-class NamedModelMixin():
+class KnowsOwnName:
+    def is_named(self, name):
+        return self.name == name
+
+
+class NamedModelMixin(KnowsOwnName):
     @declared_attr
     def name(cls):
         return database.Column(database.String(255), nullable=False, server_default=u'')
 
-class UniqueNamedModelMixin():
+
+class UniqueNamedModelMixin(KnowsOwnName):
     @declared_attr
     def name(cls):
         return database.Column(database.String(255), nullable=False, unique=True, server_default=u'')
@@ -43,8 +49,17 @@ class DescriptionModelMixin():
         return self.description.split('\n')
 
 
+class ModelWithRoles:
+    def has_role(self, person, name_of_role):
+        def yes(assignment):
+            return assignment.person == person and assignment.role.is_named(name_of_role)
+
+        return any(map(yes, self.assignments))
+
+
 class BaseModel(IdModelMixin, NamedModelMixin, DescriptionModelMixin, DatedModelMixin, database.Model):
     __abstract__ = True
+
 
 class UniqueNamedBaseModel(IdModelMixin, UniqueNamedModelMixin, DescriptionModelMixin, DatedModelMixin, database.Model):
     __abstract__ = True

@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import declared_attr
 
 from tracking import database
-from tracking.commons.base_models import DatedModelMixin, IdModelMixin, UniqueNamedBaseModel
+from tracking.commons.base_models import DatedModelMixin, IdModelMixin, UniqueNamedBaseModel, KnowsOwnName
 
 
 class Role(UniqueNamedBaseModel):
@@ -13,8 +13,16 @@ class Role(UniqueNamedBaseModel):
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,
                                                   cascade='all, delete')
 
+    observer_role = "Observer"
+    create_user_role = "Create User"
+    delete_user_role = "Delete User"
 
-class AssignmentBaseModel(IdModelMixin, DatedModelMixin, database.Model):
+    @property
+    def is_observer_role(self):
+        return self.is_named(self.observer_role)
+
+
+class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.Model):
     __abstract__ = True
 
     @declared_attr
@@ -24,6 +32,14 @@ class AssignmentBaseModel(IdModelMixin, DatedModelMixin, database.Model):
     @declared_attr
     def user_id(cls):
         return database.Column(database.Integer, database.ForeignKey('user.id'))
+
+    @property
+    def is_observer(self):
+        return self.role.is_observer_role
+
+    @property
+    def name(self):
+        return self.role.name
 
 
 class GroupAssignment(AssignmentBaseModel):
@@ -52,11 +68,12 @@ def find_or_create_role(name, description="", date_created=None):
         database.session.commit()
     return role
 
+
 def find_or_create_standard_roles():
     return [
-        find_or_create_role("Create User", "Can create new user account (i.e. login)."),
-        find_or_create_role("Delete User", "Can delete current user account."),
-        find_or_create_role("Assign Universal Roles", "Can assign user roles across all groups."),
+        find_or_create_role(Role.create_user_role, "Can create new user account (i.e. login)."),
+        find_or_create_role(Role.delete_user_role, "Can delete current user account."),
+        find_or_create_role(Role.observer_role, "Can view, search, and generate reports."),
     ]
 
 

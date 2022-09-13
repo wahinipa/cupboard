@@ -2,19 +2,16 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.commons.base_models import UniqueNamedBaseModel
+from tracking.commons.base_models import UniqueNamedBaseModel, ModelWithRoles
 
 
-class Group(UniqueNamedBaseModel):
-
+class Group(UniqueNamedBaseModel, ModelWithRoles):
     places = database.relationship('Place', backref='group', lazy=True, cascade='all, delete')
     group_assignments = database.relationship('GroupAssignment', backref='group', lazy=True, cascade='all, delete')
 
-    def has_role(self, person, name_of_role):
-        for assignment in self.group_assignments:
-            if assignment.person == person and assignment.role.name == name_of_role:
-                return True
-        return False
+    @property
+    def assignments(self):
+        return self.group_assignments
 
 
 def find_or_create_group(name, description="", date_created=None):

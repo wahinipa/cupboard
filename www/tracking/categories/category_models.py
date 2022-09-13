@@ -30,6 +30,9 @@ def find_or_create_category(name, description="", date_created=None):
 def find_category_by_name(name):
     return Category.query.filter(Category.name == name).first()
 
+def find_category_by_category_id(id):
+    return Category.query.filter(Category.id == id).first()
+
 
 def refine_thing(thing, category, date_created=None):
     refinement = find_refinement(thing, category)

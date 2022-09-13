@@ -6,7 +6,7 @@ from testing.fixtures_for_testing import BOSSY_DATE, BOSSY_DESCRIPTION, BOSSY_RO
     rainbow_place, wild_place
 from tracking.roles.role_models import assign_group_role, assign_place_role, assign_universal_role, \
     find_or_create_role, \
-    find_or_create_standard_roles
+    find_or_create_standard_roles, find_role, Role
 
 
 def _pycharm_please_keep_these_imports():
@@ -203,7 +203,11 @@ def test_place_role_assignment(rainbow_place, wild_place, dunce, buffoon, bossy,
 
 def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place, wild_place, dunce, buffoon, bossy,
                                       curly_stooge_user):
+    assert len(curly_stooge_user.assignments) == 0
+
     role_a = assign_group_role(knights_of_the_round_table, dunce, curly_stooge_user)
+    assert len(curly_stooge_user.assignments) == 1
+    assert role_a in curly_stooge_user.group_assignments
     assert not curly_stooge_user.has_universal_role("Dunce")
     assert curly_stooge_user.has_role(knights_of_the_round_table, "Dunce")
     assert curly_stooge_user.has_role(rainbow_place, "Dunce")
@@ -214,6 +218,7 @@ def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place,
     assert not curly_stooge_user.has_role(rainbow_place, "Buffoon")
     assert not curly_stooge_user.has_role(wild_place, "Buffoon")
     role_b = assign_universal_role(buffoon, curly_stooge_user)
+    assert len(curly_stooge_user.assignments) == 2
     assert curly_stooge_user.has_universal_role("Buffoon")
     assert curly_stooge_user.has_role(knights_of_the_round_table, "Buffoon")
     assert curly_stooge_user.has_role(rainbow_place, "Buffoon")
@@ -222,10 +227,19 @@ def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place,
     assert role_b == role_c
 
 
+def test_observer_role(curly_stooge_user, knights_of_the_round_table):
+    find_or_create_standard_roles()
+    observer_role = find_role(Role.observer_role)
+    assert not curly_stooge_user.can_observe_things
+    assign_group_role(knights_of_the_round_table, observer_role, curly_stooge_user)
+    assert curly_stooge_user.can_observe_things
+
+
 def test_standard_roles(app):
     standard_roles = {role.name: role for role in find_or_create_standard_roles()}
     for role_name in [
         'Create User',
         'Delete User',
+        'Observer',
     ]:
         assert standard_roles.get(role_name) is not None
