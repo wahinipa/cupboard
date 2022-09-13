@@ -16,7 +16,7 @@ database = SQLAlchemy()
 migrate = Migrate()
 
 if os.getenv('DEBUG') != 'True':
-    logging.basicConfig(filename='/home/willy/www/cupboard.log', level=logging.INFO)
+    logging.basicConfig(filename='./cupboard.log', level=logging.INFO)
 
 
 def create_app():

@@ -1,5 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
+from os import environ
 
 from flask_login import UserMixin
 from sqlalchemy import event
@@ -104,9 +105,18 @@ def find_user_by_username(username):
     return User.query.filter(User.username == username).first()
 
 
+def create_test_users():
+    find_or_create_user('Curly', 'Stooge', 'curly', 'aaaaaa', is_admin=False)
+    find_or_create_user('Moe', 'Stooge', 'moe', 'aaaaaa', is_admin=True)
+    find_or_create_user('Larry', 'Stooge', 'larry', 'aaaaaa', is_admin=False)
+
+
 def create_initial_users():
     """ Create users """
     create_initial_admin()
+
+    if environ.get('TEST_USERS'):
+        create_test_users()
 
 
 def create_initial_admin():
