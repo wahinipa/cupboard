@@ -18,12 +18,12 @@ def test_registration(pretend_application):
         'group_bp',
         'home_bp',
         'people_bp',
-        'places_bp',
-        'roles_bp',
-        'things_bp',
+        'place_bp',
+        'role_bp',
+        'thing_bp',
     ]
     for blueprint_name in expected_blueprints:
-        blueprint_prefix = blueprint_name.split("_")[0]  # "things_bp" --> "things"
+        blueprint_prefix = blueprint_name.split("_")[0]  # "thing_bp" --> "things"
         registration = pretend_application.blueprints.get(blueprint_name)
         assert registration is not None
         blueprint = registration.get("blueprint")

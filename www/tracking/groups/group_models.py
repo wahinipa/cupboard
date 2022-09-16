@@ -27,3 +27,7 @@ def find_or_create_group(name, description="", date_created=None):
 
 def find_group_by_name(name):
     return Group.query.filter(Group.name == name).first()
+
+def find_group_by_id(group_id):
+    pass
+

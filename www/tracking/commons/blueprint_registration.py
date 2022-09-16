@@ -14,9 +14,9 @@ FAKE_PREFIX = '/'  # note: not using my_url
 GROUP_PREFIX = my_url('/group')
 HOME_PREFIX = my_url('/home')
 USER_PREFIX = my_url('/people')
-PLACES_PREFIX = my_url('/places')
-ROLES_PREFIX = my_url('/roles')
-THINGS_PREFIX = my_url('/things')
+PLACES_PREFIX = my_url('/place')
+ROLES_PREFIX = my_url('/role')
+THINGS_PREFIX = my_url('/thing')
 
 
 def blueprint_registration(application):
@@ -42,11 +42,11 @@ def blueprint_registration(application):
     from tracking.people.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)
 
-    from tracking.places.place_routes import places_bp
-    application.register_blueprint(places_bp, url_prefix=PLACES_PREFIX)
+    from tracking.places.place_routes import place_bp
+    application.register_blueprint(place_bp, url_prefix=PLACES_PREFIX)
 
-    from tracking.roles.role_routes import roles_bp
-    application.register_blueprint(roles_bp, url_prefix=ROLES_PREFIX)
+    from tracking.roles.role_routes import role_bp
+    application.register_blueprint(role_bp, url_prefix=ROLES_PREFIX)
 
-    from tracking.things.thing_routes import things_bp
-    application.register_blueprint(things_bp, url_prefix=THINGS_PREFIX)
+    from tracking.things.thing_routes import thing_bp
+    application.register_blueprint(thing_bp, url_prefix=THINGS_PREFIX)
