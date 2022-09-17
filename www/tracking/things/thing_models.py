@@ -41,6 +41,10 @@ def find_thing_by_name(name):
     return Thing.query.filter(Thing.name == name).first()
 
 
+def find_thing_by_id(id):
+    return Thing.query.filter(Thing.id == id).first()
+
+
 def find_or_create_everything():
     everything = find_thing_by_name("Everything")
     if everything is None:
@@ -72,6 +76,7 @@ class ParticularThing(IdModelMixin, database.Model):
     @property
     def kind_of(self):
         return self.thing
+
     @property
     def choices(self):
         return [particular.choice for particular in self.particulars]

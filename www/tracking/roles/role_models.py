@@ -22,6 +22,10 @@ class Role(UniqueNamedBaseModel):
         return self.is_named(self.observer_role)
 
 
+def find_role_by_id(id):
+    return Role.query.filter(Role.id == id).first()
+
+
 class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.Model):
     __abstract__ = True
 
