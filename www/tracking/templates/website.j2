@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% from 'bootstrap5/form.html' import render_form %}
+{% from 'website_macros.j2' import
+user_options,
+website_footer,
+website_logo %}
+<html lang="en">
+<head>
+  {% block head %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{ title }}</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {{ bootstrap.load_css() }}
+    <style>
+      {% include 'website_style.css' %}
+    </style>
+  {% endblock %}
+</head>
+<body>
+<main class="container-fluid">
+  <div class="row">
+    {{ website_logo(project_name) }}
+    {% block header %}{% endblock %}
+    {{ user_options(current_user) }}
+  </div>
+  {% block innards %}{% endblock %}
+  <div class="row">
+    {{ website_footer() }}
+  </div>
+</main>
+{{ bootstrap.load_js() }}
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% from 'bootstrap4/nav.html' import render_nav_item %}
+
+{% macro home_nav_item() %}
+  {{ render_nav_item('home_bp.home', 'Home', use_li=True) }}
+{% endmacro %}
+
+{% macro admin_database_edit_nav_item(current_user) %}
+  {% if current_user.can_edit_database %}
+    {{ render_nav_item('admin.index', 'Admin', use_li=True) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro create_user_account_nav_item(current_user) %}
+  {% if current_user.can_create_person %}
+    {{ render_nav_item('people_bp.create', 'Create User') }}
+  {% endif %}
+{% endmacro %}
+

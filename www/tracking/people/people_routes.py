@@ -5,6 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
+from tracking.commons.display_context import display_context
 from tracking.people.people_forms import UserCreateForm, LoginForm, UserProfileForm, ChangePasswordForm
 from tracking.people.people_models import find_user_by_username, find_or_create_user
 
@@ -56,7 +57,9 @@ def login():
             return abort(400)
 
         return redirect(next_url or url_for('home_bp.home'))
-    return render_template('login.j2', form=form)
+    else:
+        context = display_context({'form': form})
+        return render_template('login.j2', **context)
 
 
 @people_bp.route('/profile', methods=['POST', 'GET'])
