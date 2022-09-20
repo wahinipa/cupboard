@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, url_for, redirect
 from flask_login import login_required, current_user
 
 from tracking.categories.category_models import find_category_by_id
+from tracking.commons.display_context import display_context
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -16,6 +17,6 @@ category_bp = Blueprint(
 def show(category_id):
     category = find_category_by_id(category_id)
     if category is not None and category.user_may_view(current_user):
-        return render_template('category_show.j2', category=category)
+        return render_template('category_show.j2', category=category, **display_context())
     else:
         return redirect(url_for('home_bp.home'))

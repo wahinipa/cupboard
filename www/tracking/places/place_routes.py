@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
+from tracking.commons.display_context import display_context
 
 place_bp = Blueprint(
     'place_bp', __name__,
@@ -24,7 +25,7 @@ def place_create():
         place = create_place_from_form(current_user, form)
         return redirect(url_for('place_bp.place_view', place_id=place.id))
     else:
-        return render_template('place_create_form.j2', form=form, tab="place")
+        return render_template('place_create_form.j2', form=form, tab="place", **display_context())
 
 
 def place_create_form():
@@ -70,7 +71,7 @@ def place_update(place_id):
             database.session.commit()
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
-            return render_template('place_edit_form.j2', form=form, tab="place")
+            return render_template('place_edit_form.j2', form=form, tab="place", **display_context())
     else:
         return redirect_hacks()
 
@@ -88,7 +89,7 @@ def update_place_from_form(place, form):
 def place_view(place_id):
     place = find_place_by_id(place_id)
     if place is not None and place.user_may_view(current_user):
-        return render_template('place_view.j2', place=place, tab="place")
+        return render_template('place_view.j2', place=place, tab="place", **display_context())
     else:
         return redirect(url_for('home_bp.home'))
 

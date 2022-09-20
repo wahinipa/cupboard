@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
+from tracking.commons.display_context import display_context
 from tracking.things.thing_models import find_thing_by_id
 
 thing_bp = Blueprint(
@@ -25,7 +26,7 @@ def thing_create():
         thing = create_thing_from_form(current_user, form)
         return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
     else:
-        return render_template('thing_create_form.j2', form=form, tab="thing")
+        return render_template('thing_create_form.j2', form=form, tab="thing", **display_context())
 
 
 def thing_create_form():
@@ -67,7 +68,7 @@ def thing_update(thing_id):
             database.session.commit()
             return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
         else:
-            return render_template('thing_edit_form.j2', form=form, tab="thing")
+            return render_template('thing_edit_form.j2', form=form, tab="thing", **display_context())
     else:
         return redirect_hacks()
 
@@ -85,7 +86,7 @@ def update_thing_from_form(thing, form):
 def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.user_may_view(current_user):
-        return render_template('thing_view.j2', thing=thing, tab="thing")
+        return render_template('thing_view.j2', thing=thing, tab="thing", **display_context())
     else:
         return redirect(url_for('home_bp.home'))
 

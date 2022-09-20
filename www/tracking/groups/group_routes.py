@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
+from tracking.commons.display_context import display_context
 from tracking.groups.group_models import find_group_by_id
 
 group_bp = Blueprint(
@@ -25,7 +26,7 @@ def group_create():
         group = create_group_from_form(current_user, form)
         return redirect(url_for('group_bp.group_view', group_id=group.id))
     else:
-        return render_template('group_create_form.j2', form=form, tab="group")
+        return render_template('group_create_form.j2', form=form, tab="group", **display_context())
 
 
 def group_create_form():
@@ -67,7 +68,7 @@ def group_update(group_id):
             database.session.commit()
             return redirect(url_for('group_bp.group_view', group_id=group.id))
         else:
-            return render_template('group_edit_form.j2', form=form, tab="group")
+            return render_template('group_edit_form.j2', form=form, tab="group", **display_context())
     else:
         return redirect_hacks()
 
@@ -85,6 +86,6 @@ def update_group_from_form(group, form):
 def group_view(group_id):
     group = find_group_by_id(group_id)
     if group is not None and group.user_may_view(current_user):
-        return render_template('group_view.j2', group=group, tab="group")
+        return render_template('group_view.j2', group=group, tab="group", **display_context())
     else:
         return redirect(url_for('home_bp.home'))
