@@ -9,7 +9,7 @@ from tracking.things.thing_models import find_thing_by_id
 
 thing_bp = Blueprint(
     'thing_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 

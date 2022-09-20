@@ -95,3 +95,8 @@ def change_password():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
     return render_template('change_password.j2', form=form, **display_context())
+
+@people_bp.route('/list')
+@login_required
+def people_list():
+    render_template('people_list.j2', tab="people", **display_context())

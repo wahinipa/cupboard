@@ -7,7 +7,7 @@ from tracking.commons.display_context import display_context
 
 category_bp = Blueprint(
     'category_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 

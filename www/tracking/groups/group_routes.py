@@ -9,7 +9,7 @@ from tracking.groups.group_models import find_group_by_id
 
 group_bp = Blueprint(
     'group_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 

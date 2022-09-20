@@ -8,7 +8,7 @@ from tracking.commons.display_context import display_context
 
 place_bp = Blueprint(
     'place_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 

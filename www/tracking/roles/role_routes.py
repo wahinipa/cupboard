@@ -7,7 +7,7 @@ from tracking.roles.role_models import find_role_by_id
 
 role_bp = Blueprint(
     'role_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 

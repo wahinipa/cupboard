@@ -6,7 +6,7 @@ from www.tracking.admin.administration import log_info_about_request, log_warn_a
 
 fake_bp = Blueprint(
     'fake_bp', __name__,
-    template_folder='../templates',
+    template_folder='templates',
     static_folder='static',
 )
 
