@@ -2,6 +2,10 @@
 from os import environ
 
 
+def project_name():
+    return display_context()['project_name']
+
+
 def display_context(context=None):
     if context is None:
         context = {}

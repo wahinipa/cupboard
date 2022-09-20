@@ -24,21 +24,25 @@ def create():
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(url_for('home_bp.home'))
         if form.validate_on_submit():
-            username = form.username.data
-            user = find_user_by_username(username)
-            if user is None:
-                find_or_create_user(
-                    form.first_name.data,
-                    form.last_name.data,
-                    username,
-                    form.password_new.data,
-                    form.is_admin.data
-                )
-                database.session.commit()
+            create_user_from_form(form)
             return redirect(url_for('home_bp.home'))
-        return render_template('user_create.j2', form=form)
+        return render_template('user_create.j2', form=form, **display_context())
     else:
         return redirect_hacks()
+
+
+def create_user_from_form(form):
+    username = form.username.data
+    user = find_user_by_username(username)
+    if user is None:
+        find_or_create_user(
+            form.first_name.data,
+            form.last_name.data,
+            username,
+            form.password_new.data,
+            form.is_admin.data
+        )
+        database.session.commit()
 
 
 @people_bp.route('/login', methods=['GET', 'POST'])
@@ -58,11 +62,10 @@ def login():
 
         return redirect(next_url or url_for('home_bp.home'))
     else:
-        context = display_context({'form': form})
-        return render_template('login.j2', **context)
+        return render_template('login.j2', form=form, **display_context())
 
 
-@people_bp.route('/profile', methods=['POST', 'GET'])
+@people_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     form = UserProfileForm(obj=current_user)
@@ -73,7 +76,7 @@ def profile():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
 
-    return render_template('profile.j2', form=form)
+    return render_template('profile.j2', form=form, **display_context())
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -91,4 +94,4 @@ def change_password():
     if form.validate_on_submit():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
-    return render_template('change_password.j2', form=form)
+    return render_template('change_password.j2', form=form, **display_context())

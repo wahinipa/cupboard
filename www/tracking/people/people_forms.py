@@ -50,7 +50,7 @@ class UserProfileForm(FlaskForm):
 
 
 class UserCreateForm(FlaskForm):
-    username = StringField('username', [DataRequired('Username is required')])
+    username = StringField('Username', [DataRequired('Username is required')])
     first_name = StringField('First Name', [DataRequired('First Name is required')])
     last_name = StringField('Last Name', [DataRequired('Last Name is required')])
     is_admin = BooleanField('Is Admin')

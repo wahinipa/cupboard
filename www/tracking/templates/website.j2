@@ -21,7 +21,9 @@ website_logo %}
 <main class="container-fluid">
   <div class="row">
     {{ website_logo(project_name) }}
-    {% block header %}{% endblock %}
+    <div class="col-md-8 text-center">
+      {% block header %}{% endblock %}
+    </div>
     {{ user_options(current_user) }}
   </div>
   {% block innards %}{% endblock %}
