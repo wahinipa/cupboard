@@ -38,8 +38,13 @@ def redirect_hacks():
 
 def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
+
     from tracking.people.people_models import create_initial_users
     create_initial_users()
+
+    from tracking.roles.role_models import find_or_create_standard_roles
+    find_or_create_standard_roles()
+
     database.session.commit()
 
 
