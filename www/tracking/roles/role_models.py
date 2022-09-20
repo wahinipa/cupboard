@@ -26,6 +26,29 @@ def find_role_by_id(id):
     return Role.query.filter(Role.id == id).first()
 
 
+def find_role(name):
+    return Role.query.filter(Role.name == name).first()
+
+
+def find_or_create_role(name, description="", date_created=None):
+    role = find_role(name)
+    if role is None:
+        if date_created is None:
+            date_created = datetime.now()
+        role = Role(name=name, description=description, date_created=date_created)
+        database.session.add(role)
+        database.session.commit()
+    return role
+
+
+def find_or_create_standard_roles():
+    return [
+        find_or_create_role(Role.create_user_role, "Can create new user account (i.e. login)."),
+        find_or_create_role(Role.delete_user_role, "Can delete current user account."),
+        find_or_create_role(Role.observer_role, "Can view, search, and generate reports."),
+    ]
+
+
 class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.Model):
     __abstract__ = True
 
@@ -56,29 +79,6 @@ class PlaceAssignment(AssignmentBaseModel):
 
 class UniversalAssignment(AssignmentBaseModel):
     pass
-
-
-def find_role(name):
-    return Role.query.filter(Role.name == name).first()
-
-
-def find_or_create_role(name, description="", date_created=None):
-    role = find_role(name)
-    if role is None:
-        if date_created is None:
-            date_created = datetime.now()
-        role = Role(name=name, description=description, date_created=date_created)
-        database.session.add(role)
-        database.session.commit()
-    return role
-
-
-def find_or_create_standard_roles():
-    return [
-        find_or_create_role(Role.create_user_role, "Can create new user account (i.e. login)."),
-        find_or_create_role(Role.delete_user_role, "Can delete current user account."),
-        find_or_create_role(Role.observer_role, "Can view, search, and generate reports."),
-    ]
 
 
 def find_group_assignment(group, role, user):

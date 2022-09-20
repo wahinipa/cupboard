@@ -24,13 +24,13 @@ class KnowsOwnName:
 class NamedModelMixin(KnowsOwnName):
     @declared_attr
     def name(cls):
-        return database.Column(database.String(255), nullable=False, server_default=u'')
+        return database.Column(database.String(255), nullable=False, server_default='')
 
 
 class UniqueNamedModelMixin(KnowsOwnName):
     @declared_attr
     def name(cls):
-        return database.Column(database.String(255), nullable=False, unique=True, server_default=u'')
+        return database.Column(database.String(255), nullable=False, unique=True, server_default='')
 
 
 class DatedModelMixin():

@@ -66,6 +66,10 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_an_admin
 
     @property
+    def can_create_role(self):
+        return self.is_the_admin
+
+    @property
     def can_delete_person(self):
         return self.is_an_admin
 
