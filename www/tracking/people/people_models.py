@@ -2,12 +2,13 @@
 from datetime import datetime
 from os import environ
 
+from flask import url_for
 from flask_login import UserMixin
 from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
 from tracking import database
-from tracking.commons.base_models import IdModelMixin
+from tracking.commons.base_models import IdModelMixin, name_is_key
 
 
 class User(IdModelMixin, database.Model, UserMixin):
@@ -69,16 +70,20 @@ class User(IdModelMixin, database.Model, UserMixin):
     def can_create_role(self):
         return self.is_the_admin
 
-    @property
-    def can_delete_person(self):
-        return self.is_an_admin
+    def can_delete_person(self, user):
+        # Super admin cannot be deleted.
+        return self.is_an_admin and not user.is_the_admin
 
     @property
     def can_observe_things(self):
+        return self.can_observe
+
+    @property
+    def can_observe(self):
         def yes(assignment):
             return assignment.is_observer
 
-        return any(map(yes, self.assignments))
+        return self.is_an_admin or any(map(yes, self.assignments))
 
     def has_role(self, group_or_place, name_of_role):
         return self.has_universal_role(name_of_role) or group_or_place.has_role(self, name_of_role)
@@ -88,6 +93,28 @@ class User(IdModelMixin, database.Model, UserMixin):
             return assignment.is_named(name_of_role)
 
         return any(map(yes, self.universal_assignments))
+
+    def can_view_person(self, user):
+        return self.is_the_admin or not user.is_the_admin
+
+    @property
+    def url(self):
+        return url_for('people_bp.people_view', user_id=self.id)
+
+    @property
+    def viewable_people(self):
+        return [person.viewable_attributes(self) for person in all_people() if self.can_view_person(person)]
+
+    def viewable_attributes(self, viewer):
+        return {
+            'name': self.name,
+            'url': self.url,
+            'about_me': self.about_me,
+        }
+
+
+def all_people():
+    return sorted([person for person in User.query.all()], key=name_is_key)
 
 
 @event.listens_for(User.password, 'set', retval=True)
@@ -107,6 +134,10 @@ def load_user(unicode_user_id):
 
 def find_user_by_username(username):
     return User.query.filter(User.username == username).first()
+
+
+def find_user_by_id(user_id):
+    return User.query.filter(User.id == user_id).first()
 
 
 def create_test_users():

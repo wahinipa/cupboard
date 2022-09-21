@@ -16,3 +16,18 @@
   {% endif %}
 {% endmacro %}
 
+{% macro group_nav_items(current_user) %}
+  {% if current_user.can_observe %}
+    {{ render_nav_item('group_bp.group_list', 'Groups') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro people_nav_items(current_user) %}
+  {% if current_user.can_observe %}
+    {{ render_nav_item('people_bp.people_list', 'People') }}
+  {% endif %}
+{% endmacro %}
+
+
+
+

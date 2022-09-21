@@ -1,0 +1,14 @@
+{% extends "content.j2" %}
+{% from 'button_macros.j2' import render_create_button %}
+{% from 'card_macros.j2' import render_card %}
+{% from 'people_macros.j2' import person_macro %}
+{% block innards %}
+  {% call render_card(title='People') %}
+    {% if create_person_url %}{{ render_create_button(text="User Account", link=create_person_url) }}{% endif %}
+  {% endcall %}
+  {% for person in people %}
+    {% call render_card(title=person.name, link=person.url, background='secondary') %}
+      {{ person_macro(**person) }}
+    {% endcall %}
+  {% endfor %}
+{% endblock %}

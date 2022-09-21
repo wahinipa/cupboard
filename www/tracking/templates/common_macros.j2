@@ -1,0 +1,3 @@
+{% macro text_link(text, link) %}
+  {% if link %}<a href="{{ link|safe }}">{{ text }}</a>{% else %}{{ text }}{% endif %}
+{% endmacro %}

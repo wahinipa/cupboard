@@ -27,6 +27,10 @@ class NamedModelMixin(KnowsOwnName):
         return database.Column(database.String(255), nullable=False, server_default='')
 
 
+def name_is_key(record):
+    return record.name
+
+
 class UniqueNamedModelMixin(KnowsOwnName):
     @declared_attr
     def name(cls):

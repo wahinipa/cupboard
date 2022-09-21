@@ -1,10 +1,9 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_link_button %}
 {% from 'card_macros.j2' import render_card %}
+{% from 'people_macros.j2' import person_macro %}
 {% block innards %}
-  {% call render_card(title='Home') %}
-    <p>
-      <large>Hello from Home {{ current_user.about_me }}</large>
-    </p>
+  {% call render_card(title=person.name) %}
+    {{ person_macro(**person) }}
   {% endcall %}
 {% endblock %}
