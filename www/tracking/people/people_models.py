@@ -106,6 +106,11 @@ class User(IdModelMixin, database.Model, UserMixin):
         return url_for('people_bp.people_delete', user_id=self.id)
 
     @property
+    def viewable_groups(self):
+        from tracking.groups.group_models import all_groups
+        return [group.viewable_attributes(self) for group in all_groups() if group.user_can_view(self)]
+
+    @property
     def viewable_people(self):
         return [person.viewable_attributes(self) for person in all_people() if self.can_view_person(person)]
 
@@ -122,7 +127,7 @@ class User(IdModelMixin, database.Model, UserMixin):
 
 
 def all_people():
-    return sorted([person for person in User.query.all()], key=name_is_key)
+    return sorted(User.query.all(), key=name_is_key)
 
 
 @event.listens_for(User.password, 'set', retval=True)

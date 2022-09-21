@@ -18,7 +18,7 @@ role_bp = Blueprint(
 @role_bp.route('/list')
 @login_required
 def role_list():
-    render_template('role_list.j2', tab="role")
+    return render_template('role_list.j2', tab="role")
 
 
 @role_bp.route('/view/<int:role_id>')

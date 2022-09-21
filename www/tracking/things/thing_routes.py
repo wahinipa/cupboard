@@ -52,7 +52,7 @@ def thing_delete(thing_id):
 @thing_bp.route('/list')
 @login_required
 def thing_list():
-    render_template('thing_list.j2', tab="thing")
+    return render_template('thing_list.j2', tab="thing")
 
 
 @thing_bp.route('/update/<int:thing_id>', methods=['GET', 'POST'])

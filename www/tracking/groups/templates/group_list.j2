@@ -1,0 +1,14 @@
+{% extends "content.j2" %}
+{% from 'button_macros.j2' import render_create_button %}
+{% from 'card_macros.j2' import render_card %}
+{% from 'group_macros.j2' import group_macro %}
+{% block innards %}
+  {% call render_card(title='Groups') %}
+    {% if create_group_url %}{{ render_create_button(text="New Group", link=create_group_url) }}{% endif %}
+  {% endcall %}
+  {% for group in groups %}
+    {% call render_card(title=group.name, link=group.url, background='secondary') %}
+      {{ group_macro(**group) }}
+    {% endcall %}
+  {% endfor %}
+{% endblock %}

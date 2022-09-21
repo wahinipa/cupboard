@@ -55,7 +55,7 @@ def place_delete(place_id):
 @place_bp.route('/list')
 @login_required
 def place_list():
-    render_template('place_list.j2', tab="place")
+    return render_template('place_list.j2', tab="place")
 
 
 @place_bp.route('/update/<int:place_id>', methods=['GET', 'POST'])

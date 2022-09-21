@@ -1,11 +1,14 @@
 # Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, render_template, url_for, redirect, request
-from flask_login import login_required, current_user
+from datetime import datetime
+
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.groups.group_models import find_group_by_id
+from tracking.groups.group_forms import GroupCreateForm, create_group_from_form
+from tracking.groups.group_models import Group, find_group_by_id
 
 group_bp = Blueprint(
     'group_bp', __name__,
@@ -19,29 +22,22 @@ group_bp = Blueprint(
 def group_create():
     if not current_user.can_create_group:
         return redirect_hacks()
-    form = group_create_form()
+    form = GroupCreateForm()
     if request.method == 'POST' and form.cancel_button.data:
         return redirect(url_for('group_bp.list'))
     if form.validate_on_submit():
-        group = create_group_from_form(current_user, form)
+        group = create_group_from_form(form)
         return redirect(url_for('group_bp.group_view', group_id=group.id))
     else:
-        return render_template('group_create_form.j2', form=form, tab="group", **display_context())
+        return render_template('group_create.j2', form=form, tab="group", **display_context())
 
-
-def group_create_form():
-    pass
-
-
-def create_group_from_form(current_user, form):
-    pass
 
 
 @group_bp.route('/delete/<int:group_id>')
 @login_required
 def group_delete(group_id):
     group = find_group_by_id(group_id)
-    if group is not None and group.user_may_delete(current_user):
+    if group is not None and group.user_can_delete(current_user):
         database.session.delete(group)
         database.session.commit()
         return redirect(url_for('group_bp.group_list'))
@@ -52,7 +48,30 @@ def group_delete(group_id):
 @group_bp.route('/list')
 @login_required
 def group_list():
-    render_template('group_list.j2', tab="group")
+    context = {}
+    if current_user.can_create_group:
+        context['create_group_url'] = url_for('group_bp.group_create')
+    return render_template(
+        'group_list.j2',
+        tab="group",
+        groups=current_user.viewable_groups,
+        **display_context(context)
+    )
+
+
+@group_bp.route('/view/<int:group_id>')
+@login_required
+def group_view(group_id):
+    group = find_group_by_id(group_id)
+    if group and group.user_can_view(current_user):
+        return render_template(
+            'group_view.j2',
+            tab="group",
+            group=group.viewable_attributes(current_user, include_actions=True),
+            **display_context()
+        )
+    else:
+        return redirect(url_for('home_bp.home'))
 
 
 @group_bp.route('/update/<int:group_id>', methods=['GET', 'POST'])
@@ -79,13 +98,3 @@ def group_update_form(group):
 
 def update_group_from_form(group, form):
     form.populate_obj(group)
-
-
-@group_bp.route('/view/<int:group_id>')
-@login_required
-def group_view(group_id):
-    group = find_group_by_id(group_id)
-    if group is not None and group.user_may_view(current_user):
-        return render_template('group_view.j2', group=group, tab="group", **display_context())
-    else:
-        return redirect(url_for('home_bp.home'))
