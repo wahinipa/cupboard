@@ -35,12 +35,12 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.universal_assignments + self.group_assignments + self.place_assignments
 
     @property
-    def is_the_admin(self):
+    def is_the_super_admin(self):
         return self.username == 'admin'
 
     @property
     def is_an_admin(self):
-        return self.is_the_admin or self.is_admin
+        return self.is_the_super_admin or self.is_admin
 
     @property
     def name(self):
@@ -48,7 +48,7 @@ class User(IdModelMixin, database.Model, UserMixin):
 
     @property
     def can_edit_database(self):
-        return self.is_the_admin
+        return self.is_the_super_admin
 
     @property
     def can_assign_universal_roles(self):
@@ -68,11 +68,11 @@ class User(IdModelMixin, database.Model, UserMixin):
 
     @property
     def can_create_role(self):
-        return self.is_the_admin
+        return self.is_the_super_admin
 
-    def can_delete_person(self, user):
+    def can_delete_person(self, person):
         # Super admin cannot be deleted.
-        return self.is_an_admin and not user.is_the_admin
+        return self.is_an_admin and not person.is_the_super_admin
 
     @property
     def can_observe_things(self):
@@ -95,22 +95,30 @@ class User(IdModelMixin, database.Model, UserMixin):
         return any(map(yes, self.universal_assignments))
 
     def can_view_person(self, user):
-        return self.is_the_admin or not user.is_the_admin
+        return self.is_the_super_admin or not user.is_the_super_admin
 
     @property
     def url(self):
         return url_for('people_bp.people_view', user_id=self.id)
 
     @property
+    def deletion_url(self):
+        return url_for('people_bp.people_delete', user_id=self.id)
+
+    @property
     def viewable_people(self):
         return [person.viewable_attributes(self) for person in all_people() if self.can_view_person(person)]
 
-    def viewable_attributes(self, viewer):
-        return {
+    def viewable_attributes(self, viewer, include_actions=False):
+        attributes = {
             'name': self.name,
             'url': self.url,
             'about_me': self.about_me,
         }
+        if include_actions:
+            if viewer.can_delete_person(self):
+                attributes['deletion_url'] = self.deletion_url
+        return attributes
 
 
 def all_people():

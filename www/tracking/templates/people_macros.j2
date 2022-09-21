@@ -1,12 +1,14 @@
 {% from 'common_macros.j2' import text_link %}
+{% from 'button_macros.j2' import render_delete_button %}
 {% macro person_macro() %}
   <p>
     {{ person_content(**kwargs) }}
   </p>
 {% endmacro %}
 
-{% macro person_content(name, about_me) %}
+{% macro person_content(name, about_me, deletion_url=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if name %}{{ name }}<br>{% endif %}
   {% if about_me %}About: {{ about_me }}<br>{% endif %}
+  {% if deletion_url %}{{ render_delete_button(link=deletion_url, text='User Account') }}{% endif %}
 {% endmacro %}
