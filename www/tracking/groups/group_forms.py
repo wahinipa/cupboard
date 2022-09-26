@@ -18,6 +18,9 @@ class GroupBaseForm(FlaskForm):
 class GroupCreateForm(GroupBaseForm):
     submit = SubmitField('Create New Group')
 
+class GroupUpdateForm(GroupBaseForm):
+    submit = SubmitField('Update Group')
+
 
 def create_group_from_form(form):
     group = Group(

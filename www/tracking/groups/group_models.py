@@ -23,6 +23,10 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
     def deletion_url(self):
         return url_for('group_bp.group_delete', group_id=self.id)
 
+    @property
+    def update_url(self):
+        return url_for('group_bp.group_update', group_id=self.id)
+
     def viewable_attributes(self, viewer, include_actions=False):
         attributes = {
             'name': self.name,
@@ -32,6 +36,8 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
         if include_actions:
             if viewer.can_delete_group:
                 attributes['deletion_url'] = self.deletion_url
+            if viewer.can_update_group:
+                attributes['update_url'] = self.update_url
         return attributes
 
     def user_can_view(self, user):
@@ -39,6 +45,9 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
 
     def user_can_delete(self, user):
         return user.can_delete_group
+
+    def user_can_update(self, user):
+        return user.can_update_group
 
 
 def find_or_create_group(name, description="", date_created=None):

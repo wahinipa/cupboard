@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.groups.group_forms import GroupCreateForm, create_group_from_form
+from tracking.groups.group_forms import GroupCreateForm, create_group_from_form, GroupUpdateForm
 from tracking.groups.group_models import Group, find_group_by_id
 
 group_bp = Blueprint(
@@ -24,7 +24,7 @@ def group_create():
         return redirect_hacks()
     form = GroupCreateForm()
     if request.method == 'POST' and form.cancel_button.data:
-        return redirect(url_for('group_bp.list'))
+        return redirect(url_for('group_bp.group_list'))
     if form.validate_on_submit():
         group = create_group_from_form(form)
         return redirect(url_for('group_bp.group_view', group_id=group.id))
@@ -87,13 +87,13 @@ def group_update(group_id):
             database.session.commit()
             return redirect(url_for('group_bp.group_view', group_id=group.id))
         else:
-            return render_template('group_edit_form.j2', form=form, tab="group", **display_context())
+            return render_template('group_update.j2', form=form, tab="group", **display_context())
     else:
         return redirect_hacks()
 
 
 def group_update_form(group):
-    pass
+    return GroupUpdateForm(obj=group)
 
 
 def update_group_from_form(group, form):

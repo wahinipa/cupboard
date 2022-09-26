@@ -63,6 +63,10 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_an_admin
 
     @property
+    def can_update_group(self):
+        return self.is_an_admin
+
+    @property
     def can_create_person(self):
         return self.is_an_admin
 
