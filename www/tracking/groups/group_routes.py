@@ -1,5 +1,4 @@
 # Copyright (c) 2022, Wahinipa LLC
-from datetime import datetime
 
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
@@ -8,7 +7,8 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
 from tracking.groups.group_forms import GroupCreateForm, create_group_from_form, GroupUpdateForm
-from tracking.groups.group_models import Group, find_group_by_id
+from tracking.groups.group_models import find_group_by_id
+from tracking.places.place_forms import PlaceCreateForm, create_place_from_form
 
 group_bp = Blueprint(
     'group_bp', __name__,
@@ -32,12 +32,11 @@ def group_create():
         return render_template('group_create.j2', form=form, tab="group", **display_context())
 
 
-
 @group_bp.route('/delete/<int:group_id>')
 @login_required
 def group_delete(group_id):
     group = find_group_by_id(group_id)
-    if group is not None and group.user_can_delete(current_user):
+    if group is not None and group.user_may_delete(current_user):
         database.session.delete(group)
         database.session.commit()
         return redirect(url_for('group_bp.group_list'))
@@ -63,7 +62,7 @@ def group_list():
 @login_required
 def group_view(group_id):
     group = find_group_by_id(group_id)
-    if group and group.user_can_view(current_user):
+    if group and group.user_may_view(current_user):
         return render_template(
             'group_view.j2',
             tab="group",
@@ -78,7 +77,7 @@ def group_view(group_id):
 @login_required
 def group_update(group_id):
     group = find_group_by_id(group_id)
-    if group and group.user_can_update(current_user):
+    if group and group.user_may_update(current_user):
         form = group_update_form(group)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(url_for('group_bp.group_view', group_id=group_id))
@@ -98,3 +97,22 @@ def group_update_form(group):
 
 def update_group_from_form(group, form):
     form.populate_obj(group)
+
+
+@group_bp.route('/create_place/<int:group_id>', methods=['POST', 'GET'])
+@login_required
+def place_create(group_id):
+    group = find_group_by_id(group_id)
+    if group and group.user_may_update(current_user):
+        form = PlaceCreateForm()
+        if request.method == 'POST' and form.cancel_button.data:
+            return redirect(url_for('group_bp.group_view', group_id=group_id))
+        if form.validate_on_submit():
+            place = create_place_from_form(group, form)
+            return redirect(url_for('place_bp.place_view', place_id=place.id))
+        else:
+            return render_template('place_create.j2', form=form, tab="place", **display_context())
+    else:
+        return redirect_hacks()
+
+

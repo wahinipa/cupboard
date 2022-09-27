@@ -1,0 +1,9 @@
+{% extends "content.j2" %}
+{% from 'button_macros.j2' import render_link_button %}
+{% from 'card_macros.j2' import render_card %}
+{% from 'place_macros.j2' import place_macro %}
+{% block innards %}
+  {% call render_card(title=place.name) %}
+    {{ place_macro(**place) }}
+  {% endcall %}
+{% endblock %}

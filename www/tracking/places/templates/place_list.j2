@@ -1,13 +1,12 @@
 {% extends "content.j2" %}
-{% from 'button_macros.j2' import render_link_button %}
+{% from 'button_macros.j2' import render_create_button %}
 {% from 'card_macros.j2' import render_card %}
-{% from 'group_macros.j2' import group_macro %}
 {% from 'place_macros.j2' import place_macro %}
 {% block innards %}
-  {% call render_card(title=group.name) %}
-    {{ group_macro(**group) }}
+  {% call render_card(title='Places') %}
+    {% if create_place_url %}{{ render_create_button(text="Place", link=create_place_url) }}{% endif %}
   {% endcall %}
-  {% for place in group.places %}
+  {% for place in places %}
     {% call render_card(title=place.name, link=place.url, background='secondary') %}
       {{ place_macro(**place) }}
     {% endcall %}

@@ -23,7 +23,7 @@ def test_place_creation(knights_of_the_round_table, rainbow_place, wild_place):
     assert wild_place.group == knights_of_the_round_table
 
 
-def test_groups_can_have_places_with_same_name(knights_of_the_round_table, queens_of_the_round_table, rainbow_place):
+def test_groups_may_have_places_with_same_name(knights_of_the_round_table, queens_of_the_round_table, rainbow_place):
     queens_rainbow_place = find_or_create_place(queens_of_the_round_table, RAINBOW_PLACE_NAME,
                                                 RAINBOW_PLACE_DESCRIPTION,
                                                 date_created=RAINBOW_PLACE_DATE)

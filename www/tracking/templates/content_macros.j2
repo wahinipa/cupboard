@@ -10,20 +10,20 @@
   {% endif %}
 {% endmacro %}
 
-{% macro create_user_account_nav_item(current_user) %}
-  {% if current_user.can_create_person %}
-    {{ render_nav_item('people_bp.create', 'Create User') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro group_nav_items(current_user) %}
-  {% if current_user.can_observe %}
+{% macro groups_nav_items(current_user) %}
+  {% if current_user.can_observe_groups %}
     {{ render_nav_item('group_bp.group_list', 'Groups') }}
   {% endif %}
 {% endmacro %}
 
+{% macro places_nav_items(current_user) %}
+  {% if current_user.can_observe_places %}
+    {{ render_nav_item('place_bp.place_list', 'Places') }}
+  {% endif %}
+{% endmacro %}
+
 {% macro people_nav_items(current_user) %}
-  {% if current_user.can_observe %}
+  {% if current_user.can_observe_people %}
     {{ render_nav_item('people_bp.people_list', 'People') }}
   {% endif %}
 {% endmacro %}

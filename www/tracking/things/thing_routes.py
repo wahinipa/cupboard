@@ -59,7 +59,7 @@ def thing_list():
 @login_required
 def thing_update(thing_id):
     thing = find_thing_by_id(thing_id)
-    if thing and thing.user_can_update(current_user):
+    if thing and thing.user_may_update(current_user):
         form = thing_update_form(thing)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(url_for('thing_bp.thing_view', thing_id=thing_id))

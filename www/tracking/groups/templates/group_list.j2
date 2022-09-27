@@ -4,7 +4,7 @@
 {% from 'group_macros.j2' import group_macro %}
 {% block innards %}
   {% call render_card(title='Groups') %}
-    {% if create_group_url %}{{ render_create_button(text="New Group", link=create_group_url) }}{% endif %}
+    {% if create_group_url %}{{ render_create_button(text="Group", link=create_group_url) }}{% endif %}
   {% endcall %}
   {% for group in groups %}
     {% call render_card(title=group.name, link=group.url, background='secondary') %}

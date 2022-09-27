@@ -12,6 +12,10 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
     group_assignments = database.relationship('GroupAssignment', backref='group', lazy=True, cascade='all, delete')
 
     @property
+    def sorted_places(self):
+        return sorted(self.places, key=name_is_key)
+
+    @property
     def assignments(self):
         return self.group_assignments
 
@@ -27,26 +31,37 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
     def update_url(self):
         return url_for('group_bp.group_update', group_id=self.id)
 
+    @property
+    def place_create_url(self):
+        return url_for('group_bp.place_create', group_id=self.id)
+
     def viewable_attributes(self, viewer, include_actions=False):
         attributes = {
             'name': self.name,
             'url': self.url,
             'lines': self.description_lines,
+            'places': [place.viewable_attributes(viewer) for place in self.sorted_places]
         }
         if include_actions:
             if viewer.can_delete_group:
                 attributes['deletion_url'] = self.deletion_url
             if viewer.can_update_group:
                 attributes['update_url'] = self.update_url
+            if self.user_may_create_place(viewer):
+                attributes['create_place_url'] = self.place_create_url
         return attributes
 
-    def user_can_view(self, user):
+    def user_may_view(self, user):
         return True  # TODO: refine this
 
-    def user_can_delete(self, user):
+    def user_may_delete(self, user):
         return user.can_delete_group
 
-    def user_can_update(self, user):
+    def user_may_update(self, user):
+        return user.can_update_group
+
+    def user_may_create_place(self, user):
+        # TODO: refine this
         return user.can_update_group
 
 

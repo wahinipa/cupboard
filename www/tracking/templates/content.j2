@@ -1,8 +1,8 @@
 {% extends "website.j2" %}
 {% from 'content_macros.j2' import
 admin_database_edit_nav_item,
-create_user_account_nav_item,
-group_nav_items,
+groups_nav_items,
+places_nav_items,
 home_nav_item,
 people_nav_items %}
 
@@ -16,7 +16,8 @@ people_nav_items %}
       <ul class="navbar-nav nav-tabs">
         {{ home_nav_item() }}
         {{ admin_database_edit_nav_item(current_user) }}
-        {{ group_nav_items(current_user) }}
+        {{ groups_nav_items(current_user) }}
+        {{ places_nav_items(current_user) }}
         {{ people_nav_items(current_user) }}
       </ul>
     </div>

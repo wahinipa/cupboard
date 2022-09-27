@@ -67,6 +67,18 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_an_admin
 
     @property
+    def can_create_place(self):
+        return self.is_an_admin
+
+    @property
+    def can_delete_place(self):
+        return self.is_an_admin
+
+    @property
+    def can_update_place(self):
+        return self.is_an_admin
+
+    @property
     def can_create_person(self):
         return self.is_an_admin
 
@@ -79,7 +91,23 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_an_admin and not person.is_the_super_admin
 
     @property
+    def can_observe_people(self):
+        # TODO: refine this
+        return self.can_observe
+
+    @property
+    def can_observe_groups(self):
+        # TODO: refine this
+        return self.can_observe
+
+    @property
+    def can_observe_places(self):
+        # TODO: refine this
+        return self.can_observe
+
+    @property
     def can_observe_things(self):
+        # TODO: refine this
         return self.can_observe
 
     @property
@@ -112,7 +140,14 @@ class User(IdModelMixin, database.Model, UserMixin):
     @property
     def viewable_groups(self):
         from tracking.groups.group_models import all_groups
-        return [group.viewable_attributes(self) for group in all_groups() if group.user_can_view(self)]
+        return [group.viewable_attributes(self) for group in all_groups() if group.user_may_view(self)]
+
+    @property
+    def viewable_places(self):
+        result = []
+        for group in self.viewable_groups:
+            result += group.get('places', [])  # A list of viewable attributes for each place in group
+        return result
 
     @property
     def viewable_people(self):
