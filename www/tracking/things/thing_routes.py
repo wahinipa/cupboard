@@ -17,7 +17,7 @@ thing_bp = Blueprint(
 @thing_bp.route('/create', methods=['POST', 'GET'])
 @login_required
 def thing_create():
-    if not current_user.can_create_thing:
+    if not current_user.may_create_thing:
         return redirect_hacks()
     form = thing_create_form()
     if request.method == 'POST' and form.cancel_button.data:

@@ -19,7 +19,7 @@ people_bp = Blueprint(
 @people_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    if current_user.can_create_person:
+    if current_user.may_create_person:
         form = UserCreateForm()
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(url_for('people_bp.people_list'))
@@ -54,7 +54,7 @@ def create_user_from_form(form):
 @login_required
 def people_delete(user_id):
     person = find_user_by_id(user_id)
-    if person and current_user.can_delete_person(person):
+    if person and current_user.may_delete_person(person):
         database.session.delete(person)
         database.session.commit()
         return redirect(url_for('people_bp.people_list'))
@@ -116,7 +116,7 @@ def change_password():
 @login_required
 def people_list():
     context = {}
-    if current_user.can_create_person:
+    if current_user.may_create_person:
         context['create_person_url'] = url_for('people_bp.create')
     return render_template(
         'people_list.j2',
@@ -129,7 +129,7 @@ def people_list():
 @login_required
 def people_view(user_id):
     person = find_user_by_id(user_id)
-    if person and current_user.can_view_person(person):
+    if person and current_user.may_view_person(person):
         return render_template(
             'people_view.j2',
             tab="people",

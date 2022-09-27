@@ -5,25 +5,31 @@
 {% endmacro %}
 
 {% macro admin_database_edit_nav_item(current_user) %}
-  {% if current_user.can_edit_database %}
+  {% if current_user.may_edit_database %}
     {{ render_nav_item('admin.index', 'Admin', use_li=True) }}
   {% endif %}
 {% endmacro %}
 
 {% macro groups_nav_items(current_user) %}
-  {% if current_user.can_observe_groups %}
+  {% if current_user.Robserve_groups %}
+    {{ render_nav_item('group_bp.group_list', 'Groups') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro things_nav_items(current_user) %}
+  {% if current_user.may_observe_things %}
     {{ render_nav_item('group_bp.group_list', 'Groups') }}
   {% endif %}
 {% endmacro %}
 
 {% macro places_nav_items(current_user) %}
-  {% if current_user.can_observe_places %}
+  {% if current_user.may_observe_places %}
     {{ render_nav_item('place_bp.place_list', 'Places') }}
   {% endif %}
 {% endmacro %}
 
 {% macro people_nav_items(current_user) %}
-  {% if current_user.can_observe_people %}
+  {% if current_user.may_observe_people %}
     {{ render_nav_item('people_bp.people_list', 'People') }}
   {% endif %}
 {% endmacro %}

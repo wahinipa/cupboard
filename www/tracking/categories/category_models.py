@@ -10,7 +10,7 @@ class Category(UniqueNamedBaseModel):
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
     def user_may_view(self, user):
-        return user.can_observe_things
+        return user.may_observe_things
 
 
 class Refinement(IdModelMixin, database.Model):

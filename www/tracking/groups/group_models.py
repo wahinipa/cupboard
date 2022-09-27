@@ -43,9 +43,9 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
             'places': [place.viewable_attributes(viewer) for place in self.sorted_places]
         }
         if include_actions:
-            if viewer.can_delete_group:
+            if viewer.may_delete_group:
                 attributes['deletion_url'] = self.deletion_url
-            if viewer.can_update_group:
+            if viewer.may_update_group:
                 attributes['update_url'] = self.update_url
             if self.user_may_create_place(viewer):
                 attributes['create_place_url'] = self.place_create_url
@@ -55,14 +55,14 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
         return True  # TODO: refine this
 
     def user_may_delete(self, user):
-        return user.can_delete_group
+        return user.may_delete_group
 
     def user_may_update(self, user):
-        return user.can_update_group
+        return user.may_update_group
 
     def user_may_create_place(self, user):
         # TODO: refine this
-        return user.can_update_group
+        return user.may_update_group
 
 
 def find_or_create_group(name, description="", date_created=None):

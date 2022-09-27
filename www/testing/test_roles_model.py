@@ -230,9 +230,9 @@ def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place,
 def test_observer_role(curly_stooge_user, knights_of_the_round_table):
     find_or_create_standard_roles()
     observer_role = find_role(Role.observer_role)
-    assert not curly_stooge_user.can_observe_things
+    assert not curly_stooge_user.may_observe_things
     assign_group_role(knights_of_the_round_table, observer_role, curly_stooge_user)
-    assert curly_stooge_user.can_observe_things
+    assert curly_stooge_user.may_observe_things
 
 
 def test_standard_roles(app):

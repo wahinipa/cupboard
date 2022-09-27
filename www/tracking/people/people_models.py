@@ -47,71 +47,71 @@ class User(IdModelMixin, database.Model, UserMixin):
         return f'{self.first_name} {self.last_name}'
 
     @property
-    def can_edit_database(self):
+    def may_edit_database(self):
         return self.is_the_super_admin
 
     @property
-    def can_assign_universal_roles(self):
+    def may_assign_universal_roles(self):
         return self.is_an_admin
 
     @property
-    def can_create_group(self):
+    def may_create_group(self):
         return self.is_an_admin
 
     @property
-    def can_delete_group(self):
+    def may_delete_group(self):
         return self.is_an_admin
 
     @property
-    def can_update_group(self):
+    def may_update_group(self):
         return self.is_an_admin
 
     @property
-    def can_create_place(self):
+    def may_create_place(self):
         return self.is_an_admin
 
     @property
-    def can_delete_place(self):
+    def may_delete_place(self):
         return self.is_an_admin
 
     @property
-    def can_update_place(self):
+    def may_update_place(self):
         return self.is_an_admin
 
     @property
-    def can_create_person(self):
+    def may_create_person(self):
         return self.is_an_admin
 
     @property
-    def can_create_role(self):
+    def may_create_role(self):
         return self.is_the_super_admin
 
-    def can_delete_person(self, person):
+    def may_delete_person(self, person):
         # Super admin cannot be deleted.
         return self.is_an_admin and not person.is_the_super_admin
 
     @property
-    def can_observe_people(self):
+    def may_observe_people(self):
         # TODO: refine this
-        return self.can_observe
+        return self.may_observe
 
     @property
-    def can_observe_groups(self):
+    def may_observe_groups(self):
         # TODO: refine this
-        return self.can_observe
+        return self.may_observe
 
     @property
-    def can_observe_places(self):
+    def may_observe_places(self):
         # TODO: refine this
-        return self.can_observe
+        return self.may_observe
 
     @property
-    def can_observe_things(self):
+    def may_observe_things(self):
         # TODO: refine this
-        return self.can_observe
+        return self.may_observe
 
     @property
-    def can_observe(self):
+    def may_observe(self):
         def yes(assignment):
             return assignment.is_observer
 
@@ -126,7 +126,7 @@ class User(IdModelMixin, database.Model, UserMixin):
 
         return any(map(yes, self.universal_assignments))
 
-    def can_view_person(self, user):
+    def may_view_person(self, user):
         return self.is_the_super_admin or not user.is_the_super_admin
 
     @property
@@ -151,7 +151,7 @@ class User(IdModelMixin, database.Model, UserMixin):
 
     @property
     def viewable_people(self):
-        return [person.viewable_attributes(self) for person in all_people() if self.can_view_person(person)]
+        return [person.viewable_attributes(self) for person in all_people() if self.may_view_person(person)]
 
     def viewable_attributes(self, viewer, include_actions=False):
         attributes = {
@@ -160,7 +160,7 @@ class User(IdModelMixin, database.Model, UserMixin):
             'about_me': self.about_me,
         }
         if include_actions:
-            if viewer.can_delete_person(self):
+            if viewer.may_delete_person(self):
                 attributes['deletion_url'] = self.deletion_url
         return attributes
 

@@ -40,9 +40,9 @@ class Place(BaseModel, ModelWithRoles):
         if include_group_url:
             attributes['group_url'] = self.group.url
         if include_actions:
-            if viewer.can_delete_place:
+            if viewer.may_delete_place:
                 attributes['deletion_url'] = self.deletion_url
-            if viewer.can_update_place:
+            if viewer.may_update_place:
                 attributes['update_url'] = self.update_url
         return attributes
 

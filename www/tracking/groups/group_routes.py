@@ -20,7 +20,7 @@ group_bp = Blueprint(
 @group_bp.route('/create', methods=['POST', 'GET'])
 @login_required
 def group_create():
-    if not current_user.can_create_group:
+    if not current_user.may_create_group:
         return redirect_hacks()
     form = GroupCreateForm()
     if request.method == 'POST' and form.cancel_button.data:
@@ -48,7 +48,7 @@ def group_delete(group_id):
 @login_required
 def group_list():
     context = {}
-    if current_user.can_create_group:
+    if current_user.may_create_group:
         context['create_group_url'] = url_for('group_bp.group_create')
     return render_template(
         'group_list.j2',
