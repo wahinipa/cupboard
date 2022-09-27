@@ -13,6 +13,13 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/www/tracking/templates" />
+        <option value="$MODULE_DIR$/www/tracking/groups/templates" />
+        <option value="$MODULE_DIR$/www/tracking/home/templates" />
+        <option value="$MODULE_DIR$/www/tracking/categories/templates" />
+        <option value="$MODULE_DIR$/www/tracking/choices/templates" />
+        <option value="$MODULE_DIR$/www/tracking/people/templates" />
+        <option value="$MODULE_DIR$/www/tracking/places/templates" />
+        <option value="$MODULE_DIR$/www/tracking/things/templates" />
       </list>
     </option>
   </component>
