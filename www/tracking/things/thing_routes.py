@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.things.thing_models import find_thing_by_id
+from tracking.things.thing_models import find_thing_by_id, top_viewable_attributes
 
 thing_bp = Blueprint(
     'thing_bp', __name__,
@@ -52,42 +52,7 @@ def thing_delete(thing_id):
 @thing_bp.route('/list')
 @login_required
 def thing_list():
-    nodes = [
-        {
-            "text": "Node 1",
-        "nodes": [
-        {
-            "text": "Sub Node 1",
-            "nodes": [
-                {
-                    "text": "Sub Child Node 1",
-                    "href": " "
-
-                },
-                {
-                    "text": "Sub Child Node 2",
-                }
-            ]
-        },
-        {
-            "text": "Sub Node 2",
-        }
-        ]
-        },
-        {
-            "text": "Node 2",
-        },
-        {
-            "text": "Node 3",
-        },
-        {
-            "text": "Node 4",
-        },
-        {
-            "text": "Node 5",
-        },
-    ]
-    return render_template('thing_list.j2', tab="thing", nodes=nodes)
+    return render_template('thing_list.j2', tab="thing", nodes=top_viewable_attributes(current_user))
 
 
 @thing_bp.route('/update/<int:thing_id>', methods=['GET', 'POST'])

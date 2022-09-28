@@ -1,5 +1,6 @@
 # Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
+from os import environ
 
 from flask import url_for
 from sqlalchemy.orm import backref
@@ -32,14 +33,15 @@ class Thing(UniqueNamedBaseModel):
     def generic(self):
         return find_or_create_particular_thing(self, [])
 
-
     def viewable_attributes(self, viewer, include_actions=False):
+        description_nodes = [{'text': line} for line in self.description_lines]
+        kind_of_nodes = [thing.viewable_attributes(viewer, include_actions) for thing in self.sorted_kinds]
         attributes = {
-            'name': self.name,
+            'text': self.name,
             'url': self.url,
-            'lines': self.description_lines,
-            'kinds': [thing.viewable_attributes(viewer) for thing in self.sorted_kinds]
+            'nodes': description_nodes + kind_of_nodes,
         }
+
         if include_actions:
             if viewer.may_delete_group:
                 attributes['deletion_url'] = self.deletion_url
@@ -48,6 +50,15 @@ class Thing(UniqueNamedBaseModel):
             if self.user_may_create_place(viewer):
                 attributes['create_place_url'] = self.place_create_url
         return attributes
+
+
+def top_viewable_attributes(viewer, include_actions=False):
+    if viewer.may_observe:
+        return [thing.viewable_attributes(viewer, include_actions) for thing in
+                find_or_create_everything().sorted_kinds]
+    else:
+        return []
+
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
     thing = find_thing_by_name(name)
@@ -152,3 +163,12 @@ def find_particular_thing(thing, choices):
         if has_same_choices(particular_thing):
             return particular_thing
     return None
+
+
+def create_initial_things():
+    if environ.get('ADD_TEST_DATA'):
+        find_or_create_thing("Shoes", "Things to wear on your feet.")
+        find_or_create_thing("Clothing", "Things to wear\nOr lose in the closet.")
+        containers = find_or_create_thing("Containers", "Things to hold other things.")
+        find_or_create_thing("Backpacks", "Containers that\nStrap to your back.", kind_of=containers)
+        find_or_create_thing("Gym Bags", description="", kind_of=containers)

@@ -45,6 +45,9 @@ def initialize_database(database):
     from tracking.roles.role_models import find_or_create_standard_roles
     find_or_create_standard_roles()
 
+    from tracking.things.thing_models import create_initial_things
+    create_initial_things()
+
     database.session.commit()
 
 

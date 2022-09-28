@@ -202,7 +202,7 @@ def create_initial_users():
     """ Create users """
     create_initial_admin()
 
-    if environ.get('TEST_USERS'):
+    if environ.get('TEST_USERS') or environ.get('ADD_TEST_DATA'):
         create_test_users()
 
 
