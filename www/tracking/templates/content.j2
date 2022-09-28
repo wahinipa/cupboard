@@ -4,7 +4,8 @@ admin_database_edit_nav_item,
 groups_nav_items,
 places_nav_items,
 home_nav_item,
-people_nav_items %}
+people_nav_items,
+things_nav_items %}
 
 {% block header %}
   <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -19,6 +20,7 @@ people_nav_items %}
         {{ groups_nav_items(current_user) }}
         {{ places_nav_items(current_user) }}
         {{ people_nav_items(current_user) }}
+        {{ things_nav_items(current_user) }}
       </ul>
     </div>
   </nav>

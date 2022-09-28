@@ -1,0 +1,14 @@
+{% extends "content.j2" %}
+{% from 'button_macros.j2' import render_create_button %}
+{% from 'card_macros.j2' import render_card %}
+{% from 'tree_macros.j2' import tree_root %}
+{% block innards %}
+  {% call render_card(title='Things') %}
+    {% if create_thing_url %}{{ render_create_button(text="Thing", link=create_thing_url) }}{% endif %}
+    <div id="tree">
+    </div>
+  {% endcall %}
+{% endblock %}
+{% block extra_js %}
+  {{ tree_root(nodes) }}
+{% endblock %}

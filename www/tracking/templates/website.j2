@@ -10,10 +10,19 @@ website_logo %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ title }}</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    {{ bootstrap.load_css() }}
+  <!-- Required Stylesheets -->
+  <link href="{{ url_for('static', filename='favicon.ico') }}" rel="stylesheet">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='bstreeview.min.css') }}" rel="stylesheet">
+
+  <!-- Required Javascript -->
+  <script src="{{ url_for('static', filename='jquery-3.6.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bstreeview.min.js') }}"></script>
+{#    {{ bootstrap.load_css() }}#}
     <style>
-      {% include 'website_style.css' %}
+{#      {% include 'website_style.css' %}#}
     </style>
   {% endblock %}
 </head>
@@ -31,7 +40,7 @@ website_logo %}
     {{ website_footer() }}
   </div>
 </main>
-{{ bootstrap.load_js() }}
+{#{{ bootstrap.load_js() }}#}
 {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -79,3 +79,5 @@ Or the other way around?
 The solution is Categories and Choices.
 A Category has a name plus various choices with that category.
 The toy problem could by solved by adding two Categories to Toys: Indoor/Outdoor and Recommended Age.
+The Indoor/Outdoor category would have two choices: indoor and outdoor.
+The Recommended Age category would have multiple choices for different ages.

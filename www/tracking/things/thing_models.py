@@ -1,10 +1,11 @@
 # Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
 
+from flask import url_for
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel
+from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
 
 
 class Thing(UniqueNamedBaseModel):
@@ -13,6 +14,14 @@ class Thing(UniqueNamedBaseModel):
     kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
     refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
+
+    @property
+    def sorted_kinds(self):
+        return sorted(self.kinds, key=name_is_key)
+
+    @property
+    def url(self):
+        return url_for('thing_bp.thing_view', thing_id=self.id)
 
     def quantity_at_place(self, place):
         return sum(particular_thing.quantity_at_place(place) for particular_thing in self.particular_things) + sum(
@@ -23,6 +32,22 @@ class Thing(UniqueNamedBaseModel):
     def generic(self):
         return find_or_create_particular_thing(self, [])
 
+
+    def viewable_attributes(self, viewer, include_actions=False):
+        attributes = {
+            'name': self.name,
+            'url': self.url,
+            'lines': self.description_lines,
+            'kinds': [thing.viewable_attributes(viewer) for thing in self.sorted_kinds]
+        }
+        if include_actions:
+            if viewer.may_delete_group:
+                attributes['deletion_url'] = self.deletion_url
+            if viewer.may_update_group:
+                attributes['update_url'] = self.update_url
+            if self.user_may_create_place(viewer):
+                attributes['create_place_url'] = self.place_create_url
+        return attributes
 
 def find_or_create_thing(name, description, kind_of=None, date_created=None):
     thing = find_thing_by_name(name)

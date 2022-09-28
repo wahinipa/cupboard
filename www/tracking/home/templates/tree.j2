@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required Stylesheets -->
+  <link href="{{ url_for('static', filename='favicon.ico') }}" rel="stylesheet">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='bstreeview.min.css') }}" rel="stylesheet">
+
+  <!-- Required Javascript -->
+  <script src="{{ url_for('static', filename='jquery-3.6.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bstreeview.min.js') }}"></script>
+</head>
+<body>
+<main class="container-fluid">
+  Hello
+  <div id="tree">
+  </div>
+</main>
+</body>
+<script>
+
+    var tree = [
+        {
+            text: "Node 1",
+            icon: "fa fa-folder",
+            expanded: true,
+            nodes: [
+                {
+                    text: "Sub Node 1",
+                    icon: "fa fa-folder",
+                    nodes: [
+                        {
+                            id: "sub-node-1",
+                            text: "Sub Child Node 1",
+                            icon: "fa fa-folder",
+                            class: "nav-level-3",
+                            href: "https://google.com"
+                        },
+                        {
+                            text: "Sub Child Node 2",
+                            icon: "fa fa-folder"
+                        }
+                    ]
+                },
+                {
+                    text: "Sub Node 2",
+                    icon: "fa fa-folder"
+                }
+            ]
+        },
+        {
+            text: "Node 2",
+            icon: "fa fa-folder"
+        },
+        {
+            text: "Node 3",
+            icon: "fa fa-folder"
+        },
+        {
+            text: "Node 4",
+            icon: "fa fa-folder"
+        },
+        {
+            text: "Node 5",
+            icon: "fa fa-folder"
+        }
+    ];
+
+
+    // Example: initializing the bstreeview
+    $('#tree').bstreeview({
+        data: tree,
+        expandIcon: 'fa fa-angle-down fa-fw',
+        collapseIcon: 'fa fa-angle-right fa-fw',
+        indent: 1.25,
+        parentsMarginLeft: '1.25rem',
+        openNodeLinkOnNewTab: true
+    });
+
+</script>
+</html>

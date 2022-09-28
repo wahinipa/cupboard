@@ -11,14 +11,14 @@
 {% endmacro %}
 
 {% macro groups_nav_items(current_user) %}
-  {% if current_user.Robserve_groups %}
+  {% if current_user.may_observe_groups %}
     {{ render_nav_item('group_bp.group_list', 'Groups') }}
   {% endif %}
 {% endmacro %}
 
 {% macro things_nav_items(current_user) %}
   {% if current_user.may_observe_things %}
-    {{ render_nav_item('group_bp.group_list', 'Groups') }}
+    {{ render_nav_item('thing_bp.thing_list', 'Things') }}
   {% endif %}
 {% endmacro %}
 

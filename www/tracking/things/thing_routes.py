@@ -52,7 +52,42 @@ def thing_delete(thing_id):
 @thing_bp.route('/list')
 @login_required
 def thing_list():
-    return render_template('thing_list.j2', tab="thing")
+    nodes = [
+        {
+            "text": "Node 1",
+        "nodes": [
+        {
+            "text": "Sub Node 1",
+            "nodes": [
+                {
+                    "text": "Sub Child Node 1",
+                    "href": " "
+
+                },
+                {
+                    "text": "Sub Child Node 2",
+                }
+            ]
+        },
+        {
+            "text": "Sub Node 2",
+        }
+        ]
+        },
+        {
+            "text": "Node 2",
+        },
+        {
+            "text": "Node 3",
+        },
+        {
+            "text": "Node 4",
+        },
+        {
+            "text": "Node 5",
+        },
+    ]
+    return render_template('thing_list.j2', tab="thing", nodes=nodes)
 
 
 @thing_bp.route('/update/<int:thing_id>', methods=['GET', 'POST'])
