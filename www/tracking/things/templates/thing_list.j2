@@ -3,7 +3,13 @@
 {% from 'card_macros.j2' import render_card %}
 {% from 'tree_macros.j2' import tree_root %}
 {% block innards %}
-  {% call render_card(title='Things') %}
+  {% call render_card(title=title) %}
+    {% if parent_list %}
+      {% for parent in parent_list %}
+        <a href="{{ parent.url }}"><-- {{ parent.label }}</a>
+      {% endfor %}
+      <br>
+    {% endif %}
     {% if create_thing_url %}{{ render_create_button(text="Thing", link=create_thing_url) }}{% endif %}
     <div id="tree">
     </div>

@@ -17,12 +17,45 @@ class Thing(UniqueNamedBaseModel):
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
     @property
+    def label(self):
+        if self.is_top:
+            return "Things"
+        else:
+            return self.name
+
+    @property
+    def is_top(self):
+        return self.kind_of is None
+
+    @property
+    def parent_thing(self):
+        root = self.kind_of
+        if root and not root.is_top:
+            return root
+        else:
+            return None
+
+    @property
     def sorted_kinds(self):
         return sorted(self.kinds, key=name_is_key)
 
     @property
     def url(self):
-        return url_for('thing_bp.thing_view', thing_id=self.id)
+        if self.is_top:
+            return url_for('thing_bp.thing_list')
+        else:
+            return url_for('thing_bp.thing_view', thing_id=self.id)
+
+    @property
+    def parent_list(self):
+        parent = self.kind_of
+        if parent is None:
+            return []
+        else:
+            return parent.parent_list + [parent]
+
+    def user_may_view(self, user):
+        return user.may_observe_things
 
     def quantity_at_place(self, place):
         return sum(particular_thing.quantity_at_place(place) for particular_thing in self.particular_things) + sum(
@@ -33,13 +66,21 @@ class Thing(UniqueNamedBaseModel):
     def generic(self):
         return find_or_create_particular_thing(self, [])
 
+    def viewable_nodes(self, viewer, include_actions=False):
+        return [thing.viewable_attributes(viewer, include_actions) for thing in self.sorted_kinds]
+
     def viewable_attributes(self, viewer, include_actions=False):
         description_nodes = [{'text': line} for line in self.description_lines]
-        kind_of_nodes = [thing.viewable_attributes(viewer, include_actions) for thing in self.sorted_kinds]
+        kind_of_nodes = self.viewable_nodes(viewer, include_actions)
+        link_nodes = [
+            {
+                'text': "-->Details",
+                'url': self.url,
+            }
+        ]
         attributes = {
             'text': self.name,
-            'url': self.url,
-            'nodes': description_nodes + kind_of_nodes,
+            'nodes': description_nodes + link_nodes + kind_of_nodes,
         }
 
         if include_actions:
@@ -54,8 +95,7 @@ class Thing(UniqueNamedBaseModel):
 
 def top_viewable_attributes(viewer, include_actions=False):
     if viewer.may_observe:
-        return [thing.viewable_attributes(viewer, include_actions) for thing in
-                find_or_create_everything().sorted_kinds]
+        return find_or_create_everything().viewable_nodes(viewer, include_actions)
     else:
         return []
 

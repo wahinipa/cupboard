@@ -49,12 +49,6 @@ def thing_delete(thing_id):
         return redirect_hacks()
 
 
-@thing_bp.route('/list')
-@login_required
-def thing_list():
-    return render_template('thing_list.j2', tab="thing", nodes=top_viewable_attributes(current_user))
-
-
 @thing_bp.route('/update/<int:thing_id>', methods=['GET', 'POST'])
 @login_required
 def thing_update(thing_id):
@@ -86,8 +80,20 @@ def update_thing_from_form(thing, form):
 def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.user_may_view(current_user):
-        return render_template('thing_view.j2', thing=thing, tab="thing", **display_context())
+        parent_list = thing.parent_list
+        return render_template('thing_list.j2',
+                               tab="thing",
+                               title=thing.name,
+                               parent_list=parent_list,
+                               nodes=thing.viewable_nodes(current_user)
+                               )
     else:
         return redirect(url_for('home_bp.home'))
+
+@thing_bp.route('/list')
+@login_required
+def thing_list():
+    return render_template('thing_list.j2', tab="thing", title='Things', parent_url_list=[], nodes=top_viewable_attributes(current_user))
+
 
 

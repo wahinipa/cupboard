@@ -24,6 +24,7 @@
 {% macro tree_node(node) %}
   {
   {% if node.text %}text: "{{ node.text }}",{% endif %}
+  {% if node.url %}href: "{{ node.url }}",{% endif %}
   {% if node.nodes %}
     nodes: {{ tree_node_list(node.nodes) }}
   {% endif %}
