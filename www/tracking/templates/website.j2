@@ -20,9 +20,9 @@ website_logo %}
   <script src="{{ url_for('static', filename='jquery-3.6.1.min.js') }}"></script>
   <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='bstreeview.min.js') }}"></script>
-{#    {{ bootstrap.load_css() }}#}
+    {{ bootstrap.load_css() }}
     <style>
-{#      {% include 'website_style.css' %}#}
+      {% include 'website_style.css' %}
     </style>
   {% endblock %}
 </head>
@@ -40,7 +40,6 @@ website_logo %}
     {{ website_footer() }}
   </div>
 </main>
-{#{{ bootstrap.load_js() }}#}
 {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,5 +1,5 @@
 {% from 'common_macros.j2' import text_link %}
-{% from 'button_macros.j2' import render_create_button, render_delete_button, render_edit_button %}
+{% from 'button_macros.j2' import render_create_button, render_delete_button, render_update_button %}
 {% macro group_macro() %}
   <p>
     {{ group_content(**kwargs) }}
@@ -11,6 +11,6 @@
   {% if name %}<b>Name of Group:</b> {{ name }}<br>{% endif %}
   {% if lines %}<b>Description:</b><br>{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
   {% if create_place_url %}{{ render_create_button(link=create_place_url, text='Place') }}{% endif %}
-  {% if update_url %}{{ render_edit_button(link=update_url, text='Group') }}{% endif %}
+  {% if update_url %}{{ render_update_button(link=update_url, text='Group') }}{% endif %}
   {% if deletion_url %}{{ render_delete_button(link=deletion_url, text='Group') }}{% endif %}
 {% endmacro %}

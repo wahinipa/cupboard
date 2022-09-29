@@ -87,6 +87,14 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_an_admin
 
     @property
+    def may_delete_thing(self):
+        return self.is_an_admin
+
+    @property
+    def may_update_thing(self):
+        return self.is_an_admin
+
+    @property
     def may_create_role(self):
         return self.is_the_super_admin
 

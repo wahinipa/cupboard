@@ -5,7 +5,8 @@ from flask_login import login_required, current_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.things.thing_models import find_thing_by_id, top_viewable_attributes
+from tracking.things.thing_forms import ThingCreateForm, create_thing_from_form, ThingUpdateForm
+from tracking.things.thing_models import find_thing_by_id, find_or_create_everything
 
 thing_bp = Blueprint(
     'thing_bp', __name__,
@@ -14,27 +15,24 @@ thing_bp = Blueprint(
 )
 
 
-@thing_bp.route('/create', methods=['POST', 'GET'])
+@thing_bp.route('/create/<int:thing_id>', methods=['POST', 'GET'])
 @login_required
-def thing_create():
-    if not current_user.may_create_thing:
+def thing_create(thing_id):
+    thing = find_thing_by_id(thing_id)
+    if thing is None or not current_user.may_create_thing:
         return redirect_hacks()
     form = thing_create_form()
     if request.method == 'POST' and form.cancel_button.data:
-        return redirect(url_for('thing_bp.list'))
+        return redirect(thing.url)
     if form.validate_on_submit():
         thing = create_thing_from_form(current_user, form)
         return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
     else:
-        return render_template('thing_create_form.j2', form=form, tab="thing", **display_context())
+        return render_template('thing_create_form.j2', form=form, form_title=f'Create new kind of {thing.label}', tab="thing", **display_context())
 
 
 def thing_create_form():
-    pass
-
-
-def create_thing_from_form(current_user, form):
-    pass
+    return ThingCreateForm()
 
 
 @thing_bp.route('/delete/<int:thing_id>')
@@ -56,19 +54,19 @@ def thing_update(thing_id):
     if thing and thing.user_may_update(current_user):
         form = thing_update_form(thing)
         if request.method == 'POST' and form.cancel_button.data:
-            return redirect(url_for('thing_bp.thing_view', thing_id=thing_id))
+            return redirect(thing.url)
         if form.validate_on_submit():
             update_thing_from_form(thing, form)
             database.session.commit()
             return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
         else:
-            return render_template('thing_edit_form.j2', form=form, tab="thing", **display_context())
+            return render_template('thing_update_form.j2', form=form, form_title=f'Update {thing.label}', tab="thing", **display_context())
     else:
         return redirect_hacks()
 
 
 def thing_update_form(thing):
-    pass
+    return ThingUpdateForm(obj=thing)
 
 
 def update_thing_from_form(thing, form):
@@ -80,20 +78,33 @@ def update_thing_from_form(thing, form):
 def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.user_may_view(current_user):
-        parent_list = thing.parent_list
-        return render_template('thing_list.j2',
-                               tab="thing",
-                               title=thing.name,
-                               parent_list=parent_list,
-                               nodes=thing.viewable_nodes(current_user)
-                               )
+        return render_template('thing_list.j2', **thing_display_context(thing, current_user))
     else:
         return redirect(url_for('home_bp.home'))
+
 
 @thing_bp.route('/list')
 @login_required
 def thing_list():
-    return render_template('thing_list.j2', tab="thing", title='Things', parent_url_list=[], nodes=top_viewable_attributes(current_user))
+    return render_template('thing_list.j2', **thing_display_context(find_or_create_everything(), current_user))
 
 
-
+def thing_display_context(thing, viewer):
+    context = {
+        'tab': 'thing',
+        'title': thing.label,
+        'parent_list': thing.parent_list,
+        'nodes': thing.viewable_nodes(current_user),
+    }
+    if viewer.may_delete_thing:
+        context['delete_url'] = thing.delete_url
+        context['delete_label'] = thing.label
+    if viewer.may_update_thing:
+        context['update_url'] = thing.update_url
+        context['update_label'] = thing.label
+    if viewer.may_create_thing:
+        context['create_url'] = thing.create_url
+        context['create_label'] = f'Kind of {thing.label}'
+    if not thing.is_top:
+        context['lines'] = thing.description_lines
+    return display_context(context)

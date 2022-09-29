@@ -1,19 +1,34 @@
 {% extends "content.j2" %}
-{% from 'button_macros.j2' import render_create_button %}
+{% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
 {% from 'card_macros.j2' import render_card %}
 {% from 'tree_macros.j2' import tree_root %}
 {% block innards %}
+  {% if parent_list %}
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        {% for parent in parent_list %}
+          <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.label }}</a></li>
+        {% endfor %}
+        <li class="breadcrumb-item active">{{ title }}</li>
+      </ul>
+    </nav>
+  {% endif %}
   {% call render_card(title=title) %}
-    {% if parent_list %}
-      {% for parent in parent_list %}
-        <a href="{{ parent.url }}"><-- {{ parent.label }}</a>
+    {% if lines %}
+      {% for line in lines %}
+        <h5>{{ line }}</h5>
       {% endfor %}
-      <br>
     {% endif %}
-    {% if create_thing_url %}{{ render_create_button(text="Thing", link=create_thing_url) }}{% endif %}
     <div id="tree">
     </div>
   {% endcall %}
+  {% if create_url or update_url or delete_url %}
+    {% call render_card(title="Actions on " + title, background='secondary') %}
+      {% if create_url %}{{ render_create_button(text=create_label, link=create_url) }}{% endif %}
+      {% if update_url %}{{ render_update_button(text=update_label, link=update_url) }}{% endif %}
+      {% if delete_url %}{{ render_delete_button(text=delete_label, link=delete_url) }}{% endif %}
+    {% endcall %}
+  {% endif %}
 {% endblock %}
 {% block extra_js %}
   {{ tree_root(nodes) }}

@@ -47,12 +47,30 @@ class Thing(UniqueNamedBaseModel):
             return url_for('thing_bp.thing_view', thing_id=self.id)
 
     @property
+    def create_url(self):
+        return url_for('thing_bp.thing_create', thing_id=self.id)
+
+    @property
+    def delete_url(self):
+        return url_for('thing_bp.thing_delete', thing_id=self.id)
+
+    @property
+    def update_url(self):
+        return url_for('thing_bp.thing_update', thing_id=self.id)
+
+    @property
     def parent_list(self):
         parent = self.kind_of
         if parent is None:
             return []
         else:
             return parent.parent_list + [parent]
+
+    def user_may_delete(self, user):
+        return user.may_delete_thing and not self.is_top
+
+    def user_may_update(self, user):
+        return user.may_update_thing and not self.is_top
 
     def user_may_view(self, user):
         return user.may_observe_things
@@ -66,15 +84,15 @@ class Thing(UniqueNamedBaseModel):
     def generic(self):
         return find_or_create_particular_thing(self, [])
 
-    def viewable_nodes(self, viewer, include_actions=False):
-        return [thing.viewable_attributes(viewer, include_actions) for thing in self.sorted_kinds]
+    def viewable_nodes(self, viewer):
+        return [thing.viewable_attributes(viewer) for thing in self.sorted_kinds]
 
-    def viewable_attributes(self, viewer, include_actions=False):
+    def viewable_attributes(self, viewer):
         description_nodes = [{'text': line} for line in self.description_lines]
-        kind_of_nodes = self.viewable_nodes(viewer, include_actions)
+        kind_of_nodes = self.viewable_nodes(viewer)  # No actions for lower nodes.
         link_nodes = [
             {
-                'text': "-->Details",
+                'text': f'{self.label} Details',
                 'url': self.url,
             }
         ]
@@ -82,20 +100,12 @@ class Thing(UniqueNamedBaseModel):
             'text': self.name,
             'nodes': description_nodes + link_nodes + kind_of_nodes,
         }
-
-        if include_actions:
-            if viewer.may_delete_group:
-                attributes['deletion_url'] = self.deletion_url
-            if viewer.may_update_group:
-                attributes['update_url'] = self.update_url
-            if self.user_may_create_place(viewer):
-                attributes['create_place_url'] = self.place_create_url
         return attributes
 
 
-def top_viewable_attributes(viewer, include_actions=False):
+def top_viewable_attributes(viewer):
     if viewer.may_observe:
-        return find_or_create_everything().viewable_nodes(viewer, include_actions)
+        return find_or_create_everything().viewable_nodes(viewer)
     else:
         return []
 
