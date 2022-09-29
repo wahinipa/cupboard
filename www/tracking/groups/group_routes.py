@@ -29,7 +29,7 @@ def group_create():
         group = create_group_from_form(form)
         return redirect(url_for('group_bp.group_view', group_id=group.id))
     else:
-        return render_template('group_create.j2', form=form, tab="group", **display_context())
+        return render_template('group_create.j2', form=form, tab="group", form_title='Create New Group', **display_context())
 
 
 @group_bp.route('/delete/<int:group_id>')
@@ -86,7 +86,7 @@ def group_update(group_id):
             database.session.commit()
             return redirect(url_for('group_bp.group_view', group_id=group.id))
         else:
-            return render_template('group_update.j2', form=form, tab="group", **display_context())
+            return render_template('group_update.j2', form=form, tab="group", form_title=f'Update {group.name}', **display_context())
     else:
         return redirect_hacks()
 
@@ -111,7 +111,7 @@ def place_create(group_id):
             place = create_place_from_form(group, form)
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
-            return render_template('place_create.j2', form=form, tab="place", **display_context())
+            return render_template('place_create.j2', form=form, form_title=f'Create new place for {group.name}', tab="place", **display_context())
     else:
         return redirect_hacks()
 

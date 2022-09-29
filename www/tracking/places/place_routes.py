@@ -53,7 +53,7 @@ def place_update(place_id):
             database.session.commit()
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
-            return render_template('place_update.j2', form=form, tab="place", **display_context())
+            return render_template('place_update.j2', form=form, form_title=f'Update {place.name}', tab="place", **display_context())
     else:
         return redirect_hacks()
 

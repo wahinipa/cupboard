@@ -29,7 +29,7 @@ def create():
                 return redirect(user.url)
             else:
                 return redirect(url_for('people_bp.people_list'))
-        return render_template('user_create.j2', form=form, **display_context())
+        return render_template('user_create.j2', form=form, form_title=f'Create New User Account', **display_context())
     else:
         return redirect_hacks()
 
@@ -92,7 +92,7 @@ def profile():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
 
-    return render_template('profile.j2', form=form, **display_context())
+    return render_template('profile.j2', form=form, form_title=f'Update Profile for {current_user.name}', **display_context())
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
