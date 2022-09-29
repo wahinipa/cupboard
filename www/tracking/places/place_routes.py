@@ -73,9 +73,9 @@ def place_view(place_id):
     if place is not None and place.user_may_view(current_user):
         return render_template(
             'place_view.j2',
-            place=place.viewable_attributes(current_user, include_actions=True, include_group_url=True),
             tab="place",
-            **display_context())
+            **place.display_context(current_user)
+        )
     else:
         return redirect(url_for('home_bp.home'))
 

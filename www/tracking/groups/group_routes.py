@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.commons.display_context import display_context
+from tracking.commons.display_context import display_context, DisplayContext
 from tracking.groups.group_forms import GroupCreateForm, create_group_from_form, GroupUpdateForm
 from tracking.groups.group_models import find_group_by_id
 from tracking.places.place_forms import PlaceCreateForm, create_place_from_form
@@ -47,14 +47,16 @@ def group_delete(group_id):
 @group_bp.route('/list')
 @login_required
 def group_list():
-    context = {}
+    group_context = DisplayContext({
+        'name': 'Groups',
+        'groups': current_user.viewable_groups,
+    })
     if current_user.may_create_group:
-        context['create_group_url'] = url_for('group_bp.group_create')
+        group_context.add_action(url_for('group_bp.group_create'), 'Group', 'create')
     return render_template(
         'group_list.j2',
         tab="group",
-        groups=current_user.viewable_groups,
-        **display_context(context)
+        **group_context.display_context
     )
 
 
@@ -66,8 +68,7 @@ def group_view(group_id):
         return render_template(
             'group_view.j2',
             tab="group",
-            group=group.viewable_attributes(current_user, include_actions=True),
-            **display_context()
+            **group.display_context(current_user)
         )
     else:
         return redirect(url_for('home_bp.home'))

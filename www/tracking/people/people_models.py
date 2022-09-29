@@ -156,9 +156,12 @@ class User(IdModelMixin, database.Model, UserMixin):
 
     @property
     def viewable_places(self):
+        from tracking.groups.group_models import all_groups
         result = []
-        for group in self.viewable_groups:
-            result += group.get('places', [])  # A list of viewable attributes for each place in group
+        for group in all_groups():
+            if group.user_may_view(self):
+                for place in group.sorted_places:
+                    result.append(place.viewable_attributes(self, include_group_url=True))
         return result
 
     @property

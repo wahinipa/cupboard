@@ -5,6 +5,7 @@ from flask import url_for
 
 from tracking import database
 from tracking.commons.base_models import BaseModel, ModelWithRoles
+from tracking.commons.display_context import DisplayContext
 
 
 class Place(BaseModel, ModelWithRoles):
@@ -30,7 +31,7 @@ class Place(BaseModel, ModelWithRoles):
     def user_may_view(self, user):
         return self.group.user_may_view(user)
 
-    def viewable_attributes(self, viewer, include_actions=False, include_group_url=False):
+    def viewable_attributes(self, viewer, include_group_url=False):
         attributes = {
             'name': self.name,
             'url': self.url,
@@ -39,12 +40,19 @@ class Place(BaseModel, ModelWithRoles):
         }
         if include_group_url:
             attributes['group_url'] = self.group.url
-        if include_actions:
-            if viewer.may_delete_place:
-                attributes['deletion_url'] = self.deletion_url
-            if viewer.may_update_place:
-                attributes['update_url'] = self.update_url
         return attributes
+
+    def display_context(self, viewer):
+        place_context = DisplayContext({
+            'place': self.viewable_attributes(viewer, include_group_url=True),
+            'name': self.name,
+            'group_url': self.group.url
+        })
+        if viewer.may_update_place:
+            place_context.add_action(self.update_url, self.name, 'update')
+        if viewer.may_delete_place:
+            place_context.add_action(self.deletion_url, self.name, 'delete')
+        return place_context.display_context
 
     @property
     def url(self):

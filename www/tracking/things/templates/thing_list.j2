@@ -2,6 +2,7 @@
 {% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
 {% from 'card_macros.j2' import render_card %}
 {% from 'tree_macros.j2' import tree_root %}
+{% from 'action_macros.j2' import action_card %}
 {% block innards %}
   {% if parent_list %}
     <nav aria-label="breadcrumb">
@@ -22,13 +23,7 @@
     <div id="tree">
     </div>
   {% endcall %}
-  {% if create_url or update_url or delete_url %}
-    {% call render_card(title="Actions on " + title, background='secondary') %}
-      {% if create_url %}{{ render_create_button(text=create_label, link=create_url) }}{% endif %}
-      {% if update_url %}{{ render_update_button(text=update_label, link=update_url) }}{% endif %}
-      {% if delete_url %}{{ render_delete_button(text=delete_label, link=delete_url) }}{% endif %}
-    {% endcall %}
-  {% endif %}
+  {{ action_card(title, actions) }}
 {% endblock %}
 {% block extra_js %}
   {{ tree_root(nodes) }}

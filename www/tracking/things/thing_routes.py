@@ -6,7 +6,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
 from tracking.things.thing_forms import ThingCreateForm, create_thing_from_form, ThingUpdateForm
-from tracking.things.thing_models import find_thing_by_id, find_or_create_everything
+from tracking.things.thing_models import find_thing_by_id, find_or_create_everything, thing_display_context
 
 thing_bp = Blueprint(
     'thing_bp', __name__,
@@ -89,22 +89,3 @@ def thing_list():
     return render_template('thing_list.j2', **thing_display_context(find_or_create_everything(), current_user))
 
 
-def thing_display_context(thing, viewer):
-    context = {
-        'tab': 'thing',
-        'title': thing.label,
-        'parent_list': thing.parent_list,
-        'nodes': thing.viewable_nodes(current_user),
-    }
-    if viewer.may_delete_thing:
-        context['delete_url'] = thing.delete_url
-        context['delete_label'] = thing.label
-    if viewer.may_update_thing:
-        context['update_url'] = thing.update_url
-        context['update_label'] = thing.label
-    if viewer.may_create_thing:
-        context['create_url'] = thing.create_url
-        context['create_label'] = f'Kind of {thing.label}'
-    if not thing.is_top:
-        context['lines'] = thing.description_lines
-    return display_context(context)

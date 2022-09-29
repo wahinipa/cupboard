@@ -1,0 +1,22 @@
+{% from 'card_macros.j2' import render_card %}
+{% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
+
+{% macro action_card(title, actions) %}
+  {% if actions %}
+    {% call render_card(title="Actions on " + title, background='primary') %}
+      {% for action in actions %}
+        {{ action_link(**action) }}
+      {% endfor %}
+    {% endcall %}
+  {% endif %}
+{% endmacro %}
+
+{% macro action_link(url=None, label=None, task=None) %}
+  {% if task == 'create' %}
+    {{ render_create_button(text=label, link=url) }}
+  {% elif task == 'update' %}
+    {{ render_update_button(text=label, link=url) }}
+  {% elif task == 'delete' %}
+    {{ render_delete_button(text=label, link=url) }}
+  {% endif %}
+{% endmacro %}

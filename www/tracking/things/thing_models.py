@@ -7,6 +7,7 @@ from sqlalchemy.orm import backref
 
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
+from tracking.commons.display_context import DisplayContext
 
 
 class Thing(UniqueNamedBaseModel):
@@ -101,6 +102,24 @@ class Thing(UniqueNamedBaseModel):
             'nodes': description_nodes + link_nodes + kind_of_nodes,
         }
         return attributes
+
+
+def thing_display_context(thing, viewer):
+    thing_context = DisplayContext({
+        'tab': 'thing',
+        'title': thing.label,
+        'parent_list': thing.parent_list,
+        'nodes': thing.viewable_nodes(viewer),
+    })
+    if not thing.is_top:
+        thing_context.add_attribute('lines', thing.description_lines)
+    if viewer.may_create_thing:
+        thing_context.add_action(thing.create_url, f'Kind of {thing.label}', 'create')
+    if viewer.may_update_thing:
+        thing_context.add_action(thing.update_url, thing.label, 'update')
+    if viewer.may_delete_thing:
+        thing_context.add_action(thing.delete_url, thing.label, 'delete')
+    return thing_context.display_context
 
 
 def top_viewable_attributes(viewer):

@@ -6,7 +6,7 @@
   </p>
 {% endmacro %}
 
-{% macro place_content(name, lines, update_url=None, deletion_url=None, group_name=None, group_url=None) %}
+{% macro place_content(name, lines, group_name=None, group_url=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if group_name %}
     <b>Group: </b>{% if group_url %}<a href="{{ group_url }}">{% endif %}{{ group_name }}{% if group_url %}</a>{% endif %}<br>

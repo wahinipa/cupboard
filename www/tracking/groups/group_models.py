@@ -5,6 +5,7 @@ from flask import url_for
 
 from tracking import database
 from tracking.commons.base_models import ModelWithRoles, UniqueNamedBaseModel, name_is_key
+from tracking.commons.display_context import DisplayContext
 
 
 class Group(UniqueNamedBaseModel, ModelWithRoles):
@@ -35,21 +36,27 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
     def place_create_url(self):
         return url_for('group_bp.place_create', group_id=self.id)
 
-    def viewable_attributes(self, viewer, include_actions=False):
+    def viewable_attributes(self, viewer):
         attributes = {
             'name': self.name,
             'url': self.url,
             'lines': self.description_lines,
-            'places': [place.viewable_attributes(viewer) for place in self.sorted_places]
+            'places': [place.viewable_attributes(viewer, include_group_url=False) for place in self.sorted_places]
         }
-        if include_actions:
-            if viewer.may_delete_group:
-                attributes['deletion_url'] = self.deletion_url
-            if viewer.may_update_group:
-                attributes['update_url'] = self.update_url
-            if self.user_may_create_place(viewer):
-                attributes['create_place_url'] = self.place_create_url
         return attributes
+
+    def display_context(self, viewer):
+        group_context = DisplayContext({
+            'group': self.viewable_attributes(viewer),
+            'name': self.name,
+        })
+        if self.user_may_create_place(viewer):
+            group_context.add_action(self.place_create_url, f'Place for {self.name}', 'create')
+        if viewer.may_update_group:
+            group_context.add_action(self.update_url, self.name, 'update')
+        if viewer.may_delete_group:
+            group_context.add_action(self.deletion_url, self.name, 'delete')
+        return group_context.display_context
 
     def user_may_view(self, user):
         return True  # TODO: refine this
