@@ -20,7 +20,7 @@ class Thing(UniqueNamedBaseModel):
     @property
     def label(self):
         if self.is_top:
-            return "Things"
+            return "All Things"
         else:
             return self.name
 
@@ -35,6 +35,18 @@ class Thing(UniqueNamedBaseModel):
             return root
         else:
             return None
+
+    @property
+    def category_set(self):
+        categories = {refinement.category for refinement in self.refinements}
+        root = self.kind_of
+        if root:
+            categories |= root.category_set
+        return categories
+
+    @property
+    def categories(self):
+        return sorted(self.category_set, key=name_is_key)
 
     @property
     def sorted_kinds(self):
@@ -115,10 +127,11 @@ def thing_display_context(thing, viewer):
         thing_context.add_attribute('lines', thing.description_lines)
     if viewer.may_create_thing:
         thing_context.add_action(thing.create_url, f'Kind of {thing.label}', 'create')
-    if viewer.may_update_thing:
-        thing_context.add_action(thing.update_url, thing.label, 'update')
-    if viewer.may_delete_thing:
-        thing_context.add_action(thing.delete_url, thing.label, 'delete')
+    if not thing.is_top:
+        if viewer.may_update_thing:
+            thing_context.add_action(thing.update_url, thing.label, 'update')
+        if viewer.may_delete_thing:
+            thing_context.add_action(thing.delete_url, thing.label, 'delete')
     return thing_context.display_context
 
 

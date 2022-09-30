@@ -33,3 +33,7 @@ def test_refinement(light_saber, pastry):
 
     another_refinement = refine_thing(light_saber, pastry)
     assert another_refinement == refinement
+
+    light_saber_categories = light_saber.categories
+    assert len(light_saber_categories) == 1
+    assert light_saber_categories[0] == pastry

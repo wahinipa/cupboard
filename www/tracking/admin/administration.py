@@ -58,7 +58,25 @@ def create_test_data(database):
     clothing = find_or_create_thing("Clothing", "Things to wear\nOr lose in the closet.")
     containers = find_or_create_thing("Containers", "Things to hold other things.")
     backpacks = find_or_create_thing("Backpacks", "Containers that\nStrap to your back.", kind_of=containers)
-    find_or_create_thing("Gym Bags", description="", kind_of=containers)
+    gym_bags = find_or_create_thing("Gym Bags", description="", kind_of=containers)
+
+    from tracking.categories.category_models import find_or_create_category
+    sex_category = find_or_create_category("Sex", description="Whether for girls or boys or either.")
+    seasonal_category = find_or_create_category("Season", description="Summer versus Winter versus All Seasons.")
+
+    from tracking.choices.choice_models import find_or_create_choice
+    sex_female = find_or_create_choice(sex_category, "Female", "For girl or woman.")
+    sex_male = find_or_create_choice(sex_category, "Male", "For boy or man.")
+    sex_any = find_or_create_choice(sex_category, "Either", "For either girl or boy.")
+    seasonal_summer = find_or_create_choice(seasonal_category, "Summer", "Appropriate for summer.")
+    seasonal_winter = find_or_create_choice(seasonal_category, "Winter", "Appropriate for winter.")
+    seasonal_all_year = find_or_create_choice(seasonal_category, "All Year", "Appropriate for any season.")
+
+    from tracking.categories.category_models import refine_thing
+    clothing_by_season = refine_thing(clothing, seasonal_category)
+    clothing_by_sex = refine_thing(clothing, sex_category)
+    containers_by_sex = refine_thing(containers, sex_category)
+    backpacks_by_season = refine_thing(backpacks, seasonal_category)
 
     from tracking.groups.group_models import find_or_create_group
     do_gooders = find_or_create_group("Do Gooders, Inc.", "Doing good\nwhile doing more good.")

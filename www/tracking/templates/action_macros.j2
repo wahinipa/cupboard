@@ -1,9 +1,9 @@
 {% from 'card_macros.j2' import render_card %}
 {% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
 
-{% macro action_card(title, actions) %}
+{% macro action_card(label, actions) %}
   {% if actions %}
-    {% call render_card(title="Actions on " + title, background='primary') %}
+    {% call render_card(title="Actions on " + label, background='primary') %}
       {% for action in actions %}
         {{ action_link(**action) }}
       {% endfor %}
