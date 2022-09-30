@@ -234,10 +234,3 @@ def find_particular_thing(thing, choices):
     return None
 
 
-def create_initial_things():
-    if environ.get('ADD_TEST_DATA'):
-        find_or_create_thing("Shoes", "Things to wear on your feet.")
-        find_or_create_thing("Clothing", "Things to wear\nOr lose in the closet.")
-        containers = find_or_create_thing("Containers", "Things to hold other things.")
-        find_or_create_thing("Backpacks", "Containers that\nStrap to your back.", kind_of=containers)
-        find_or_create_thing("Gym Bags", description="", kind_of=containers)

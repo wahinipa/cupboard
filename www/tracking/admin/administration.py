@@ -1,5 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
+from os import environ
 
 from flask import current_app, request, url_for
 from flask_admin import Admin
@@ -45,13 +46,30 @@ def initialize_database(database):
     from tracking.roles.role_models import find_or_create_standard_roles
     find_or_create_standard_roles()
 
-    from tracking.things.thing_models import create_initial_things
-    create_initial_things()
-
-    from tracking.places.place_models import create_initial_places_and_groups
-    create_initial_places_and_groups()
+    if environ.get('ADD_TEST_DATA'):
+        create_test_data(database)
 
     database.session.commit()
+
+
+def create_test_data(database):
+    from tracking.things.thing_models import find_or_create_thing
+    shoes = find_or_create_thing("Shoes", "Things to wear on your feet.")
+    clothing = find_or_create_thing("Clothing", "Things to wear\nOr lose in the closet.")
+    containers = find_or_create_thing("Containers", "Things to hold other things.")
+    backpacks = find_or_create_thing("Backpacks", "Containers that\nStrap to your back.", kind_of=containers)
+    find_or_create_thing("Gym Bags", description="", kind_of=containers)
+
+    from tracking.groups.group_models import find_or_create_group
+    do_gooders = find_or_create_group("Do Gooders, Inc.", "Doing good\nwhile doing more good.")
+    well_wishers = find_or_create_group("Society of Well Wishers",
+                                        "If wishes were horses we would find you a pony.")
+
+    from tracking.places.place_models import find_or_create_place
+    out_back = find_or_create_place(do_gooders, "Out Back", "The shed behind the main office.\nClaudia has the key.")
+    church_basement = find_or_create_place(well_wishers, "Church Basement", "")
+    main_storage_unit = find_or_create_place(well_wishers, "Main Storage Unit", "Unit 17 at Store-Your-Stuff-Here")
+    garage = find_or_create_place(well_wishers, "Garage", "Please keep locked when office is closed.")
 
 
 def add_flask_admin(application, database):
