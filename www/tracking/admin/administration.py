@@ -48,6 +48,9 @@ def initialize_database(database):
     from tracking.things.thing_models import create_initial_things
     create_initial_things()
 
+    from tracking.places.place_models import create_initial_places_and_groups
+    create_initial_places_and_groups()
+
     database.session.commit()
 
 

@@ -1,5 +1,6 @@
 # Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
+from os import environ
 
 from flask import url_for
 
@@ -87,3 +88,14 @@ def find_place(group, name):
 
 def find_place_by_id(place_id):
     return Place.query.filter(Place.id == place_id).first()
+
+
+def create_initial_places_and_groups():
+    if environ.get('ADD_TEST_DATA'):
+        from tracking.groups.group_models import find_or_create_group
+        do_gooders = find_or_create_group("Do Gooders, Inc.", "Doing good\nwhile doing more good.")
+        well_wishers = find_or_create_group("Society of Well Wishers", "If wishes were horses we would find you a pony.")
+        find_or_create_place(do_gooders, "Out Back", "The shed behind the main office.\nClaudia has the key.")
+        find_or_create_place(well_wishers, "Church Basement", "")
+        find_or_create_place(well_wishers, "Main Storage Unit", "Unit 17 at Store-Your-Stuff-Here")
+        find_or_create_place(well_wishers, "Garage", "Please keep locked when office is closed.")
