@@ -62,7 +62,7 @@ def create_test_data(database):
 
     from tracking.categories.category_models import find_or_create_category
     sex_category = find_or_create_category("Sex", description="Whether for girls or boys or either.")
-    seasonal_category = find_or_create_category("Season", description="Summer versus Winter versus All Seasons.")
+    seasonal_category = find_or_create_category("Season", description="Summer versus winter versus any season.")
 
     from tracking.choices.choice_models import find_or_create_choice
     sex_female = find_or_create_choice(sex_category, "Female", "For girl or woman.")

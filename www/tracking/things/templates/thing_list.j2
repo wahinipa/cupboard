@@ -13,6 +13,18 @@
     <div id="tree">
     </div>
   {% endcall %}
+  {% if categories %}
+    {% call render_card(title="Categories", background="secondary") %}
+      {% for category in categories %}
+        <h5>{{ category.name }}: {{ category.description }}</h5>
+        <p>
+        {% for choice in category.sorted_choices %}
+          {{ choice.name }} - {{ choice.description }}<br>
+          {% endfor %}
+        </p>
+      {% endfor %}
+    {% endcall %}
+  {% endif %}
   {{ action_card(label, actions) }}
 {% endblock %}
 {% block extra_js %}

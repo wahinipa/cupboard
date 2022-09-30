@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel
+from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
 
 
 class Category(UniqueNamedBaseModel):
@@ -11,6 +11,10 @@ class Category(UniqueNamedBaseModel):
 
     def user_may_view(self, user):
         return user.may_observe_things
+
+    @property
+    def sorted_choices(self):
+        return sorted(self.choices, key=name_is_key)
 
 
 class Refinement(IdModelMixin, database.Model):
