@@ -8,6 +8,15 @@ from tracking.commons.base_models import ModelWithRoles, UniqueNamedBaseModel, n
 from tracking.commons.display_context import DisplayContext
 
 
+class AllGroups:
+    def __init__(self):
+        self.label = "Groups"
+
+    @property
+    def url(self):
+        return url_for('group_bp.group_list')
+
+
 class Group(UniqueNamedBaseModel, ModelWithRoles):
     places = database.relationship('Place', backref='group', lazy=True, cascade='all, delete')
     group_assignments = database.relationship('GroupAssignment', backref='group', lazy=True, cascade='all, delete')
@@ -19,6 +28,14 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
     @property
     def assignments(self):
         return self.group_assignments
+
+    @property
+    def label(self):
+        return self.name
+
+    @property
+    def list_all_url(self):
+        return url_for('group_bp.group_list')
 
     @property
     def url(self):
@@ -49,6 +66,8 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
         group_context = DisplayContext({
             'group': self.viewable_attributes(viewer),
             'name': self.name,
+            'label': self.label,
+            'parent_list': [AllGroups()],
         })
         if self.user_may_create_place(viewer):
             group_context.add_action(self.place_create_url, f'Place for {self.name}', 'create')

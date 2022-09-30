@@ -4,17 +4,7 @@
 {% from 'tree_macros.j2' import tree_root %}
 {% from 'action_macros.j2' import action_card %}
 {% block innards %}
-  {% if parent_list %}
-    <nav aria-label="breadcrumb">
-      <ul class="breadcrumb">
-        {% for parent in parent_list %}
-          <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.label }}</a></li>
-        {% endfor %}
-        <li class="breadcrumb-item active">{{ title }}</li>
-      </ul>
-    </nav>
-  {% endif %}
-  {% call render_card(title=title) %}
+  {% call render_card(title=label) %}
     {% if lines %}
       {% for line in lines %}
         <h5>{{ line }}</h5>

@@ -5,8 +5,8 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.commons.display_context import display_context, DisplayContext
-from tracking.groups.group_forms import GroupCreateForm, create_group_from_form, GroupUpdateForm
+from tracking.commons.display_context import DisplayContext, display_context
+from tracking.groups.group_forms import GroupCreateForm, GroupUpdateForm, create_group_from_form
 from tracking.groups.group_models import find_group_by_id
 from tracking.places.place_forms import PlaceCreateForm, create_place_from_form
 
@@ -29,7 +29,8 @@ def group_create():
         group = create_group_from_form(form)
         return redirect(url_for('group_bp.group_view', group_id=group.id))
     else:
-        return render_template('group_create.j2', form=form, tab="group", form_title='Create New Group', **display_context())
+        return render_template('group_create.j2', form=form, tab="group", form_title='Create New Group',
+                               **display_context())
 
 
 @group_bp.route('/delete/<int:group_id>')
@@ -87,7 +88,8 @@ def group_update(group_id):
             database.session.commit()
             return redirect(url_for('group_bp.group_view', group_id=group.id))
         else:
-            return render_template('group_update.j2', form=form, tab="group", form_title=f'Update {group.name}', **display_context())
+            return render_template('group_update.j2', form=form, tab="group", form_title=f'Update {group.name}',
+                                   **display_context())
     else:
         return redirect_hacks()
 
@@ -112,8 +114,7 @@ def place_create(group_id):
             place = create_place_from_form(group, form)
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
-            return render_template('place_create.j2', form=form, form_title=f'Create new place for {group.name}', tab="place", **display_context())
+            return render_template('place_create.j2', form=form, form_title=f'Create new place for {group.name}',
+                                   tab="place", **display_context())
     else:
         return redirect_hacks()
-
-

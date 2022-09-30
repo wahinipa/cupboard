@@ -47,13 +47,19 @@ class Place(BaseModel, ModelWithRoles):
         place_context = DisplayContext({
             'place': self.viewable_attributes(viewer, include_group_url=True),
             'name': self.name,
-            'group_url': self.group.url
+            'group_url': self.group.url,
+            'parent_list': self.parent_list,
+            'label': self.label
         })
         if viewer.may_update_place:
             place_context.add_action(self.update_url, self.name, 'update')
         if viewer.may_delete_place:
             place_context.add_action(self.deletion_url, self.name, 'delete')
         return place_context.display_context
+
+    @property
+    def label(self):
+        return self.name
 
     @property
     def url(self):
@@ -66,6 +72,11 @@ class Place(BaseModel, ModelWithRoles):
     @property
     def update_url(self):
         return url_for('place_bp.place_update', place_id=self.id)
+
+    @property
+    def parent_list(self):
+        from tracking.groups.group_models import AllGroups
+        return [AllGroups(), self.group]
 
 
 def find_or_create_place(group, name, description, date_created=None):
@@ -94,7 +105,8 @@ def create_initial_places_and_groups():
     if environ.get('ADD_TEST_DATA'):
         from tracking.groups.group_models import find_or_create_group
         do_gooders = find_or_create_group("Do Gooders, Inc.", "Doing good\nwhile doing more good.")
-        well_wishers = find_or_create_group("Society of Well Wishers", "If wishes were horses we would find you a pony.")
+        well_wishers = find_or_create_group("Society of Well Wishers",
+                                            "If wishes were horses we would find you a pony.")
         find_or_create_place(do_gooders, "Out Back", "The shed behind the main office.\nClaudia has the key.")
         find_or_create_place(well_wishers, "Church Basement", "")
         find_or_create_place(well_wishers, "Main Storage Unit", "Unit 17 at Store-Your-Stuff-Here")

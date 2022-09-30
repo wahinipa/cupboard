@@ -107,7 +107,7 @@ class Thing(UniqueNamedBaseModel):
 def thing_display_context(thing, viewer):
     thing_context = DisplayContext({
         'tab': 'thing',
-        'title': thing.label,
+        'label': thing.label,
         'parent_list': thing.parent_list,
         'nodes': thing.viewable_nodes(viewer),
     })

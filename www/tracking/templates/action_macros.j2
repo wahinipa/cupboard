@@ -20,3 +20,17 @@
     {{ render_delete_button(text=label, link=url) }}
   {% endif %}
 {% endmacro %}
+
+{% macro bread_crumbs(parent_list=None, label=None) %}
+  {% if parent_list %}
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        {% for parent in parent_list %}
+          <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.label }}</a></li>
+        {% endfor %}
+        {% if label %}
+          <li class="breadcrumb-item active">{{ label }}</li>{% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}

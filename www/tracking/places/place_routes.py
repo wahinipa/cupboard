@@ -1,6 +1,6 @@
 # Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, request, redirect, url_for, render_template
-from flask_login import login_required, current_user
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
@@ -13,8 +13,6 @@ place_bp = Blueprint(
     template_folder='templates',
     static_folder='static',
 )
-
-
 
 
 @place_bp.route('/delete/<int:place_id>')
@@ -53,7 +51,12 @@ def place_update(place_id):
             database.session.commit()
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
-            return render_template('place_update.j2', form=form, form_title=f'Update {place.name}', tab="place", **display_context())
+            return render_template(
+                'place_update.j2',
+                form=form,
+                form_title=f'Update {place.name}',
+                tab="place", **display_context()
+            )
     else:
         return redirect_hacks()
 
@@ -78,5 +81,3 @@ def place_view(place_id):
         )
     else:
         return redirect(url_for('home_bp.home'))
-
-
