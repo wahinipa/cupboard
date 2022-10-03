@@ -20,6 +20,10 @@ class Category(UniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
+    @property
+    def label(self):
+        return self.name
+
     def viewable_attributes(self, viewer):
         attributes = {
             'name': self.name,
@@ -51,6 +55,10 @@ class Category(UniqueNamedBaseModel):
         return user.may_delete_category
 
     def user_may_update(self, user):
+        return user.may_update_category
+
+    def user_may_create_choice(self, user):
+        # TODO: refine this
         return user.may_update_category
 
     @property

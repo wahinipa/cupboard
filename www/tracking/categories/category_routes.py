@@ -88,7 +88,11 @@ def update_category_from_form(category, form):
 def category_view(category_id):
     category = find_category_by_id(category_id)
     if category is not None and category.user_may_view(current_user):
-        return render_template('category_view.j2', category=category, tab="category", **display_context())
+        return render_template(
+            'category_view.j2',
+            tab="category",
+            **category.display_context(current_user)
+        )
     else:
         return redirect(url_for('home_bp.home'))
 

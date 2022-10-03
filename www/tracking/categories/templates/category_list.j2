@@ -8,7 +8,7 @@
     <h3>Categories are lists of Choices for being more specific about Things</h3>
     {% if create_category_url %}{{ render_create_button(text="Category", link=create_category_url) }}{% endif %}
   {% endcall %}
-  {% for category in groups %}
+  {% for category in categories %}
     {% call render_card(title=category.name, link=category.url, background='secondary') %}
       {{ category_macro(**category) }}
     {% endcall %}
