@@ -7,6 +7,7 @@ from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
 from tracking.commons.display_context import DisplayContext
 
+
 class AllCategories:
     def __init__(self):
         self.label = "Categories"
@@ -82,6 +83,18 @@ class Category(UniqueNamedBaseModel):
         return url_for('category_bp.choice_create', category_id=self.id)
 
 
+def category_list_display_context(viewer):
+    category_context = DisplayContext({
+        'tab': 'category',
+        'label': 'Categories',
+        'name': 'Categories',
+        'categories': viewer.viewable_categories,
+    })
+    if viewer.may_create_category:
+        category_context.add_action(url_for('category_bp.category_create'), 'Category', 'create')
+    return category_context.display_context
+
+
 class Refinement(IdModelMixin, database.Model):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'))
@@ -123,6 +136,7 @@ def find_refinement(thing, category):
         if refinement.category_id == category.id:
             return refinement
     return None
+
 
 def all_categories():
     return sorted(Category.query.all(), key=name_is_key)

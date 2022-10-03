@@ -1,13 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, render_template, url_for, redirect, request
-from flask_login import login_required, current_user
+from flask import Blueprint, redirect, render_template, request, url_for
+from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdateForm, create_category_from_form
-from tracking.categories.category_models import find_category_by_id
-from tracking.choices.choice_forms import create_choice_from_form, ChoiceCreateForm
-from tracking.commons.display_context import display_context, DisplayContext
+from tracking.categories.category_models import category_list_display_context, find_category_by_id
+from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
+from tracking.commons.display_context import DisplayContext, display_context
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -54,7 +54,21 @@ def category_list():
         'name': 'Categories',
         'categories': current_user.viewable_categories,
     })
-    return render_template('category_list.j2', tab="category", **category_context.display_context)
+    return render_template('category_list.j2', **category_list_display_context(current_user))
+
+
+@category_bp.route('/view/<int:category_id>')
+@login_required
+def category_view(category_id):
+    category = find_category_by_id(category_id)
+    if category is not None and category.user_may_view(current_user):
+        return render_template(
+            'category_view.j2',
+            tab="category",
+            **category.display_context(current_user)
+        )
+    else:
+        return redirect(url_for('home_bp.home'))
 
 
 @category_bp.route('/update/<int:category_id>', methods=['GET', 'POST'])
@@ -81,20 +95,6 @@ def category_update_form(category):
 
 def update_category_from_form(category, form):
     form.populate_obj(category)
-
-
-@category_bp.route('/view/<int:category_id>')
-@login_required
-def category_view(category_id):
-    category = find_category_by_id(category_id)
-    if category is not None and category.user_may_view(current_user):
-        return render_template(
-            'category_view.j2',
-            tab="category",
-            **category.display_context(current_user)
-        )
-    else:
-        return redirect(url_for('home_bp.home'))
 
 
 @category_bp.route('/create_choice/<int:category_id>', methods=['POST', 'GET'])

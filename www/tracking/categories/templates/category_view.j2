@@ -7,10 +7,5 @@
   {% call render_card(title=name) %}
     {{ category_macro(**category) }}
   {% endcall %}
-{#  {% for place in group.places %}#}
-{#    {% call render_card(title=place.name, link=place.url, background='secondary') %}#}
-{#      {{ place_macro(**place) }}#}
-{#    {% endcall %}#}
-{#  {% endfor %}#}
   {{ action_card(name, actions) }}
 {% endblock %}

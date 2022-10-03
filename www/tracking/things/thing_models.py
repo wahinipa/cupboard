@@ -122,7 +122,7 @@ def thing_display_context(thing, viewer):
         'label': thing.label,
         'parent_list': thing.parent_list,
         'nodes': thing.viewable_nodes(viewer),
-        'categories': thing.categories,
+        'categories': [category.viewable_attributes(viewer) for category in thing.categories],
     })
     if not thing.is_top:
         thing_context.add_attribute('lines', thing.description_lines)

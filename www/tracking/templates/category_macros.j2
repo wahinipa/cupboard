@@ -6,10 +6,23 @@
   </p>
 {% endmacro %}
 
-{% macro category_content(name, lines, update_url=None, deletion_url=None, create_place_url=None) %}
+{% macro category_content(name, lines, update_url=None, deletion_url=None, create_place_url=None, choices=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if name %}<b>Name of Category:</b> {{ name }}<br>{% endif %}
   {% if lines %}<b>Description:</b><br>{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
+  {% if choices %}
+    <b>Choices:</b><br>
+    {% for choice in choices %}
+      <i>{{ choice.name }}</i>
+      {% if choice.lines %}
+        {% for choice_line in choice.lines %}
+          - {{ choice_line }}<br>
+        {% endfor %}
+      {% else %}
+        <br>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
   {% if create_choice_url %}{{ render_create_button(link=create_choice_url, text='Choice') }}{% endif %}
   {% if update_url %}{{ render_update_button(link=update_url, text='Category') }}{% endif %}
   {% if deletion_url %}{{ render_delete_button(link=deletion_url, text='Category') }}{% endif %}
