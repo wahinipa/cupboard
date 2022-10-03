@@ -10,6 +10,12 @@
   {% endif %}
 {% endmacro %}
 
+{% macro categories_nav_items(current_user) %}
+  {% if current_user.may_observe_categories %}
+    {{ render_nav_item('category_bp.category_list', 'Categories') }}
+  {% endif %}
+{% endmacro %}
+
 {% macro groups_nav_items(current_user) %}
   {% if current_user.may_observe_groups %}
     {{ render_nav_item('group_bp.group_list', 'Groups') }}

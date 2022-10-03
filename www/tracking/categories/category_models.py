@@ -1,20 +1,77 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
 
+from flask import url_for
+
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
+from tracking.commons.display_context import DisplayContext
+
+class AllCategories:
+    def __init__(self):
+        self.label = "Categories"
+
+    @property
+    def url(self):
+        return url_for('category_bp.category_list')
 
 
 class Category(UniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
+    def viewable_attributes(self, viewer):
+        attributes = {
+            'name': self.name,
+            'url': self.url,
+            'lines': self.description_lines,
+            'choices': [choice.viewable_attributes(viewer) for choice in self.sorted_choices]
+        }
+        return attributes
+
+    def display_context(self, viewer):
+        category_context = DisplayContext({
+            'category': self.viewable_attributes(viewer),
+            'name': self.name,
+            'label': self.label,
+            'parent_list': [AllCategories()],
+        })
+        if self.user_may_create_choice(viewer):
+            category_context.add_action(self.place_create_url, f'Choice for {self.name}', 'create')
+        if viewer.may_update_category:
+            category_context.add_action(self.update_url, self.name, 'update')
+        if viewer.may_delete_category:
+            category_context.add_action(self.deletion_url, self.name, 'delete')
+        return category_context.display_context
+
     def user_may_view(self, user):
-        return user.may_observe_things
+        return True  # TODO: refine this
+
+    def user_may_delete(self, user):
+        return user.may_delete_category
+
+    def user_may_update(self, user):
+        return user.may_update_category
 
     @property
     def sorted_choices(self):
         return sorted(self.choices, key=name_is_key)
+
+    @property
+    def url(self):
+        return url_for('category_bp.category_view', category_id=self.id)
+
+    @property
+    def deletion_url(self):
+        return url_for('category_bp.category_delete', category_id=self.id)
+
+    @property
+    def update_url(self):
+        return url_for('category_bp.category_update', category_id=self.id)
+
+    @property
+    def place_create_url(self):
+        return url_for('category_bp.choice_create', category_id=self.id)
 
 
 class Refinement(IdModelMixin, database.Model):
@@ -58,3 +115,6 @@ def find_refinement(thing, category):
         if refinement.category_id == category.id:
             return refinement
     return None
+
+def all_categories():
+    return sorted(Category.query.all(), key=name_is_key)

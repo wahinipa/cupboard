@@ -108,6 +108,11 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.may_observe
 
     @property
+    def may_observe_categories(self):
+        # TODO: refine this
+        return self.may_observe
+
+    @property
     def may_observe_groups(self):
         # TODO: refine this
         return self.may_observe
@@ -148,6 +153,11 @@ class User(IdModelMixin, database.Model, UserMixin):
     @property
     def deletion_url(self):
         return url_for('people_bp.people_delete', user_id=self.id)
+
+    @property
+    def viewable_categories(self):
+        from tracking.categories.category_models import all_categories
+        return [category.viewable_attributes(self) for category in all_categories() if category.user_may_view(self)]
 
     @property
     def viewable_groups(self):
