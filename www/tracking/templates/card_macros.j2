@@ -23,24 +23,3 @@
     </div>
   </div>
 {% endmacro %}
-
-
-{% macro old_render_card(title, link=None, background='dark') %}
-  <div class="row mt-2">
-    <div class="col-md-12">
-      <div class="card border-{{ background }}">
-        <div class="card-header text-white bg-{{ background }}">
-          {% if link %}
-            <a href="{{ link }}" class="text-white">{{ title }}</a>
-          {% else %}
-            <h4>{{ title }}</h4>
-          {% endif %}
-        </div>
-        <div class="card-body">
-          {{ caller() }}
-        </div>
-      </div>
-    </div>
-  </div>
-{% endmacro %}
-
