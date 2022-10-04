@@ -7,7 +7,7 @@ from tracking.admin.administration import redirect_hacks
 from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdateForm, create_category_from_form
 from tracking.categories.category_models import category_list_display_context, find_category_by_id
 from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
-from tracking.commons.display_context import DisplayContext, display_context
+from tracking.commons.display_context import display_context
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -50,10 +50,6 @@ def category_delete(category_id):
 @category_bp.route('/list')
 @login_required
 def category_list():
-    category_context = DisplayContext({
-        'name': 'Categories',
-        'categories': current_user.viewable_categories,
-    })
     return render_template('category_list.j2', **category_list_display_context(current_user))
 
 
@@ -90,7 +86,7 @@ def category_update(category_id):
 
 
 def category_update_form(category):
-    CategoryUpdateForm(category)
+    return CategoryUpdateForm(category)
 
 
 def update_category_from_form(category, form):
