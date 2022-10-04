@@ -1,10 +1,6 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_link_button %}
-{% from 'card_macros.j2' import viewing_card %}
+{% from 'card_macros.j2' import render_parent, target_card, viewing_card, child_card %}
 {% block innards %}
-  {% call viewing_card(label='Home', purpose='target') %}
-    <p>
-      <large>Hello from Home {{ current_user.about_me }}</large>
-    </p>
-  {% endcall %}
+  {{ render_parent(**target) }}
 {% endblock %}

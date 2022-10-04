@@ -23,3 +23,42 @@
     </div>
   </div>
 {% endmacro %}
+
+{% macro render_parent(classification=None, label=None, children=None, lines=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% call target_card(classification, label) %}
+    {% if lines %}
+      <p>
+        {% for line in lines %}
+          {{ line }}<br>
+        {% endfor %}
+      </p>
+    {% endif %}
+  {% endcall %}
+  {% for child in children %}
+    {{ child_card(**child) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro target_card(classification=None, label=None) %}
+{% if False %}{{ kwargs }}{% endif %}
+{% set content %}
+{% if caller %}{{ caller() }}{% endif %}
+{% endset %}
+{% call viewing_card(prefix=classification + ": ", label=label, purpose='target') %}
+  {{ content }}
+{% endcall %}
+{% endmacro %}
+
+{% macro child_card(classification=None, label=None, lines=None, view_url=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% call viewing_card(prefix=classification + ": ", label=label, view_url=view_url) %}
+    {% if lines %}
+      <p>
+        {% for line in lines %}
+          {{ line }}<br>
+        {% endfor %}
+      </p>
+    {% endif %}
+  {% endcall %}
+{% endmacro %}

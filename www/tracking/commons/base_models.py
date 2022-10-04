@@ -69,6 +69,24 @@ class ModelWithRoles:
         return any(map(yes, self.assignments))
 
 
+class TrackableMixin:
+    @property
+    def label(self):
+        return self.name
+
+    @property
+    def parent_object(self):
+        raise NotImplemented()
+
+    @property
+    def classification(self):
+        raise NotImplemented()
+
+    @property
+    def parent_list(self):
+        return self.parent_object.parent_list
+
+
 class BaseModel(IdModelMixin, NamedModelMixin, DescriptionModelMixin, DatedModelMixin, database.Model):
     __abstract__ = True
 

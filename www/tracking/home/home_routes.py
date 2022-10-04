@@ -2,7 +2,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 
-from tracking.commons.display_context import display_context
+from tracking.commons.display_context import DisplayContext, display_context
+from tracking.home.home_models import home_root
 
 home_bp = Blueprint(
     'home_bp', __name__,
@@ -22,6 +23,6 @@ def base():
 @home_bp.route('/home')
 @login_required
 def home():
-    return render_template('home.j2', **display_context())
+    return render_template('home.j2', **home_root.display_context(current_user))
 
 
