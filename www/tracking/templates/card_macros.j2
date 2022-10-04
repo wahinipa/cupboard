@@ -1,18 +1,31 @@
-{% from 'button_macros.j2' import
-render_expansion_button %}
-{% macro render_description(model, level=4) %}
-  {% if model.description_lines %}
-    <h{{ level }}>Description:</h{{ level }}>
-    <p>
-      {% for line in model.description_lines %}
-        {{ line }}<br/>
-      {% endfor %}
-    </p>
+{% macro viewing_card(prefix=None, label=None, view_url=None, purpose=None) %}
+  {% if purpose == 'target' %}
+    {% set background = 'dark' %}
+  {% elif purpose == 'action' %}
+    {% set background = 'primary' %}
+  {% else %}
+    {% set background = 'secondary' %}
   {% endif %}
+  <div class="row mt-2">
+    <div class="col-md-12">
+      <div class="card border-{{ background }}">
+        <div class="card-header text-white bg-{{ background }}">
+          {% if view_url %}
+            {% if prefix %}{{ prefix }}{% endif %}<a href="{{ view_url }}" class="text-white">{{ label }}</a>
+          {% else %}
+            <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          {{ caller() }}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endmacro %}
 
 
-{% macro render_card(title, link=None, background='dark') %}
+{% macro old_render_card(title, link=None, background='dark') %}
   <div class="row mt-2">
     <div class="col-md-12">
       <div class="card border-{{ background }}">

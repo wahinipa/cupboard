@@ -1,15 +1,16 @@
-{% from 'card_macros.j2' import render_card %}
+{% from 'card_macros.j2' import viewing_card %}
 {% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
 
 {% macro action_card(label, actions) %}
   {% if actions %}
-    {% call render_card(title="Actions on " + label, background='primary') %}
+    {% call viewing_card(prefix="Actions on ", label=label, purpose='action') %}
       {% for action in actions %}
         {{ action_link(**action) }}
       {% endfor %}
     {% endcall %}
   {% endif %}
 {% endmacro %}
+
 
 {% macro action_link(url=None, label=None, task=None) %}
   {% if task == 'create' %}
@@ -21,16 +22,3 @@
   {% endif %}
 {% endmacro %}
 
-{% macro bread_crumbs(parent_list=None, label=None) %}
-  {% if parent_list %}
-    <nav aria-label="breadcrumb">
-      <ul class="breadcrumb">
-        {% for parent in parent_list %}
-          <li class="breadcrumb-item"><a href="{{ parent.url }}">{{ parent.label }}</a></li>
-        {% endfor %}
-        {% if label %}
-          <li class="breadcrumb-item active">{{ label }}</li>{% endif %}
-      </ul>
-    </nav>
-  {% endif %}
-{% endmacro %}

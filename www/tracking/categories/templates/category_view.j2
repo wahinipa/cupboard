@@ -1,15 +1,15 @@
 {% extends "content.j2" %}
-{% from 'card_macros.j2' import render_card %}
+{% from 'card_macros.j2' import old_render_card %}
 {% from 'category_macros.j2' import category_content, category_macro %}
 {% from 'choice_macros.j2' import choice_macro %}
 {% from 'action_macros.j2' import action_card %}
 {% block innards %}
-  {% call render_card(title=name) %}
+  {% call old_render_card(title=name) %}
     {{ category_content(**category) }}
   {% endcall %}
   {% if category.choices %}
     {% for choice in category.choices %}
-      {% call render_card(title=choice.name, link=choice.url, background='secondary') %}
+      {% call old_render_card(title=choice.name, link=choice.url, background='secondary') %}
         {{ choice_macro(**choice) }}
       {% endcall %}
     {% endfor %}

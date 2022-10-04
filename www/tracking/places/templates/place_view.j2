@@ -1,10 +1,9 @@
 {% extends "content.j2" %}
-{% from 'button_macros.j2' import render_link_button %}
-{% from 'card_macros.j2' import render_card %}
+{% from 'card_macros.j2' import viewing_card %}
 {% from 'place_macros.j2' import place_macro %}
 {% from 'action_macros.j2' import action_card %}
 {% block innards %}
-  {% call render_card(title=name) %}
+  {% call viewing_card(prefix="Place: ", label=name, purpose='target') %}
     {{ place_macro(**place) }}
   {% endcall %}
   {{ action_card(name, actions) }}

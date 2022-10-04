@@ -1,8 +1,8 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_link_button %}
-{% from 'card_macros.j2' import render_card %}
+{% from 'card_macros.j2' import old_render_card %}
 {% block innards %}
-  {% call render_card(title='Home') %}
+  {% call old_render_card(title='Home') %}
     <p>
       <large>Hello from Home {{ current_user.about_me }}</large>
     </p>

@@ -1,17 +1,13 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_link_button %}
-{% from 'card_macros.j2' import render_card %}
+{% from 'card_macros.j2' import viewing_card %}
 {% from 'group_macros.j2' import group_content, group_macro %}
-{% from 'place_macros.j2' import place_macro %}
+{% from 'place_macros.j2' import place_listing %}
 {% from 'action_macros.j2' import action_card %}
 {% block innards %}
-  {% call render_card(title=name) %}
+  {% call viewing_card(prefix='Group: ', label=name, purpose='target') %}
     {{ group_content(**group) }}
   {% endcall %}
-  {% for place in group.places %}
-    {% call render_card(title=place.name, link=place.url, background='secondary') %}
-      {{ place_macro(**place) }}
-    {% endcall %}
-  {% endfor %}
+  {{ place_listing(group.places) }}
   {{ action_card(name, actions) }}
 {% endblock %}

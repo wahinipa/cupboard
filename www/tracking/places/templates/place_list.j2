@@ -1,14 +1,9 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_create_button %}
-{% from 'card_macros.j2' import render_card %}
-{% from 'place_macros.j2' import place_macro %}
+{% from 'card_macros.j2' import viewing_card %}
+{% from 'place_macros.j2' import place_listing %}
 {% block innards %}
-  {% call render_card(title='Places') %}
-    {% if create_place_url %}{{ render_create_button(text="Place", link=create_place_url) }}{% endif %}
+  {% call viewing_card(label='Places', purpose='target') %}
   {% endcall %}
-  {% for place in places %}
-    {% call render_card(title=place.name, link=place.url, background='secondary') %}
-      {{ place_macro(**place) }}
-    {% endcall %}
-  {% endfor %}
+  {{ place_listing(places) }}
 {% endblock %}

@@ -1,11 +1,11 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
-{% from 'card_macros.j2' import render_card %}
+{% from 'card_macros.j2' import old_render_card %}
 {% from 'tree_macros.j2' import tree_root %}
 {% from 'action_macros.j2' import action_card %}
 {% from 'category_macros.j2' import category_macro %}
 {% block innards %}
-  {% call render_card(title=label) %}
+  {% call old_render_card(title=label) %}
     {% if lines %}
       {% for line in lines %}
         <h5>{{ line }}</h5>
@@ -16,7 +16,7 @@
   {% endcall %}
   {% if categories %}
     {% for category in categories %}
-      {% call render_card(title="Category: " + category.name, link=category.url, background='secondary') %}
+      {% call old_render_card(title="Category: " + category.name, link=category.url, background='secondary') %}
         {{ category_macro(**category) }}
       {% endcall %}
     {% endfor %}
