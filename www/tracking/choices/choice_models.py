@@ -26,7 +26,7 @@ class Choice(BaseModel):
 
     @property
     def parent_list(self):
-        return [self.category]
+        return self.category.parent_list + [self.category]
 
     def user_may_update(self, viewer):
         return self.category.user_may_update(viewer)

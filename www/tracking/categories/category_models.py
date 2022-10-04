@@ -30,12 +30,16 @@ class Category(UniqueNamedBaseModel):
         }
         return attributes
 
+    @property
+    def parent_list(self):
+        return [AllCategories()]
+
     def display_context(self, viewer):
         category_context = DisplayContext({
             'category': self.viewable_attributes(viewer),
             'name': self.name,
             'label': self.label,
-            'parent_list': [AllCategories()],
+            'parent_list': self.parent_list,
         })
         if self.user_may_create_choice(viewer):
             category_context.add_action(self.place_create_url, f'Choice for {self.name}', 'create')
