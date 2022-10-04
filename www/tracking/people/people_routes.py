@@ -1,13 +1,14 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, flash, request, abort, redirect, url_for, render_template
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from flask_admin.helpers import is_safe_url
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.people.people_forms import UserCreateForm, LoginForm, UserProfileForm, ChangePasswordForm
-from tracking.people.people_models import find_user_by_id, find_user_by_username, find_or_create_user
+from tracking.people.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
+from tracking.people.people_models import find_or_create_user, find_user_by_id, find_user_by_username, \
+    people_list_display_context
 
 people_bp = Blueprint(
     'people_bp', __name__,
@@ -34,8 +35,6 @@ def create():
         return redirect_hacks()
 
 
-
-
 def create_user_from_form(form):
     username = form.username.data
     user = find_user_by_username(username)
@@ -50,6 +49,7 @@ def create_user_from_form(form):
         database.session.commit()
     return user
 
+
 @people_bp.route('/delete/<int:user_id>')
 @login_required
 def people_delete(user_id):
@@ -60,6 +60,7 @@ def people_delete(user_id):
         return redirect(url_for('people_bp.people_list'))
     else:
         return redirect_hacks()
+
 
 @people_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -92,7 +93,8 @@ def profile():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
 
-    return render_template('profile.j2', form=form, form_title=f'Update Profile for {current_user.name}', **display_context())
+    return render_template('profile.j2', form=form, form_title=f'Update Profile for {current_user.name}',
+                           **display_context())
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -112,18 +114,15 @@ def change_password():
         return redirect(url_for('home_bp.home'))
     return render_template('change_password.j2', form=form, **display_context())
 
+
 @people_bp.route('/list')
 @login_required
 def people_list():
-    context = {}
-    if current_user.may_create_person:
-        context['create_person_url'] = url_for('people_bp.create')
     return render_template(
         'people_list.j2',
-        tab="people",
-        people=current_user.viewable_people,
-        **display_context(context)
+        **people_list_display_context(current_user)
     )
+
 
 @people_bp.route('/view/<int:user_id>')
 @login_required
@@ -133,9 +132,7 @@ def people_view(user_id):
         return render_template(
             'people_view.j2',
             tab="people",
-            person=person.viewable_attributes(current_user, include_actions=True),
-            **display_context()
+            **person.display_context(current_user)
         )
     else:
         return redirect(url_for('home_bp.home'))
-

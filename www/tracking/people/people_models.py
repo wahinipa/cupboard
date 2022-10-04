@@ -9,6 +9,16 @@ from werkzeug.security import generate_password_hash
 
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, name_is_key
+from tracking.commons.display_context import DisplayContext
+
+
+class AllPeople:
+    def __init__(self):
+        self.label = "People"
+
+    @property
+    def url(self):
+        return url_for('people_bp.people_list')
 
 
 class User(IdModelMixin, database.Model, UserMixin):
@@ -167,6 +177,14 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_the_super_admin or not user.is_the_super_admin
 
     @property
+    def parent_list(self):
+        return [AllPeople()]
+
+    @property
+    def label(self):
+        return self.name
+
+    @property
     def url(self):
         return url_for('people_bp.people_view', user_id=self.id)
 
@@ -198,16 +216,36 @@ class User(IdModelMixin, database.Model, UserMixin):
     def viewable_people(self):
         return [person.viewable_attributes(self) for person in all_people() if self.may_view_person(person)]
 
-    def viewable_attributes(self, viewer, include_actions=False):
+    def viewable_attributes(self, viewer):
         attributes = {
             'name': self.name,
             'url': self.url,
             'about_me': self.about_me,
         }
-        if include_actions:
-            if viewer.may_delete_person(self):
-                attributes['deletion_url'] = self.deletion_url
         return attributes
+
+    def display_context(self, viewer):
+        person_context = DisplayContext({
+            'person': self.viewable_attributes(viewer),
+            'name': self.name,
+            'label': self.label,
+            'parent_list': self.parent_list,
+        })
+        if viewer.may_delete_person(self):
+            person_context.add_action(self.deletion_url, self.name, 'delete')
+        return person_context.display_context
+
+
+def people_list_display_context(viewer):
+    category_context = DisplayContext({
+        'tab': 'people',
+        'label': 'People',
+        'name': 'People',
+        'people': viewer.viewable_people,
+    })
+    if viewer.may_create_person:
+        category_context.add_action(url_for('people_bp.create'), 'User Account', 'create')
+    return category_context.display_context
 
 
 def all_people():

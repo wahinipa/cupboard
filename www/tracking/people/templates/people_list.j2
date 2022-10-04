@@ -1,14 +1,16 @@
 {% extends "content.j2" %}
 {% from 'button_macros.j2' import render_create_button %}
-{% from 'card_macros.j2' import old_render_card %}
+{% from 'card_macros.j2' import viewing_card %}
 {% from 'people_macros.j2' import person_macro %}
+{% from 'action_macros.j2' import action_card %}
 {% block innards %}
-  {% call old_render_card(title='People') %}
+  {% call viewing_card(label='People', purpose='target') %}
     {% if create_person_url %}{{ render_create_button(text="User Account", link=create_person_url) }}{% endif %}
   {% endcall %}
   {% for person in people %}
-    {% call old_render_card(title=person.name, link=person.url, background='secondary') %}
+    {% call viewing_card(prefix="Person: ", label=person.name, view_url=person.url) %}
       {{ person_macro(**person) }}
     {% endcall %}
   {% endfor %}
+  {{ action_card("People", actions) }}
 {% endblock %}

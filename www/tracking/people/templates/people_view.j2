@@ -1,9 +1,10 @@
 {% extends "content.j2" %}
-{% from 'button_macros.j2' import render_link_button %}
-{% from 'card_macros.j2' import old_render_card %}
+{% from 'card_macros.j2' import viewing_card %}
 {% from 'people_macros.j2' import person_macro %}
+{% from 'action_macros.j2' import action_card %}
 {% block innards %}
-  {% call old_render_card(title=person.name) %}
+  {% call viewing_card(prefix="Person: ", label=person.name, purpose='target') %}
     {{ person_macro(**person) }}
   {% endcall %}
+  {{ action_card(person.name, actions) }}
 {% endblock %}
