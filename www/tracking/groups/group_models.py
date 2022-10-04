@@ -30,10 +30,6 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
         return self.group_assignments
 
     @property
-    def label(self):
-        return self.name
-
-    @property
     def list_all_url(self):
         return url_for('group_bp.group_list')
 

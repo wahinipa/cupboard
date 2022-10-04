@@ -19,7 +19,7 @@ category_bp = Blueprint(
 @category_bp.route('/create', methods=['POST', 'GET'])
 @login_required
 def category_create():
-    if not current_user.can_create_category:
+    if not current_user.may_create_category:
         return redirect_hacks()
     form = category_create_form()
     if request.method == 'POST' and form.cancel_button.data:
@@ -71,7 +71,7 @@ def category_view(category_id):
 @login_required
 def category_update(category_id):
     category = find_category_by_id(category_id)
-    if category and category.user_can_update(current_user):
+    if category and category.user_may_update(current_user):
         form = category_update_form(category)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(url_for('category_bp.category_view', category_id=category_id))
@@ -100,12 +100,12 @@ def choice_create(category_id):
     if category and category.user_may_update(current_user):
         form = ChoiceCreateForm()
         if request.method == 'POST' and form.cancel_button.data:
-            return redirect(url_for('group_bp.group_view', category_id=category_id))
+            return redirect(url_for('category_bp.category_view', category_id=category_id))
         if form.validate_on_submit():
-            place = create_choice_from_form(category, form)
-            return redirect(url_for('place_bp.place_view', place_id=place.id))
+            choice = create_choice_from_form(category, form)
+            return redirect(url_for('choice_bp.choice_view', choice_id=choice.id))
         else:
-            return render_template('place_create.j2', form=form, form_title=f'Create new place for {category.name}',
-                                   tab="place", **display_context())
+            return render_template('choice_create.j2', form=form, form_title=f'Create new choice for {category.name}',
+                                   tab="choice", **display_context())
     else:
         return redirect_hacks()

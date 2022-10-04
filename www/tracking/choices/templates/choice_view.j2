@@ -1,0 +1,10 @@
+{% extends "content.j2" %}
+{% from 'card_macros.j2' import render_card %}
+{% from 'choice_macros.j2' import choice_macro %}
+{% from 'action_macros.j2' import action_card %}
+{% block innards %}
+  {% call render_card(title=name) %}
+    {{ choice_macro(**choice) }}
+  {% endcall %}
+  {{ action_card(name, actions) }}
+{% endblock %}

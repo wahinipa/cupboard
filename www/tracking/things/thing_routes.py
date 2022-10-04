@@ -40,9 +40,11 @@ def thing_create_form():
 def thing_delete(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.user_may_delete(current_user):
+        kind_of_thing = thing.kind_of
+        redirect_url = kind_of_thing.url if kind_of_thing else url_for('thing_bp.thing_list')
         database.session.delete(thing)
         database.session.commit()
-        return redirect(url_for('thing_bp.thing_list'))
+        return redirect(redirect_url)
     else:
         return redirect_hacks()
 

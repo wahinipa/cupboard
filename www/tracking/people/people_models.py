@@ -103,7 +103,15 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.is_an_admin
 
     @property
+    def may_delete_choice(self):
+        return self.is_an_admin
+
+    @property
     def may_update_category(self):
+        return self.is_an_admin
+
+    @property
+    def may_update_choice(self):
         return self.is_an_admin
 
     @property

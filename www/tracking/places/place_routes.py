@@ -20,9 +20,10 @@ place_bp = Blueprint(
 def place_delete(place_id):
     place = find_place_by_id(place_id)
     if place is not None and place.user_may_delete(current_user):
+        group = place.group
         database.session.delete(place)
         database.session.commit()
-        return redirect(url_for('place_bp.place_list'))
+        return redirect(group.url)
     else:
         return redirect_hacks()
 

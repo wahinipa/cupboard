@@ -24,6 +24,16 @@ class Choice(BaseModel):
     def update_url(self):
         return url_for('choice_bp.choice_update', choice_id=self.id)
 
+    @property
+    def parent_list(self):
+        return [self.category]
+
+    def user_may_update(self, viewer):
+        return self.category.user_may_update(viewer)
+
+    def user_may_delete(self, viewer):
+        return self.category.user_may_delete(viewer)
+
     def viewable_attributes(self, viewer, include_category_url=False):
         attributes = {
             'name': self.name,
@@ -39,7 +49,6 @@ class Choice(BaseModel):
         choice_context = DisplayContext({
             'choice': self.viewable_attributes(viewer, include_category_url=True),
             'name': self.name,
-            'category_url': self.category.url,
             'parent_list': self.parent_list,
             'label': self.label
         })
@@ -49,6 +58,8 @@ class Choice(BaseModel):
             choice_context.add_action(self.deletion_url, self.name, 'delete')
         return choice_context.display_context
 
+    def user_may_view(self, viewer):
+        return self.category.user_may_view(viewer)
 
 
 def find_or_create_choice(category, name, description="", date_created=None):
@@ -64,6 +75,7 @@ def find_or_create_choice(category, name, description="", date_created=None):
 
 def find_choice(category, name):
     return Choice.query.filter(Choice.category_id == category.id, Choice.name == name).first()
+
 
 def find_choice_by_id(choice_id):
     return Choice.query.filter(Choice.id == choice_id).first()

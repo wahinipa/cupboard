@@ -57,10 +57,6 @@ class Place(BaseModel, ModelWithRoles):
         return place_context.display_context
 
     @property
-    def label(self):
-        return self.name
-
-    @property
     def url(self):
         return url_for('place_bp.place_view', place_id=self.id)
 

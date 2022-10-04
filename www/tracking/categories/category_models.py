@@ -21,10 +21,6 @@ class Category(UniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
-    @property
-    def label(self):
-        return self.name
-
     def viewable_attributes(self, viewer):
         attributes = {
             'name': self.name,

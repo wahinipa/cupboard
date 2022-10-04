@@ -1,0 +1,16 @@
+{% from 'common_macros.j2' import text_link %}
+{% from 'button_macros.j2' import render_create_button, render_delete_button, render_update_button %}
+{% macro choice_macro() %}
+  <p>
+    {{ choice_content(**kwargs) }}
+  </p>
+{% endmacro %}
+
+{% macro choice_content(name, lines=None, category_url=None, category_name=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% if category_name %}
+    <b>Category: </b>{% if category_url %}<a href="{{ category_url }}">{% endif %}{{ category_name }}{% if category_url %}</a>{% endif %}<br>
+  {% endif %}
+  {% if name %}<b>Choice:</b> {{ name }}<br>{% endif %}
+  {% if lines %}<b>Description:</b><br>{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
+{% endmacro %}

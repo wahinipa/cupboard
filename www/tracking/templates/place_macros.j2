@@ -13,6 +13,4 @@
   {% endif %}
   {% if name %}<b>Place:</b> {{ name }}<br>{% endif %}
   {% if lines %}<b>Description:</b><br>{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
-  {% if update_url %}{{ render_update_button(link=update_url, text='Place') }}{% endif %}
-  {% if deletion_url %}{{ render_delete_button(link=deletion_url, text='Place') }}{% endif %}
 {% endmacro %}
