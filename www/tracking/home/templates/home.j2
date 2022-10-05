@@ -1,6 +1,5 @@
 {% extends "content.j2" %}
-{% from 'button_macros.j2' import render_link_button %}
-{% from 'card_macros.j2' import render_parent, target_card, viewing_card, child_card %}
+{% from 'card_macros.j2' import render_parent %}
 {% block innards %}
   {{ render_parent(**target) }}
 {% endblock %}
