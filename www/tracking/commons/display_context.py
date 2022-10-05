@@ -1,6 +1,8 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from os import environ
 
+from flask import render_template
+
 
 def project_name():
     return display_context()['project_name']
@@ -31,3 +33,6 @@ class DisplayContext:
     @property
     def display_context(self):
         return self.context
+
+    def render_template(self, template_file_name='card_content.j2'):
+        return render_template(template_file_name, **self.context)

@@ -1,7 +1,7 @@
 {% extends "content.j2" %}
 {% from 'card_macros.j2' import viewing_card %}
 {% from 'category_macros.j2' import category_macro %}
-{% from 'action_macros.j2' import action_card %}
+{% from 'card_macros.j2' import action_card %}
 {% block innards %}
   {% call viewing_card(label='Categories', purpose='target') %}
     <h3>Categories are lists of Choices for being more specific about Things</h3>

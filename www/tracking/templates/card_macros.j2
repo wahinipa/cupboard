@@ -1,3 +1,5 @@
+{% from 'button_macros.j2' import render_create_button, render_update_button, render_delete_button %}
+
 {% macro viewing_card(prefix=None, label=None, view_url=None, purpose=None) %}
   {% if purpose == 'target' %}
     {% set background = 'dark' %}
@@ -24,7 +26,7 @@
   </div>
 {% endmacro %}
 
-{% macro render_parent(classification=None, label=None, children=None, lines=None) %}
+{% macro render_parent(classification=None, label=None, children=None, lines=None, actions=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% call target_card(classification, label) %}
     {% if lines %}
@@ -35,9 +37,14 @@
       </p>
     {% endif %}
   {% endcall %}
-  {% for child in children %}
-    {{ child_card(**child) }}
-  {% endfor %}
+  {% if children %}
+    {% for child in children %}
+      {{ child_card(**child) }}
+    {% endfor %}
+  {% endif %}
+  {% if actions %}
+    {{ action_card(label=label, actions=actions) }}
+  {% endif %}
 {% endmacro %}
 
 {% macro target_card(classification=None, label=None) %}
@@ -61,4 +68,24 @@
       </p>
     {% endif %}
   {% endcall %}
+{% endmacro %}
+
+{% macro action_card(label, actions) %}
+  {% if actions %}
+    {% call viewing_card(prefix="Actions on ", label=label, purpose='action') %}
+      {% for action in actions %}
+        {{ action_link(**action) }}
+      {% endfor %}
+    {% endcall %}
+  {% endif %}
+{% endmacro %}
+
+{% macro action_link(url=None, label=None, task=None) %}
+  {% if task == 'create' %}
+    {{ render_create_button(text=label, link=url) }}
+  {% elif task == 'update' %}
+    {{ render_update_button(text=label, link=url) }}
+  {% elif task == 'delete' %}
+    {{ render_delete_button(text=label, link=url) }}
+  {% endif %}
 {% endmacro %}

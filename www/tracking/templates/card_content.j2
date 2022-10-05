@@ -1,5 +1,5 @@
 {% extends "content.j2" %}
 {% from 'card_macros.j2' import render_parent %}
 {% block innards %}
-  {{ render_parent(**target) }}
+  {{ render_parent(children=children, actions=actions, **target) }}
 {% endblock %}

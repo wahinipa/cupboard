@@ -10,15 +10,29 @@ from werkzeug.security import generate_password_hash
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, name_is_key
 from tracking.commons.display_context import DisplayContext
+from tracking.commons.pseudo_model import PseudoModel
 
 
-class AllPeople:
-    def __init__(self):
-        self.label = "People"
+class AllPeople(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="People",
+            endpoint='people_bp.people_list',
+            description="User Accounts",
+            parent_object=home
+        )
+
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_people
 
     @property
-    def url(self):
-        return url_for('people_bp.people_list')
+    def child_list(self):
+        return sorted(User.query.all(), key=name_is_key)
+
+    def add_actions(self, context, viewer):
+        if viewer.may_create_person:
+            context.add_action(url_for('people_bp.create'), 'User Account', 'create')
+        return context.display_context
 
 
 class User(IdModelMixin, database.Model, UserMixin):
@@ -176,13 +190,25 @@ class User(IdModelMixin, database.Model, UserMixin):
     def may_view_person(self, user):
         return self.is_the_super_admin or not user.is_the_super_admin
 
+    def may_be_observed(self, viewer):
+        return viewer.is_the_super_admin or not self.is_the_super_admin
+
     @property
     def parent_list(self):
-        return [AllPeople()]
+        from tracking.home.home_models import home_root
+        return [home_root, home_root.all_people]
 
     @property
     def label(self):
         return self.name
+
+    @property
+    def description_lines(self):
+        description = self.about_me
+        if description:
+            return description.split('\n')
+        else:
+            return []
 
     @property
     def url(self):
@@ -212,44 +238,24 @@ class User(IdModelMixin, database.Model, UserMixin):
                     result.append(place.viewable_attributes(self, include_group_url=True))
         return result
 
-    @property
-    def viewable_people(self):
-        return [person.viewable_attributes(self) for person in all_people() if self.may_view_person(person)]
-
     def viewable_attributes(self, viewer):
         attributes = {
+            'classification': 'Person',
             'name': self.name,
-            'url': self.url,
-            'about_me': self.about_me,
+            'label': self.label,
+            'view_url': self.url,
+            'lines': self.description_lines,
         }
         return attributes
 
     def display_context(self, viewer):
         person_context = DisplayContext({
-            'person': self.viewable_attributes(viewer),
-            'name': self.name,
-            'label': self.label,
+            'target': self.viewable_attributes(viewer),
             'parent_list': self.parent_list,
         })
         if viewer.may_delete_person(self):
             person_context.add_action(self.deletion_url, self.name, 'delete')
-        return person_context.display_context
-
-
-def people_list_display_context(viewer):
-    category_context = DisplayContext({
-        'tab': 'people',
-        'label': 'People',
-        'name': 'People',
-        'people': viewer.viewable_people,
-    })
-    if viewer.may_create_person:
-        category_context.add_action(url_for('people_bp.create'), 'User Account', 'create')
-    return category_context.display_context
-
-
-def all_people():
-    return sorted(User.query.all(), key=name_is_key)
+        return person_context
 
 
 @event.listens_for(User.password, 'set', retval=True)

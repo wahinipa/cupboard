@@ -1,8 +1,7 @@
 # Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required, current_user
 
-from tracking.commons.display_context import DisplayContext, display_context
 from tracking.home.home_models import home_root
 
 home_bp = Blueprint(
@@ -23,6 +22,4 @@ def base():
 @home_bp.route('/home')
 @login_required
 def home():
-    return render_template('home.j2', **home_root.display_context(current_user))
-
-
+    return home_root.display_context(current_user).render_template()

@@ -1,7 +1,7 @@
 {% extends "content.j2" %}
 {% from 'card_macros.j2' import viewing_card %}
 {% from 'place_macros.j2' import place_macro %}
-{% from 'action_macros.j2' import action_card %}
+{% from 'card_macros.j2' import action_card %}
 {% block innards %}
   {% call viewing_card(prefix="Place: ", label=name, purpose='target') %}
     {{ place_macro(**place) }}

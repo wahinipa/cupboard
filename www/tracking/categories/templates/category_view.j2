@@ -2,7 +2,7 @@
 {% from 'card_macros.j2' import viewing_card %}
 {% from 'category_macros.j2' import category_content %}
 {% from 'choice_macros.j2' import choice_macro %}
-{% from 'action_macros.j2' import action_card %}
+{% from 'card_macros.j2' import action_card %}
 {% block innards %}
   {% call viewing_card(prefix="Category: ", label=name, purpose='target') %}
     {{ category_content(**category) }}

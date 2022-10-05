@@ -1,80 +1,59 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import url_for
 
-from tracking.commons.base_models import TrackableMixin
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.pseudo_model import PseudoModel
 
 
-class PseudoModel(TrackableMixin):
-    def __init__(self,
-                 label,
-                 endpoint,
-                 description,
-                 parent_object,
-                 child_list=None,
-                 classification="All",
-                 ):
-        if child_list is None:
-            child_list = []
-        self._child_list = child_list
-        self.name = label  # TrackableMixin generates label from name.
-        self.endpoint = endpoint
-        self._parent_object = parent_object
-        self.description = description
-        self._classification = classification
+class AllCategories(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Categories",
+            endpoint='category_bp.category_list',
+            description="Categories are lists of Choices for being more specific about Things",
+            parent_object=home
+        )
 
-    def viewable_child_list(self, viewer):
-        return self._child_list
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_categories
 
-    @property
-    def classification(self):
-        return self._classification
 
-    @property
-    def parent_object(self):
-        return self._parent_object
+class AllGroups(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Groups",
+            endpoint='group_bp.group_list',
+            description="Groups have Places which have Things",
+            parent_object=home
+        )
 
-    @property
-    def one_line_description(self):
-        return self.description
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_groups
 
-    @property
-    def description_lines(self):
-        if self.description:
-            return [self.description]
-        else:
-            return []
 
-    @property
-    def url(self):
-        return url_for(self.endpoint)
 
-    @property
-    def parent_list(self):
-        if self.parent_object is None:
-            return []
-        else:
-            return self.parent_object.parent_list
+class AllPlaces(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Places",
+            endpoint='place_bp.place_list',
+            description="Places are locations where Groups keep Things",
+            parent_object=home
+        )
 
-    def viewable_attributes(self, viewer):
-        attributes = {
-            'classification': self.classification,
-            'name': self.name,
-            'label': self.label,
-            'view_url': self.url,
-            'lines': self.description_lines,
-            'children': [child.viewable_attributes(viewer) for child in self.viewable_child_list(viewer)]
-        }
-        return attributes
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_places
 
-    def display_context(self, viewer):
-        context = DisplayContext({
-            'target': self.viewable_attributes(viewer),
-            'name': self.name,
-            'label': self.label,
-            'parent_list': self.parent_list,
-        })
-        return context.display_context
+
+class AllThings(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Things",
+            endpoint='thing_bp.thing_list',
+            description="Things are inventory items that needs tracking",
+            parent_object=home
+        )
+
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_things
 
 
 class HomeModel(PseudoModel):
@@ -86,36 +65,12 @@ class HomeModel(PseudoModel):
             parent_object=None,
             classification="Root"
         )
-        self.all_categories = PseudoModel(
-            label="Categories",
-            endpoint='category_bp.category_list',
-            description="Categories are lists of Choices for being more specific about Things",
-            parent_object=self,
-        )
-        self.all_groups = PseudoModel(
-            label="Groups",
-            endpoint='group_bp.group_list',
-            description="Groups have Places which have Things",
-            parent_object=self
-        )
-        self.all_places = PseudoModel(
-            label="Places",
-            endpoint='place_bp.place_list',
-            description="Places are locations where Groups keep Things",
-            parent_object=self
-        )
-        self.all_people = PseudoModel(
-            label="People",
-            endpoint='people_bp.people_list',
-            description="User Accounts",
-            parent_object=self
-        )
-        self.all_things = PseudoModel(
-            label="Things",
-            endpoint='thing_bp.thing_list',
-            description="Things are inventory items that needs tracking",
-            parent_object=self
-        )
+        self.all_categories = AllCategories(self)
+        self.all_groups = AllGroups(self)
+        self.all_places = AllPlaces(self)
+        from tracking.people.people_models import AllPeople
+        self.all_people = AllPeople(self)
+        self.all_things = AllThings(self)
         self._child_list = [
             self.all_groups,
             self.all_places,
@@ -124,7 +79,12 @@ class HomeModel(PseudoModel):
             self.all_categories,
         ]
 
+    def may_be_observed(self, viewer):
+        return True
+
+    @property
+    def child_list(self):
+        return self._child_list
+
 
 home_root = HomeModel()
-
-
