@@ -26,16 +26,10 @@
   </div>
 {% endmacro %}
 
-{% macro render_parent(classification=None, label=None, children=None, lines=None, actions=None) %}
+{% macro render_parent(classification=None, label=None, children=None, notations=None, actions=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% call target_card(classification, label) %}
-    {% if lines %}
-      <p>
-        {% for line in lines %}
-          {{ line }}<br>
-        {% endfor %}
-      </p>
-    {% endif %}
+    {{ render_notations(notations) }}
   {% endcall %}
   {% if children %}
     {% for child in children %}
@@ -57,16 +51,10 @@
 {% endcall %}
 {% endmacro %}
 
-{% macro child_card(classification=None, label=None, lines=None, view_url=None) %}
+{% macro child_card(classification=None, label=None, notations=None, view_url=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% call viewing_card(prefix=classification + ": ", label=label, view_url=view_url) %}
-    {% if lines %}
-      <p>
-        {% for line in lines %}
-          {{ line }}<br>
-        {% endfor %}
-      </p>
-    {% endif %}
+    {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}
 
@@ -88,4 +76,21 @@
   {% elif task == 'delete' %}
     {{ render_delete_button(text=label, link=url) }}
   {% endif %}
+{% endmacro %}
+
+{% macro render_notations(notations=None) %}
+  {% if notations %}
+    {% for notation in notations %}
+      {{ render_notation(**notation) }}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro render_notation(label=None, url=None, value=None, lines=None) %}
+  {% if label %}<b>{{ label }}: </b>{% endif %}
+  {% if url %}<a href="{{ url }}">{% endif %}
+{% if value %}{{ value }}{% endif %}
+{% if label or value %}<br>{% endif %}
+{% if url %}</a>{% endif %}
+  {% if lines %}{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
 {% endmacro %}

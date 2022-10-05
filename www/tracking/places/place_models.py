@@ -4,8 +4,27 @@ from datetime import datetime
 from flask import url_for
 
 from tracking import database
-from tracking.commons.base_models import BaseModel, ModelWithRoles
+from tracking.commons.base_models import BaseModel, ModelWithRoles, name_is_key
 from tracking.commons.display_context import DisplayContext
+from tracking.commons.pseudo_model import PseudoModel
+
+
+class AllPlaces(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Places",
+            endpoint='place_bp.place_list',
+            description="Places are locations where Groups keep Things",
+            parent_object=home
+        )
+
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_places
+
+    @property
+    def child_list(self):
+        return sorted(Place.query.all(), key=name_is_key)
+
 
 
 class Place(BaseModel, ModelWithRoles):
@@ -28,25 +47,29 @@ class Place(BaseModel, ModelWithRoles):
     def user_may_update(self, user):
         return self.group.user_may_update(user)
 
-    def user_may_view(self, user):
-        return self.group.user_may_view(user)
+    def may_be_observed(self, user):
+        return self.group.may_be_observed(user)
 
     def viewable_attributes(self, viewer, include_group_url=False):
-        attributes = {
-            'name': self.name,
-            'url': self.url,
-            'lines': self.description_lines,
-            'group_name': self.group.name,
+        group_notation = {
+            'label': 'Group',
+            'value': self.group.name,
         }
         if include_group_url:
-            attributes['group_url'] = self.group.url
+            group_notation['url'] =  self.group.url
+        notations = [group_notation] + self.description_notation
+        attributes = {
+            'classification': 'Place',
+            'name': self.name,
+            'label': self.label,
+            'view_url': self.url,
+            'notations': notations,
+        }
         return attributes
 
     def display_context(self, viewer):
         place_context = DisplayContext({
-            'place': self.viewable_attributes(viewer, include_group_url=True),
-            'name': self.name,
-            'group_url': self.group.url,
+            'target': self.viewable_attributes(viewer, include_group_url=True),
             'parent_list': self.parent_list,
             'label': self.label
         })
@@ -54,7 +77,7 @@ class Place(BaseModel, ModelWithRoles):
             place_context.add_action(self.update_url, self.name, 'update')
         if viewer.may_delete_place:
             place_context.add_action(self.deletion_url, self.name, 'delete')
-        return place_context.display_context
+        return place_context
 
     @property
     def url(self):
@@ -70,8 +93,7 @@ class Place(BaseModel, ModelWithRoles):
 
     @property
     def parent_list(self):
-        from tracking.groups.group_models import AllGroups
-        return [AllGroups(), self.group]
+        return self.group.parent_list + [self.group]
 
 
 def find_or_create_place(group, name, description, date_created=None):

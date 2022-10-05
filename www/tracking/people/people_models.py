@@ -246,12 +246,23 @@ class User(IdModelMixin, database.Model, UserMixin):
             'view_url': self.url,
             'lines': self.description_lines,
         }
+        lines = self.description_lines
+        if lines:
+            notation = {
+                'label': 'About me',
+            }
+            if len(lines) > 1:
+                notation['lines'] = lines
+            else:
+                notation['value'] = lines[0]
+            attributes['notations'] = [notation]
         return attributes
 
     def display_context(self, viewer):
         person_context = DisplayContext({
             'target': self.viewable_attributes(viewer),
             'parent_list': self.parent_list,
+            'label': self.label,
         })
         if viewer.may_delete_person(self):
             person_context.add_action(self.deletion_url, self.name, 'delete')

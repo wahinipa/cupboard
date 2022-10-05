@@ -16,32 +16,6 @@ class AllCategories(PseudoModel):
         return viewer.may_observe_categories
 
 
-class AllGroups(PseudoModel):
-    def __init__(self, home):
-        super().__init__(
-            label="Groups",
-            endpoint='group_bp.group_list',
-            description="Groups have Places which have Things",
-            parent_object=home
-        )
-
-    def may_be_observed(self, viewer):
-        return viewer.may_observe_groups
-
-
-
-class AllPlaces(PseudoModel):
-    def __init__(self, home):
-        super().__init__(
-            label="Places",
-            endpoint='place_bp.place_list',
-            description="Places are locations where Groups keep Things",
-            parent_object=home
-        )
-
-    def may_be_observed(self, viewer):
-        return viewer.may_observe_places
-
 
 class AllThings(PseudoModel):
     def __init__(self, home):
@@ -65,10 +39,12 @@ class HomeModel(PseudoModel):
             parent_object=None,
             classification="Root"
         )
+        from tracking.groups.group_models import AllGroups
+        from tracking.places.place_models import AllPlaces
+        from tracking.people.people_models import AllPeople
         self.all_categories = AllCategories(self)
         self.all_groups = AllGroups(self)
         self.all_places = AllPlaces(self)
-        from tracking.people.people_models import AllPeople
         self.all_people = AllPeople(self)
         self.all_things = AllThings(self)
         self._child_list = [

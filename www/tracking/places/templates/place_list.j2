@@ -1,8 +1,0 @@
-{% extends "content.j2" %}
-{% from 'card_macros.j2' import viewing_card %}
-{% from 'place_macros.j2' import place_listing %}
-{% block innards %}
-  {% call viewing_card(label='Places', purpose='target') %}
-  {% endcall %}
-  {{ place_listing(places) }}
-{% endblock %}

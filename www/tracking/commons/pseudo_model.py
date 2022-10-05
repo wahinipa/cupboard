@@ -62,12 +62,15 @@ class PseudoModel(TrackableMixin):
             'name': self.name,
             'label': self.label,
             'view_url': self.url,
-            'lines': self.description_lines,
+            'notations': [{
+                'lines': self.description_lines,
+            }],
         }
         return attributes
 
     def display_context(self, viewer):
         context = DisplayContext({
+            'label': self.label,
             'target': self.viewable_attributes(viewer),
             'children': [child.viewable_attributes(viewer) for child in self.viewable_children(viewer)],
             'parent_list': self.parent_list,
@@ -77,5 +80,3 @@ class PseudoModel(TrackableMixin):
 
     def add_actions(self, context, viewer):
         pass
-
-

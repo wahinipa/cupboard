@@ -60,6 +60,21 @@ class DescriptionModelMixin():
     def description_lines(self):
         return self.description.split('\n')
 
+    @property
+    def description_notation(self):
+        if self.description:
+            notation = {
+                'label': 'Description',
+            }
+            lines = self.description_lines
+            if len(lines) > 1:
+                notation['lines'] = lines
+            else:
+                notation['value'] = self.description
+            return [notation]
+        else:
+            return []
+
 
 class ModelWithRoles:
     def has_role(self, person, name_of_role):

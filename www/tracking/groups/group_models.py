@@ -6,20 +6,39 @@ from flask import url_for
 from tracking import database
 from tracking.commons.base_models import ModelWithRoles, UniqueNamedBaseModel, name_is_key
 from tracking.commons.display_context import DisplayContext
+from tracking.commons.pseudo_model import PseudoModel
 
 
-class AllGroups:
-    def __init__(self):
-        self.label = "Groups"
+class AllGroups(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Groups",
+            endpoint='group_bp.group_list',
+            description="Groups have Places which have Things",
+            parent_object=home
+        )
+
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_groups
 
     @property
-    def url(self):
-        return url_for('group_bp.group_list')
+    def child_list(self):
+        return sorted(Group.query.all(), key=name_is_key)
+
+    def add_actions(self, context, viewer):
+        if viewer.may_create_group:
+            context.add_action(url_for('group_bp.group_create'), 'Group', 'create')
+        return context.display_context
 
 
 class Group(UniqueNamedBaseModel, ModelWithRoles):
     places = database.relationship('Place', backref='group', lazy=True, cascade='all, delete')
     group_assignments = database.relationship('GroupAssignment', backref='group', lazy=True, cascade='all, delete')
+
+    @property
+    def parent_list(self):
+        from tracking.home.home_models import home_root
+        return [home_root, home_root.all_groups]
 
     @property
     def sorted_places(self):
@@ -51,19 +70,25 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
 
     def viewable_attributes(self, viewer):
         attributes = {
+            'classification': 'Group',
             'name': self.name,
-            'url': self.url,
-            'lines': self.description_lines,
-            'places': [place.viewable_attributes(viewer, include_group_url=False) for place in self.sorted_places]
+            'label': self.label,
+            'view_url': self.url,
+            'notations': [
+                {
+                    'lines': self.description_lines,
+                }
+            ],
+
         }
         return attributes
 
     def display_context(self, viewer):
         group_context = DisplayContext({
-            'group': self.viewable_attributes(viewer),
-            'name': self.name,
             'label': self.label,
-            'parent_list': [AllGroups()],
+            'target': self.viewable_attributes(viewer),
+            'parent_list': self.parent_list,
+            'children': [place.viewable_attributes(viewer, include_group_url=False) for place in self.sorted_places],
         })
         if self.user_may_create_place(viewer):
             group_context.add_action(self.place_create_url, f'Place for {self.name}', 'create')
@@ -71,9 +96,9 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
             group_context.add_action(self.update_url, self.name, 'update')
         if viewer.may_delete_group:
             group_context.add_action(self.deletion_url, self.name, 'delete')
-        return group_context.display_context
+        return group_context
 
-    def user_may_view(self, user):
+    def may_be_observed(self, viewer):
         return True  # TODO: refine this
 
     def user_may_delete(self, user):

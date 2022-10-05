@@ -1,5 +1,5 @@
 {% macro bread_crumbs(parent_list=None, label=None) %}
-  {% if parent_list %}
+  {% if parent_list or label%}
     <nav aria-label="breadcrumb">
       <ul class="breadcrumb">
         {% for parent in parent_list %}

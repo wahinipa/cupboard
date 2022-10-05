@@ -8,6 +8,7 @@ from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import DisplayContext, display_context
 from tracking.groups.group_forms import GroupCreateForm, GroupUpdateForm, create_group_from_form
 from tracking.groups.group_models import find_group_by_id
+from tracking.home.home_models import home_root
 from tracking.places.place_forms import PlaceCreateForm, create_place_from_form
 
 group_bp = Blueprint(
@@ -29,7 +30,7 @@ def group_create():
         group = create_group_from_form(form)
         return redirect(url_for('group_bp.group_view', group_id=group.id))
     else:
-        return render_template('group_create.j2', form=form, tab="group", form_title='Create New Group',
+        return render_template('form_page.j2', form=form, tab="group", form_title='Create New Group',
                                **display_context())
 
 
@@ -48,29 +49,15 @@ def group_delete(group_id):
 @group_bp.route('/list')
 @login_required
 def group_list():
-    group_context = DisplayContext({
-        'name': 'Groups',
-        'groups': current_user.viewable_groups,
-    })
-    if current_user.may_create_group:
-        group_context.add_action(url_for('group_bp.group_create'), 'Group', 'create')
-    return render_template(
-        'group_list.j2',
-        tab="group",
-        **group_context.display_context
-    )
+    return home_root.all_groups.display_context(current_user).render_template()
 
 
 @group_bp.route('/view/<int:group_id>')
 @login_required
 def group_view(group_id):
     group = find_group_by_id(group_id)
-    if group and group.user_may_view(current_user):
-        return render_template(
-            'group_view.j2',
-            tab="group",
-            **group.display_context(current_user)
-        )
+    if group and group.may_be_observed(current_user):
+        return group.display_context(current_user).render_template()
     else:
         return redirect(url_for('home_bp.home'))
 
@@ -88,7 +75,7 @@ def group_update(group_id):
             database.session.commit()
             return redirect(url_for('group_bp.group_view', group_id=group.id))
         else:
-            return render_template('group_update.j2', form=form, tab="group", form_title=f'Update {group.name}',
+            return render_template('form_page.j2', form=form, tab="group", form_title=f'Update {group.name}',
                                    **display_context())
     else:
         return redirect_hacks()
@@ -114,7 +101,7 @@ def place_create(group_id):
             place = create_place_from_form(group, form)
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
-            return render_template('place_create.j2', form=form, form_title=f'Create new place for {group.name}',
+            return render_template('form_page.j2', form=form, form_title=f'Create new place for {group.name}',
                                    tab="place", **display_context())
     else:
         return redirect_hacks()

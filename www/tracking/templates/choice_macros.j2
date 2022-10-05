@@ -1,4 +1,5 @@
 {% from 'button_macros.j2' import render_create_button, render_delete_button, render_update_button %}
+{% from 'card_macros.j2' import render_notation %}
 {% macro choice_macro() %}
   <p>
     {{ choice_content(**kwargs) }}
@@ -8,8 +9,8 @@
 {% macro choice_content(name, lines=None, category_url=None, category_name=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if category_name %}
-    <b>Category: </b>{% if category_url %}<a href="{{ category_url }}">{% endif %}{{ category_name }}{% if category_url %}</a>{% endif %}<br>
+    {{ render_notation(label="Category", url=category_url, value=category_name) }}
   {% endif %}
-  {% if name %}<b>Choice:</b> {{ name }}<br>{% endif %}
-  {% if lines %}<b>Description:</b><br>{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
+  {% if name %}{{ render_notation(label="Choice", value=name) }}{% endif %}
+  {% if lines %}{{ render_notation(label="Description", lines=lines) }}{% endif %}
 {% endmacro %}
