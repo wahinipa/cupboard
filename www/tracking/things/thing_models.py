@@ -47,14 +47,11 @@ class Thing(UniqueNamedBaseModel):
 
     @property
     def category_set(self):
-        if self.is_top:
-            return set()
-        else:
-            categories = {refinement.category for refinement in self.refinements}
-            root = self.kind_of
-            if root:
-                categories |= root.category_set
-            return categories
+        categories = {refinement.category for refinement in self.refinements}
+        root = self.kind_of
+        if root:
+            categories |= root.category_set
+        return categories
 
     @property
     def categories(self):
@@ -136,7 +133,6 @@ class Thing(UniqueNamedBaseModel):
             'nodes': description_nodes + link_nodes + kind_of_nodes,
         }
         return attributes
-
 
     def display_context(self, viewer):
         thing_context = DisplayContext({
