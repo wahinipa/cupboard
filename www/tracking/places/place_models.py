@@ -50,7 +50,7 @@ class Place(BaseModel, ModelWithRoles):
     def may_be_observed(self, user):
         return self.group.may_be_observed(user)
 
-    def viewable_attributes(self, viewer, include_group_url=False):
+    def viewable_attributes(self, viewer, include_group_url=True):
         group_notation = {
             'label': 'Group',
             'value': self.group.name,

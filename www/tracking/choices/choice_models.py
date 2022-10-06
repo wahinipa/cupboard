@@ -35,31 +35,36 @@ class Choice(BaseModel):
         return self.category.user_may_delete(viewer)
 
     def viewable_attributes(self, viewer, include_category_url=False):
-        attributes = {
-            'name': self.name,
-            'url': self.url,
-            'lines': self.description_lines,
-            'category_name': self.category.name,
+        category_notation = {
+            'label': 'Category',
+            'value': self.category.name,
         }
         if include_category_url:
-            attributes['category_url'] = self.category.url
+            category_notation['url'] = self.category.url
+        attributes = {
+            'classification': 'Choice',
+            'name': self.name,
+            'label': self.label,
+            'view_url': self.url,
+            'notations': [category_notation] + self.description_notation,
+        }
         return attributes
 
     def display_context(self, viewer):
         choice_context = DisplayContext({
-            'choice': self.viewable_attributes(viewer, include_category_url=True),
+            'target': self.viewable_attributes(viewer, include_category_url=True),
+            'label': self.label,
             'name': self.name,
             'parent_list': self.parent_list,
-            'label': self.label
         })
         if viewer.may_update_choice:
             choice_context.add_action(self.update_url, self.name, 'update')
         if viewer.may_delete_choice:
             choice_context.add_action(self.deletion_url, self.name, 'delete')
-        return choice_context.display_context
+        return choice_context
 
-    def user_may_view(self, viewer):
-        return self.category.user_may_view(viewer)
+    def may_be_observed(self, viewer):
+        return self.category.may_be_observed(viewer)
 
 
 def find_or_create_choice(category, name, description="", date_created=None):

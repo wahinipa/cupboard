@@ -32,10 +32,8 @@ def choice_delete(choice_id):
 @login_required
 def choice_view(choice_id):
     choice = find_choice_by_id(choice_id)
-    if choice is not None and choice.user_may_view(current_user):
-        return render_template(
-            'choice_view.j2',
-            **choice.display_context(current_user))
+    if choice is not None and choice.may_be_observed(current_user):
+        return choice.display_context(current_user).render_template()
     else:
         return redirect(url_for('home_bp.home'))
 
@@ -53,7 +51,7 @@ def choice_update(choice_id):
             database.session.commit()
             return redirect(url_for('choice_bp.choice_view', choice_id=choice.id))
         else:
-            return render_template('choice_update.j2', form=form, tab="choice", **display_context())
+            return render_template('form_page.j2', form=form, tab="choice", **display_context())
     else:
         return redirect_hacks()
 

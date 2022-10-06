@@ -3,20 +3,6 @@
 from tracking.commons.pseudo_model import PseudoModel
 
 
-class AllCategories(PseudoModel):
-    def __init__(self, home):
-        super().__init__(
-            label="Categories",
-            endpoint='category_bp.category_list',
-            description="Categories are lists of Choices for being more specific about Things",
-            parent_object=home
-        )
-
-    def may_be_observed(self, viewer):
-        return viewer.may_observe_categories
-
-
-
 class AllThings(PseudoModel):
     def __init__(self, home):
         super().__init__(
@@ -39,6 +25,7 @@ class HomeModel(PseudoModel):
             parent_object=None,
             classification="Root"
         )
+        from tracking.categories.category_models import AllCategories
         from tracking.groups.group_models import AllGroups
         from tracking.places.place_models import AllPlaces
         from tracking.people.people_models import AllPeople

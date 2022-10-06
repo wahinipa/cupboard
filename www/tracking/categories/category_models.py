@@ -6,40 +6,75 @@ from flask import url_for
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
 from tracking.commons.display_context import DisplayContext
+from tracking.commons.pseudo_model import PseudoModel
 
 
-class AllCategories:
-    def __init__(self):
-        self.label = "Categories"
+class AllCategories(PseudoModel):
+    def __init__(self, home):
+        super().__init__(
+            label="Categories",
+            endpoint='category_bp.category_list',
+            description="Categories are lists of Choices for being more specific about Things",
+            parent_object=home
+        )
+
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_categories
 
     @property
-    def url(self):
-        return url_for('category_bp.category_list')
+    def child_list(self):
+        return sorted(Category.query.all(), key=name_is_key)
+
+    def add_actions(self, context, viewer):
+        if viewer.may_create_category:
+            context.add_action(url_for('category_bp.category_create'), 'Category', 'create')
+        return context.display_context
 
 
 class Category(UniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
+    @property
+    def parent_list(self):
+        from tracking.home.home_models import home_root
+        return [home_root, home_root.all_categories]
+
     def viewable_attributes(self, viewer):
+        notations = self.description_notation
+        choices = self.choices
+        if choices:
+            notations.append({
+                'label': "Choices"
+            })
+            for choice in choices:
+                choice_notation = {
+                    'tag': choice.name,
+                }
+                choice_description_lines = choice.description_lines
+                if choice_description_lines:
+                    if len(choice_description_lines) > 1:
+                        choice_notation['lines'] = choice_description_lines
+                    else:
+                        choice_notation['value'] = choice_description_lines[0]
+                notations.append(choice_notation)
+
         attributes = {
+            'classification': 'Category',
             'name': self.name,
-            'url': self.url,
-            'lines': self.description_lines,
-            'choices': [choice.viewable_attributes(viewer) for choice in self.sorted_choices]
+            'label': self.label,
+            'view_url': self.url,
+            'notations': notations,
         }
         return attributes
 
-    @property
-    def parent_list(self):
-        return [AllCategories()]
-
     def display_context(self, viewer):
         category_context = DisplayContext({
-            'category': self.viewable_attributes(viewer),
+            'target': self.viewable_attributes(viewer),
             'name': self.name,
             'label': self.label,
             'parent_list': self.parent_list,
+            'children': [choice.viewable_attributes(viewer) for choice in self.sorted_choices]
         })
         if self.user_may_create_choice(viewer):
             category_context.add_action(self.place_create_url, f'Choice for {self.name}', 'create')
@@ -47,9 +82,9 @@ class Category(UniqueNamedBaseModel):
             category_context.add_action(self.update_url, self.name, 'update')
         if viewer.may_delete_category:
             category_context.add_action(self.deletion_url, self.name, 'delete')
-        return category_context.display_context
+        return category_context
 
-    def user_may_view(self, user):
+    def may_be_observed(self, user):
         return True  # TODO: refine this
 
     def user_may_delete(self, user):

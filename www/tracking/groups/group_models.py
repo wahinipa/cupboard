@@ -74,12 +74,7 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
             'name': self.name,
             'label': self.label,
             'view_url': self.url,
-            'notations': [
-                {
-                    'lines': self.description_lines,
-                }
-            ],
-
+            'notations': self.description_notation,
         }
         return attributes
 

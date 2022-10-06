@@ -5,9 +5,10 @@ from flask_login import current_user, login_required
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdateForm, create_category_from_form
-from tracking.categories.category_models import category_list_display_context, find_category_by_id
+from tracking.categories.category_models import find_category_by_id
 from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
 from tracking.commons.display_context import display_context
+from tracking.home.home_models import home_root
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -50,19 +51,15 @@ def category_delete(category_id):
 @category_bp.route('/list')
 @login_required
 def category_list():
-    return render_template('category_list.j2', **category_list_display_context(current_user))
+    return home_root.all_categories.display_context(current_user).render_template()
 
 
 @category_bp.route('/view/<int:category_id>')
 @login_required
 def category_view(category_id):
     category = find_category_by_id(category_id)
-    if category is not None and category.user_may_view(current_user):
-        return render_template(
-            'category_view.j2',
-            tab="category",
-            **category.display_context(current_user)
-        )
+    if category is not None and category.may_be_observed(current_user):
+        return category.display_context(current_user).render_template()
     else:
         return redirect(url_for('home_bp.home'))
 
