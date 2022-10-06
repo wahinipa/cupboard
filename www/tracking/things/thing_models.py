@@ -1,6 +1,5 @@
 # Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
-from os import environ
 
 from flask import url_for
 from sqlalchemy.orm import backref
@@ -17,10 +16,20 @@ class Thing(UniqueNamedBaseModel):
     refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
+    def may_be_observed(self, viewer):
+        return viewer.may_observe_things
+
+    @property
+    def classification(self):
+        if self.is_top:
+            return "All"
+        else:
+            return "Thing"
+
     @property
     def label(self):
         if self.is_top:
-            return "All Things"
+            return "Things"
         else:
             return self.name
 
@@ -38,11 +47,14 @@ class Thing(UniqueNamedBaseModel):
 
     @property
     def category_set(self):
-        categories = {refinement.category for refinement in self.refinements}
-        root = self.kind_of
-        if root:
-            categories |= root.category_set
-        return categories
+        if self.is_top:
+            return set()
+        else:
+            categories = {refinement.category for refinement in self.refinements}
+            root = self.kind_of
+            if root:
+                categories |= root.category_set
+            return categories
 
     @property
     def categories(self):
@@ -75,7 +87,8 @@ class Thing(UniqueNamedBaseModel):
     def parent_list(self):
         parent = self.kind_of
         if parent is None:
-            return []
+            from tracking.home.home_models import home_root
+            return [home_root]
         else:
             return parent.parent_list + [parent]
 
@@ -109,31 +122,42 @@ class Thing(UniqueNamedBaseModel):
                 'url': self.url,
             }
         ]
+        if kind_of_nodes:
+            node_label = [{'label': f'Kinds of {self.label}'}]
+        else:
+            node_label = []
         attributes = {
+            'classification': self.classification,
+            'name': self.name,
             'text': self.name,
+            'label': self.label,
+            'view_url': self.url,
+            'notations': self.description_notation + node_label,
             'nodes': description_nodes + link_nodes + kind_of_nodes,
         }
         return attributes
 
 
-def thing_display_context(thing, viewer):
-    thing_context = DisplayContext({
-        'tab': 'thing',
-        'label': thing.label,
-        'parent_list': thing.parent_list,
-        'nodes': thing.viewable_nodes(viewer),
-        'categories': [category.viewable_attributes(viewer) for category in thing.categories],
-    })
-    if not thing.is_top:
-        thing_context.add_attribute('lines', thing.description_lines)
-    if viewer.may_create_thing:
-        thing_context.add_action(thing.create_url, f'Kind of {thing.label}', 'create')
-    if not thing.is_top:
-        if viewer.may_update_thing:
-            thing_context.add_action(thing.update_url, thing.label, 'update')
-        if viewer.may_delete_thing:
-            thing_context.add_action(thing.delete_url, thing.label, 'delete')
-    return thing_context.display_context
+    def display_context(self, viewer):
+        thing_context = DisplayContext({
+            'target': self.viewable_attributes(viewer),
+            'tab': 'thing',
+            'name': self.name,
+            'label': self.label,
+            'parent_list': self.parent_list,
+            'nodes': self.viewable_nodes(viewer),
+            'children': [category.viewable_attributes(viewer) for category in self.categories],
+        })
+        if not self.is_top:
+            thing_context.add_attribute('lines', self.description_lines)
+        if viewer.may_create_thing:
+            thing_context.add_action(self.create_url, f'Kind of {self.label}', 'create')
+        if not self.is_top:
+            if viewer.may_update_thing:
+                thing_context.add_action(self.update_url, self.label, 'update')
+            if viewer.may_delete_thing:
+                thing_context.add_action(self.delete_url, self.label, 'delete')
+        return thing_context
 
 
 def top_viewable_attributes(viewer):
@@ -246,5 +270,3 @@ def find_particular_thing(thing, choices):
         if has_same_choices(particular_thing):
             return particular_thing
     return None
-
-

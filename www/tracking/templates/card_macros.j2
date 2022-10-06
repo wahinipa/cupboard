@@ -26,10 +26,14 @@
   </div>
 {% endmacro %}
 
-{% macro render_parent(classification=None, label=None, children=None, notations=None, actions=None) %}
+{% macro render_parent(classification=None, label=None, children=None, notations=None, nodes=None, actions=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% call target_card(classification, label) %}
     {{ render_notations(notations) }}
+    {% if nodes %}
+      <div id="tree">
+      </div>
+    {% endif %}
   {% endcall %}
   {% if children %}
     {% for child in children %}

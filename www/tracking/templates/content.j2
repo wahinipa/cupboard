@@ -8,6 +8,7 @@ places_nav_items,
 home_nav_item,
 people_nav_items,
 things_nav_items %}
+{% from 'tree_macros.j2' import tree_root %}
 
 {% block header %}
   <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -30,4 +31,7 @@ things_nav_items %}
 {% endblock %}
 {% block breadcrumbs %}
   {{ bread_crumbs(parent_list, label) }}
+{% endblock %}
+{% block extra_js %}
+  {% if nodes %}{{ tree_root(nodes) }}{% endif %}
 {% endblock %}

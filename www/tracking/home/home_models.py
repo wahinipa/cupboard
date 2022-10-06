@@ -3,19 +3,6 @@
 from tracking.commons.pseudo_model import PseudoModel
 
 
-class AllThings(PseudoModel):
-    def __init__(self, home):
-        super().__init__(
-            label="Things",
-            endpoint='thing_bp.thing_list',
-            description="Things are inventory items that needs tracking",
-            parent_object=home
-        )
-
-    def may_be_observed(self, viewer):
-        return viewer.may_observe_things
-
-
 class HomeModel(PseudoModel):
     def __init__(self):
         super().__init__(
@@ -25,6 +12,7 @@ class HomeModel(PseudoModel):
             parent_object=None,
             classification="Root"
         )
+        self._child_list = None
         from tracking.categories.category_models import AllCategories
         from tracking.groups.group_models import AllGroups
         from tracking.places.place_models import AllPlaces
@@ -33,20 +21,29 @@ class HomeModel(PseudoModel):
         self.all_groups = AllGroups(self)
         self.all_places = AllPlaces(self)
         self.all_people = AllPeople(self)
-        self.all_things = AllThings(self)
-        self._child_list = [
-            self.all_groups,
-            self.all_places,
-            self.all_people,
-            self.all_things,
-            self.all_categories,
-        ]
+        self._all_things = None
 
     def may_be_observed(self, viewer):
         return True
 
     @property
+    def all_things(self):
+        if self._all_things is None:
+            from tracking.things.thing_models import find_or_create_everything
+            self._all_things = find_or_create_everything()
+        return self._all_things
+
+    @property
     def child_list(self):
+        if self._child_list is None:
+            self._child_list = [
+                self.all_groups,
+                self.all_places,
+                self.all_people,
+                self.all_things,
+                self.all_categories,
+            ]
+
         return self._child_list
 
 

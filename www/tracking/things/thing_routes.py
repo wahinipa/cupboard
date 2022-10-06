@@ -5,8 +5,9 @@ from flask_login import login_required, current_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
+from tracking.home.home_models import home_root
 from tracking.things.thing_forms import ThingCreateForm, create_thing_from_form, ThingUpdateForm
-from tracking.things.thing_models import find_thing_by_id, find_or_create_everything, thing_display_context
+from tracking.things.thing_models import find_thing_by_id
 
 thing_bp = Blueprint(
     'thing_bp', __name__,
@@ -28,7 +29,8 @@ def thing_create(thing_id):
         thing = create_thing_from_form(current_user, form)
         return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
     else:
-        return render_template('thing_create_form.j2', form=form, form_title=f'Create new kind of {thing.label}', tab="thing", **display_context())
+        return render_template('form_page.j2', form=form, form_title=f'Create new kind of {thing.label}', tab="thing",
+                               **display_context())
 
 
 def thing_create_form():
@@ -62,7 +64,8 @@ def thing_update(thing_id):
             database.session.commit()
             return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
         else:
-            return render_template('thing_update_form.j2', form=form, form_title=f'Update {thing.label}', tab="thing", **display_context())
+            return render_template('form_page.j2', form=form, form_title=f'Update {thing.label}', tab="thing",
+                                   **display_context())
     else:
         return redirect_hacks()
 
@@ -80,7 +83,8 @@ def update_thing_from_form(thing, form):
 def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.user_may_view(current_user):
-        return render_template('thing_list.j2', **thing_display_context(thing, current_user))
+        # return thing.display_context(current_user).render_template(template_file_name='thing_list.j2')
+        return thing.display_context(current_user).render_template()
     else:
         return redirect(url_for('home_bp.home'))
 
@@ -88,6 +92,6 @@ def thing_view(thing_id):
 @thing_bp.route('/list')
 @login_required
 def thing_list():
-    return render_template('thing_list.j2', **thing_display_context(find_or_create_everything(), current_user))
-
-
+    return home_root.all_things.display_context(current_user).render_template()
+    # return home_root.all_things.display_context(current_user).render_template(template_file_name='thing_list.j2')
+    # return render_template('thing_list.j2', **thing_display_context(find_or_create_everything(), current_user))
