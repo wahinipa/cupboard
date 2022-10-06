@@ -8,7 +8,6 @@ from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import DisplayContext, display_context
 from tracking.groups.group_forms import GroupCreateForm, GroupUpdateForm, create_group_from_form
 from tracking.groups.group_models import find_group_by_id
-from tracking.home.home_models import home_root
 from tracking.places.place_forms import PlaceCreateForm, create_place_from_form
 
 group_bp = Blueprint(
@@ -49,6 +48,7 @@ def group_delete(group_id):
 @group_bp.route('/list')
 @login_required
 def group_list():
+    from tracking.home.home_models import home_root
     return home_root.all_groups.display_context(current_user).render_template()
 
 

@@ -5,7 +5,6 @@ from flask_login import current_user, login_required
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.home.home_models import home_root
 from tracking.places.place_forms import PlaceUpdateForm
 from tracking.places.place_models import find_place_by_id
 
@@ -32,6 +31,7 @@ def place_delete(place_id):
 @place_bp.route('/list')
 @login_required
 def place_list():
+    from tracking.home.home_models import home_root
     return home_root.all_places.display_context(current_user).render_template()
 
 @place_bp.route('/view/<int:place_id>')

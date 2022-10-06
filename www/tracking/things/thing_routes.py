@@ -5,7 +5,6 @@ from flask_login import login_required, current_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.home.home_models import home_root
 from tracking.things.thing_forms import ThingCreateForm, create_thing_from_form, ThingUpdateForm
 from tracking.things.thing_models import find_thing_by_id
 
@@ -83,7 +82,6 @@ def update_thing_from_form(thing, form):
 def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.user_may_view(current_user):
-        # return thing.display_context(current_user).render_template(template_file_name='thing_list.j2')
         return thing.display_context(current_user).render_template()
     else:
         return redirect(url_for('home_bp.home'))
@@ -92,6 +90,5 @@ def thing_view(thing_id):
 @thing_bp.route('/list')
 @login_required
 def thing_list():
+    from tracking.home.home_models import home_root
     return home_root.all_things.display_context(current_user).render_template()
-    # return home_root.all_things.display_context(current_user).render_template(template_file_name='thing_list.j2')
-    # return render_template('thing_list.j2', **thing_display_context(find_or_create_everything(), current_user))

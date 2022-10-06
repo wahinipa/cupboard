@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import declared_attr
 
 from tracking import database
+from tracking.commons.text_utilities import description_notation_list
 
 
 class IdModelMixin():
@@ -57,23 +58,8 @@ class DescriptionModelMixin():
         return database.Column(database.Text(), nullable=False, server_default=u'')
 
     @property
-    def description_lines(self):
-        return self.description.split('\n')
-
-    @property
-    def description_notation(self):
-        if self.description:
-            notation = {
-                'label': 'Description',
-            }
-            lines = self.description_lines
-            if len(lines) > 1:
-                notation['lines'] = lines
-            else:
-                notation['value'] = self.description
-            return [notation]
-        else:
-            return []
+    def description_notation_list(self):
+        return description_notation_list(label="Description", description=self.description)
 
 
 class ModelWithRoles:

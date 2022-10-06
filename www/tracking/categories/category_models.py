@@ -7,6 +7,7 @@ from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
 from tracking.commons.display_context import DisplayContext
 from tracking.commons.pseudo_model import PseudoModel
+from tracking.commons.text_utilities import description_notation_list
 
 
 class AllCategories(PseudoModel):
@@ -41,32 +42,22 @@ class Category(UniqueNamedBaseModel):
         return [home_root, home_root.all_categories]
 
     def viewable_attributes(self, viewer):
-        notations = self.description_notation
+        notations = self.description_notation_list
         choices = self.choices
         if choices:
             notations.append({
                 'label': "Choices"
             })
             for choice in choices:
-                choice_notation = {
-                    'tag': choice.name,
-                }
-                choice_description_lines = choice.description_lines
-                if choice_description_lines:
-                    if len(choice_description_lines) > 1:
-                        choice_notation['lines'] = choice_description_lines
-                    else:
-                        choice_notation['value'] = choice_description_lines[0]
-                notations.append(choice_notation)
+                notations += description_notation_list(tag=choice.name, description=choice.description)
 
-        attributes = {
+        return {
             'classification': 'Category',
             'name': self.name,
             'label': self.label,
             'view_url': self.url,
             'notations': notations,
         }
-        return attributes
 
     def display_context(self, viewer):
         category_context = DisplayContext({

@@ -12,7 +12,7 @@ from tracking.commons.display_context import DisplayContext
 class Thing(UniqueNamedBaseModel):
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
 
-    kinds = database.relationship('Thing', backref=backref('kind_of', remote_side='Thing.id'))
+    kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
     refinements = database.relationship('Refinement', backref='thing', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
@@ -111,7 +111,7 @@ class Thing(UniqueNamedBaseModel):
         return [thing.viewable_attributes(viewer) for thing in self.sorted_kinds]
 
     def viewable_attributes(self, viewer):
-        description_nodes = [{'text': line} for line in self.description_lines]
+        description_nodes = [{'text': line} for line in self.description.split('\n')]
         kind_of_nodes = self.viewable_nodes(viewer)  # No actions for lower nodes.
         link_nodes = [
             {
@@ -129,7 +129,7 @@ class Thing(UniqueNamedBaseModel):
             'text': self.name,
             'label': self.label,
             'view_url': self.url,
-            'notations': self.description_notation + node_label,
+            'notations': self.description_notation_list + node_label,
             'nodes': description_nodes + link_nodes + kind_of_nodes,
         }
         return attributes
@@ -145,7 +145,7 @@ class Thing(UniqueNamedBaseModel):
             'children': [category.viewable_attributes(viewer) for category in self.categories],
         })
         if not self.is_top:
-            thing_context.add_attribute('lines', self.description_lines)
+            thing_context.add_attribute('lines', self.description.split('\n'))
         if viewer.may_create_thing:
             thing_context.add_action(self.create_url, f'Kind of {self.label}', 'create')
         if not self.is_top:

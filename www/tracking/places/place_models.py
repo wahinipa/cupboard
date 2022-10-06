@@ -57,7 +57,7 @@ class Place(BaseModel, ModelWithRoles):
         }
         if include_group_url:
             group_notation['url'] =  self.group.url
-        notations = [group_notation] + self.description_notation
+        notations = [group_notation] + self.description_notation_list
         attributes = {
             'classification': 'Place',
             'name': self.name,

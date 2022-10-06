@@ -8,7 +8,6 @@ from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdat
 from tracking.categories.category_models import find_category_by_id
 from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
 from tracking.commons.display_context import display_context
-from tracking.home.home_models import home_root
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -51,6 +50,7 @@ def category_delete(category_id):
 @category_bp.route('/list')
 @login_required
 def category_list():
+    from tracking.home.home_models import home_root
     return home_root.all_categories.display_context(current_user).render_template()
 
 

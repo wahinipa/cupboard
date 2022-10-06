@@ -11,6 +11,7 @@ from tracking import database
 from tracking.commons.base_models import IdModelMixin, name_is_key
 from tracking.commons.display_context import DisplayContext
 from tracking.commons.pseudo_model import PseudoModel
+from tracking.commons.text_utilities import description_notation_list
 
 
 class AllPeople(PseudoModel):
@@ -203,14 +204,6 @@ class User(IdModelMixin, database.Model, UserMixin):
         return self.name
 
     @property
-    def description_lines(self):
-        description = self.about_me
-        if description:
-            return description.split('\n')
-        else:
-            return []
-
-    @property
     def url(self):
         return url_for('people_bp.people_view', user_id=self.id)
 
@@ -239,24 +232,13 @@ class User(IdModelMixin, database.Model, UserMixin):
         return result
 
     def viewable_attributes(self, viewer):
-        attributes = {
+        return {
             'classification': 'Person',
             'name': self.name,
             'label': self.label,
             'view_url': self.url,
-            'lines': self.description_lines,
+            'notations': description_notation_list(label="About Me", description=self.about_me),
         }
-        lines = self.description_lines
-        if lines:
-            notation = {
-                'label': 'About me',
-            }
-            if len(lines) > 1:
-                notation['lines'] = lines
-            else:
-                notation['value'] = lines[0]
-            attributes['notations'] = [notation]
-        return attributes
 
     def display_context(self, viewer):
         person_context = DisplayContext({

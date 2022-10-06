@@ -6,7 +6,6 @@ from flask_login import current_user, login_required, login_user, logout_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.display_context import display_context
-from tracking.home.home_models import home_root
 from tracking.people.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
 from tracking.people.people_models import find_or_create_user, find_user_by_id, find_user_by_username
 
@@ -118,6 +117,7 @@ def change_password():
 @people_bp.route('/list')
 @login_required
 def people_list():
+    from tracking.home.home_models import home_root
     return home_root.all_people.display_context(current_user).render_template()
 
 

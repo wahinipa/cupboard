@@ -3,6 +3,7 @@ from flask import url_for
 
 from tracking.commons.base_models import TrackableMixin
 from tracking.commons.display_context import DisplayContext
+from tracking.commons.text_utilities import description_notation_list
 
 
 class PseudoModel(TrackableMixin):
@@ -32,17 +33,6 @@ class PseudoModel(TrackableMixin):
         return self._parent_object
 
     @property
-    def one_line_description(self):
-        return self.description
-
-    @property
-    def description_lines(self):
-        if self.description:
-            return [self.description]
-        else:
-            return []
-
-    @property
     def url(self):
         return url_for(self.endpoint)
 
@@ -62,9 +52,7 @@ class PseudoModel(TrackableMixin):
             'name': self.name,
             'label': self.label,
             'view_url': self.url,
-            'notations': [{
-                'lines': self.description_lines,
-            }],
+            'notations': description_notation_list(description=self.description)
         }
         return attributes
 

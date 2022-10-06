@@ -46,7 +46,7 @@ class Choice(BaseModel):
             'name': self.name,
             'label': self.label,
             'view_url': self.url,
-            'notations': [category_notation] + self.description_notation,
+            'notations': [category_notation] + self.description_notation_list,
         }
         return attributes
 
