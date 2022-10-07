@@ -65,9 +65,13 @@
 {% macro action_card(label, actions) %}
   {% if actions %}
     {% call viewing_card(prefix="Actions on ", label=label, purpose='action') %}
-      {% for action in actions %}
-        {{ action_link(**action) }}
-      {% endfor %}
+      <div class="row">
+        {% for action in actions %}
+          <div class="col-md-2">
+            {{ action_link(**action) }}
+          </div>
+        {% endfor %}
+      </div>
     {% endcall %}
   {% endif %}
 {% endmacro %}
