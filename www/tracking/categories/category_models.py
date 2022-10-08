@@ -5,7 +5,7 @@ from flask import url_for
 
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.pseudo_model import PseudoModel
 from tracking.commons.text_utilities import description_notation_list
 
@@ -60,7 +60,7 @@ class Category(UniqueNamedBaseModel):
         }
 
     def display_context(self, viewer):
-        category_context = DisplayContext({
+        category_context = CupboardDisplayContext({
             'target': self.viewable_attributes(viewer),
             'name': self.name,
             'label': self.label,
@@ -110,7 +110,7 @@ class Category(UniqueNamedBaseModel):
 
 
 def category_list_display_context(viewer):
-    category_context = DisplayContext({
+    category_context = CupboardDisplayContext({
         'tab': 'category',
         'label': 'Categories',
         'name': 'Categories',

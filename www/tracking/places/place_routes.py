@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.commons.display_context import display_context
+from tracking.commons.cupboard_display_context import display_context
 from tracking.places.place_forms import PlaceUpdateForm
 from tracking.places.place_models import find_place_by_id
 

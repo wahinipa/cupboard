@@ -5,7 +5,7 @@ from flask import url_for
 
 from tracking import database
 from tracking.commons.base_models import BaseModel
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 
 
 class Choice(BaseModel):
@@ -51,7 +51,7 @@ class Choice(BaseModel):
         return attributes
 
     def display_context(self, viewer):
-        choice_context = DisplayContext({
+        choice_context = CupboardDisplayContext({
             'target': self.viewable_attributes(viewer, include_category_url=True),
             'label': self.label,
             'name': self.name,

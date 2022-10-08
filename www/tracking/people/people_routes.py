@@ -5,7 +5,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.commons.display_context import display_context
+from tracking.commons.cupboard_display_context import display_context
 from tracking.people.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
 from tracking.people.people_models import find_or_create_user, find_user_by_id, find_user_by_username
 

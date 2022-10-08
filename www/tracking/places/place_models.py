@@ -5,7 +5,7 @@ from flask import url_for
 
 from tracking import database
 from tracking.commons.base_models import BaseModel, ModelWithRoles, name_is_key
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.pseudo_model import PseudoModel
 
 
@@ -68,7 +68,7 @@ class Place(BaseModel, ModelWithRoles):
         return attributes
 
     def display_context(self, viewer):
-        place_context = DisplayContext({
+        place_context = CupboardDisplayContext({
             'target': self.viewable_attributes(viewer, include_group_url=True),
             'parent_list': self.parent_list,
             'label': self.label

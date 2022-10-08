@@ -6,7 +6,7 @@ from sqlalchemy.orm import backref
 
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 
 
 class Thing(UniqueNamedBaseModel):
@@ -135,7 +135,7 @@ class Thing(UniqueNamedBaseModel):
         return attributes
 
     def display_context(self, viewer):
-        thing_context = DisplayContext({
+        thing_context = CupboardDisplayContext({
             'target': self.viewable_attributes(viewer),
             'tab': 'thing',
             'name': self.name,

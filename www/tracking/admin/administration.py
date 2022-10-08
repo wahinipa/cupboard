@@ -10,7 +10,7 @@ from flask_login import current_user
 from werkzeug.utils import redirect
 
 from tracking.commons.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
-from tracking.commons.display_context import project_name
+from tracking.commons.cupboard_display_context import project_name
 
 
 def request_info(prefix):

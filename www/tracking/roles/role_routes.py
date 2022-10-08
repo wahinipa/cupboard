@@ -2,7 +2,7 @@
 from flask import Blueprint, url_for, redirect, render_template
 from flask_login import login_required, current_user
 
-from tracking.commons.display_context import display_context
+from tracking.commons.cupboard_display_context import display_context
 from tracking.roles.role_models import find_role_by_id
 
 role_bp = Blueprint(

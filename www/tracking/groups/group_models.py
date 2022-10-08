@@ -5,7 +5,7 @@ from flask import url_for
 
 from tracking import database
 from tracking.commons.base_models import ModelWithRoles, UniqueNamedBaseModel, name_is_key
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.pseudo_model import PseudoModel
 
 
@@ -79,7 +79,7 @@ class Group(UniqueNamedBaseModel, ModelWithRoles):
         return attributes
 
     def display_context(self, viewer):
-        group_context = DisplayContext({
+        group_context = CupboardDisplayContext({
             'label': self.label,
             'target': self.viewable_attributes(viewer),
             'parent_list': self.parent_list,

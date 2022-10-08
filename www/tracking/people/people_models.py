@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 
 from tracking import database
 from tracking.commons.base_models import IdModelMixin, name_is_key
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.pseudo_model import PseudoModel
 from tracking.commons.text_utilities import description_notation_list
 
@@ -241,7 +241,7 @@ class User(IdModelMixin, database.Model, UserMixin):
         }
 
     def display_context(self, viewer):
-        person_context = DisplayContext({
+        person_context = CupboardDisplayContext({
             'target': self.viewable_attributes(viewer),
             'parent_list': self.parent_list,
             'label': self.label,

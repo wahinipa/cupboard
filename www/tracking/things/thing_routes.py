@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.commons.display_context import display_context
+from tracking.commons.cupboard_display_context import display_context
 from tracking.things.thing_forms import ThingCreateForm, create_thing_from_form, ThingUpdateForm
 from tracking.things.thing_models import find_thing_by_id
 

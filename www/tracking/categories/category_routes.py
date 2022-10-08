@@ -7,7 +7,7 @@ from tracking.admin.administration import redirect_hacks
 from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdateForm, create_category_from_form
 from tracking.categories.category_models import find_category_by_id
 from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
-from tracking.commons.display_context import display_context
+from tracking.commons.cupboard_display_context import display_context
 
 category_bp = Blueprint(
     'category_bp', __name__,

@@ -6,7 +6,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.choices.choice_forms import ChoiceUpdateForm
 from tracking.choices.choice_models import find_choice_by_id
-from tracking.commons.display_context import display_context
+from tracking.commons.cupboard_display_context import display_context
 
 choice_bp = Blueprint(
     'choice_bp', __name__,

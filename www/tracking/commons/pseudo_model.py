@@ -2,7 +2,7 @@
 from flask import url_for
 
 from tracking.commons.base_models import TrackableMixin
-from tracking.commons.display_context import DisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.text_utilities import description_notation_list
 
 
@@ -57,7 +57,7 @@ class PseudoModel(TrackableMixin):
         return attributes
 
     def display_context(self, viewer):
-        context = DisplayContext({
+        context = CupboardDisplayContext({
             'label': self.label,
             'target': self.viewable_attributes(viewer),
             'children': [child.viewable_attributes(viewer) for child in self.viewable_children(viewer)],
