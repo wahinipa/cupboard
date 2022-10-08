@@ -1,0 +1,44 @@
+{% from 'buttons.j2' import button_task %}
+
+{% macro card_tasks(label, tasks, prefix="Actions on ", column_width="12", is_row=True) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% if tasks %}
+    {% call viewing_card(prefix=prefix, label=label, purpose='tasks'
+    , column_width=column_width, is_row=is_row) %}
+        {% for task in tasks %}
+          <div class="col-md-2">
+            {{ button_task(**task) }}
+          </div>
+        {% endfor %}
+    {% endcall %}
+  {% endif %}
+{% endmacro %}
+
+
+{% macro card_view(prefix=None, label=None, url=None, purpose=None, column_width="6", is_row=False) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% if purpose == 'target' %}
+    {% set background = 'dark' %}
+  {% elif purpose == 'tasks' %}
+    {% set background = 'primary' %}
+  {% else %}
+    {% set background = 'secondary' %}
+  {% endif %}
+  {% if is_row %}
+    <div class="row mt-2">{% endif %}
+{% if column_width %}<div class="col-md-{{ column_width }}">{% endif %}
+  <div class="card border-{{ background }}">
+    <div class="card-header text-white bg-{{ background }}">
+      {% if url %}
+        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
+      {% else %}
+        <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      {{ caller() }}
+    </div>
+  </div>
+{% if column_width %}</div>{% endif %}
+{% if is_row %}</div>{% endif %}
+{% endmacro %}

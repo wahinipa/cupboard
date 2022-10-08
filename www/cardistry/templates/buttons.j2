@@ -1,0 +1,23 @@
+{% macro button_task(url, task, label, column_width="2") %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% if task == 'create' %}
+    {{ button_action(url=url, prefix='Create New ', label=label, column_width=column_width) }}
+  {% elif task == 'delete' %}
+    {{ button_action(url=url, prefix='DELETE ', label=label, column_width=column_width, button_color='danger'
+    , on_submit="return confirm('Are you sure you wish to delete?');") }}
+  {% elif task == 'duplicate' %}
+    {{ button_action(url=url, prefix='Duplicate ', label=label, column_width=column_width) }}
+  {% elif task == 'update' %}
+    {{ button_action(url=url, prefix='Update ', label=label, column_width=column_width) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro button_action(url, prefix='', label='', button_color='primary', on_submit=None, column_width=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  <form action="{{ url }}"
+      {% if column_width %} class="col-md-{{ column_width }}"{% endif %}
+      {% if on_submit %} onSubmit="{{ on_submit }}"{% endif %}
+  >
+    <button class="btn-sm btn-{{ button_color }}" type="submit">{{ prefix }}{{ label }}</button>
+  </form>
+{% endmacro %}

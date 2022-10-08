@@ -14,7 +14,7 @@
 {% endmacro %}
 
 {% macro render_action_button(link, text, prefix='', button_color='btn-primary') %}
-    <form action="{{ link }}">
+    <form action="{{ link }}" class="col-md-2">
         <button class="btn-sm {{ button_color }}" type="submit">{{ prefix }}{{ text }}</button>
     </form>
 {% endmacro %}
@@ -32,7 +32,7 @@
 {% endmacro %}
 
 {% macro render_delete_button(link, text) %}
-    <form action="{{ link }}" onSubmit="return confirm('Are you sure you wish to delete?');">
+    <form action="{{ link }}" onSubmit="return confirm('Are you sure you wish to delete?');" >
         <button class="btn-sm btn-danger" type="submit">DELETE {{ text }}</button>
     </form>
 {% endmacro %}
