@@ -28,7 +28,7 @@ def thing_create(thing_id):
         thing = create_thing_from_form(current_user, form)
         return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
     else:
-        return render_template('form_page.j2', form=form, form_title=f'Create new kind of {thing.label}', tab="thing",
+        return render_template('pages/form_page.j2', form=form, form_title=f'Create new kind of {thing.label}', tab="thing",
                                **display_context())
 
 
@@ -63,7 +63,7 @@ def thing_update(thing_id):
             database.session.commit()
             return redirect(url_for('thing_bp.thing_view', thing_id=thing.id))
         else:
-            return render_template('form_page.j2', form=form, form_title=f'Update {thing.label}', tab="thing",
+            return render_template('pages/form_page.j2', form=form, form_title=f'Update {thing.label}', tab="thing",
                                    **display_context())
     else:
         return redirect_hacks()

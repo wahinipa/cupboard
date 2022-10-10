@@ -16,7 +16,7 @@ class HomeModel(PseudoModel):
         from tracking.categories.category_models import AllCategories
         from tracking.groups.group_models import AllGroups
         from tracking.places.old_place_models import AllPlaces
-        from tracking.people.people_models import AllPeople
+        from tracking.modelling.people_models import AllPeople
         self.all_categories = AllCategories(self)
         self.all_groups = AllGroups(self)
         self.all_places = AllPlaces(self)

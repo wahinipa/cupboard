@@ -58,7 +58,7 @@ def place_update(place_id):
             return redirect(url_for('place_bp.place_view', place_id=place.id))
         else:
             return render_template(
-                'form_page.j2',
+                'pages/form_page.j2',
                 form=form,
                 form_title=f'Update {place.name}',
                 tab="place", **display_context()

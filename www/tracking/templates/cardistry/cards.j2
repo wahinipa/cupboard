@@ -1,4 +1,4 @@
-{% from 'buttons.j2' import button_task %}
+{% from 'cardistry/buttons.j2' import button_task %}
 
 {% macro card_tasks(label, tasks, prefix="Actions on ", column_width="12", is_row=True) %}
   {% if False %}{{ kwargs }}{% endif %}
@@ -42,3 +42,29 @@
 {% if column_width %}</div>{% endif %}
 {% if is_row %}</div>{% endif %}
 {% endmacro %}
+
+{% macro card_child(classification=None, label=None, notations=None, view_url=None, column_width="12", is_row=True) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% call card_view(prefix=classification + ": ", label=label, view_url=view_url, column_width=column_width, is_row=is_row) %}
+    {{ render_notations(notations) }}
+  {% endcall %}
+{% endmacro %}
+
+{% macro render_notations(notations=None) %}
+  {% if notations %}
+    {% for notation in notations %}
+      {{ render_notation(**notation) }}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro render_notation(label=None, url=None, value=None, tag=None, lines=None) %}
+  {% if label %}<b>{{ label }}: </b>{% endif %}
+  {% if tag %}<i>{{ tag }} - </i>{% endif %}
+  {% if url %}<a href="{{ url }}">{% endif %}
+{% if value %}{{ value }}{% endif %}
+{% if label or value or tag %}<br>{% endif %}
+{% if url %}</a>{% endif %}
+  {% if lines %}{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
+{% endmacro %}
+

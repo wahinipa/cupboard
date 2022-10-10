@@ -7,7 +7,7 @@ from flask_login import UserMixin
 from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
-from cardistry.models.cardistry_models import name_is_key
+from tracking.cardistry.models.cardistry_models import name_is_key
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin
 

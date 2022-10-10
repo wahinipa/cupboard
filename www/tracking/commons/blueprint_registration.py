@@ -35,11 +35,11 @@ def blueprint_registration(application):
     #
     # from tracking.groups.group_routes import group_bp
     # application.register_blueprint(group_bp, url_prefix=GROUP_PREFIX)
-    #
-    # from tracking.home.home_routes import home_bp
-    # application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
 
-    from tracking.people.people_routes import people_bp
+    from tracking.routing.home_routes import home_bp
+    application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
+
+    from tracking.routing.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)
 
     # from tracking.places.place_routes import place_bp

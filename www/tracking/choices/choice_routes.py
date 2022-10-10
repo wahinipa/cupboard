@@ -51,7 +51,7 @@ def choice_update(choice_id):
             database.session.commit()
             return redirect(url_for('choice_bp.choice_view', choice_id=choice.id))
         else:
-            return render_template('form_page.j2', form=form, tab="choice", **display_context())
+            return render_template('pages/form_page.j2', form=form, tab="choice", **display_context())
     else:
         return redirect_hacks()
 

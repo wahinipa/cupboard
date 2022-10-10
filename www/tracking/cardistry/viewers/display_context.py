@@ -1,8 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from flask import render_template
 
 
 class DisplayContext:
-    def __init__(self, context=None, title=None, project_name=None):
+    def __init__(self, context=None, title=None, project_name=None, page_template=None):
         if context is None:
             context = {}
         self.context = context
@@ -10,6 +11,7 @@ class DisplayContext:
             self.add_attribute('title', title)
         if project_name is not None:
             self.add_attribute('project_name', project_name)
+        self.page_template = page_template
 
     def add_attribute(self, key, value):
         self.context[key] = value
@@ -51,6 +53,14 @@ class DisplayContext:
         if value:
             self.context.setdefault(list_key, []).append(value)
 
+    def add_child_display_context(self, child_context):
+        self.append_to_list('children', child_context.display_context)
+
     @property
     def display_context(self):
         return self.context
+
+    def render_template(self, template=None):
+        if template is None:
+            template = self.page_template
+        return render_template(template, **self.display_context)

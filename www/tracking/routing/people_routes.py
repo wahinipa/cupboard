@@ -6,7 +6,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.people.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
-from tracking.people.people_models import find_or_create_user, find_user_by_id, find_user_by_username
+from tracking.modelling.people_models import find_or_create_user, find_user_by_id, find_user_by_username
 
 people_bp = Blueprint(
     'people_bp', __name__,
@@ -28,7 +28,7 @@ def create():
                 return redirect(user.url)
             else:
                 return redirect(url_for('people_bp.people_list'))
-        return render_template('form_page.j2', form=form, form_title=f'Create New User Account')
+        return render_template('pages/form_page.j2', form=form, form_title=f'Create New User Account')
         # return render_template('form_page.j2', form=form, form_title=f'Create New User Account', **display_context())
     else:
         return redirect_hacks()
@@ -92,7 +92,7 @@ def profile():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
 
-    return render_template('form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}')
+    return render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}')
     # return render_template('form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}', **display_context())
 
 

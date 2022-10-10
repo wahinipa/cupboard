@@ -28,7 +28,7 @@ def category_create():
         category = create_category_from_form(form)
         return redirect(url_for('category_bp.category_view', category_id=category.id))
     else:
-        return render_template('form_page.j2', form=form, tab="category", **display_context())
+        return render_template('pages/form_page.j2', form=form, tab="category", **display_context())
 
 
 def category_create_form():
@@ -77,7 +77,7 @@ def category_update(category_id):
             database.session.commit()
             return redirect(url_for('category_bp.category_view', category_id=category.id))
         else:
-            return render_template('form_page.j2', form=form, tab="category", **display_context())
+            return render_template('pages/form_page.j2', form=form, tab="category", **display_context())
     else:
         return redirect_hacks()
 
@@ -102,7 +102,7 @@ def choice_create(category_id):
             choice = create_choice_from_form(category, form)
             return redirect(url_for('choice_bp.choice_view', choice_id=choice.id))
         else:
-            return render_template('form_page.j2', form=form, form_title=f'Create new choice for {category.name}',
+            return render_template('pages/form_page.j2', form=form, form_title=f'Create new choice for {category.name}',
                                    tab="choice", **display_context())
     else:
         return redirect_hacks()

@@ -1,5 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.cardistry.models.cardistry_models import name_is_key
 from tracking import database
+from tracking.cardistry.viewers.display_context import DisplayContext
 from tracking.modelling.base_models import UniqueNamedBaseModel
 
 
@@ -10,6 +12,14 @@ class Root(UniqueNamedBaseModel):
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
 
+    def display_context(self, viewer):
+        context = DisplayContext({
+            'label': self.name,
+            'classification': 'Organizational Association',
+        })
+        self.add_description(context)
+        return context
+
 
 def place_root(place):
     top = place.top
@@ -19,6 +29,7 @@ def place_root(place):
 def thing_root(thing):
     top = thing.top
     return Root.query.filter(Root.thing_id == top.id).first()
+
 
 def create_root(name, description):
     from tracking.modelling.place_models import Place
@@ -40,3 +51,5 @@ def create_root(name, description):
     return root
 
 
+def all_roots():
+    return sorted(Root.query.all(), key=name_is_key)

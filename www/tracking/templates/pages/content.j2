@@ -1,14 +1,9 @@
-{% extends "website.j2" %}
-{% from 'common_macros.j2' import bread_crumbs %}
-{% from 'content_macros.j2' import
+{% extends "pages/website.j2" %}
+{% from 'old/common_macros.j2' import bread_crumbs %}
+{% from 'old/content_macros.j2' import
 admin_database_edit_nav_item,
-categories_nav_items,
-groups_nav_items,
-places_nav_items,
-home_nav_item,
-people_nav_items,
-things_nav_items %}
-{% from 'tree_macros.j2' import tree_root %}
+home_nav_item %}
+{% from 'old/tree_macros.j2' import tree_root %}
 
 {% block header %}
   <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -20,11 +15,10 @@ things_nav_items %}
       <ul class="navbar-nav nav-tabs">
         {{ home_nav_item() }}
         {{ admin_database_edit_nav_item(current_user) }}
-        {{ categories_nav_items(current_user) }}
-        {{ groups_nav_items(current_user) }}
-        {{ places_nav_items(current_user) }}
-        {{ people_nav_items(current_user) }}
-        {{ things_nav_items(current_user) }}
+        {#        {{ categories_nav_items(current_user) }}#}
+        {#        {{ places_nav_items(current_user) }}#}
+        {#        {{ people_nav_items(current_user) }}#}
+        {#        {{ things_nav_items(current_user) }}#}
       </ul>
     </div>
   </nav>

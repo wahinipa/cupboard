@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy.orm import declared_attr
 
-from cardistry.models.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
+from tracking.cardistry.models.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
 from tracking import database
 
 

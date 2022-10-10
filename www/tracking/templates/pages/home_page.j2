@@ -1,0 +1,12 @@
+{% extends "pages/content.j2" %}
+{% from 'cardistry/cards.j2' import card_view, card_child %}
+{% block innards %}
+  <h2>Home Page</h2>
+  {% call card_view(label="Home Card", purpose='target', column_width="12", is_row=True) %}
+  {% endcall %}
+  {% if children %}
+    {% for child in children %}
+      {{ card_child(**child) }}
+    {% endfor %}
+  {% endif %}
+{% endblock %}
