@@ -3,19 +3,27 @@
 {% macro card_tasks(label, tasks, prefix="Actions on ", column_width="12", is_row=True) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if tasks %}
-    {% call viewing_card(prefix=prefix, label=label, purpose='tasks'
+    {% call card_view(prefix=prefix, label=label, purpose='tasks'
     , column_width=column_width, is_row=is_row) %}
-        {% for task in tasks %}
-          <div class="col-md-2">
-            {{ button_task(**task) }}
-          </div>
-        {% endfor %}
+      {% for task in tasks %}
+        <div class="col-md-2">
+          {{ button_task(column_width=None, **task) }}
+        </div>
+      {% endfor %}
     {% endcall %}
   {% endif %}
 {% endmacro %}
 
+{% macro card_target(prefix=None, label=None, url=None, column_width="6", is_row=False, bread_crumb_list=None, notations=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  {% call card_view(prefix=prefix, label=label, url=url, purpose="target", column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
+    {% if notations %}
+      {{ render_notations(notations) }}
+    {% endif %}
+  {% endcall %}
+{% endmacro %}
 
-{% macro card_view(prefix=None, label=None, url=None, purpose=None, column_width="6", is_row=False) %}
+{% macro card_view(prefix=None, label=None, url=None, purpose=None, column_width="6", is_row=False, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if purpose == 'target' %}
     {% set background = 'dark' %}
@@ -26,26 +34,31 @@
   {% endif %}
   {% if is_row %}
     <div class="row mt-2">{% endif %}
-{% if column_width %}<div class="col-md-{{ column_width }}">{% endif %}
-  <div class="card border-{{ background }}">
-    <div class="card-header text-white bg-{{ background }}">
-      {% if url %}
-        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
+{% if column_width %}
+  <div class="col-md-{{ column_width }}">{% endif %}
+<div class="card border-{{ background }}">
+  <div class="card-header text-white bg-{{ background }}">
+    {% if url %}
+      {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
+    {% else %}
+      {% if bread_crumb_list %}
+        {{ render_bread_crumbs(bread_crumb_list) }}
       {% else %}
         <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
       {% endif %}
-    </div>
-    <div class="card-body">
-      {{ caller() }}
-    </div>
+    {% endif %}
   </div>
+  <div class="card-body">
+    {{ caller() }}
+  </div>
+</div>
 {% if column_width %}</div>{% endif %}
 {% if is_row %}</div>{% endif %}
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, notations=None, view_url=None, column_width="12", is_row=True) %}
+{% macro card_child(classification=None, label=None, notations=None, url=None, column_width="6", is_row=True) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, view_url=view_url, column_width=column_width, is_row=is_row) %}
+  {% call card_view(prefix=classification + ": ", label=label, url=url, column_width=column_width, is_row=is_row) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}
@@ -67,4 +80,23 @@
 {% if url %}</a>{% endif %}
   {% if lines %}{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
 {% endmacro %}
+
+{% macro render_bread_crumbs(bread_crumb_list=None) %}
+  {% if bread_crumb_list %}
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        {% for crumb in bread_crumb_list %}
+          {{ bread_crumb_item(**crumb) }}
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
+
+{% macro bread_crumb_item(label, url=None) %}
+  <li class="breadcrumb-item">
+    {% if url %}<a href="{{ url }}">{% endif %}{{ label }}{% if url %}</a>{% endif %}
+  </li>
+{% endmacro %}
+
 

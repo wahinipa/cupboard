@@ -1,5 +1,4 @@
 {% extends "pages/website.j2" %}
-{% from 'old/common_macros.j2' import bread_crumbs %}
 {% from 'old/content_macros.j2' import
 admin_database_edit_nav_item,
 home_nav_item %}
@@ -15,17 +14,7 @@ home_nav_item %}
       <ul class="navbar-nav nav-tabs">
         {{ home_nav_item() }}
         {{ admin_database_edit_nav_item(current_user) }}
-        {#        {{ categories_nav_items(current_user) }}#}
-        {#        {{ places_nav_items(current_user) }}#}
-        {#        {{ people_nav_items(current_user) }}#}
-        {#        {{ things_nav_items(current_user) }}#}
       </ul>
     </div>
   </nav>
-{% endblock %}
-{% block breadcrumbs %}
-  {{ bread_crumbs(parent_list, label) }}
-{% endblock %}
-{% block extra_js %}
-  {% if nodes %}{{ tree_root(nodes) }}{% endif %}
 {% endblock %}

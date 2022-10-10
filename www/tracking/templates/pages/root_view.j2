@@ -1,0 +1,13 @@
+{% extends "pages/content.j2" %}
+{% from 'cardistry/cards.j2' import card_view, card_child, card_target %}
+{% block innards %}
+  {% call card_target(label=label, purpose='target', url=url, is_row=True, column_width="12", bread_crumb_list=bread_crumb_list, notations=notations) %}
+  {% endcall %}
+  {% if children %}
+    <div class="row mt-2">
+    {% for child in children %}
+      {{ card_child(is_row=False, **child) }}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

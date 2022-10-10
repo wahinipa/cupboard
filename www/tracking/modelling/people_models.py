@@ -32,6 +32,13 @@ class User(IdModelMixin, database.Model, UserMixin):
     #                                               cascade='all, delete')
 
     @property
+    def may_create_root(self):
+        return self.is_the_super_admin
+
+
+    #### ????? ####
+
+    @property
     def assignments(self):
         return self.universal_assignments + self.group_assignments + self.place_assignments
 

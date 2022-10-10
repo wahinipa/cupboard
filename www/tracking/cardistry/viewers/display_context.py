@@ -16,8 +16,11 @@ class DisplayContext:
     def add_attribute(self, key, value):
         self.context[key] = value
 
-    def add_action(self, url, label, task):
-        self.context.setdefault('actions', []).append({
+    def add_bread_crumbs(self, bread_crumbs):
+        self.add_attribute('bread_crumb_list', bread_crumbs)
+
+    def add_task(self, url, label, task):
+        self.context.setdefault('tasks', []).append({
             'url': url,
             'label': label,
             'task': task,

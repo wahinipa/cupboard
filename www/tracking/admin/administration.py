@@ -54,8 +54,15 @@ def initialize_database(database):
 
 def create_test_data(database):
     from tracking.modelling.root_model import create_root
+
+    # Roots
     our_test_group = create_root(name="Our Test Group", description="For testing out the code.")
-    another_test_group = create_root(name="Another Test Group", description="For really, really testing out the code.\nLike, a lot.")
+    another_test_group = create_root(name="Yet Another Test Group", description="For really, really testing out the code.\nLike, a lot.")
+
+    # Places
+    metropolis = our_test_group.place.create_kind_of_place(name="Metropolis", description="Home of the Daily Planet")
+    smallville = our_test_group.place.create_kind_of_place(name="SMallville", description="Clark Kent's Home Town.\n Also, coincidentally, Clark Kent.")
+    phone_booth = smallville.create_kind_of_place(name="Phone Booth", description="Those tall boxes that had phones back in the day.")
 
 
 def add_flask_admin(application, database):
