@@ -15,7 +15,7 @@ class HomeModel(PseudoModel):
         self._child_list = None
         from tracking.categories.category_models import AllCategories
         from tracking.groups.group_models import AllGroups
-        from tracking.places.place_models import AllPlaces
+        from tracking.places.old_place_models import AllPlaces
         from tracking.people.people_models import AllPeople
         self.all_categories = AllCategories(self)
         self.all_groups = AllGroups(self)
@@ -29,7 +29,7 @@ class HomeModel(PseudoModel):
     @property
     def all_things(self):
         if self._all_things is None:
-            from tracking.things.thing_models import find_or_create_everything
+            from tracking.things.old_thing_models import find_or_create_everything
             self._all_things = find_or_create_everything()
         return self._all_things
 

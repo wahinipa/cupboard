@@ -4,11 +4,11 @@ from datetime import datetime
 from flask import url_for
 
 from tracking import database
-from tracking.commons.base_models import BaseModel
+from tracking.commons.old_base_models import OldBaseModel
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 
 
-class Choice(BaseModel):
+class Choice(OldBaseModel):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
     particulars = database.relationship('Particular', backref='choice', lazy=True, cascade='all, delete')
 

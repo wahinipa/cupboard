@@ -1,5 +1,5 @@
 # Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures_for_testing import pretend_application
+from old_testing.fixtures_for_testing import pretend_application
 from tracking import blueprint_registration
 
 

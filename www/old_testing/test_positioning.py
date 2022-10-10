@@ -1,10 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures_for_testing import app, knights_of_the_round_table, light_saber, muffin, pastry, rainbow_place, \
+from old_testing.fixtures_for_testing import app, knights_of_the_round_table, light_saber, muffin, pastry, rainbow_place, \
     roll, wild_place
 from tracking import database
 from tracking.positionings.postioning_models import Positioning, _find_positionings, add_quantity_of_things, \
     find_quantity_of_things, move_quantity_of_things
-from tracking.things.thing_models import find_or_create_particular_thing
+from tracking.things.old_thing_models import find_or_create_particular_thing
 
 
 def _pycharm_please_keep_these_imports():

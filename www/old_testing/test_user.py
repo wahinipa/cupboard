@@ -2,7 +2,7 @@ from werkzeug.security import check_password_hash
 
 from tracking import database
 from tracking.people.people_models import find_or_create_user
-from testing.fixtures_for_testing import app, curly_stooge_user, generate_curly, CURLY_STOOGE_USER_NAME
+from old_testing.fixtures_for_testing import app, curly_stooge_user, generate_curly, CURLY_STOOGE_USER_NAME
 
 
 def _pycharm_please_keep_these_imports():

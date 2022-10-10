@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import url_for
 
 from tracking import database
-from tracking.commons.base_models import BaseModel, ModelWithRoles, name_is_key
+from tracking.commons.old_base_models import OldBaseModel, ModelWithRoles, name_is_key
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.pseudo_model import PseudoModel
 
@@ -27,7 +27,7 @@ class AllPlaces(PseudoModel):
 
 
 
-class Place(BaseModel, ModelWithRoles):
+class OldPlace(OldBaseModel, ModelWithRoles):
     group_id = database.Column(database.Integer, database.ForeignKey('group.id'))
     place_assignments = database.relationship('PlaceAssignment', backref='place', lazy=True, cascade='all, delete')
     positionings = database.relationship('Positioning', backref='place', lazy=True, cascade='all, delete')

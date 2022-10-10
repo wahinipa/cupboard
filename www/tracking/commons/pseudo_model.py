@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import url_for
 
-from tracking.commons.base_models import TrackableMixin
+from tracking.commons.old_base_models import TrackableMixin
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.text_utilities import description_notation_list
 

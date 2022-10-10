@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
-from testing.fixtures_for_testing import app, knights_of_the_round_table, ROUND_TABLE_GROUP_NAME, \
+from old_testing.fixtures_for_testing import app, knights_of_the_round_table, ROUND_TABLE_GROUP_NAME, \
     ROUND_TABLE_DESCRIPTION, ROUND_TABLE_DATE, queens_of_the_round_table, QUEENS_TABLE_GROUP_NAME, QUEENS_TABLE_DATE, \
     QUEENS_TABLE_DESCRIPTION
 from tracking.groups.group_models import find_or_create_group

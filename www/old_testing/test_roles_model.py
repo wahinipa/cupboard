@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures_for_testing import BOSSY_DATE, BOSSY_DESCRIPTION, BOSSY_ROLE_NAME, BUFFOON_DATE, \
+from old_testing.fixtures_for_testing import BOSSY_DATE, BOSSY_DESCRIPTION, BOSSY_ROLE_NAME, BUFFOON_DATE, \
     BUFFOON_DESCRIPTION, BUFFOON_ROLE_NAME, DUNCE_DATE, DUNCE_DESCRIPTION, DUNCE_ROLE_NAME, app, bossy, buffoon, \
     curly_stooge_user, dunce, knights_of_the_round_table, larry_stooge_user, moe_stooge_user, \
     queens_of_the_round_table, \

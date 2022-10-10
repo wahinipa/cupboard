@@ -19,7 +19,7 @@ class Config:
     # Database
     if environ.get('TESTING') == 'True':
         if environ.get('TEST_SQL_IN_MEMORY') == 'True':
-            SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:" # 10x faster testing
+            SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:" # 10x faster old_testing
         else:
             SQLALCHEMY_DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_TEST_URI")
     else:

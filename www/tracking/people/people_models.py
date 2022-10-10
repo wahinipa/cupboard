@@ -7,33 +7,9 @@ from flask_login import UserMixin
 from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
+from cardistry.models.cardistry_models import name_is_key
 from tracking import database
-from tracking.commons.base_models import IdModelMixin, name_is_key
-from tracking.commons.cupboard_display_context import CupboardDisplayContext
-from tracking.commons.pseudo_model import PseudoModel
-from tracking.commons.text_utilities import description_notation_list
-
-
-class AllPeople(PseudoModel):
-    def __init__(self, home):
-        super().__init__(
-            label="People",
-            endpoint='people_bp.people_list',
-            description="User Accounts",
-            parent_object=home
-        )
-
-    def may_be_observed(self, viewer):
-        return viewer.may_observe_people
-
-    @property
-    def child_list(self):
-        return sorted(User.query.all(), key=name_is_key)
-
-    def add_actions(self, context, viewer):
-        if viewer.may_create_person:
-            context.add_action(url_for('people_bp.create'), 'User Account', 'create')
-        return context.display_context
+from tracking.modelling.base_models import IdModelMixin
 
 
 class User(IdModelMixin, database.Model, UserMixin):
@@ -50,10 +26,10 @@ class User(IdModelMixin, database.Model, UserMixin):
     date_joined = database.Column(database.DateTime(), default=datetime.now())
     about_me = database.Column(database.String(255), nullable=False, server_default=u'')
 
-    group_assignments = database.relationship('GroupAssignment', backref='person', lazy=True, cascade='all, delete')
-    place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
-    universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
-                                                  cascade='all, delete')
+    # group_assignments = database.relationship('GroupAssignment', backref='person', lazy=True, cascade='all, delete')
+    # place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
+    # universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
+    #                                               cascade='all, delete')
 
     @property
     def assignments(self):
@@ -216,40 +192,6 @@ class User(IdModelMixin, database.Model, UserMixin):
         from tracking.categories.category_models import all_categories
         return [category.viewable_attributes(self) for category in all_categories() if category.user_may_view(self)]
 
-    @property
-    def viewable_groups(self):
-        from tracking.groups.group_models import all_groups
-        return [group.viewable_attributes(self) for group in all_groups() if group.user_may_view(self)]
-
-    @property
-    def viewable_places(self):
-        from tracking.groups.group_models import all_groups
-        result = []
-        for group in all_groups():
-            if group.user_may_view(self):
-                for place in group.sorted_places:
-                    result.append(place.viewable_attributes(self, include_group_url=True))
-        return result
-
-    def viewable_attributes(self, viewer):
-        return {
-            'classification': 'Person',
-            'name': self.name,
-            'label': self.label,
-            'view_url': self.url,
-            'notations': description_notation_list(label="About Me", description=self.about_me),
-        }
-
-    def display_context(self, viewer):
-        person_context = CupboardDisplayContext({
-            'target': self.viewable_attributes(viewer),
-            'parent_list': self.parent_list,
-            'label': self.label,
-        })
-        if viewer.may_delete_person(self):
-            person_context.add_action(self.deletion_url, self.name, 'delete')
-        return person_context
-
 
 @event.listens_for(User.password, 'set', retval=True)
 def hash_user_password(target, value, oldvalue, initiator):
@@ -317,3 +259,6 @@ def generate_uncommitted_user(first_name, last_name, username, password, is_admi
                 is_admin=is_admin,
                 date_joined=date_joined)
     return user
+
+def all_people():
+    return sorted(User.query.all(), key=name_is_key)

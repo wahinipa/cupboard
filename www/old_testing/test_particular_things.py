@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures_for_testing import app, bucket, coloring, light_saber, muffin, pastry, red_coloring, roll
-from tracking.things.thing_models import find_or_create_particular_thing
+from old_testing.fixtures_for_testing import app, bucket, coloring, light_saber, muffin, pastry, red_coloring, roll
+from tracking.things.old_thing_models import find_or_create_particular_thing
 
 
 def _pycharm_please_keep_these_imports():

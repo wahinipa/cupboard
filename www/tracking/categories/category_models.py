@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import url_for
 
 from tracking import database
-from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
+from tracking.commons.old_base_models import IdModelMixin, OldUniqueNamedBaseModel, name_is_key
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.pseudo_model import PseudoModel
 from tracking.commons.text_utilities import description_notation_list
@@ -32,7 +32,7 @@ class AllCategories(PseudoModel):
         return context.display_context
 
 
-class Category(UniqueNamedBaseModel):
+class Category(OldUniqueNamedBaseModel):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 

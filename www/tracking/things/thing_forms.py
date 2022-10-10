@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField
 
 from tracking.commons.base_forms import cancel_button_field, description_form_field, name_form_field
-from tracking.things.thing_models import find_or_create_thing
+from tracking.things.old_thing_models import find_or_create_thing
 
 
 class ThingBaseForm(FlaskForm):

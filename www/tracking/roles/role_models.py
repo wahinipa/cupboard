@@ -4,10 +4,10 @@ from datetime import datetime
 from sqlalchemy.orm import declared_attr
 
 from tracking import database
-from tracking.commons.base_models import DatedModelMixin, IdModelMixin, UniqueNamedBaseModel, KnowsOwnName
+from tracking.commons.old_base_models import DatedModelMixin, IdModelMixin, OldUniqueNamedBaseModel, KnowsOwnName
 
 
-class Role(UniqueNamedBaseModel):
+class Role(OldUniqueNamedBaseModel):
     group_assignments = database.relationship('GroupAssignment', backref='role', lazy=True, cascade='all, delete')
     place_assignments = database.relationship('PlaceAssignment', backref='role', lazy=True, cascade='all, delete')
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,

@@ -6,7 +6,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.cupboard_display_context import display_context
 from tracking.places.place_forms import PlaceUpdateForm
-from tracking.places.place_models import find_place_by_id
+from tracking.places.old_place_models import find_place_by_id
 
 place_bp = Blueprint(
     'place_bp', __name__,

@@ -5,11 +5,11 @@ from flask import url_for
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.commons.base_models import IdModelMixin, UniqueNamedBaseModel, name_is_key
+from tracking.commons.old_base_models import IdModelMixin, OldUniqueNamedBaseModel, name_is_key
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 
 
-class Thing(UniqueNamedBaseModel):
+class OldThing(OldUniqueNamedBaseModel):
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
 
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
@@ -170,24 +170,24 @@ def find_or_create_thing(name, description, kind_of=None, date_created=None):
             kind_of = find_or_create_everything()
         if date_created is None:
             date_created = datetime.now()
-        thing = Thing(name=name, description=description, kind_of_id=kind_of.id, date_created=date_created)
+        thing = OldThing(name=name, description=description, kind_of_id=kind_of.id, date_created=date_created)
         database.session.add(thing)
         database.session.commit()
     return thing
 
 
 def find_thing_by_name(name):
-    return Thing.query.filter(Thing.name == name).first()
+    return OldThing.query.filter(OldThing.name == name).first()
 
 
 def find_thing_by_id(id):
-    return Thing.query.filter(Thing.id == id).first()
+    return OldThing.query.filter(OldThing.id == id).first()
 
 
 def find_or_create_everything():
     everything = find_thing_by_name("Everything")
     if everything is None:
-        everything = Thing(name="Everything", description="All things")
+        everything = OldThing(name="Everything", description="All things")
         database.session.add(everything)
         database.session.commit()
     return everything

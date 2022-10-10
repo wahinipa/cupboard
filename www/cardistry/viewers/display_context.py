@@ -1,5 +1,4 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import render_template
 
 
 class DisplayContext:

@@ -6,7 +6,7 @@ from wtforms import SubmitField
 
 from tracking import database
 from tracking.commons.base_forms import cancel_button_field, description_form_field, name_form_field
-from tracking.places.place_models import Place
+from tracking.places.old_place_models import Place
 
 
 class PlaceBaseForm(FlaskForm):

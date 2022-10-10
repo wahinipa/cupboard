@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from tracking import database
-from tracking.commons.base_models import IdModelMixin
+from tracking.commons.old_base_models import IdModelMixin
 
 
 class Positioning(IdModelMixin, database.Model):
