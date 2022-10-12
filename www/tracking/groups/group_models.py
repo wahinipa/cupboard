@@ -61,7 +61,7 @@ class Group(OldUniqueNamedBaseModel, ModelWithRoles):
         return url_for('group_bp.group_delete', group_id=self.id)
 
     @property
-    def update_url(self):
+    def url_update(self):
         return url_for('group_bp.group_update', group_id=self.id)
 
     @property
@@ -88,7 +88,7 @@ class Group(OldUniqueNamedBaseModel, ModelWithRoles):
         if self.user_may_create_place(viewer):
             group_context.add_action(self.place_create_url, f'Place for {self.name}', 'create')
         if viewer.may_update_group:
-            group_context.add_action(self.update_url, self.name, 'update')
+            group_context.add_action(self.url_update, self.name, 'update')
         if viewer.may_delete_group:
             group_context.add_action(self.deletion_url, self.name, 'delete')
         return group_context

@@ -21,7 +21,7 @@ class Choice(OldBaseModel):
         return url_for('choice_bp.choice_delete', choice_id=self.id)
 
     @property
-    def update_url(self):
+    def url_update(self):
         return url_for('choice_bp.choice_update', choice_id=self.id)
 
     @property
@@ -58,7 +58,7 @@ class Choice(OldBaseModel):
             'parent_list': self.parent_list,
         })
         if viewer.may_update_choice:
-            choice_context.add_action(self.update_url, self.name, 'update')
+            choice_context.add_action(self.url_update, self.name, 'update')
         if viewer.may_delete_choice:
             choice_context.add_action(self.deletion_url, self.name, 'delete')
         return choice_context

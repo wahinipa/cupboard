@@ -26,7 +26,7 @@ def root_create():
         root = create_root_from_form(form)
         return redirect(url_for('root_bp.root_view', root_id=root.id))
     else:
-        return root_display_context(current_user).render_template(form=form)
+        return root_display_context(current_user).render_template(form=form, form_title="Create New Root")
 
 
 @root_bp.route('/delete/<int:root_id>')
@@ -54,7 +54,7 @@ def root_update(root_id):
             database.session.commit()
             return redirect(url_for('root_bp.root_view', root_id=root.id))
         else:
-            return root.display_context(current_user).render_template('pages/form_page.j2', form=form)
+            return root.display_context(current_user).render_template('pages/form_page.j2', form=form, form_title=f'Update {root.name}')
     else:
         return redirect_hacks()
 

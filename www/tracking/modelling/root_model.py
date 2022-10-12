@@ -18,19 +18,14 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     def classification(self):
         return 'Organizational Association'
 
-    @property
-    def delete_url(self):
-        return url_for('root_bp.root_delete', root_id=self.id)
-
-    @property
-    def update_url(self):
-        return url_for('root_bp.root_update', root_id=self.id)
-
     def may_be_observed(self, viewer):
         return True
 
     def may_delete(self, viewer):
         return viewer.may_delete_root
+
+    def may_create_place(self, viewer):
+        return viewer.may_update_root
 
     def may_update(self, viewer):
         return viewer.may_update_root
@@ -46,6 +41,14 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     @property
     def url(self):
         return url_for('root_bp.root_view', root_id=self.id)
+
+    @property
+    def url_delete(self):
+        return url_for('root_bp.root_delete', root_id=self.id)
+
+    @property
+    def url_update(self):
+        return url_for('root_bp.root_update', root_id=self.id)
 
     def viewable_children(self, viewer):
         return [self.place, self.thing]

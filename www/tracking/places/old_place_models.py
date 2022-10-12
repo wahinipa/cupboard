@@ -74,7 +74,7 @@ class OldPlace(OldBaseModel, ModelWithRoles):
             'label': self.label
         })
         if viewer.may_update_place:
-            place_context.add_action(self.update_url, self.name, 'update')
+            place_context.add_action(self.url_update, self.name, 'update')
         if viewer.may_delete_place:
             place_context.add_action(self.deletion_url, self.name, 'delete')
         return place_context
@@ -88,7 +88,7 @@ class OldPlace(OldBaseModel, ModelWithRoles):
         return url_for('place_bp.place_delete', place_id=self.id)
 
     @property
-    def update_url(self):
+    def url_update(self):
         return url_for('place_bp.place_update', place_id=self.id)
 
     @property

@@ -70,7 +70,7 @@ class Category(OldUniqueNamedBaseModel):
         if self.user_may_create_choice(viewer):
             category_context.add_action(self.place_create_url, f'Choice for {self.name}', 'create')
         if viewer.may_update_category:
-            category_context.add_action(self.update_url, self.name, 'update')
+            category_context.add_action(self.url_update, self.name, 'update')
         if viewer.may_delete_category:
             category_context.add_action(self.deletion_url, self.name, 'delete')
         return category_context
@@ -101,7 +101,7 @@ class Category(OldUniqueNamedBaseModel):
         return url_for('category_bp.category_delete', category_id=self.id)
 
     @property
-    def update_url(self):
+    def url_update(self):
         return url_for('category_bp.category_update', category_id=self.id)
 
     @property

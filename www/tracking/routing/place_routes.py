@@ -1,12 +1,12 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, request, redirect, url_for, render_template
+
+from flask import Blueprint, url_for, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.modelling.place_model import Place
-from tracking.modelling.root_model import Root
-from tracking.modelling.thing_model import Thing
+from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm
+from tracking.modelling.place_model import find_place_by_id
 
 place_bp = Blueprint(
     'place_bp', __name__,
@@ -14,72 +14,58 @@ place_bp = Blueprint(
     static_folder='static',
 )
 
-def dummy():
-    return Place, Thing, Root
 
-@place_bp.route('/create', methods=['POST', 'GET'])
+@place_bp.route('/create/<int:place_id>', methods=['POST', 'GET'])
 @login_required
-def place_create():
-    if not current_user.can_create_place:
+def place_create(place_id):
+    place = find_place_by_id(place_id)
+    if place is None or not place.may_create_place(current_user):
         return redirect_hacks()
-    form = place_create_form()
+    form = PlaceCreateForm()
     if request.method == 'POST' and form.cancel_button.data:
-        return redirect(url_for('place_bp.place_list'))
+        return redirect(url_for('place_bp.place_view', place_id=place_id))
     if form.validate_on_submit():
-        place = create_place_from_form(form)
-        return redirect(url_for('place_bp.place_view', place_id=place.id))
+        new_place = place.create_kind_of_place(name=form.name.data, description=form.description.data)
+        return redirect(url_for('place_bp.place_view', place_id=new_place.id))
     else:
-        return render_template('place_create.j2', form=form, tab="place", ) #  **display_context())
-
-
-def place_create_form():
-    pass
-    # return PlaceCreateForm()
-
-
-def create_place_from_form(current_user, form):
-    pass
+        return place.display_context(current_user).render_template(form=form,
+                                                                   form_title=f'Create New Place of {place.name}')
 
 
 @place_bp.route('/delete/<int:place_id>')
 @login_required
 def place_delete(place_id):
-    place = None # find_place_by_id(place_id)
-    if place is not None and place.user_may_delete(current_user):
+    place = find_place_by_id(place_id)
+    if place is not None and place.may_delete(current_user):
+        redirect_url = place.url_on_delete
         database.session.delete(place)
         database.session.commit()
-        return redirect(url_for('place_bp.place_list'))
+        return redirect(redirect_url)
     else:
         return redirect_hacks()
-
-
-@place_bp.route('/list')
-@login_required
-def place_list():
-    return render_template('place_list.j2', tab="place") #  , **display_context())
 
 
 @place_bp.route('/update/<int:place_id>', methods=['GET', 'POST'])
 @login_required
 def place_update(place_id):
-    place = None # find_place_by_id(place_id)
-    if place and place.user_can_update(current_user):
+    place = find_place_by_id(place_id)
+    if place and place.may_update(current_user):
         form = place_update_form(place)
+        redirect_url = url_for('place_bp.place_view', place_id=place_id)
         if request.method == 'POST' and form.cancel_button.data:
-            return redirect(url_for('place_bp.place_view', place_id=place_id))
+            return redirect(redirect_url)
         if form.validate_on_submit():
             update_place_from_form(place, form)
             database.session.commit()
-            return redirect(url_for('place_bp.place_view', place_id=place.id))
+            return redirect(redirect_url)
         else:
-            return render_template('place_update.j2', form=form, tab="place") #  , **display_context())
+            return place.display_context(current_user).render_template('pages/form_page.j2', form=form)
     else:
         return redirect_hacks()
 
 
 def place_update_form(place):
-    pass
-    # PlaceUpdateForm(place)
+    return PlaceUpdateForm(obj=place)
 
 
 def update_place_from_form(place, form):
@@ -89,10 +75,8 @@ def update_place_from_form(place, form):
 @place_bp.route('/view/<int:place_id>')
 @login_required
 def place_view(place_id):
-    place = None # find_place_by_id(place_id)
-    if place is not None and place.user_may_view(current_user):
-        return render_template('place_view.j2', place=place, tab="place") #  , **display_context())
+    place = find_place_by_id(place_id)
+    if place is not None and place.may_be_observed(current_user):
+        return place.display_context(current_user, as_child=False).render_template('pages/place_view.j2')
     else:
         return redirect(url_for('home_bp.home'))
-
-

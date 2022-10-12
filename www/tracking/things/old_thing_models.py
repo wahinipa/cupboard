@@ -73,11 +73,11 @@ class OldThing(OldUniqueNamedBaseModel):
         return url_for('thing_bp.thing_create', thing_id=self.id)
 
     @property
-    def delete_url(self):
+    def url_delete(self):
         return url_for('thing_bp.thing_delete', thing_id=self.id)
 
     @property
-    def update_url(self):
+    def url_update(self):
         return url_for('thing_bp.thing_update', thing_id=self.id)
 
     @property
@@ -150,9 +150,9 @@ class OldThing(OldUniqueNamedBaseModel):
             thing_context.add_action(self.create_url, f'Kind of {self.label}', 'create')
         if not self.is_top:
             if viewer.may_update_thing:
-                thing_context.add_action(self.update_url, self.label, 'update')
+                thing_context.add_action(self.url_update, self.label, 'update')
             if viewer.may_delete_thing:
-                thing_context.add_action(self.delete_url, self.label, 'delete')
+                thing_context.add_action(self.url_delete, self.label, 'delete')
         return thing_context
 
 

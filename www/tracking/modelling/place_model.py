@@ -5,7 +5,7 @@ from flask import url_for
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.commons.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
+from tracking.commons.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import NamedBaseModel
 
 
@@ -19,8 +19,19 @@ class Place(CupboardDisplayContextMixin, NamedBaseModel):
     places = database.relationship('Place', lazy='subquery', backref=backref('place_of', remote_side='Place.id'))
 
     @property
+    def ancestor(self):
+        if self.is_top:
+            return self.root
+        else:
+            return self.parent_object
+
+    @property
     def classification(self):
         return 'Place'
+
+    @property
+    def children(self):
+        return self.places
 
     def create_kind_of_place(self, name, description, date_created=None):
         if date_created is None:
@@ -29,6 +40,18 @@ class Place(CupboardDisplayContextMixin, NamedBaseModel):
         database.session.add(place)
         database.session.commit()
         return place
+
+    def may_be_observed(self, viewer):
+        return self.ancestor.may_be_observed(viewer)
+
+    def may_create_place(self, viewer):
+        return self.ancestor.may_create_place(viewer)
+
+    def may_delete(self, viewer):
+        return self.ancestor.may_delete(viewer)
+
+    def may_update(self, viewer):
+        return self.ancestor.may_update(viewer)
 
     @property
     def page_template(self):
@@ -49,9 +72,27 @@ class Place(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def url(self):
-        # return url_for('place_bp.place_view', place_id=self.id)
-        return url_for('home_bp.home')
+        return url_for('place_bp.place_view', place_id=self.id)
+
+    @property
+    def url_create(self):
+        return url_for('place_bp.place_create', place_id=self.id)
+
+    @property
+    def url_on_delete(self):
+        return self.ancestor.url
+
+    @property
+    def url_delete(self):
+        return url_for('place_bp.place_delete', place_id=self.id)
+
+    @property
+    def url_update(self):
+        return url_for('place_bp.place_update', place_id=self.id)
 
     def viewable_children(self, viewer):
         return self.sorted_children
 
+
+def find_place_by_id(place_id):
+    return Place.query.filter(Place.id == place_id).first()

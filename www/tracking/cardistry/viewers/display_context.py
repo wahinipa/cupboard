@@ -63,7 +63,7 @@ class DisplayContext:
     def display_context(self):
         return self.context
 
-    def render_template(self, template=None, form=None):
+    def render_template(self, template=None, **kwarg):
         if template is None:
             template = self.page_template
-        return render_template(template, form=form, **self.display_context)
+        return render_template(template, **kwarg, **self.display_context)

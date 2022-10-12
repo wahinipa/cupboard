@@ -78,7 +78,8 @@ def login():
 
         return redirect(next_url or url_for('home_bp.home'))
     else:
-        return render_template('login.j2', form=form, **display_context())
+        from tracking.commons.cupboard_display_context import CupboardDisplayContext
+        return render_template('pages/login.j2', form=form, **CupboardDisplayContext().display_context)
 
 
 @people_bp.route('/profile', methods=['GET', 'POST'])
@@ -111,7 +112,7 @@ def change_password():
     if form.validate_on_submit():
         database.session.commit()
         return redirect(url_for('home_bp.home'))
-    return render_template('change_password.j2', form=form)
+    return render_template('pages/change_password.j2', form=form)
     # return render_template('change_password.j2', form=form, **display_context())
 
 
