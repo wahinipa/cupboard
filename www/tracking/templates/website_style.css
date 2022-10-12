@@ -10,3 +10,7 @@ h2 {
 footer {
     margin: 20px;
 }
+
+.bg-warning {
+    color: black;
+}

@@ -8,7 +8,7 @@
   {% elif task == 'duplicate' %}
     {{ button_action(url=url, prefix='Duplicate ', label=label, column_width=column_width) }}
   {% elif task == 'update' %}
-    {{ button_action(url=url, prefix='Update ', label=label, column_width=column_width) }}
+    {{ button_action(url=url, prefix='Update ', label=label, column_width=column_width, button_color='warning') }}
   {% endif %}
 {% endmacro %}
 
