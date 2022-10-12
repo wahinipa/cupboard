@@ -35,6 +35,14 @@ class User(IdModelMixin, database.Model, UserMixin):
     def may_create_root(self):
         return self.is_the_super_admin
 
+    @property
+    def may_delete_root(self):
+        return self.is_the_super_admin
+
+    @property
+    def may_update_root(self):
+        return self.is_the_super_admin
+
 
     #### ????? ####
 

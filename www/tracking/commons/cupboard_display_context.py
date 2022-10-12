@@ -37,4 +37,8 @@ class CupboardDisplayContextMixin:
             context.add_bread_crumbs(self.bread_crumbs)
             for child in self.viewable_children(viewer):
                 context.add_child_display_context(child.display_context(viewer))
+            if self.may_update(viewer):
+                context.add_task(url=self.update_url, label=self.name, task="update")
+            if self.may_delete(viewer):
+                context.add_task(url=self.delete_url, label=self.name, task="delete")
         return context

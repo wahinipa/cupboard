@@ -33,7 +33,7 @@ def root_create():
 @login_required
 def root_delete(root_id):
     root = find_root_by_id(root_id)
-    if root is not None and root.user_may_delete(current_user):
+    if root is not None and root.may_delete(current_user):
         database.session.delete(root)
         database.session.commit()
         return redirect(url_for('root_bp.root_list'))
@@ -45,7 +45,7 @@ def root_delete(root_id):
 @login_required
 def root_update(root_id):
     root = find_root_by_id(root_id)
-    if root and root.user_may_update(current_user):
+    if root and root.may_update(current_user):
         form = RootUpdateForm(obj=root)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(url_for('root_bp.root_view', root_id=root_id))
