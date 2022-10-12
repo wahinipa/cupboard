@@ -1,7 +1,7 @@
 from werkzeug.security import check_password_hash
 
 from tracking import database
-from tracking.modelling.people_models import find_or_create_user
+from tracking.modelling.people_model import find_or_create_user
 from old_testing.fixtures_for_testing import app, curly_stooge_user, generate_curly, CURLY_STOOGE_USER_NAME
 
 

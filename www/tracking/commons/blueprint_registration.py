@@ -16,6 +16,7 @@ HOME_PREFIX = my_url('/home')
 USER_PREFIX = my_url('/people')
 PLACES_PREFIX = my_url('/place')
 ROLES_PREFIX = my_url('/role')
+ROOT_PREFIX = my_url('/root')
 THINGS_PREFIX = my_url('/thing')
 
 
@@ -24,29 +25,12 @@ def blueprint_registration(application):
     from tracking.admin.admin_routes import admin_bp
     application.register_blueprint(admin_bp, url_prefix=ADMIN_URL)
 
-    # from tracking.categories.category_routes import category_bp
-    # application.register_blueprint(category_bp, url_prefix=CATEGORY_PREFIX)
-    #
-    # from tracking.choices.choice_routes import choice_bp
-    # application.register_blueprint(choice_bp, url_prefix=CHOICE_PREFIX)
-    #
-    # from tracking.home.fake_routes import fake_bp
-    # application.register_blueprint(fake_bp, url_prefix=FAKE_PREFIX)
-    #
-    # from tracking.groups.group_routes import group_bp
-    # application.register_blueprint(group_bp, url_prefix=GROUP_PREFIX)
-
     from tracking.routing.home_routes import home_bp
     application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
 
     from tracking.routing.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)
 
-    # from tracking.places.place_routes import place_bp
-    # application.register_blueprint(place_bp, url_prefix=PLACES_PREFIX)
-    #
-    # from tracking.roles.role_routes import role_bp
-    # application.register_blueprint(role_bp, url_prefix=ROLES_PREFIX)
-    #
-    # from tracking.things.thing_routes import thing_bp
-    # application.register_blueprint(thing_bp, url_prefix=THINGS_PREFIX)
+    from tracking.routing.route_routes import root_bp
+    application.register_blueprint(root_bp, url_prefix=ROOT_PREFIX)
+

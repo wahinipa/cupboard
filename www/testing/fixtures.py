@@ -6,7 +6,7 @@ import pytest
 
 from tracking import create_app, database
 from tracking.modelling.root_model import create_root
-from tracking.modelling.people_models import find_or_create_user
+from tracking.modelling.people_model import find_or_create_user
 
 
 #############################

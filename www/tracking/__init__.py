@@ -54,7 +54,7 @@ def initialize_login_manager(application):
     login_manager = LoginManager()
     login_manager.login_view = "people_bp.login"
     login_manager.init_app(application)
-    from tracking.modelling.people_models import load_user
+    from tracking.modelling.people_model import load_user
     login_manager.user_loader(load_user)
 
 

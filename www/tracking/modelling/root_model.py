@@ -31,7 +31,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
     @property
     def url(self):
-        return url_for('home_bp.root_view', root_id=self.id)
+        return url_for('root_bp.root_view', root_id=self.id)
 
     def viewable_children(self, viewer):
         return [self.place, self.thing]
@@ -41,24 +41,29 @@ def all_roots():
     return sorted(Root.query.all(), key=name_is_key)
 
 
-def all_roots_display_context(viewer):
-    context = CupboardDisplayContext(page_template="pages/home_page.j2")
-    context.add_attribute('label', 'Home')
+def all_root_display_context(viewer):
+    context = root_display_context(viewer, "pages/home_page.j2")
     for root in all_roots():
         context.add_child_display_context(root.display_context(viewer))
     if viewer.may_create_root:
-        context.add_task(url=url_for('home_bp.home'), label="Root", task="create")
+        context.add_task(url=url_for('root_bp.root_create'), label="Root", task="create")
+    return context
+
+
+def root_display_context(viewer, page_template='pages/form_page.j2'):
+    context = CupboardDisplayContext(page_template=page_template)
+    context.add_attribute('label', 'Home')
     return context
 
 
 def create_root(name, description):
-    from tracking.modelling.place_models import Place
+    from tracking.modelling.place_model import Place
     place_name = f'All of {name} Places'
     place_description = f'All of the top places for {name}'
     place = Place(name=place_name, description=place_description)
     database.session.add(place)
 
-    from tracking.modelling.thing_models import Thing
+    from tracking.modelling.thing_model import Thing
     thing_name = f'All of {name} Things'
     thing_description = f'All of the top things for {name}'
     thing = Thing(name=thing_name, description=thing_description)

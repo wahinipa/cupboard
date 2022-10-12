@@ -6,7 +6,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.people.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
-from tracking.modelling.people_models import find_or_create_user, find_user_by_id, find_user_by_username
+from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username
 
 people_bp = Blueprint(
     'people_bp', __name__,

@@ -4,9 +4,9 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.modelling.place_models import Place
+from tracking.modelling.place_model import Place
 from tracking.modelling.root_model import Root
-from tracking.modelling.thing_models import Thing
+from tracking.modelling.thing_model import Thing
 
 place_bp = Blueprint(
     'place_bp', __name__,

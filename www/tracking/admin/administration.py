@@ -40,7 +40,7 @@ def redirect_hacks():
 def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
 
-    from tracking.modelling.people_models import create_initial_users
+    from tracking.modelling.people_model import create_initial_users
     create_initial_users()
 
     # from tracking.roles.role_models import find_or_create_standard_roles
@@ -69,10 +69,10 @@ def add_flask_admin(application, database):
     admin = Admin(application, project_name(), url=ADMIN_URL)
     admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
     # Using local imports helps break circularity of dependencies
-    from tracking.modelling.people_models import User
+    from tracking.modelling.people_model import User
     from tracking.modelling.root_model import Root
-    from tracking.modelling.place_models import Place
-    from tracking.modelling.thing_models import Thing
+    from tracking.modelling.place_model import Place
+    from tracking.modelling.thing_model import Thing
     admin.add_view(AdminModelView(User, database.session))
     admin.add_view(AdminModelView(Place, database.session))
     admin.add_view(AdminModelView(Thing, database.session))

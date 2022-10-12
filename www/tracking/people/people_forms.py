@@ -6,7 +6,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Hidde
 from wtforms.validators import DataRequired
 
 from tracking.commons.base_forms import cancel_button_field
-from tracking.modelling.people_models import find_user_by_username
+from tracking.modelling.people_model import find_user_by_username
 
 
 class LoginForm(FlaskForm):
