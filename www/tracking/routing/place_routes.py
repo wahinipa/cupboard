@@ -77,6 +77,6 @@ def update_place_from_form(place, form):
 def place_view(place_id):
     place = find_place_by_id(place_id)
     if place is not None and place.may_be_observed(current_user):
-        return place.display_context(current_user, as_child=False).render_template('pages/place_view.j2')
+        return place.display_context(current_user, as_child=False, child_link_label=f'Place').render_template('pages/place_view.j2')
     else:
         return redirect(url_for('home_bp.home'))

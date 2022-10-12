@@ -48,6 +48,18 @@ class ModelWithAssignedRoles:
 
         return any(map(yes, self.assignments))
 
+class RootDescendantMixin:
+    @property
+    def ancestor(self):
+        if self.is_top:
+            return self.root
+        else:
+            return self.parent_object
+    @property
+    def url_on_delete(self):
+        return self.ancestor.url
+
+
 
 class NamedBaseModel(IdModelMixin, NamedModelMixin, DescriptionModelMixin, HierarchicalMixin, DatedModelMixin,
                      database.Model):

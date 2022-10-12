@@ -25,7 +25,7 @@ class CupboardDisplayContext(DisplayContext):
 
 
 class CupboardDisplayContextMixin:
-    def display_context(self, viewer, as_child=True):
+    def display_context(self, viewer, as_child=True, child_link_label=None):
         context = CupboardDisplayContext(context={
             'label': self.name,
             'classification': self.classification,
@@ -35,10 +35,17 @@ class CupboardDisplayContextMixin:
             context.add_attribute('url', self.url)
         else:
             context.add_bread_crumbs(self.bread_crumbs)
+            self.add_additional_tasks(context, viewer)
             for child in self.viewable_children(viewer):
-                context.add_child_display_context(child.display_context(viewer))
+                if child_link_label:
+                    context.add_notation(label=child_link_label, url=child.url, value=child.name)
+                else:
+                    context.add_child_display_context(child.display_context(viewer))
             if self.may_update(viewer):
                 context.add_task(url=self.url_update, label=self.name, task="update")
             if self.may_delete(viewer):
                 context.add_task(url=self.url_delete, label=self.name, task="delete")
         return context
+
+    def add_additional_tasks(self, context, viewer):
+        pass

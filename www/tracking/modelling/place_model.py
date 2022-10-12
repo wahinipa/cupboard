@@ -6,10 +6,10 @@ from sqlalchemy.orm import backref
 
 from tracking import database
 from tracking.commons.cupboard_display_context import CupboardDisplayContextMixin
-from tracking.modelling.base_models import NamedBaseModel
+from tracking.modelling.base_models import NamedBaseModel, RootDescendantMixin
 
 
-class Place(CupboardDisplayContextMixin, NamedBaseModel):
+class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = "Place"
     plural_label = "Places"
 
@@ -18,12 +18,9 @@ class Place(CupboardDisplayContextMixin, NamedBaseModel):
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), index=True)
     places = database.relationship('Place', lazy='subquery', backref=backref('place_of', remote_side='Place.id'))
 
-    @property
-    def ancestor(self):
-        if self.is_top:
-            return self.root
-        else:
-            return self.parent_object
+    def add_additional_tasks(self, context, viewer):
+        if self.may_create_place(viewer):
+            context.add_task(self.url_create, label=f'Place of {self.name}', task='create')
 
     @property
     def classification(self):
@@ -77,10 +74,6 @@ class Place(CupboardDisplayContextMixin, NamedBaseModel):
     @property
     def url_create(self):
         return url_for('place_bp.place_create', place_id=self.id)
-
-    @property
-    def url_on_delete(self):
-        return self.ancestor.url
 
     @property
     def url_delete(self):

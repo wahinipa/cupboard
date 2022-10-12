@@ -31,7 +31,7 @@ def blueprint_registration(application):
     from tracking.routing.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)
 
-    from tracking.routing.route_routes import root_bp
+    from tracking.routing.root_routes import root_bp
     application.register_blueprint(root_bp, url_prefix=ROOT_PREFIX)
 
     from tracking.routing.place_routes import place_bp

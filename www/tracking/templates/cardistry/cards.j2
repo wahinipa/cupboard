@@ -15,12 +15,16 @@
 {% endmacro %}
 
 {% macro card_target(prefix=None, label=None, url=None, column_width="6", is_row=False, bread_crumb_list=None, notations=None) %}
-  {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=prefix, label=label, url=url, purpose="target", column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
-    {% if notations %}
-      {{ render_notations(notations) }}
-    {% endif %}
-  {% endcall %}
+{% if False %}{{ kwargs }}{% endif %}
+{% set card_content %}
+{% if caller %}{{ caller() }}{% endif %}
+{% endset %}
+{% call card_view(prefix=prefix, label=label, url=url, purpose="target", column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
+{% if notations %}
+  {{ render_notations(notations) }}
+{% endif %}
+{{ card_content }}
+{% endcall %}
 {% endmacro %}
 
 {% macro card_view(prefix=None, label=None, url=None, purpose=None, column_width="6", is_row=False, bread_crumb_list=None) %}
