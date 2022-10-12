@@ -1,5 +1,0 @@
-{% extends "pages/content.j2" %}
-{% from 'old/card_macros.j2' import render_parent %}
-{% block innards %}
-  {{ render_parent(children=children, actions=actions, **target) }}
-{% endblock %}

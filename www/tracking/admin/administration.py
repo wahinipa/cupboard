@@ -61,8 +61,15 @@ def create_test_data(database):
 
     # Places
     metropolis = our_test_group.place.create_kind_of_place(name="Metropolis", description="Home of the Daily Planet")
-    smallville = our_test_group.place.create_kind_of_place(name="SMallville", description="Clark Kent's Home Town.\n Also, coincidentally, Clark Kent.")
+    smallville = our_test_group.place.create_kind_of_place(name="Smallville", description="Superboy's Home Town.\n Also, coincidentally, childhood home of Clark Kent.")
     phone_booth = smallville.create_kind_of_place(name="Phone Booth", description="Those tall boxes that had phones back in the day.")
+
+    # Things
+    shoes = our_test_group.thing.create_kind_of_thing("Shoes", "Things to wear on your feet.")
+    clothing = our_test_group.thing.create_kind_of_thing("Clothing", "Things to wear\nOr lose in the closet.")
+    containers = our_test_group.thing.create_kind_of_thing("Containers", "Things to hold other things.")
+    backpacks = containers.create_kind_of_thing("Backpacks", "Containers that\nStrap to your back.")
+    gym_bags = containers.create_kind_of_thing("Gym Bags", description="")
 
 
 def add_flask_admin(application, database):

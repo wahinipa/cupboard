@@ -25,6 +25,10 @@ class CupboardDisplayContext(DisplayContext):
 
 
 class CupboardDisplayContextMixin:
+    @property
+    def classification(self):
+        return self.singular_label
+
     def display_context(self, viewer, as_child=True, child_link_label=None):
         context = CupboardDisplayContext(context={
             'label': self.name,

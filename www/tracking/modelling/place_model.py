@@ -23,10 +23,6 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
             context.add_task(self.url_create, label=f'Place of {self.name}', task='create')
 
     @property
-    def classification(self):
-        return 'Place'
-
-    @property
     def children(self):
         return self.places
 

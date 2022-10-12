@@ -8,15 +8,11 @@ from tracking.modelling.base_models import UniqueNamedBaseModel
 
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
-    singular_label = "Root"
-    plural_label = "Roots"
+    singular_label = "Organizational Association"
+    plural_label = "Organizational Associations"
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
-
-    @property
-    def classification(self):
-        return 'Organizational Association'
 
     def may_be_observed(self, viewer):
         return True
@@ -25,6 +21,9 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         return viewer.may_delete_root
 
     def may_create_place(self, viewer):
+        return viewer.may_update_root
+
+    def may_create_thing(self, viewer):
         return viewer.may_update_root
 
     def may_update(self, viewer):
