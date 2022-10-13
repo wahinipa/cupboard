@@ -1,7 +1,7 @@
 {% from 'bootstrap4/nav.html' import render_nav_item %}
 
 {% macro home_nav_item() %}
-  {{ render_nav_item('home_bp.home', 'Home', use_li=True) }}
+  {{ render_nav_item('root_bp.root_list', 'Home', use_li=True) }}
 {% endmacro %}
 
 {% macro admin_database_edit_nav_item(current_user) %}

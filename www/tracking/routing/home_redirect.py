@@ -3,5 +3,9 @@ from flask import url_for
 from werkzeug.utils import redirect
 
 
+def home_url():
+    return url_for('root_bp.root_list')
+
+
 def home_redirect():
-    return redirect(url_for('root_bp.root_list'))
+    return redirect(home_url())
