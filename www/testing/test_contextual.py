@@ -24,14 +24,16 @@ def test_context_setdefault():
     context.setdefault('foo', 'xyz')
     assert 'bar' == context.get('foo', 'qed')
 
+
 def test_context_items():
     context = Context()
     context['foo'] = 'bar'
-    context ['a'] = 'apple'
+    context['a'] = 'apple'
     context_items = context.items()
     assert len(context_items) == 2
     assert ('foo', 'bar') in context_items
     assert ('a', 'apple') in context_items
+
 
 def test_context_as_dictionary():
     inner_context = Context()
@@ -60,3 +62,12 @@ def test_context_as_dictionary():
         ]
     }
     assert expected == outer_context.as_dictionary
+
+
+def test_context_merging():
+    alpha_context = Context()
+    alpha_context['aaa'] = 'AAA'
+    beta_context = Context()
+    beta_context['bbb'] = [1, 2, 3]
+    alpha_context |= beta_context
+    assert alpha_context['bbb'] == [1, 2, 3]

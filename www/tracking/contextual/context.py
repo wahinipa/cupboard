@@ -10,7 +10,12 @@ class Context:
     def __getitem__(self, key):
         return self.context.__getitem__(key)
 
-    def get(self,key, default=None):
+    def __ior__(self, other):
+        for key, value in other.items():
+            self[key] = value
+        return self
+
+    def get(self, key, default=None):
         return self.context.get(key, default)
 
     def setdefault(self, key, default=None):
@@ -26,12 +31,10 @@ class Context:
         elif isinstance(value, list):
             return [Context.filter(item) for item in value]
         elif isinstance(value, dict):
-            return { key:Context.filter(item) for key, item in value.items()}
+            return {key: Context.filter(item) for key, item in value.items()}
         else:
             return value
 
     @property
     def as_dictionary(self):
         return Context.filter(self.context)
-
-
