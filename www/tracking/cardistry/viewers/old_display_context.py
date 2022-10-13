@@ -2,7 +2,7 @@
 from flask import render_template
 
 
-class DisplayContext:
+class OldDisplayContext:
     def __init__(self, context=None, title=None, project_name=None, page_template=None):
         if context is None:
             context = {}
