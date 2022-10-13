@@ -6,6 +6,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form, RootUpdateForm
 from tracking.modelling.root_model import find_root_by_id, all_root_display_context, root_display_context
+from tracking.routing.home_redirect import home_redirect
 
 root_bp = Blueprint(
     'root_bp', __name__,
@@ -76,4 +77,4 @@ def root_view(root_id):
     if root is not None and root.may_be_observed(current_user):
         return root.display_context(current_user, as_child=False).render_template('pages/root_view.j2')
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()

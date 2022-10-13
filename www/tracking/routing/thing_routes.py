@@ -7,6 +7,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.forms.thing_forms import ThingUpdateForm, ThingCreateForm
 from tracking.modelling.thing_model import find_thing_by_id
+from tracking.routing.home_redirect import home_redirect
 
 thing_bp = Blueprint(
     'thing_bp', __name__,
@@ -79,4 +80,4 @@ def thing_view(thing_id):
     if thing is not None and thing.may_be_observed(current_user):
         return thing.display_context(current_user, as_child=False, child_link_label=f'Thing').render_template('pages/thing_view.j2')
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()

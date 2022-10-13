@@ -3,6 +3,7 @@ from flask import Blueprint, redirect, url_for
 from flask_login import login_required, current_user
 
 from tracking.modelling.root_model import all_root_display_context
+from tracking.routing.home_redirect import home_redirect
 
 home_bp = Blueprint(
     'home_bp', __name__,
@@ -14,7 +15,7 @@ home_bp = Blueprint(
 @home_bp.route('/')
 def base():
     if current_user:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
     else:
         return redirect(url_for('people_bp.login'))
 

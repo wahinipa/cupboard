@@ -7,6 +7,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
 from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username
+from tracking.routing.home_redirect import home_redirect
 
 people_bp = Blueprint(
     'people_bp', __name__,
@@ -87,11 +88,11 @@ def login():
 def profile():
     form = UserProfileForm(obj=current_user)
     if request.method == 'POST' and form.cancel_button.data:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
     if form.validate_on_submit():
         form.populate_obj(current_user)
         database.session.commit()
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
 
     return render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}')
     # return render_template('form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}', **display_context())
@@ -108,10 +109,10 @@ def logout():
 def change_password():
     form = ChangePasswordForm()
     if request.method == 'POST' and form.cancel_button.data:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
     if form.validate_on_submit():
         database.session.commit()
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
     return render_template('pages/change_password.j2', form=form)
     # return render_template('change_password.j2', form=form, **display_context())
 
@@ -130,4 +131,4 @@ def people_view(user_id):
     if person and current_user.may_view_person(person):
         return person.display_context(current_user).render_template()
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()

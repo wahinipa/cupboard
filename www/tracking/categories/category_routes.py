@@ -7,6 +7,7 @@ from tracking.admin.administration import redirect_hacks
 from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdateForm
 from tracking.categories.category_models import find_category_by_id
 from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
+from tracking.routing.home_redirect import home_redirect
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -60,7 +61,7 @@ def category_view(category_id):
     if category is not None and category.may_be_observed(current_user):
         return category.display_context(current_user).render_template()
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
 
 
 @category_bp.route('/update/<int:category_id>', methods=['GET', 'POST'])

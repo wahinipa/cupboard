@@ -6,6 +6,8 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.choices.choice_forms import ChoiceUpdateForm
 from tracking.choices.choice_models import find_choice_by_id
+from tracking.routing.home_redirect import home_redirect
+
 # from tracking.commons.cupboard_display_context import display_context
 
 choice_bp = Blueprint(
@@ -35,7 +37,7 @@ def choice_view(choice_id):
     if choice is not None and choice.may_be_observed(current_user):
         return choice.display_context(current_user).render_template()
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
 
 
 # @choice_bp.route('/update/<int:choice_id>', methods=['GET', 'POST'])

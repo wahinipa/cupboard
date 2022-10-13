@@ -7,6 +7,7 @@ from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm
 from tracking.modelling.place_model import find_place_by_id
+from tracking.routing.home_redirect import home_redirect
 
 place_bp = Blueprint(
     'place_bp', __name__,
@@ -79,4 +80,4 @@ def place_view(place_id):
     if place is not None and place.may_be_observed(current_user):
         return place.display_context(current_user, as_child=False, child_link_label=f'Place').render_template('pages/place_view.j2')
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()

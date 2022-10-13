@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking.commons.cupboard_display_context import display_context
 from tracking.roles.role_models import find_role_by_id
+from tracking.routing.home_redirect import home_redirect
 
 role_bp = Blueprint(
     'role_bp', __name__,
@@ -28,4 +29,4 @@ def role_view(role_id):
     if role is not None and role.user_may_view(current_user):
         return render_template('role_view.j2', role=role, tab="role", **display_context())
     else:
-        return redirect(url_for('home_bp.home'))
+        return home_redirect()
