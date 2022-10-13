@@ -2,7 +2,6 @@
 from flask import Blueprint, redirect, url_for
 from flask_login import login_required, current_user
 
-from tracking.modelling.root_model import all_root_display_context
 from tracking.routing.home_redirect import home_redirect
 
 home_bp = Blueprint(
@@ -23,4 +22,4 @@ def base():
 @home_bp.route('/home')
 @login_required
 def home():
-    return all_root_display_context(current_user).render_template()
+    return home_redirect()
