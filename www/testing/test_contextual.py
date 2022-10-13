@@ -71,3 +71,11 @@ def test_context_merging():
     beta_context['bbb'] = [1, 2, 3]
     alpha_context |= beta_context
     assert alpha_context['bbb'] == [1, 2, 3]
+
+
+def test_context_append_to_list():
+    context = Context()
+    context.append_to_list('bbb', 1)
+    context.append_to_list('bbb', 2)
+    context.append_to_list('bbb', 3)
+    assert context['bbb'] == [1, 2, 3]

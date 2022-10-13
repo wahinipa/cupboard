@@ -11,18 +11,20 @@ class Context:
         return self.context.__getitem__(key)
 
     def __ior__(self, other):
-        for key, value in other.items():
-            self[key] = value
+        self.add_context(other)
         return self
 
-    def get(self, key, default=None):
-        return self.context.get(key, default)
+    def add_context(self, context):
+        for key, value in context.items():
+            self[key] = value
 
-    def setdefault(self, key, default=None):
-        return self.context.setdefault(key, default)
+    def append_to_list(self, list_key, value):
+        if value:
+            self.context.setdefault(list_key, []).append(value)
 
-    def items(self):
-        return self.context.items()
+    @property
+    def as_dictionary(self):
+        return Context.filter(self.context)
 
     @staticmethod
     def filter(value):
@@ -35,6 +37,11 @@ class Context:
         else:
             return value
 
-    @property
-    def as_dictionary(self):
-        return Context.filter(self.context)
+    def get(self, key, default=None):
+        return self.context.get(key, default)
+
+    def items(self):
+        return self.context.items()
+
+    def setdefault(self, key, default=None):
+        return self.context.setdefault(key, default)
