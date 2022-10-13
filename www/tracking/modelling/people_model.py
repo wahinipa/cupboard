@@ -186,11 +186,6 @@ class User(IdModelMixin, database.Model, UserMixin):
         return viewer.is_the_super_admin or not self.is_the_super_admin
 
     @property
-    def parent_list(self):
-        from tracking.home.home_models import home_root
-        return [home_root, home_root.all_people]
-
-    @property
     def label(self):
         return self.name
 

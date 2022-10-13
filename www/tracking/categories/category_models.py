@@ -4,42 +4,15 @@ from datetime import datetime
 from flask import url_for
 
 from tracking import database
-from tracking.commons.old_base_models import IdModelMixin, OldUniqueNamedBaseModel, name_is_key
+from tracking.cardistry.models.cardistry_models import name_is_key
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
-from tracking.commons.pseudo_model import PseudoModel
 from tracking.commons.text_utilities import description_notation_list
+from tracking.modelling.base_models import UniqueNamedModelMixin, IdModelMixin
 
 
-class AllCategories(PseudoModel):
-    def __init__(self, home):
-        super().__init__(
-            label="Categories",
-            endpoint='category_bp.category_list',
-            description="Categories are lists of Choices for being more specific about Things",
-            parent_object=home
-        )
-
-    def may_be_observed(self, viewer):
-        return viewer.may_observe_categories
-
-    @property
-    def child_list(self):
-        return sorted(Category.query.all(), key=name_is_key)
-
-    def add_actions(self, context, viewer):
-        if viewer.may_create_category:
-            context.add_action(url_for('category_bp.category_create'), 'Category', 'create')
-        return context.display_context
-
-
-class Category(OldUniqueNamedBaseModel):
+class Category(UniqueNamedModelMixin):
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
-
-    @property
-    def parent_list(self):
-        from tracking.home.home_models import home_root
-        return [home_root, home_root.all_categories]
 
     def viewable_attributes(self, viewer):
         notations = self.description_notation_list

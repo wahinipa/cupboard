@@ -4,10 +4,9 @@ from datetime import datetime
 from sqlalchemy.orm import declared_attr
 
 from tracking import database
-from tracking.commons.old_base_models import DatedModelMixin, IdModelMixin, OldUniqueNamedBaseModel, KnowsOwnName
+from tracking.modelling.base_models import UniqueNamedBaseModel, IdModelMixin, DatedModelMixin
 
-
-class Role(OldUniqueNamedBaseModel):
+class Role(UniqueNamedBaseModel):
     group_assignments = database.relationship('GroupAssignment', backref='role', lazy=True, cascade='all, delete')
     place_assignments = database.relationship('PlaceAssignment', backref='role', lazy=True, cascade='all, delete')
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,
@@ -47,6 +46,10 @@ def find_or_create_standard_roles():
         find_or_create_role(Role.delete_user_role, "Can delete current user account."),
         find_or_create_role(Role.observer_role, "Can view, search, and generate reports."),
     ]
+
+class KnowsOwnName:
+    def is_named(self, name):
+        return self.name == name
 
 
 class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.Model):

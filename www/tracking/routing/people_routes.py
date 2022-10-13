@@ -5,7 +5,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.people.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
+from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
 from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username
 
 people_bp = Blueprint(
@@ -116,12 +116,12 @@ def change_password():
     # return render_template('change_password.j2', form=form, **display_context())
 
 
-@people_bp.route('/list')
-@login_required
-def people_list():
-    from tracking.home.home_models import home_root
-    return home_root.all_people.display_context(current_user).render_template()
-
+# @people_bp.route('/list')
+# @login_required
+# def people_list():
+#     from tracking.home.home_models import home_root
+#     return home_root.all_people.display_context(current_user).render_template()
+#
 
 @people_bp.route('/view/<int:user_id>')
 @login_required
