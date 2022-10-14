@@ -12,6 +12,9 @@ class DisplayContext(Context):
         if kwargs:
             self.add_context(kwargs)
 
+    def add_bread_crumbs(self, bread_crumbs):
+        self['bread_crumb_list'] = bread_crumbs
+
     def add_child_context(self, child_context):
         self.append_to_list('children', child_context)
 

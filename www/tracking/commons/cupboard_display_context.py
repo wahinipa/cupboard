@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from os import environ
 
+from tracking.cardistry.viewers.display_context import DisplayContext
 from tracking.cardistry.viewers.old_display_context import OldDisplayContext
 
 
@@ -12,44 +13,49 @@ def project_title():
     return environ.get('WEBSITE_TITLE', 'Wahinipa')
 
 
-class CupboardDisplayContext(OldDisplayContext):
-    def __init__(self, context=None, page_template=None):
-        if page_template is None:
-            page_template = "pages/card_content.j2"
+class CupboardDisplayContext(DisplayContext):
+    def __init__(self, context=None, **kwargs):
         super().__init__(
             context=context,
-            page_template=page_template,
             title=project_title(),
             project_name=project_name(),
+            **kwargs
         )
-
+    def add_task(self, url, label, task):
+        self.context.setdefault('tasks', []).append({
+            'url': url,
+            'label': label,
+            'task': task,
+        })
 
 class CupboardDisplayContextMixin:
-    @property
-    def classification(self):
-        return self.singular_label
+    def add_task(self, context, navigator, task):
+        context.add_task(url=navigator.url(self, task), label=self.task_label(task), task=task)
 
-    def display_context(self, viewer, as_child=True, child_link_label=None):
+    def task_label(self, task):
+        prefix = self.label_prefixes.get(task, '')
+        return f'{prefix}{self.name}'
+
+    def display_context(self, navigator, viewer, as_child=True, child_link_label=None):
         context = CupboardDisplayContext(context={
             'label': self.name,
-            'classification': self.classification,
-        }, page_template=self.page_template)
+            'classification': self.singular_label,
+        })
         self.add_description(context)
         if as_child:
-            context.add_attribute('url', self.url)
+            context['url'] = navigator.url(self, 'view')
         else:
-            context.add_bread_crumbs(self.bread_crumbs)
-            self.add_additional_tasks(context, viewer)
+            context.add_bread_crumbs(self.bread_crumbs(navigator))
             for child in self.viewable_children(viewer):
                 if child_link_label:
-                    context.add_notation(label=child_link_label, url=child.url, value=child.name)
+                    context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
                 else:
-                    context.add_child_display_context(child.display_context(viewer))
-            if self.may_update(viewer):
-                context.add_task(url=self.url_update, label=self.name, task="update")
-            if self.may_delete(viewer):
-                context.add_task(url=self.url_delete, label=self.name, task="delete")
+                    context.add_child_context(child.display_context(navigator, viewer))
+            for task in self.allowed_tasks(viewer):
+                self.add_task(context, navigator, task)
         return context
 
-    def add_additional_tasks(self, context, viewer):
-        pass
+    def allowed_tasks(self, viewer):
+        return [task for task in self.possible_tasks if self.may_perform_task(viewer, task)]
+
+

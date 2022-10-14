@@ -12,15 +12,17 @@ from tracking.modelling.base_models import UniqueNamedBaseModel, RootDescendantM
 class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseModel):
     singular_label = "Thing"
     plural_label = "Things"
+    possible_tasks = ['create', 'update', 'delete']
+    label_prefixes = {'create': 'Kind of '}
 
     roots = database.relationship('Root', backref='thing', lazy=True)
 
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
 
-    def add_additional_tasks(self, context, viewer):
-        if self.may_create_thing(viewer):
-            context.add_task(self.url_create, label=f'Kind of {self.name}', task='create')
+    @property
+    def identities(self):
+        return {'thing_id': self.id}
 
     @property
     def children(self):
@@ -33,6 +35,18 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
         database.session.add(thing)
         database.session.commit()
         return thing
+
+    def may_perform_task(self, viewer, task):
+        if task == 'view':
+            return self.may_be_observed(viewer)
+        elif task == 'create':
+            return self.may_create_thing(viewer)
+        elif task == 'delete':
+            return self.may_delete(viewer)
+        elif task == 'update':
+            return self.may_update(viewer)
+        else:
+            return False
 
     def may_be_observed(self, viewer):
         return self.ancestor.may_be_observed(viewer)

@@ -55,9 +55,6 @@ class RootDescendantMixin:
             return self.root
         else:
             return self.parent_object
-    @property
-    def url_on_delete(self):
-        return self.ancestor.url
 
 
 

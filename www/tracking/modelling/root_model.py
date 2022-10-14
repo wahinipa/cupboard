@@ -1,18 +1,37 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import url_for
 
 from tracking import database
 from tracking.cardistry.models.cardistry_models import name_is_key
-from tracking.commons.cupboard_display_context import CupboardDisplayContextMixin, CupboardDisplayContext
+from tracking.commons.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import UniqueNamedBaseModel
 
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     singular_label = "Organizational Association"
     plural_label = "Organizational Associations"
+    possible_tasks = ['update', 'delete']
+    label_prefixes = {}
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
+
+    @property
+    def identities(self):
+        return {'root_id': self.id}
+
+    def may_perform_task(self, viewer, task):
+        if task == 'view':
+            return self.may_be_observed(viewer)
+        elif task == 'delete':
+            return self.may_delete(viewer)
+        elif task == 'update':
+            return self.may_update(viewer)
+        elif task == 'create_place':
+            return self.may_create_place(viewer)
+        elif task == 'create_thing':
+            return self.may_create_thing(viewer)
+        else:
+            return False
 
     def may_be_observed(self, viewer):
         return True
@@ -33,42 +52,24 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     def parent_object(self):
         return None
 
-    @property
-    def page_template(self):
-        return "pages/root_view.j2"
-
-    @property
-    def url(self):
-        return url_for('root_bp.root_view', root_id=self.id)
-
-    @property
-    def url_delete(self):
-        return url_for('root_bp.root_delete', root_id=self.id)
-
-    @property
-    def url_update(self):
-        return url_for('root_bp.root_update', root_id=self.id)
-
     def viewable_children(self, viewer):
-        return [self.place, self.thing]
+        if self.may_be_observed(viewer):
+            return [self.place, self.thing]
+        else:
+            return []
 
 
 def all_roots():
     return sorted(Root.query.all(), key=name_is_key)
 
 
-def all_root_display_context(viewer):
-    context = root_display_context(viewer, "pages/home_page.j2")
+def all_root_display_context(navigator, viewer):
+    context = CupboardDisplayContext(label="Home")
     for root in all_roots():
-        context.add_child_display_context(root.display_context(viewer))
+        if root.may_be_observed(viewer):
+            context.append_to_list('children', root.display_context(navigator, viewer))
     if viewer.may_create_root:
-        context.add_task(url=url_for('root_bp.root_create'), label="Root", task="create")
-    return context
-
-
-def root_display_context(viewer, page_template='pages/form_page.j2'):
-    context = CupboardDisplayContext(page_template=page_template)
-    context.add_attribute('label', 'Home')
+        context.add_task(navigator.url(Root, 'create'), label=Root.singular_label, task="create")
     return context
 
 

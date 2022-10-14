@@ -12,15 +12,17 @@ from tracking.modelling.base_models import NamedBaseModel, RootDescendantMixin
 class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = "Place"
     plural_label = "Places"
+    possible_tasks = ['create', 'update', 'delete']
+    label_prefixes = {'create': 'Place for '}
 
     roots = database.relationship('Root', backref='place', lazy=True)
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), index=True)
     places = database.relationship('Place', lazy='subquery', backref=backref('place_of', remote_side='Place.id'))
 
-    def add_additional_tasks(self, context, viewer):
-        if self.may_create_place(viewer):
-            context.add_task(self.url_create, label=f'Place of {self.name}', task='create')
+    @property
+    def identities(self):
+        return {'place_id': self.id}
 
     @property
     def children(self):
@@ -33,6 +35,18 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         database.session.add(place)
         database.session.commit()
         return place
+
+    def may_perform_task(self, viewer, task):
+        if task == 'view':
+            return self.may_be_observed(viewer)
+        elif task == 'create':
+            return self.may_create_place(viewer)
+        elif task == 'delete':
+            return self.may_delete(viewer)
+        elif task == 'update':
+            return self.may_update(viewer)
+        else:
+            return False
 
     def may_be_observed(self, viewer):
         return self.ancestor.may_be_observed(viewer)
@@ -62,22 +76,6 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     @property
     def top_thing(self):
         return self.root.thing
-
-    @property
-    def url(self):
-        return url_for('place_bp.place_view', place_id=self.id)
-
-    @property
-    def url_create(self):
-        return url_for('place_bp.place_create', place_id=self.id)
-
-    @property
-    def url_delete(self):
-        return url_for('place_bp.place_delete', place_id=self.id)
-
-    @property
-    def url_update(self):
-        return url_for('place_bp.place_update', place_id=self.id)
 
     def viewable_children(self, viewer):
         return self.sorted_children

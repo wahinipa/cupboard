@@ -42,19 +42,18 @@ class HierarchicalMixin:
             parent = parent.parent_object
         return top
 
-    @property
-    def bread_crumbs(self):
-        return bread_crumbs(self.root_path, target=self)
+    def bread_crumbs(self, navigator):
+        return bread_crumbs(navigator, self.root_path, target=self)
 
     @property
     def sorted_children(self):
         return sorted_by_name(self.children)
 
 
-def bread_crumbs(path, target=None):
+def bread_crumbs(navigator, path, target=None):
     def bread_crumb(item):
         crumb = {'label': item.label}
-        url = item.url
+        url = navigator.url(item, 'view')
         if url and item != target:
             crumb['url'] = url
         return crumb
