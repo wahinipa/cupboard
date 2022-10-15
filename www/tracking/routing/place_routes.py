@@ -83,7 +83,7 @@ def place_view(place_id):
     place = find_place_by_id(place_id)
     if place is not None and place.may_be_observed(current_user):
         navigator = create_cupboard_navigator()
-        return place.display_context(navigator, current_user, as_child=False,
+        return place.display_context(navigator, current_user, as_child=False, child_depth=1,
                                      child_link_label=f'Place').render_template('pages/place_view.j2')
     else:
         return home_redirect()

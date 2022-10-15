@@ -44,12 +44,11 @@
   <div class="card-header text-white bg-{{ background }}">
     {% if url %}
       {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
+    {% endif %}
+    {% if bread_crumb_list %}
+      {{ render_bread_crumbs(bread_crumb_list) }}
     {% else %}
-      {% if bread_crumb_list %}
-        {{ render_bread_crumbs(bread_crumb_list) }}
-      {% else %}
-        <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
-      {% endif %}
+      <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
     {% endif %}
   </div>
   <div class="card-body">
@@ -60,9 +59,9 @@
 {% if is_row %}</div>{% endif %}
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, notations=None, url=None, column_width="6", is_row=True) %}
+{% macro card_child(classification=None, label=None, notations=None, url=None, column_width="6", is_row=True, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, url=url, column_width=column_width, is_row=is_row) %}
+  {% call card_view(prefix=classification + ": ", label=label, url=url, column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}

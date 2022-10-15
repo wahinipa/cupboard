@@ -21,12 +21,14 @@ class CupboardDisplayContext(DisplayContext):
             project_name=project_name(),
             **kwargs
         )
+
     def add_task(self, url, label, task):
         self.context.setdefault('tasks', []).append({
             'url': url,
             'label': label,
             'task': task,
         })
+
 
 class CupboardDisplayContextMixin:
     def add_task(self, context, navigator, task):
@@ -36,7 +38,9 @@ class CupboardDisplayContextMixin:
         prefix = self.label_prefixes.get(task, '')
         return f'{prefix}{self.name}'
 
-    def display_context(self, navigator, viewer, as_child=True, child_link_label=None):
+    def display_context(self, navigator, viewer, as_child=True, child_depth=0, children=None):
+        if children is None:
+            children = self.viewable_children(viewer)
         context = CupboardDisplayContext(context={
             'label': self.name,
             'classification': self.singular_label,
@@ -44,18 +48,17 @@ class CupboardDisplayContextMixin:
         self.add_description(context)
         if as_child:
             context['url'] = navigator.url(self, 'view')
-        else:
+        if child_depth > 0:
             context.add_bread_crumbs(self.bread_crumbs(navigator))
-            for child in self.viewable_children(viewer):
-                if child_link_label:
-                    context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
+            for child in children:
+                if child_depth > 1:
+                    context.add_child_context(child.display_context(navigator, viewer, child_depth=child_depth - 1))
                 else:
-                    context.add_child_context(child.display_context(navigator, viewer))
+                    child_link_label = f'{child.singular_label}: '
+                    context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
             for task in self.allowed_tasks(viewer):
                 self.add_task(context, navigator, task)
         return context
 
     def allowed_tasks(self, viewer):
         return [task for task in self.possible_tasks if self.may_perform_task(viewer, task)]
-
-

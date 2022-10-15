@@ -83,6 +83,6 @@ def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.may_be_observed(current_user):
         navigator = create_cupboard_navigator()
-        return thing.display_context(navigator, current_user, as_child=False, child_link_label=f'Thing').render_template('pages/thing_view.j2')
+        return thing.display_context(navigator, current_user, as_child=False, child_depth=1, child_link_label=f'Thing').render_template('pages/thing_view.j2')
     else:
         return home_redirect()

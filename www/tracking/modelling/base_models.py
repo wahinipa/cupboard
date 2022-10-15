@@ -3,8 +3,8 @@ from datetime import datetime
 
 from sqlalchemy.orm import declared_attr
 
-from tracking.cardistry.models.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
 from tracking import database
+from tracking.cardistry.models.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
 
 
 class IdModelMixin():
@@ -48,6 +48,7 @@ class ModelWithAssignedRoles:
 
         return any(map(yes, self.assignments))
 
+
 class RootDescendantMixin:
     @property
     def ancestor(self):
@@ -55,8 +56,6 @@ class RootDescendantMixin:
             return self.root
         else:
             return self.parent_object
-
-
 
 class NamedBaseModel(IdModelMixin, NamedModelMixin, DescriptionModelMixin, HierarchicalMixin, DatedModelMixin,
                      database.Model):
