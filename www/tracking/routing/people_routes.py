@@ -80,7 +80,7 @@ def login():
         return redirect(next_url or url_for('home_bp.home'))
     else:
         from tracking.commons.cupboard_display_context import CupboardDisplayContext
-        return render_template('pages/login.j2', form=form, **CupboardDisplayContext().display_context)
+        return CupboardDisplayContext().render_template('pages/login.j2', form=form)
 
 
 @people_bp.route('/profile', methods=['GET', 'POST'])
@@ -95,7 +95,6 @@ def profile():
         return home_redirect()
 
     return render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}')
-    # return render_template('form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}', **display_context())
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -114,7 +113,6 @@ def change_password():
         database.session.commit()
         return home_redirect()
     return render_template('pages/change_password.j2', form=form)
-    # return render_template('change_password.j2', form=form, **display_context())
 
 
 # @people_bp.route('/list')
