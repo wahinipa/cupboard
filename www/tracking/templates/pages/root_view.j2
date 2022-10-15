@@ -5,9 +5,9 @@
   {% endcall %}
   {% if children %}
     <div class="row mt-2">
-    {% for child in children %}
-      {{ card_child(is_row=False, **child) }}
-    {% endfor %}
+      {% for child in children %}
+        {{ card_child(is_row=False, purpose='target', **child) }}
+      {% endfor %}
     </div>
   {% endif %}
   {% if tasks %}

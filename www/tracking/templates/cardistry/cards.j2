@@ -20,10 +20,10 @@
 {% if caller %}{{ caller() }}{% endif %}
 {% endset %}
 {% call card_view(prefix=prefix, label=label, url=url, purpose="target", column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
-{% if notations %}
-  {{ render_notations(notations) }}
-{% endif %}
-{{ card_content }}
+  {% if notations %}
+    {{ render_notations(notations) }}
+  {% endif %}
+  {{ card_content }}
 {% endcall %}
 {% endmacro %}
 
@@ -59,9 +59,9 @@
 {% if is_row %}</div>{% endif %}
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, notations=None, url=None, column_width="6", is_row=True, bread_crumb_list=None) %}
+{% macro card_child(classification=None, label=None, notations=None, purpose=None, url=None, column_width="6", is_row=True, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, url=url, column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
+  {% call card_view(prefix=classification + ": ", label=label, url=url, purpose=purpose, column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}
