@@ -1,45 +1,17 @@
-{% from 'bootstrap4/nav.html' import render_nav_item %}
 
 {% macro home_nav_item() %}
-  {{ render_nav_item('root_bp.root_list', 'Home', use_li=True) }}
+  {{ render_pill('root_bp.root_list', 'Home', True) }}
 {% endmacro %}
 
 {% macro admin_database_edit_nav_item(current_user) %}
   {% if current_user.may_edit_database %}
-    {{ render_nav_item('admin.index', 'Admin', use_li=True) }}
+    {{ render_pill('admin.index', 'Admin') }}
   {% endif %}
 {% endmacro %}
 
-{% macro categories_nav_items(current_user) %}
-  {% if current_user.may_observe_categories %}
-    {{ render_nav_item('category_bp.category_list', 'Categories') }}
-  {% endif %}
+{% macro render_pill(endpoint, label, active=False) %}
+  <li class="nav-item">
+    <a href="{{ url_for(endpoint) }}" class="nav-link{% if active %} active{% endif %}">{{ label }}</a>
+  </li>
 {% endmacro %}
-
-{% macro groups_nav_items(current_user) %}
-  {% if current_user.may_observe_groups %}
-    {{ render_nav_item('group_bp.group_list', 'Groups') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro things_nav_items(current_user) %}
-  {% if current_user.may_observe_things %}
-    {{ render_nav_item('thing_bp.thing_list', 'Things') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro places_nav_items(current_user) %}
-  {% if current_user.may_observe_places %}
-    {{ render_nav_item('place_bp.place_list', 'Places') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro people_nav_items(current_user) %}
-  {% if current_user.may_observe_people %}
-    {{ render_nav_item('people_bp.people_list', 'People') }}
-  {% endif %}
-{% endmacro %}
-
-
-
 
