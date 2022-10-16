@@ -1,5 +1,6 @@
 {% extends "pages/content.j2" %}
 {% from 'cardistry/cards.j2' import card_view, card_child, card_tasks %}
+{% from 'macros/content_macros.j2' import show_action_button %}
 {% block innards %}
   {% call card_view(label=label, purpose='target', column_width="12", is_row=True) %}
   {% endcall %}
@@ -10,5 +11,10 @@
   {% endif %}
   {% if tasks %}
     {{ card_tasks(label=label, tasks=tasks) }}
+  {% endif %}
+{% endblock %}
+{% block bottom_header %}
+  {% if tasks %}
+    {{ show_action_button() }}
   {% endif %}
 {% endblock %}

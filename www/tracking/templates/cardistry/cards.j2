@@ -3,14 +3,17 @@
 {% macro card_tasks(label, tasks, prefix="Actions on ", column_width="12", is_row=True) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if tasks %}
-    {% call card_view(prefix=prefix, label=label, purpose='tasks'
+    <input type="checkbox" id="action_check_button">
+    <div class="action_show_card" id="action_show_place">
+      {% call card_view(prefix=prefix, label=label, purpose='tasks'
     , column_width=column_width, is_row=is_row) %}
-      {% for task in tasks %}
-        <div class="col-md-2">
-          {{ button_task(column_width=None, **task) }}
-        </div>
-      {% endfor %}
-    {% endcall %}
+        {% for task in tasks %}
+          <div class="col-md-2">
+            {{ button_task(column_width=None, **task) }}
+          </div>
+        {% endfor %}
+      {% endcall %}
+    </div>
   {% endif %}
 {% endmacro %}
 

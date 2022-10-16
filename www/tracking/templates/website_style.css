@@ -14,3 +14,15 @@ footer {
 .bg-warning {
     color: black;
 }
+
+#action_check_button {
+    display: none;
+}
+
+#action_check_button:checked ~ #action_show_place {
+    display: block;
+}
+
+#action_show_place {
+    display: none;
+}

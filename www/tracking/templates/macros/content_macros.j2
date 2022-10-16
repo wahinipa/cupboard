@@ -1,6 +1,5 @@
-
-{% macro home_nav_item() %}
-  {{ render_pill('root_bp.root_list', 'Home', True) }}
+{% macro home_nav_item(active_label) %}
+  {{ render_pill('root_bp.root_list', 'Home', active_label) }}
 {% endmacro %}
 
 {% macro admin_database_edit_nav_item(current_user) %}
@@ -9,9 +8,12 @@
   {% endif %}
 {% endmacro %}
 
-{% macro render_pill(endpoint, label, active=False) %}
+{% macro render_pill(endpoint, label, active_label=None) %}
   <li class="nav-item">
-    <a href="{{ url_for(endpoint) }}" class="nav-link{% if active %} active{% endif %}">{{ label }}</a>
+    <a href="{{ url_for(endpoint) }}" class="nav-link{% if label==active_label %} active{% endif %}">{{ label }}</a>
   </li>
 {% endmacro %}
 
+{% macro show_action_button(label="Show Actions") %}
+  <label class="action-toggle" for="action_check_button"><span class="badge bg-primary">{{ label }}</span></label>
+{% endmacro %}

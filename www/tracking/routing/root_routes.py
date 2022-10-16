@@ -77,7 +77,7 @@ def update_root_from_form(root, form):
 @login_required
 def root_list():
     navigator = DualNavigator()
-    return all_root_display_context(navigator, current_user).render_template("pages/home_page.j2")
+    return all_root_display_context(navigator, current_user).render_template("pages/home_page.j2", active_label="Home")
 
 
 @root_bp.route('/view/<int:root_id>/<int:place_id>/<int:thing_id>')
