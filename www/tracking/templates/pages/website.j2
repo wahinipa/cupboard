@@ -29,11 +29,27 @@ website_logo %}
 <body>
 <main class="container-fluid">
   <div class="row">
-    {{ website_logo(project_name) }}
-    <div class="col-md-8 text-center">
-      {% block header %}{% endblock %}
+    <div class="col-md-2">
+      {{ website_logo(project_name) }}
     </div>
-    {{ user_options(current_user) }}
+    <div class="col-md-8 text-center">
+      <div class="card border-primary">
+        <div class="card-header text-white bg-primary">
+          {% block top_title %}Welcome{% endblock %}
+        </div>
+        <div class="card-body">
+          <div class="row">
+            {% block top_header %}{% endblock %}
+          </div>
+          <div class="row">
+            {% block bottom_header %}{% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      {{ user_options(current_user) }}
+    </div>
   </div>
   {% block innards %}{% endblock %}
   <div class="row">

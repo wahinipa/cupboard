@@ -12,25 +12,23 @@
 {% endmacro %}
 
 {% macro website_logo(project_name) %}
-  <div class="col-md-2">
-    <div class="card flex-row flex-wrap">
-      <div class="card-header border-0">
-        <img width="104" height="32" src="{{ url_for('static', filename='logo.png') }}">
-      </div>
-      <div class="card-body">{{ project_name }}</div>
+  <div class="card flex-row flex-wrap">
+    <div class="card-header border-0">
+      {{ project_name }}
+    </div>
+    <div class="card-body">
+      <img width="104" height="32" src="{{ url_for('static', filename='logo.png') }}">
     </div>
   </div>
 {% endmacro %}
 
 {% macro user_options(current_user) %}
-  <div class="col-md-2">
-    <div class="card">
-      {% if current_user.is_authenticated %}
-        {{ user_options_logged_in(current_user) }}
-      {% else %}
-        {{ user_options_logged_out() }}
-      {% endif %}
-    </div>
+  <div class="card">
+    {% if current_user.is_authenticated %}
+      {{ user_options_logged_in(current_user) }}
+    {% else %}
+      {{ user_options_logged_out() }}
+    {% endif %}
   </div>
 {% endmacro %}
 
