@@ -14,6 +14,7 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     plural_label = "Places"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Place for '}
+    flavor="place"
 
     roots = database.relationship('Root', backref='place', lazy=True)
 

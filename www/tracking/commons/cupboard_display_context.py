@@ -2,7 +2,6 @@
 from os import environ
 
 from tracking.cardistry.viewers.display_context import DisplayContext
-from tracking.cardistry.viewers.old_display_context import OldDisplayContext
 
 
 def project_name():
@@ -56,8 +55,9 @@ class CupboardDisplayContextMixin:
                 else:
                     child_link_label = f'{child.singular_label}: '
                     context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
-            for task in self.allowed_tasks(viewer):
-                self.add_task(context, navigator, task)
+        for task in self.allowed_tasks(viewer):
+            context['flavor'] = self.flavor
+            self.add_task(context, navigator, task)
         return context
 
     def allowed_tasks(self, viewer):

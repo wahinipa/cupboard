@@ -1,28 +1,28 @@
 {% from 'cardistry/buttons.j2' import button_task %}
 
-{% macro card_tasks(label, tasks, prefix="Actions on ", column_width="12", is_row=True) %}
+{% macro card_tasks(label, tasks, flavor='', prefix="Actions on ") %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if tasks %}
-    <input type="checkbox" id="action_check_button">
-    <div class="action_show_card" id="action_show_place">
-      {% call card_view(prefix=prefix, label=label, purpose='tasks'
-    , column_width=column_width, is_row=is_row) %}
+    <div class="action_show_card" id="action_{{ flavor }}_show_place">
+      {% call card_view(prefix=prefix, label=label, purpose='tasks') %}
+        <div class="row">
         {% for task in tasks %}
-          <div class="col-md-2">
+          <div class="col-md-4">
             {{ button_task(column_width=None, **task) }}
           </div>
         {% endfor %}
+        </div>
       {% endcall %}
     </div>
   {% endif %}
 {% endmacro %}
 
-{% macro card_target(prefix=None, label=None, url=None, column_width="6", is_row=False, bread_crumb_list=None, notations=None) %}
+{% macro card_target(prefix=None, label=None, flavor=None, url=None, bread_crumb_list=None, notations=None) %}
 {% if False %}{{ kwargs }}{% endif %}
 {% set card_content %}
 {% if caller %}{{ caller() }}{% endif %}
 {% endset %}
-{% call card_view(prefix=prefix, label=label, url=url, purpose="target", column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
+{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, purpose="target", bread_crumb_list=bread_crumb_list) %}
   {% if notations %}
     {{ render_notations(notations) }}
   {% endif %}
@@ -30,7 +30,7 @@
 {% endcall %}
 {% endmacro %}
 
-{% macro card_view(prefix=None, label=None, url=None, purpose=None, column_width="6", is_row=False, bread_crumb_list=None) %}
+{% macro card_view(prefix=None, label=None, include_actions=True, flavor=None, url=None, purpose=None, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if purpose == 'target' %}
     {% set background = 'dark' %}
@@ -39,32 +39,31 @@
   {% else %}
     {% set background = 'secondary' %}
   {% endif %}
-  {% if is_row %}
-    <div class="row mt-2">{% endif %}
-{% if column_width %}
-  <div class="col-md-{{ column_width }}">{% endif %}
-<div class="card border-{{ background }}">
-  <div class="card-header text-white bg-{{ background }}">
-    {% if url %}
-      {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
-    {% endif %}
-    {% if bread_crumb_list %}
-      {{ render_bread_crumbs(bread_crumb_list) }}
-    {% else %}
-      <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
+  <div class="card border-{{ background }}">
+    <div class="card-header text-white bg-{{ background }}">
+      {% if url %}
+        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
+      {% endif %}
+      {% if bread_crumb_list %}
+        {{ render_bread_crumbs(bread_crumb_list) }}
+      {% else %}
+        <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      {{ caller() }}
+    </div>
+    {% if flavor and include_actions %}
+      <div class="card-footer">
+        {{ show_action_button(flavor=flavor) }}
+      </div>
     {% endif %}
   </div>
-  <div class="card-body">
-    {{ caller() }}
-  </div>
-</div>
-{% if column_width %}</div>{% endif %}
-{% if is_row %}</div>{% endif %}
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, notations=None, purpose=None, url=None, column_width="6", is_row=True, bread_crumb_list=None) %}
+{% macro card_child(classification=None, label=None, include_actions=True, flavor=None, notations=None, purpose=None, url=None, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, url=url, purpose=purpose, column_width=column_width, is_row=is_row, bread_crumb_list=bread_crumb_list) %}
+  {% call card_view(prefix=classification + ": ", label=label, include_actions=include_actions, flavor=flavor, url=url, purpose=purpose, bread_crumb_list=bread_crumb_list) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}
@@ -105,4 +104,61 @@
   </li>
 {% endmacro %}
 
+{% macro action_block(label=None, tasks=None, flavor=Npne) %}
+  {% if tasks %}
+    <div class="row">
+      <div class="col-md-12">
+        {% if flavor %}<input type="checkbox" id="action_{{ flavor }}_check_button">{% endif %}
+        {{ card_tasks(label=label, tasks=tasks, flavor=flavor) }}
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}
 
+{% macro show_action_button(label="Show Actions", flavor='') %}
+  <label class="action-{{ flavor }}-toggle" for="action_{{ flavor }}_check_button"><span
+      class="badge bg-primary">{{ label }}</span></label>
+{% endmacro %}
+
+{% macro sequential_child_cards(children, include_actions=False) %}
+  {% if children %}
+    {% for child in children %}
+      <div class="row mt-2">
+        <div class="col-md-12">
+          {{ card_child(include_actions=include_actions, **child) }}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro paired_child_cards(children) %}
+  {% if children %}
+    <div class="row mt-2">
+      {% for child in children %}
+        <div class="col-md-6">
+          <div class="row mt-2">
+            <div class="col-md-12">
+              {{ card_child(**child) }}
+            </div>
+          </div>
+          <div class="row mt">
+            <div class="col-md-12">
+              {{ action_block(label=child.label, flavor=child.flavor, tasks=child.tasks) }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro target_block(label=None, flavor=None, url=None, bread_crumb_list=None, notations=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  <div class="row mt-2">
+    <div class="col-md-12">
+      {% call card_target(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations) %}
+      {% endcall %}
+    </div>
+  </div>
+{% endmacro %}

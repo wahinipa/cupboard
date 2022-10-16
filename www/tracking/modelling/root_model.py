@@ -11,6 +11,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     plural_label = "Organizational Associations"
     possible_tasks = ['update', 'delete']
     label_prefixes = {}
+    flavor="root"
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
@@ -69,6 +70,7 @@ def all_root_display_context(navigator, viewer):
         if root.may_be_observed(viewer):
             context.append_to_list('children', root.display_context(navigator, viewer))
     if viewer.may_create_root:
+        context['flavor'] = 'home'
         context.add_task(navigator.url(Root, 'create'), label=Root.singular_label, task="create")
     return context
 

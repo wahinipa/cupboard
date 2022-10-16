@@ -14,6 +14,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
     plural_label = "Things"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Kind of '}
+    flavor="thing"
 
     roots = database.relationship('Root', backref='thing', lazy=True)
 

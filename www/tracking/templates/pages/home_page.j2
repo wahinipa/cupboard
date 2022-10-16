@@ -1,20 +1,7 @@
 {% extends "pages/content.j2" %}
-{% from 'cardistry/cards.j2' import card_view, card_child, card_tasks %}
-{% from 'macros/content_macros.j2' import show_action_button %}
+{% from 'cardistry/cards.j2' import target_block, action_block, sequential_child_cards %}
 {% block innards %}
-  {% call card_view(label=label, purpose='target', column_width="12", is_row=True) %}
-  {% endcall %}
-  {% if children %}
-    {% for child in children %}
-      {{ card_child(column_width="12", **child) }}
-    {% endfor %}
-  {% endif %}
-  {% if tasks %}
-    {{ card_tasks(label=label, tasks=tasks) }}
-  {% endif %}
-{% endblock %}
-{% block bottom_header %}
-  {% if tasks %}
-    {{ show_action_button() }}
-  {% endif %}
+  {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations) }}
+  {{ action_block(label=label, tasks=tasks, flavor=flavor) }}
+  {{ sequential_child_cards(children) }}
 {% endblock %}
