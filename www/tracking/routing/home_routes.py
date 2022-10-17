@@ -25,6 +25,5 @@ def home():
     return home_redirect()
 
 @home_bp.route('/scaffolding')
-@login_required
 def scaffolding():
     return render_template("pages/scaffolding.j2")
