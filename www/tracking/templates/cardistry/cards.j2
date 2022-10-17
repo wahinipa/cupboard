@@ -34,11 +34,10 @@
   {% if False %}{{ kwargs }}{% endif %}
   <div class="card{% if flavor %} card-flavor-{{ flavor }}{% endif %}">
     <div class="card-header">
-      {% if url %}
-        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}">{{ label }}</a>
-      {% endif %}
       {% if bread_crumb_list %}
         {{ render_bread_crumbs(bread_crumb_list) }}
+      {% elif url %}
+        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}">{{ label }}</a>
       {% else %}
         <h4>{% if prefix %}{{ prefix }}{% endif %}{{ label }}</h4>
       {% endif %}

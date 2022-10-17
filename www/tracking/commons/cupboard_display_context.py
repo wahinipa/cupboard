@@ -46,7 +46,7 @@ class CupboardDisplayContextMixin:
                 if child_depth > 1:
                     context.add_child_context(child.display_context(navigator, viewer, child_depth=child_depth - 1))
                 else:
-                    child_link_label = f'{child.singular_label}: '
+                    child_link_label = child.singular_label
                     context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
         for task in self.allowed_tasks(viewer):
             context['flavor'] = self.flavor
