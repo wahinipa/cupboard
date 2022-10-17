@@ -6,8 +6,7 @@
   {% endif %}
 {% endblock %}
 {% block innards %}
-  {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations) }}
-  {{ action_block(label=label, tasks=tasks) }}
+  {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) }}
   {{ sequential_child_cards(children) }}
 {% endblock %}
 

@@ -3,26 +3,26 @@
 {% macro card_tasks(label, tasks, prefix="Actions on ") %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if tasks %}
-    <div class="action_show_container" >
+    <div class="action_show_container">
       {% call card_view(prefix=prefix, label=label, flavor='tasks') %}
         <div class="row">
-        {% for task in tasks %}
-          <div class="col-md-4">
-            {{ button_task(column_width=None, **task) }}
-          </div>
-        {% endfor %}
+          {% for task in tasks %}
+            <div class="col-md-4">
+              {{ button_task(column_width=None, **task) }}
+            </div>
+          {% endfor %}
         </div>
       {% endcall %}
     </div>
   {% endif %}
 {% endmacro %}
 
-{% macro card_target(prefix=None, label=None, flavor=None, url=None, bread_crumb_list=None, notations=None) %}
+{% macro card_target(prefix=None, label=None, flavor=None, url=None, bread_crumb_list=None, notations=None, tasks=None) %}
 {% if False %}{{ kwargs }}{% endif %}
 {% set card_content %}
 {% if caller %}{{ caller() }}{% endif %}
 {% endset %}
-{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, bread_crumb_list=bread_crumb_list) %}
+{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, bread_crumb_list=bread_crumb_list, tasks=tasks) %}
   {% if notations %}
     {{ render_notations(notations) }}
   {% endif %}
@@ -30,7 +30,7 @@
 {% endcall %}
 {% endmacro %}
 
-{% macro card_view(prefix=None, label=None, url=None, flavor=None, bread_crumb_list=None) %}
+{% macro card_view(prefix=None, label=None, url=None, flavor=None, bread_crumb_list=None, tasks=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   <div class="card{% if flavor %} card-flavor-{{ flavor }}{% endif %}">
     <div class="card-header">
@@ -45,12 +45,25 @@
     <div class="card-body">
       {{ caller() }}
     </div>
+    {% if tasks %}
+      <div class="action_show_container">
+        <div class="card-footer">
+          <div class="row">
+            {% for task in tasks %}
+              <div class="col-md-4">
+                {{ button_task(column_width=None, **task) }}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
   </div>
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, notations=None, flavor=None, url=None, bread_crumb_list=None) %}
+{% macro card_child(classification=None, label=None, notations=None, flavor=None, url=None, bread_crumb_list=None, tasks=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, url=url, flavor=flavor, bread_crumb_list=bread_crumb_list) %}
+  {% call card_view(prefix=classification + ": ", label=label, url=url, flavor=flavor, bread_crumb_list=bread_crumb_list, tasks=tasks) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}
@@ -114,11 +127,6 @@
           {{ card_child(**child) }}
         </div>
       </div>
-      <div class="row mt">
-        <div class="col-md-12">
-          {{ action_block(label=child.label, tasks=child.tasks) }}
-        </div>
-      </div>
     {% endfor %}
   {% endif %}
 {% endmacro %}
@@ -133,22 +141,17 @@
               {{ card_child(**child) }}
             </div>
           </div>
-          <div class="row mt">
-            <div class="col-md-12">
-              {{ action_block(label=child.label, tasks=child.tasks) }}
-            </div>
-          </div>
         </div>
       {% endfor %}
     </div>
   {% endif %}
 {% endmacro %}
 
-{% macro target_block(label=None, flavor=None, url=None, bread_crumb_list=None, notations=None) %}
+{% macro target_block(label=None, flavor=None, url=None, bread_crumb_list=None, notations=None, task=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   <div class="row mt-2">
     <div class="col-md-12">
-      {% call card_target(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations) %}
+      {% call card_target(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) %}
       {% endcall %}
     </div>
   </div>
