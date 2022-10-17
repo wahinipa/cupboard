@@ -1,5 +1,5 @@
 {% macro home_nav_item(active_label) %}
-  {{ render_pill('root_bp.root_list', 'Home', active_label) }}
+  {{ render_pill('root_bp.root_list', 'Home', active_label, flavor='home') }}
 {% endmacro %}
 
 {% macro admin_database_edit_nav_item(current_user) %}
@@ -8,9 +8,9 @@
   {% endif %}
 {% endmacro %}
 
-{% macro render_pill(endpoint, label, active_label=None) %}
-  <li class="nav-item">
-    <a href="{{ url_for(endpoint) }}" class="nav-link{% if label==active_label %} active{% endif %}">{{ label }}</a>
+{% macro render_pill(endpoint, label, active_label=None, flavor=None) %}
+  <li class="nav-item{% if flavor %} nav-flavor-{{ flavor }}{% endif %}">
+    <a href="{{ url_for(endpoint) }}" class="nav-link{% if active_label %} active{% endif %}">{{ label }}</a>
   </li>
 {% endmacro %}
 

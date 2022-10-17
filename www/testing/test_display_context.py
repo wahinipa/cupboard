@@ -48,3 +48,15 @@ def test_context_multi_line_notation():
     assert notations[1]['url'] == "URL"
     assert notations[1]['lines'] == ['two', 'lines']
     assert notations[1].get('value') is None
+
+def test_context_has_tasks():
+    outer_context = DisplayContext()
+    assert not outer_context.get('has_tasks')
+    inner_context = DisplayContext()
+    assert not inner_context.get('has_tasks')
+    inner_context.add_task('URL', 'LABEL', 'TASK')
+    assert inner_context.get('has_tasks')
+    assert not outer_context.get('has_tasks')
+    outer_context.add_child_context(inner_context)
+    assert outer_context.get('has_tasks')
+

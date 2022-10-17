@@ -1,7 +1,7 @@
 {% extends "pages/content.j2" %}
 {% from 'cardistry/cards.j2' import show_action_button, target_block, action_block, paired_child_cards %}
 {% block bottom_header %}
- {% if tasks %}
+ {% if has_tasks %}
     {{ show_action_button() }}
   {% endif %}
 {% endblock %}

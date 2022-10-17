@@ -4,7 +4,7 @@
   {% if False %}{{ kwargs }}{% endif %}
   {% if tasks %}
     <div class="action_show_container" >
-      {% call card_view(prefix=prefix, label=label, purpose='tasks') %}
+      {% call card_view(prefix=prefix, label=label, flavor='tasks') %}
         <div class="row">
         {% for task in tasks %}
           <div class="col-md-4">
@@ -22,7 +22,7 @@
 {% set card_content %}
 {% if caller %}{{ caller() }}{% endif %}
 {% endset %}
-{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, purpose="target", bread_crumb_list=bread_crumb_list) %}
+{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, bread_crumb_list=bread_crumb_list) %}
   {% if notations %}
     {{ render_notations(notations) }}
   {% endif %}
@@ -30,19 +30,12 @@
 {% endcall %}
 {% endmacro %}
 
-{% macro card_view(prefix=None, label=None, include_actions=True, flavor=None, url=None, purpose=None, bread_crumb_list=None) %}
+{% macro card_view(prefix=None, label=None, url=None, flavor=None, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% if purpose == 'target' %}
-    {% set background = 'dark' %}
-  {% elif purpose == 'tasks' %}
-    {% set background = 'primary' %}
-  {% else %}
-    {% set background = 'secondary' %}
-  {% endif %}
-  <div class="card border-{{ background }}">
-    <div class="card-header text-white bg-{{ background }}">
+  <div class="card{% if flavor %} card-flavor-{{ flavor }}{% endif %}">
+    <div class="card-header">
       {% if url %}
-        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}" class="text-white">{{ label }}</a>
+        {% if prefix %}{{ prefix }}{% endif %}<a href="{{ url }}">{{ label }}</a>
       {% endif %}
       {% if bread_crumb_list %}
         {{ render_bread_crumbs(bread_crumb_list) }}
@@ -56,9 +49,9 @@
   </div>
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, include_actions=True, flavor=None, notations=None, purpose=None, url=None, bread_crumb_list=None) %}
+{% macro card_child(classification=None, label=None, notations=None, flavor=None, url=None, bread_crumb_list=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, include_actions=include_actions, flavor=flavor, url=url, purpose=purpose, bread_crumb_list=bread_crumb_list) %}
+  {% call card_view(prefix=classification + ": ", label=label, url=url, flavor=flavor, bread_crumb_list=bread_crumb_list) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}
@@ -114,12 +107,17 @@
       class="badge bg-primary">{{ label }}</span></label>
 {% endmacro %}
 
-{% macro sequential_child_cards(children, include_actions=False) %}
+{% macro sequential_child_cards(children) %}
   {% if children %}
     {% for child in children %}
       <div class="row mt-2">
         <div class="col-md-12">
-          {{ card_child(include_actions=include_actions, **child) }}
+          {{ card_child(**child) }}
+        </div>
+      </div>
+      <div class="row mt">
+        <div class="col-md-12">
+          {{ action_block(label=child.label, tasks=child.tasks) }}
         </div>
       </div>
     {% endfor %}

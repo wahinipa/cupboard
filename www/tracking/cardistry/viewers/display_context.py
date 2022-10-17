@@ -17,6 +17,9 @@ class DisplayContext(Context):
 
     def add_child_context(self, child_context):
         self.append_to_list('children', child_context)
+        if child_context.get('has_tasks'):
+            self.context['has_tasks'] = True
+
 
     def add_multiline_notation(self, label=None, tag=None, url=None, multiline=None):
         if multiline:
@@ -43,6 +46,14 @@ class DisplayContext(Context):
 
     def append_notation(self, notation):
         self.append_to_list('notations', notation)
+
+    def add_task(self, url, label, task):
+        self.context.setdefault('tasks', []).append({
+            'url': url,
+            'label': label,
+            'task': task,
+        })
+        self.context['has_tasks'] = True
 
     def render_template(self, template=None, **kwarg):
         if template is None:

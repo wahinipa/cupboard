@@ -1,7 +1,17 @@
+:root {
+    --flavor-home-color: rgb(100, 100, 100);
+    --flavor-place-color: rgb(50, 10, 100);
+    --flavor-root-color: rgb(100, 50, 50);
+    --flavor-tasks-color: rgb(10, 53, 253);
+    --flavor-thing-color: rgb(20, 100, 20);
+    --flavor-welcome-color: rgb(255, 255, 255);
+}
+
 pre {
     background: #ddd;
     padding: 10px;
 }
+
 
 h2 {
     margin-top: 20px;
@@ -27,3 +37,87 @@ footer {
     display: block;
 }
 
+.card-flavor-welcome {
+    border-color: black;
+}
+
+.card-flavor-welcome .card-header {
+    border-color: black;
+    color: black;
+    background-color: var(--flavor-welcome-color);
+}
+
+.card-flavor-welcome .card-header a {
+    color: black;
+}
+
+.card-flavor-home {
+    border-color: black;
+}
+
+.card-flavor-home .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-home-color);
+}
+
+.nav-pills .nav-flavor-home .nav-link.active {
+    color: white;
+    background-color: var(--flavor-home-color);
+}
+
+.card-flavor-root {
+    border-color: black;
+}
+
+.card-flavor-root .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-root-color);
+}
+
+.card-flavor-root .card-header a {
+    color: white;
+}
+
+.card-flavor-place {
+    border-color: black;
+}
+
+.card-flavor-place .card-header a {
+    color: white;
+}
+
+.card-flavor-place .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-place-color);
+}
+
+.card-flavor-tasks {
+    border-color: black;
+}
+
+.card-flavor-tasks .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-tasks-color);
+}
+
+.card-flavor-tasks .card-header a {
+    color: white;
+}
+
+.card-flavor-thing {
+    border-color: black;
+}
+
+.card-flavor-thing .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-thing-color);
+}
+
+.card-flavor-thing .card-header a {
+    color: white;
+}

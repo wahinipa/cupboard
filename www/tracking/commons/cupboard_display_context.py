@@ -21,13 +21,6 @@ class CupboardDisplayContext(DisplayContext):
             **kwargs
         )
 
-    def add_task(self, url, label, task):
-        self.context.setdefault('tasks', []).append({
-            'url': url,
-            'label': label,
-            'task': task,
-        })
-
 
 class CupboardDisplayContextMixin:
     def add_task(self, context, navigator, task):
