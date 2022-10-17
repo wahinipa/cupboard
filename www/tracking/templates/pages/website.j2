@@ -53,7 +53,10 @@ website_logo %}
       {{ user_options(current_user) }}
     </div>
   </div>
-  {% block innards %}{% endblock %}
+  <input type="checkbox" id="action_check_button">
+  <div id="action_show_place">
+    {% block innards %}{% endblock %}
+  </div>
   <div class="row">
     {{ website_footer() }}
   </div>

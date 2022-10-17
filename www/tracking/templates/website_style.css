@@ -15,42 +15,15 @@ footer {
     color: black;
 }
 
-#action_root_check_button {
-    display: none;
-}
-#action_root_check_button:checked ~ #action_root_show_place {
-    display: block;
-}
-#action_root_show_place {
+#action_check_button {
     display: none;
 }
 
-#action_home_check_button {
-    display: none;
-}
-#action_home_check_button:checked ~ #action_home_show_place {
-    display: block;
-}
-#action_home_show_place {
+#action_show_place .action_show_container {
     display: none;
 }
 
-#action_place_show_place {
-    display: none;
-}
-#action_place_check_button {
-    display: none;
-}
-#action_place_check_button:checked ~ #action_place_show_place {
+#action_check_button:checked ~ #action_show_place .action_show_container {
     display: block;
 }
 
-#action_thing_show_place {
-    display: none;
-}
-#action_thing_check_button {
-    display: none;
-}
-#action_thing_check_button:checked ~ #action_thing_show_place {
-    display: block;
-}

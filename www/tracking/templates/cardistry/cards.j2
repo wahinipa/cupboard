@@ -1,9 +1,9 @@
 {% from 'cardistry/buttons.j2' import button_task %}
 
-{% macro card_tasks(label, tasks, flavor='', prefix="Actions on ") %}
+{% macro card_tasks(label, tasks, prefix="Actions on ") %}
   {% if False %}{{ kwargs }}{% endif %}
   {% if tasks %}
-    <div class="action_show_card" id="action_{{ flavor }}_show_place">
+    <div class="action_show_container" >
       {% call card_view(prefix=prefix, label=label, purpose='tasks') %}
         <div class="row">
         {% for task in tasks %}
@@ -53,11 +53,6 @@
     <div class="card-body">
       {{ caller() }}
     </div>
-    {% if flavor and include_actions %}
-      <div class="card-footer">
-        {{ show_action_button(flavor=flavor) }}
-      </div>
-    {% endif %}
   </div>
 {% endmacro %}
 
@@ -104,19 +99,18 @@
   </li>
 {% endmacro %}
 
-{% macro action_block(label=None, tasks=None, flavor=Npne) %}
+{% macro action_block(label=None, tasks=None) %}
   {% if tasks %}
     <div class="row">
       <div class="col-md-12">
-        {% if flavor %}<input type="checkbox" id="action_{{ flavor }}_check_button">{% endif %}
         {{ card_tasks(label=label, tasks=tasks, flavor=flavor) }}
       </div>
     </div>
   {% endif %}
 {% endmacro %}
 
-{% macro show_action_button(label="Show Actions", flavor='') %}
-  <label class="action-{{ flavor }}-toggle" for="action_{{ flavor }}_check_button"><span
+{% macro show_action_button(label="Show Actions") %}
+  <label class="action-toggle" for="action_check_button"><span
       class="badge bg-primary">{{ label }}</span></label>
 {% endmacro %}
 
@@ -144,7 +138,7 @@
           </div>
           <div class="row mt">
             <div class="col-md-12">
-              {{ action_block(label=child.label, flavor=child.flavor, tasks=child.tasks) }}
+              {{ action_block(label=child.label, tasks=child.tasks) }}
             </div>
           </div>
         </div>
