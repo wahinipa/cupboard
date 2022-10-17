@@ -1,0 +1,25 @@
+{% extends "pages/website.j2" %}
+
+{% block head_extra %}
+  <style>
+    {% include 'scaffolding.css' %}
+  </style>
+{% endblock %}
+
+{% block innards %}
+  <label class="action-toggle" for="action_check_button"><span class="badge bg-primary">Show Some Action</span></label>
+  <input type="checkbox" id="action_check_button">
+  <div id="action_show_place">
+    <div class="scaffolding ">
+      <h1>Hello from Scaffolding</h1>
+    </div>
+    <div class="stuff ">
+      <h1>Hello from stuff</h1>
+    </div>
+    <div>
+      <div class="scaffolding ">
+        <h1>Hello from more Scaffolding</h1>
+      </div>
+    </div>
+  </div>
+{% endblock %}

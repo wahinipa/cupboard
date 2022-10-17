@@ -1,0 +1,21 @@
+/*
+ * Copyright (c) 2022, Wahinipa LLC
+ */
+
+
+.scaffolding {
+    background-color: rgb(255, 128, 128);
+}
+
+#action_show_place .scaffolding {
+    display: none;
+}
+
+#action_check_button {
+    display: none;
+}
+
+#action_check_button:checked ~ #action_show_place .scaffolding {
+    display: block;
+}
+

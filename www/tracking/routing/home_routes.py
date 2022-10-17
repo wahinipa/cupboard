@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, redirect, url_for
+from flask import Blueprint, redirect, url_for, render_template
 from flask_login import login_required, current_user
 
 from tracking.routing.home_redirect import home_redirect
@@ -23,3 +23,8 @@ def base():
 @login_required
 def home():
     return home_redirect()
+
+@home_bp.route('/scaffolding')
+@login_required
+def scaffolding():
+    return render_template("pages/scaffolding.j2")
