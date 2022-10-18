@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.people_model import User
+from tracking.modelling.people_model import User, AllPeople
 
 
 def register_people_navigation(navigator):
@@ -13,3 +13,5 @@ def register_people_navigation(navigator):
     register('list')
     register('update')
     register('view')
+
+    navigator.register(AllPeople, 'view', 'people_bp.people_list')

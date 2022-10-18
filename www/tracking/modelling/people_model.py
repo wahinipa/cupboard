@@ -8,9 +8,13 @@ from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
 from tracking import database
-from tracking.cardistry.models.cardistry_models import name_is_key
+from tracking.cardistry.models.cardistry_models import name_is_key, bread_crumbs
 from tracking.commons.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin
+
+
+class AllPeople:
+    label = 'People'
 
 
 class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin):
@@ -47,6 +51,9 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     def add_description(self, display_context):
         display_context.add_multiline_notation(label="About me", multiline=self.about_me)
+
+    def bread_crumbs(self, navigator):
+        return bread_crumbs(navigator, [AllPeople, self], target=self)
 
     def may_perform_task(self, viewer, task):
         if task == 'view':
