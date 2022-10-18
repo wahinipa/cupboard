@@ -5,8 +5,10 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
+from tracking.commons.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
-from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username
+from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username, \
+    all_people_display_context
 from tracking.routing.home_redirect import home_redirect
 
 people_bp = Blueprint(
@@ -18,7 +20,7 @@ people_bp = Blueprint(
 
 @people_bp.route('/create', methods=['GET', 'POST'])
 @login_required
-def create():
+def people_create():
     if current_user.may_create_person:
         form = UserCreateForm()
         if request.method == 'POST' and form.cancel_button.data:
@@ -83,9 +85,9 @@ def login():
         return CupboardDisplayContext().render_template('pages/login.j2', form=form)
 
 
-@people_bp.route('/profile', methods=['GET', 'POST'])
+@people_bp.route('/update', methods=['GET', 'POST'])
 @login_required
-def profile():
+def people_update():
     form = UserProfileForm(obj=current_user)
     if request.method == 'POST' and form.cancel_button.data:
         return home_redirect()
@@ -115,18 +117,19 @@ def change_password():
     return render_template('pages/change_password.j2', form=form)
 
 
-# @people_bp.route('/list')
-# @login_required
-# def people_list():
-#     from tracking.home.home_models import home_root
-#     return home_root.all_people.display_context(current_user).render_template()
-#
+@people_bp.route('/list')
+@login_required
+def people_list():
+    navigator = create_cupboard_navigator()
+    return all_people_display_context(navigator, current_user).render_template("pages/people_list.j2", active_flavor="people")
+
 
 @people_bp.route('/view/<int:user_id>')
 @login_required
 def people_view(user_id):
     person = find_user_by_id(user_id)
     if person and current_user.may_view_person(person):
-        return person.display_context(current_user).render_template()
+        navigator = create_cupboard_navigator()
+        return person.display_context(navigator, current_user, as_child=False).render_template("pages/person_view.j2")
     else:
         return home_redirect()

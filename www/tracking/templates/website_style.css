@@ -1,5 +1,6 @@
 :root {
     --flavor-home-color: rgb(100, 100, 100);
+    --flavor-people-color: rgb(10, 90, 90);
     --flavor-place-color: rgb(50, 10, 100);
     --flavor-root-color: rgb(100, 50, 50);
     --flavor-tasks-color: rgb(10, 53, 253);
@@ -80,6 +81,26 @@ footer {
     color: white;
 }
 
+.card-flavor-people {
+    border-color: black;
+}
+
+.card-flavor-people .card-header a {
+    color: white;
+}
+
+.card-flavor-people .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-people-color);
+}
+
+.nav-pills .nav-flavor-people .nav-link.active {
+    color: white;
+    background-color: var(--flavor-people-color);
+}
+
+
 .card-flavor-place {
     border-color: black;
 }
@@ -93,6 +114,7 @@ footer {
     color: white;
     background-color: var(--flavor-place-color);
 }
+
 
 .card-flavor-tasks {
     border-color: black;

@@ -1,16 +1,20 @@
-{% macro home_nav_item(active_label) %}
-  {{ render_pill('root_bp.root_list', 'Home', active_label, flavor='home') }}
+{% macro home_nav_item(active_flavor) %}
+  {{ render_pill('root_bp.root_list', 'Home', active_flavor, flavor='home') }}
+{% endmacro %}
+
+{% macro people_nav_item(active_flavor) %}
+  {{ render_pill('people_bp.people_list', 'People', active_flavor, flavor='people') }}
 {% endmacro %}
 
 {% macro admin_database_edit_nav_item(current_user) %}
   {% if current_user.may_edit_database %}
-    {{ render_pill('admin.index', 'Admin') }}
+    {{ render_pill('admin.index', 'Admin', active_flavor, flavor='admin') }}
   {% endif %}
 {% endmacro %}
 
-{% macro render_pill(endpoint, label, active_label=None, flavor=None) %}
+{% macro render_pill(endpoint, label, active_flavor=None, flavor=None) %}
   <li class="nav-item{% if flavor %} nav-flavor-{{ flavor }}{% endif %}">
-    <a href="{{ url_for(endpoint) }}" class="nav-link{% if active_label %} active{% endif %}">{{ label }}</a>
+    <a href="{{ url_for(endpoint) }}" class="nav-link{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
   </li>
 {% endmacro %}
 

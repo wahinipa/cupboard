@@ -1,11 +1,13 @@
 {% extends "pages/website.j2" %}
 {% from 'macros/content_macros.j2' import
-admin_database_edit_nav_item,
-home_nav_item %}
+home_nav_item,
+people_nav_item,
+admin_database_edit_nav_item %}
 
 {% block top_header %}
   <ul class="nav nav-pills">
-    {{ home_nav_item(active_label) }}
+    {{ home_nav_item(active_flavor) }}
+    {{ people_nav_item(active_flavor) }}
     {{ admin_database_edit_nav_item(current_user) }}
   </ul>
 {% endblock %}
