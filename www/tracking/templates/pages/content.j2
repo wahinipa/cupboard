@@ -3,11 +3,11 @@
 home_nav_item,
 people_nav_item,
 admin_database_edit_nav_item %}
-
+iv
 {% block top_header %}
-  <ul class="nav nav-pills">
-    {{ home_nav_item(active_flavor) }}
-    {{ people_nav_item(active_flavor) }}
-    {{ admin_database_edit_nav_item(current_user) }}
-  </ul>
+<div class="col-md-12">
+  {{ home_nav_item(active_flavor) }}
+  {{ people_nav_item(active_flavor) }}
+  {{ admin_database_edit_nav_item(current_user) }}
+</div>
 {% endblock %}

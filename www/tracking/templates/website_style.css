@@ -62,7 +62,13 @@ footer {
     background-color: var(--flavor-home-color);
 }
 
-.nav-pills .nav-flavor-home .nav-link.active {
+.btn-flavor-home {
+    border-color: var(--flavor-home-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-home.active {
     color: white;
     background-color: var(--flavor-home-color);
 }
@@ -95,11 +101,27 @@ footer {
     background-color: var(--flavor-people-color);
 }
 
-.nav-pills .nav-flavor-people .nav-link.active {
+.btn-flavor-people {
+    border-color: var(--flavor-people-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-people.active {
     color: white;
     background-color: var(--flavor-people-color);
 }
 
+.btn-flavor-admin {
+    border-color: black;
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-admin.active {
+    color: white;
+    background-color: black;
+}
 
 .card-flavor-place {
     border-color: black;
