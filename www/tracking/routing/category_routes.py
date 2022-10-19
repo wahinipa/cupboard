@@ -2,13 +2,12 @@
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 
-from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.commons.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.category_forms import CategoryCreateForm, CategoryUpdateForm
-from tracking.modelling.category_models import find_category_by_id, all_categories_display_context
 from tracking.forms.choice_forms import ChoiceCreateForm, create_choice_from_form
+from tracking.modelling.category_models import find_category_by_id, Categories
 from tracking.modelling.root_model import find_root_by_id
+from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 
 category_bp = Blueprint(
@@ -49,17 +48,28 @@ def category_create_form():
 #         return redirect_hacks()
 
 
-
-
 @category_bp.route('/view/<int:category_id>')
 @login_required
 def category_view(category_id):
     category = find_category_by_id(category_id)
     if category is not None and category.may_be_observed(current_user):
-        navigator = create_cupboard_navigator()
-        return category.display_context(navigator, current_user).render_template("pages/category_view.j2")
+        navigator = DualNavigator()
+        return category.display_context(navigator, current_user, as_child=False, child_depth=1).render_template(
+            "pages/category_view.j2")
     else:
         return home_redirect()
+
+
+@category_bp.route('/list/<int:root_id>')
+@login_required
+def category_list(root_id):
+    root = find_root_by_id(root_id)
+    if root is not None and root.may_be_observed(current_user):
+        navigator = DualNavigator()
+        categories = Categories(root)
+        return categories.display_context(navigator, current_user, child_depth=1).render_template(
+            "pages/category_list.j2")
+    return home_redirect()
 
 
 # @category_bp.route('/update/<int:category_id>', methods=['GET', 'POST'])

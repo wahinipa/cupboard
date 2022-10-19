@@ -11,5 +11,4 @@ def register_root_navigation(navigator):
     register('create')
     register('delete')
     register('list')
-    register('category_list')
     register('update')

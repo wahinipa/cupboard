@@ -1,23 +1,51 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
 
-from flask import url_for
-
 from tracking import database
 from tracking.cardistry.models.cardistry_models import name_is_key, bread_crumbs
-from tracking.commons.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
-from tracking.commons.text_utilities import description_notation_list
+from tracking.commons.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin, NamedBaseModel
 
-class AllCategories:
+
+class Categories(CupboardDisplayContextMixin):
     label = 'Categories'
+    singular_label = 'Categories'
+    possible_tasks = []
+    flavor = 'category'
+
+    def __init__(self, root):
+        self.root = root
+
+    @property
+    def identities(self):
+        return {'root_id': self.root.id}
+
+    @property
+    def name(self):
+        return self.label
+
+    @property
+    def parent_object(self):
+        return self.root
+
+    @property
+    def root_path(self):
+        return [self.root, self]
+
+    def viewable_children(self, viewer):
+        return [category for category in self.root.sorted_categories if category.may_be_observed(viewer)]
+
+    def add_description(self, context):
+        pass
+
+    def bread_crumbs(self, navigator):
+        return bread_crumbs(navigator, [self.root, self], target=self)
 
 
 class Category(CupboardDisplayContextMixin, NamedBaseModel):
-
     singular_label = 'Category'
     plural_label = 'Categories'
-    possible_tasks = [] # ['update', 'delete']
+    possible_tasks = []  # ['update', 'delete']
     label_prefixes = {}
     flavor = "category"
 
@@ -27,6 +55,10 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
     def viewable_children(self, viewer):
         return []
+
+    @property
+    def parent_object(self):
+        return Categories(self.root)
 
     @property
     def identities(self):
@@ -44,7 +76,6 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
         else:
             return False
 
-
     def may_be_observed(self, viewer):
         return True  # TODO: refine this
 
@@ -61,39 +92,6 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
     @property
     def sorted_choices(self):
         return sorted(self.choices, key=name_is_key)
-
-    @property
-    def url(self):
-        return url_for('category_bp.category_view', category_id=self.id)
-
-    @property
-    def deletion_url(self):
-        return url_for('category_bp.category_delete', category_id=self.id)
-
-    @property
-    def url_update(self):
-        return url_for('category_bp.category_update', category_id=self.id)
-
-    @property
-    def place_create_url(self):
-        return url_for('category_bp.choice_create', category_id=self.id)
-
-
-def all_categories_display_context(root, navigator, viewer):
-    category_context = CupboardDisplayContext({
-        'tab': 'category',
-        'label': 'Categories',
-        'name': 'Categories',
-        'flavor': 'category',
-    })
-    for category in root.sorted_categories:
-        if category.may_be_observed(viewer):
-            category_context.add_child_context(category.display_context(navigator, viewer))
-    # if viewer.may_create_category:
-    #     category_context.add_task(navigator.url(root), 'Category', 'create')
-    return category_context
-
-
 
 
 class Refinement(IdModelMixin, database.Model):

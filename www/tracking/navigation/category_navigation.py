@@ -1,9 +1,8 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.category_models import Category
+from tracking.modelling.category_models import Category, Categories
 
 
 def register_category_navigation(navigator):
-
     def register(task):
         endpoint = f'category_bp.category_{task}'
         navigator.register(Category, task, endpoint)
@@ -12,3 +11,5 @@ def register_category_navigation(navigator):
     register('delete')
     register('update')
     register('view')
+
+    navigator.register(Categories, 'view', 'category_bp.category_list')

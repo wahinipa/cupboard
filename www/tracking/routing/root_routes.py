@@ -5,9 +5,8 @@ from flask_login import login_required, current_user
 from tracking import database
 from tracking.admin.administration import redirect_hacks
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
-from tracking.commons.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form, RootUpdateForm
-from tracking.modelling.category_models import Category, all_categories_display_context
+from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.root_model import find_root_by_id, all_root_display_context, Root
 from tracking.modelling.thing_model import find_thing_by_id
@@ -81,15 +80,6 @@ def root_list():
     navigator = DualNavigator()
     return all_root_display_context(navigator, current_user).render_template("pages/home_page.j2", active_flavor="home")
 
-@root_bp.route('/category_list/<int:root_id>')
-@login_required
-def root_category_list(root_id):
-    root = find_root_by_id(root_id)
-    if root is not None and root.may_be_observed(current_user):
-        navigator = create_cupboard_navigator()
-        return all_categories_display_context(root, navigator, current_user).render_template("pages/category_list.j2")
-    return home_redirect()
-
 
 @root_bp.route('/view/<int:root_id>/<int:place_id>/<int:thing_id>')
 @login_required
@@ -101,7 +91,7 @@ def root_view(root_id, place_id, thing_id):
         if place is not None and place.root == root and place.may_be_observed(current_user):
             if thing is not None and thing.root == root and thing.may_be_observed(current_user):
                 navigator = DualNavigator(root=root, place=place, thing=thing)
-                category_list_url = navigator.url(root, 'category_list')
+                category_list_url = navigator.url(Categories(root), 'view')
                 return root.display_context(navigator, current_user, as_child=False, child_depth=2,
                                             children=[place, thing]).render_template('pages/root_view.j2',
                                                                                      category_list_url=category_list_url)
