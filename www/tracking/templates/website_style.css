@@ -1,4 +1,6 @@
 :root {
+    --flavor-admin-color: rgb(0, 0, 0);
+    --flavor-category-color: rgb(10, 10, 253);
     --flavor-home-color: rgb(100, 100, 100);
     --flavor-people-color: rgb(10, 90, 90);
     --flavor-place-color: rgb(50, 10, 100);
@@ -26,6 +28,8 @@ footer {
     color: black;
 }
 
+/* *** Action Button Styling *** */
+
 #action_check_button {
     display: none;
 }
@@ -38,19 +42,48 @@ footer {
     display: block;
 }
 
-.card-flavor-welcome {
+/* *** Admin Styling *** */
+
+.btn-flavor-admin {
+    border-color: black;
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-admin.active {
+    color: white;
+    background-color: black;
+}
+
+/* *** Category Styling *** */
+
+.card-flavor-category {
     border-color: black;
 }
 
-.card-flavor-welcome .card-header {
+.card-flavor-category .card-header {
     border-color: black;
-    color: black;
-    background-color: var(--flavor-welcome-color);
+    color: white;
+    background-color: var(--flavor-category-color);
 }
 
-.card-flavor-welcome .card-header a {
+.btn-flavor-category {
+    border-color: var(--flavor-category-color);
     color: black;
+    background-color: white;
 }
+
+.btn-flavor-category.active {
+    color: white;
+    background-color: var(--flavor-category-color);
+}
+
+.card-flavor-category .card-header a {
+    color: white;
+}
+
+
+/* *** Home Styling *** */
 
 .card-flavor-home {
     border-color: black;
@@ -73,19 +106,7 @@ footer {
     background-color: var(--flavor-home-color);
 }
 
-.card-flavor-root {
-    border-color: black;
-}
-
-.card-flavor-root .card-header {
-    border-color: black;
-    color: white;
-    background-color: var(--flavor-root-color);
-}
-
-.card-flavor-root .card-header a {
-    color: white;
-}
+/* *** People Styling *** */
 
 .card-flavor-people {
     border-color: black;
@@ -112,16 +133,7 @@ footer {
     background-color: var(--flavor-people-color);
 }
 
-.btn-flavor-admin {
-    border-color: black;
-    color: black;
-    background-color: white;
-}
-
-.btn-flavor-admin.active {
-    color: white;
-    background-color: black;
-}
+/* *** Place Styling *** */
 
 .card-flavor-place {
     border-color: black;
@@ -137,6 +149,23 @@ footer {
     background-color: var(--flavor-place-color);
 }
 
+/* *** Root Styling *** */
+
+.card-flavor-root {
+    border-color: black;
+}
+
+.card-flavor-root .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-root-color);
+}
+
+.card-flavor-root .card-header a {
+    color: white;
+}
+
+/* *** Task Styling *** */
 
 .card-flavor-tasks {
     border-color: black;
@@ -152,6 +181,8 @@ footer {
     color: white;
 }
 
+/* *** Thing Styling *** */
+
 .card-flavor-thing {
     border-color: black;
 }
@@ -165,3 +196,20 @@ footer {
 .card-flavor-thing .card-header a {
     color: white;
 }
+
+.card-flavor-welcome {
+    border-color: black;
+}
+
+/* *** Welcome Styling *** */
+
+.card-flavor-welcome .card-header {
+    border-color: black;
+    color: black;
+    background-color: var(--flavor-welcome-color);
+}
+
+.card-flavor-welcome .card-header a {
+    color: black;
+}
+

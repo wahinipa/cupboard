@@ -1,5 +1,6 @@
 {% extends "pages/website.j2" %}
 {% from 'macros/content_macros.j2' import
+category_nav_item,
 home_nav_item,
 people_nav_item,
 admin_database_edit_nav_item %}
@@ -7,6 +8,7 @@ iv
 {% block top_header %}
 <div class="col-md-12">
   {{ home_nav_item(active_flavor) }}
+  {{ category_nav_item(active_flavor, category_list_url) }}
   {{ people_nav_item(active_flavor) }}
   {{ admin_database_edit_nav_item(current_user) }}
 </div>

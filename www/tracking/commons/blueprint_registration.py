@@ -28,6 +28,9 @@ def blueprint_registration(application):
     from tracking.routing.home_routes import home_bp
     application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
 
+    from tracking.routing.category_routes import category_bp
+    application.register_blueprint(category_bp, url_prefix=CATEGORY_PREFIX)
+
     from tracking.routing.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)
 

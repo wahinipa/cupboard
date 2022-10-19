@@ -9,8 +9,8 @@ from tracking.modelling.base_models import NamedBaseModel
 
 
 class Choice(NamedBaseModel):
-    category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
-    particulars = database.relationship('Particular', backref='choice', lazy=True, cascade='all, delete')
+    category_id = database.Column(database.Integer, database.ForeignKey('category.id'), nullable=False)
+    # particulars = database.relationship('Particular', backref='choice', lazy=True, cascade='all, delete')
 
     @property
     def url(self):

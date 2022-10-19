@@ -1,11 +1,11 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect
 from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.choices.choice_forms import ChoiceUpdateForm
-from tracking.choices.choice_models import find_choice_by_id
+from tracking.forms.choice_forms import ChoiceUpdateForm
+from tracking.modelling.choice_models import find_choice_by_id
 from tracking.routing.home_redirect import home_redirect
 
 # from tracking.commons.cupboard_display_context import display_context

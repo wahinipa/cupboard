@@ -4,9 +4,11 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.admin.administration import redirect_hacks
-from tracking.categories.category_forms import CategoryCreateForm, CategoryUpdateForm
-from tracking.categories.category_models import find_category_by_id
-from tracking.choices.choice_forms import ChoiceCreateForm, create_choice_from_form
+from tracking.commons.cupboard_navigation import create_cupboard_navigator
+from tracking.forms.category_forms import CategoryCreateForm, CategoryUpdateForm
+from tracking.modelling.category_models import find_category_by_id, all_categories_display_context
+from tracking.forms.choice_forms import ChoiceCreateForm, create_choice_from_form
+from tracking.modelling.root_model import find_root_by_id
 from tracking.routing.home_redirect import home_redirect
 
 category_bp = Blueprint(
@@ -35,51 +37,47 @@ def category_create_form():
     return CategoryCreateForm()
 
 
-@category_bp.route('/delete/<int:category_id>')
-@login_required
-def category_delete(category_id):
-    category = find_category_by_id(category_id)
-    if category is not None and category.user_may_delete(current_user):
-        database.session.delete(category)
-        database.session.commit()
-        return redirect(url_for('category_bp.category_list'))
-    else:
-        return redirect_hacks()
-
-
-# @category_bp.route('/list')
+# @category_bp.route('/delete/<int:category_id>')
 # @login_required
-# def category_list():
-#     from tracking.home.home_models import home_root
-#     return home_root.all_categories.display_context(current_user).render_template()
-#
+# def category_delete(category_id):
+#     category = find_category_by_id(category_id)
+#     if category is not None and category.user_may_delete(current_user):
+#         database.session.delete(category)
+#         database.session.commit()
+#         return redirect(url_for('category_bp.category_list'))
+#     else:
+#         return redirect_hacks()
+
+
+
 
 @category_bp.route('/view/<int:category_id>')
 @login_required
 def category_view(category_id):
     category = find_category_by_id(category_id)
     if category is not None and category.may_be_observed(current_user):
-        return category.display_context(current_user).render_template()
+        navigator = create_cupboard_navigator()
+        return category.display_context(navigator, current_user).render_template("pages/category_view.j2")
     else:
         return home_redirect()
 
 
-@category_bp.route('/update/<int:category_id>', methods=['GET', 'POST'])
-@login_required
-def category_update(category_id):
-    category = find_category_by_id(category_id)
-    if category and category.user_may_update(current_user):
-        form = category_update_form(category)
-        if request.method == 'POST' and form.cancel_button.data:
-            return redirect(url_for('category_bp.category_view', category_id=category_id))
-        if form.validate_on_submit():
-            update_category_from_form(category, form)
-            database.session.commit()
-            return redirect(url_for('category_bp.category_view', category_id=category.id))
-        else:
-            return render_template('pages/form_page.j2', form=form, tab="category", **display_context())
-    else:
-        return redirect_hacks()
+# @category_bp.route('/update/<int:category_id>', methods=['GET', 'POST'])
+# @login_required
+# def category_update(category_id):
+#     category = find_category_by_id(category_id)
+#     if category and category.user_may_update(current_user):
+#         form = category_update_form(category)
+#         if request.method == 'POST' and form.cancel_button.data:
+#             return redirect(url_for('category_bp.category_view', category_id=category_id))
+#         if form.validate_on_submit():
+#             update_category_from_form(category, form)
+#             database.session.commit()
+#             return redirect(url_for('category_bp.category_view', category_id=category.id))
+#         else:
+#             return render_template('pages/form_page.j2', form=form, tab="category", **display_context())
+#     else:
+#         return redirect_hacks()
 
 
 def category_update_form(category):

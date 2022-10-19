@@ -4,7 +4,7 @@ from old_testing.fixtures_for_testing import COLORING_DATE, COLORING_DESCRIPTION
     PASTRY_DESCRIPTION, \
     PASTRY_DATE, \
     light_saber
-from tracking.categories.category_models import refine_thing
+from tracking.modelling.category_models import refine_thing
 
 
 def _pycharm_please_keep_these_imports():

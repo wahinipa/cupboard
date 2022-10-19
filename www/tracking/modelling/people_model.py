@@ -225,7 +225,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     @property
     def viewable_categories(self):
-        from tracking.categories.category_models import all_categories
+        from tracking.modelling.category_models import all_categories
         return [category.viewable_attributes(self) for category in all_categories() if category.user_may_view(self)]
 
 

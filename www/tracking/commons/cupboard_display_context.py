@@ -49,8 +49,8 @@ class CupboardDisplayContextMixin:
                     child_link_label = child.singular_label
                     context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
         for task in self.allowed_tasks(viewer):
-            context['flavor'] = self.flavor
             self.add_task(context, navigator, task)
+        context['flavor'] = self.flavor
         return context
 
     def allowed_tasks(self, viewer):

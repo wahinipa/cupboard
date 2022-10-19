@@ -6,28 +6,29 @@ from wtforms import SubmitField
 
 from tracking import database
 from tracking.cardistry.forms.cardistry_forms import name_form_field, description_form_field, cancel_button_field
-from tracking.categories.category_models import Category
+from tracking.modelling.choice_models import Choice
 
 
-class CategoryBaseForm(FlaskForm):
+class ChoiceBaseForm(FlaskForm):
     name = name_form_field()
     description = description_form_field()
     cancel_button = cancel_button_field()
 
 
-class CategoryCreateForm(CategoryBaseForm):
-    submit = SubmitField('Create New Category')
+class ChoiceCreateForm(ChoiceBaseForm):
+    submit = SubmitField('Create New Choice')
 
-class CategoryUpdateForm(CategoryBaseForm):
-    submit = SubmitField('Update Category')
+class ChoiceUpdateForm(ChoiceBaseForm):
+    submit = SubmitField('Update Choice')
 
 
-def create_category_from_form(form):
-    category = Category(
+def create_choice_from_form(category, form):
+    choice = Choice(
+        category_id=category.id,
         name=form.name.data,
         description=form.description.data,
         date_created=datetime.now()
     )
-    database.session.add(category)
+    database.session.add(choice)
     database.session.commit()
-    return category
+    return choice

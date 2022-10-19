@@ -71,19 +71,28 @@ def create_test_data(database):
     backpacks = containers.create_kind_of_thing("Backpacks", "Containers that\nStrap to your back.")
     gym_bags = containers.create_kind_of_thing("Gym Bags", description="")
 
+    # Categories
+    our_test_group.create_category("Season", "Whether for summer or winter or either.")
+    our_test_group.create_category("Sex", "Whether for girl or boy or either.")
+    our_test_group.create_category("Age Appropriate", "Whether for infant, toddler, child, adult, or any.")
+
 
 def add_flask_admin(application, database):
     admin = Admin(application, project_name(), url=ADMIN_URL)
     admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
     # Using local imports helps break circularity of dependencies
     from tracking.modelling.people_model import User
-    from tracking.modelling.root_model import Root
+    from tracking.modelling.category_models import Category
     from tracking.modelling.place_model import Place
     from tracking.modelling.thing_model import Thing
-    admin.add_view(AdminModelView(User, database.session))
+    from tracking.modelling.choice_models import Choice
+    from tracking.modelling.root_model import Root
+    admin.add_view(AdminModelView(Category, database.session))
+    admin.add_view(AdminModelView(Choice, database.session))
     admin.add_view(AdminModelView(Place, database.session))
-    admin.add_view(AdminModelView(Thing, database.session))
     admin.add_view(AdminModelView(Root, database.session))
+    admin.add_view(AdminModelView(Thing, database.session))
+    admin.add_view(AdminModelView(User, database.session))
 
 
 class AdminModelView(ModelView):

@@ -1,7 +1,8 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from datetime import datetime
 
 from tracking import database
-from tracking.cardistry.models.cardistry_models import name_is_key
+from tracking.cardistry.models.cardistry_models import name_is_key, sorted_by_name
 from tracking.commons.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import UniqueNamedBaseModel
 
@@ -11,14 +12,30 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     plural_label = "Organizational Associations"
     possible_tasks = ['update', 'delete']
     label_prefixes = {}
-    flavor="root"
+    flavor = "root"
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
 
+    categories = database.relationship('Category', backref='root', lazy=True, cascade='all, delete')
+
     @property
     def identities(self):
         return {'root_id': self.id}
+
+    @property
+    def sorted_categories(self):
+        return sorted_by_name(self.categories)
+
+
+    def create_category(self, name, description, date_created=None):
+        if date_created is None:
+            date_created = datetime.now()
+        from tracking.modelling.category_models import Category
+        category = Category(name=name, description=description, root=self, date_created=date_created)
+        database.session.add(category)
+        database.session.commit()
+        return category
 
     def may_perform_task(self, viewer, task):
         if task == 'view':
@@ -70,8 +87,8 @@ def all_root_display_context(navigator, viewer):
         if root.may_be_observed(viewer):
             context.append_to_list('children', root.display_context(navigator, viewer))
     if viewer.may_create_root:
-        context['flavor'] = 'home'
         context.add_task(navigator.url(Root, 'create'), label=Root.singular_label, task="create")
+    context['flavor'] = 'home'
     return context
 
 
