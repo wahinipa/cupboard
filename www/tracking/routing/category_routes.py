@@ -6,6 +6,8 @@ from tracking import database
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.category_forms import CategoryCreateForm, CategoryUpdateForm
 from tracking.modelling.category_models import find_category_by_id, Categories
+from tracking.modelling.place_model import find_place_by_id
+from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 
@@ -16,13 +18,16 @@ category_bp = Blueprint(
 )
 
 
-@category_bp.route('/delete/<int:category_id>')
+@category_bp.route('/delete/<int:category_id>/<int:place_id>/<int:thing_id>')
 @login_required
-def category_delete(category_id):
+def category_delete(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
-    if category is not None and category.may_delete(current_user):
-        navigator = DualNavigator(root=category.root)
-        redirect_url = navigator.url(Categories(category.root), 'view')
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if category and place and thing and category.may_delete(current_user):
+        navigator = DualNavigator(root=category.root, place=place, thing=thing)
+        categories = Categories(root=category.root, place=category.root.place, thing=category.root.thing)
+        redirect_url = navigator.url(categories, 'view')
         database.session.delete(category)
         database.session.commit()
         return redirect(redirect_url)
@@ -30,24 +35,28 @@ def category_delete(category_id):
         return home_redirect()
 
 
-@category_bp.route('/view/<int:category_id>')
+@category_bp.route('/view/<int:category_id>/<int:place_id>/<int:thing_id>')
 @login_required
-def category_view(category_id):
+def category_view(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
-    if category is not None and category.may_be_observed(current_user):
-        navigator = DualNavigator(root=category.root)
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if category and place and thing and category.may_be_observed(current_user):
+        navigator = DualNavigator(root=category.root, place=place, thing=thing)
         return category.display_context(navigator, current_user, as_child=False, child_depth=1).render_template(
             "pages/category_view.j2")
     else:
         return home_redirect()
 
 
-@category_bp.route('/update/<int:category_id>', methods=['GET', 'POST'])
+@category_bp.route('/update/<int:category_id>/<int:place_id>/<int:thing_id>', methods=['GET', 'POST'])
 @login_required
-def category_update(category_id):
+def category_update(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
-    if category and category.may_update(current_user):
-        navigator = DualNavigator(root=category.root)
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if category and place and thing and category.may_update(current_user):
+        navigator = DualNavigator(root=category.root, place=place, thing=thing)
         form = CategoryUpdateForm(obj=category)
         redirect_url = navigator.url(category, 'view')
         if request.method == 'POST' and form.cancel_button.data:
@@ -72,13 +81,15 @@ def update_category_from_form(category, form):
     form.populate_obj(category)
 
 
-@category_bp.route('/create_choice/<int:category_id>', methods=['POST', 'GET'])
+@category_bp.route('/create_choice/<int:category_id>/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
 @login_required
-def category_choice_create(category_id):
+def category_choice_create(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
-    if category is not None and category.may_create_choice(current_user):
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if category and place and thing and category.may_create_choice(current_user):
         form = CategoryCreateForm()
-        navigator = DualNavigator()
+        navigator = DualNavigator(root=category.root, place=place, thing=thing)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(navigator.url(category, 'view'))
         if form.validate_on_submit():

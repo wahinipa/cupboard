@@ -14,12 +14,18 @@ class Categories(CupboardDisplayContextMixin):
     singular_label = 'Categories'
     possible_tasks = ['create', 'view']
 
-    def __init__(self, root):
+    def __init__(self, root, place=None, thing=None):
+        if place is None:
+            place = root.place
+        if thing is None:
+            thing = root.thing
         self.root = root
+        self.place = place
+        self.thing = thing
 
     @property
     def identities(self):
-        return {'root_id': self.root.id}
+        return {'root_id': self.root.id, 'place_id': self.place.id, 'thing_id':self.thing.id}
 
     @property
     def name(self):
@@ -67,7 +73,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def parent_object(self):
-        return Categories(self.root)
+        return Categories(root=self.root, place=self.root.place, thing=self.root.thing)
 
     @property
     def identities(self):

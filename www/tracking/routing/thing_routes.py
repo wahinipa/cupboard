@@ -24,7 +24,7 @@ def thing_create(thing_id):
     if thing is None or not thing.may_create_thing(current_user):
         return home_redirect()
     form = ThingCreateForm()
-    navigator = DualNavigator()
+    navigator = DualNavigator(thing.root)
     if request.method == 'POST' and form.cancel_button.data:
         return redirect(navigator.url(thing, 'view'))
     if form.validate_on_submit():
