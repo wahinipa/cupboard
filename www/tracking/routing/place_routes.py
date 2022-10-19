@@ -1,10 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
-from flask import Blueprint, url_for, request, redirect
+from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.admin.administration import redirect_hacks
 from tracking.commons.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm
 from tracking.modelling.place_model import find_place_by_id
@@ -22,7 +21,7 @@ place_bp = Blueprint(
 def place_create(place_id):
     place = find_place_by_id(place_id)
     if place is None or not place.may_create_place(current_user):
-        return redirect_hacks()
+        return home_redirect()
     form = PlaceCreateForm()
     navigator = create_cupboard_navigator()
     if request.method == 'POST' and form.cancel_button.data:
@@ -32,7 +31,8 @@ def place_create(place_id):
         return redirect(navigator.url(new_place, 'view'))
     else:
         return place.display_context(navigator, current_user).render_template("pages/form_page.j2", form=form,
-                                                                   form_title=f'Create New Place for {place.name}')
+                                                                              form_title=f'Create New Place for '
+                                                                                         f'{place.name}')
 
 
 @place_bp.route('/delete/<int:place_id>')
@@ -46,7 +46,7 @@ def place_delete(place_id):
         database.session.commit()
         return redirect(redirect_url)
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 @place_bp.route('/update/<int:place_id>', methods=['GET', 'POST'])
@@ -66,7 +66,7 @@ def place_update(place_id):
         else:
             return place.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form)
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 def place_update_form(place):

@@ -32,8 +32,8 @@ def log_warn_about_request(prefix):
     current_app.logger.warning(request_info(prefix))
 
 
-def redirect_hacks():
-    log_warn_about_request('Redirect Hack')
+def redirect_hackers():
+    log_warn_about_request('Redirecting Hackers')
     return redirect((url_for('fake_bp.fake')))
 
 

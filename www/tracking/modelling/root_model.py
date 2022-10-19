@@ -27,7 +27,6 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     def sorted_categories(self):
         return sorted_by_name(self.categories)
 
-
     def create_category(self, name, description, date_created=None):
         if date_created is None:
             date_created = datetime.now()
@@ -58,6 +57,9 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         return viewer.may_delete_root
 
     def may_create_place(self, viewer):
+        return viewer.may_update_root
+
+    def may_create_category(self, viewer):
         return viewer.may_update_root
 
     def may_create_thing(self, viewer):

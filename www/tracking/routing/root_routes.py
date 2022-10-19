@@ -3,7 +3,6 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.admin.administration import redirect_hacks
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form, RootUpdateForm
 from tracking.modelling.category_models import Categories
@@ -24,7 +23,7 @@ root_bp = Blueprint(
 @login_required
 def root_create():
     if not current_user.may_create_root:
-        return redirect_hacks()
+        return home_redirect()
     form = RootCreateForm()
     navigator = DualNavigator()
     if request.method == 'POST' and form.cancel_button.data:
@@ -46,7 +45,7 @@ def root_delete(root_id):
         database.session.commit()
         return redirect(navigator.url(Root, 'list'))
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 @root_bp.route('/update/<int:root_id>', methods=['GET', 'POST'])
@@ -67,7 +66,7 @@ def root_update(root_id):
             return root.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form,
                                                                                  form_title=f'Update {root.name}')
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 def update_root_from_form(root, form):

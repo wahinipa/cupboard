@@ -1,13 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
-from flask import Blueprint, url_for, request, redirect
+from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.admin.administration import redirect_hacks
 from tracking.commons.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.thing_forms import ThingUpdateForm, ThingCreateForm
 from tracking.modelling.thing_model import find_thing_by_id
+from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 
 thing_bp = Blueprint(
@@ -22,9 +22,9 @@ thing_bp = Blueprint(
 def thing_create(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is None or not thing.may_create_thing(current_user):
-        return redirect_hacks()
+        return home_redirect()
     form = ThingCreateForm()
-    navigator = create_cupboard_navigator()
+    navigator = DualNavigator()
     if request.method == 'POST' and form.cancel_button.data:
         return redirect(navigator.url(thing, 'view'))
     if form.validate_on_submit():
@@ -32,7 +32,8 @@ def thing_create(thing_id):
         return redirect(navigator.url(new_thing, 'view'))
     else:
         return thing.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form,
-                                                                   form_title=f'Create New Kind of {thing.name}')
+                                                                              form_title=f'Create New Kind of '
+                                                                                         f'{thing.name}')
 
 
 @thing_bp.route('/delete/<int:thing_id>')
@@ -46,7 +47,7 @@ def thing_delete(thing_id):
         database.session.commit()
         return redirect(redirect_url)
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 @thing_bp.route('/update/<int:thing_id>', methods=['GET', 'POST'])
@@ -66,7 +67,7 @@ def thing_update(thing_id):
         else:
             return thing.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form)
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 def thing_update_form(thing):
@@ -83,6 +84,7 @@ def thing_view(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing is not None and thing.may_be_observed(current_user):
         navigator = create_cupboard_navigator()
-        return thing.display_context(navigator, current_user, as_child=False, child_depth=1, child_link_label=f'Thing').render_template('pages/thing_view.j2')
+        return thing.display_context(navigator, current_user, as_child=False, child_depth=1,
+                                     child_link_label=f'Thing').render_template('pages/thing_view.j2')
     else:
         return home_redirect()

@@ -8,10 +8,11 @@ from tracking.modelling.base_models import IdModelMixin, NamedBaseModel
 
 
 class Categories(CupboardDisplayContextMixin):
-    label = 'Categories'
-    singular_label = 'Categories'
-    possible_tasks = []
     flavor = 'category'
+    label = 'Categories'
+    label_prefixes = {}
+    singular_label = 'Categories'
+    possible_tasks = ['create', 'view']
 
     def __init__(self, root):
         self.root = root
@@ -41,11 +42,19 @@ class Categories(CupboardDisplayContextMixin):
     def bread_crumbs(self, navigator):
         return bread_crumbs(navigator, [self.root, self], target=self)
 
+    def may_perform_task(self, viewer, task):
+        if task == 'view':
+            return self.root.may_be_observed(viewer)
+        elif task == 'create':
+            return self.root.may_create_thing(viewer)
+        else:
+            return False
+
 
 class Category(CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = 'Category'
     plural_label = 'Categories'
-    possible_tasks = []  # ['update', 'delete']
+    possible_tasks = ['update', 'delete']
     label_prefixes = {}
     flavor = "category"
 
@@ -68,30 +77,34 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
         if task == 'view':
             return self.may_be_observed(viewer)
         elif task == 'delete':
-            return self.user_may_delete(viewer)
+            return self.may_delete(viewer)
         elif task == 'update':
-            return self.user_may_update(viewer)
+            return self.may_update(viewer)
         elif task == 'create':
-            return self.user_may_create_choice(viewer)
+            return self.may_create_choice(viewer)
         else:
             return False
 
     def may_be_observed(self, viewer):
         return True  # TODO: refine this
 
-    def user_may_delete(self, viewer):
+    def may_delete(self, viewer):
         return viewer.may_delete_category
 
-    def user_may_update(self, viewer):
+    def may_update(self, viewer):
         return viewer.may_update_category
 
-    def user_may_create_choice(self, viewer):
+    def may_create_choice(self, viewer):
         # TODO: refine this
         return viewer.may_update_category
 
     @property
     def sorted_choices(self):
         return sorted(self.choices, key=name_is_key)
+
+    def create_choice(self, name, description):
+        from tracking.modelling.choice_models import find_or_create_choice
+        return find_or_create_choice(self, name, description)
 
 
 class Refinement(IdModelMixin, database.Model):

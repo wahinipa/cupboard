@@ -3,12 +3,9 @@ from flask import Blueprint, redirect
 from flask_login import current_user, login_required
 
 from tracking import database
-from tracking.admin.administration import redirect_hacks
 from tracking.forms.choice_forms import ChoiceUpdateForm
 from tracking.modelling.choice_models import find_choice_by_id
 from tracking.routing.home_redirect import home_redirect
-
-# from tracking.commons.cupboard_display_context import display_context
 
 choice_bp = Blueprint(
     'choice_bp', __name__,
@@ -27,7 +24,7 @@ def choice_delete(choice_id):
         database.session.commit()
         return redirect(category.url)
     else:
-        return redirect_hacks()
+        return home_redirect()
 
 
 @choice_bp.route('/view/<int:choice_id>')
@@ -55,7 +52,7 @@ def choice_view(choice_id):
 #         else:
 #             return render_template('pages/form_page.j2', form=form, tab="choice", **display_context())
 #     else:
-#         return redirect_hacks()
+#         return home_redirect()
 
 
 def choice_update_form(choice):
