@@ -18,6 +18,7 @@ USER_PREFIX = my_url('/people')
 PLACES_PREFIX = my_url('/place')
 ROLES_PREFIX = my_url('/role')
 ROOT_PREFIX = my_url('/root')
+ROOTS_PREFIX = my_url('/roots')
 THINGS_PREFIX = my_url('/thing')
 
 
@@ -46,6 +47,9 @@ def blueprint_registration(application):
 
     from tracking.routing.root_routes import root_bp
     application.register_blueprint(root_bp, url_prefix=ROOT_PREFIX)
+
+    from tracking.routing.roots_routes import roots_bp
+    application.register_blueprint(roots_bp, url_prefix=ROOTS_PREFIX)
 
     from tracking.routing.place_routes import place_bp
     application.register_blueprint(place_bp, url_prefix=PLACES_PREFIX)

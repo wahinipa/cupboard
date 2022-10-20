@@ -4,7 +4,7 @@ from werkzeug.utils import redirect
 
 
 def home_url():
-    return url_for('root_bp.root_list')
+    return url_for('roots_bp.roots_view')
 
 
 def home_redirect():

@@ -2,9 +2,50 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
+from tracking.modelling.cardistry_models import name_is_key, sorted_by_name, bread_crumbs
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import UniqueNamedBaseModel
+
+
+class Roots(CupboardDisplayContextMixin):
+    flavor = 'home'
+    label = 'Home'
+    label_prefixes = {}
+    singular_label = 'home'
+    possible_tasks = ['create', 'view']
+
+    @property
+    def identities(self):
+        return {}
+
+    @property
+    def name(self):
+        return self.label
+
+    @property
+    def parent_object(self):
+        return None
+
+    @property
+    def root_path(self):
+        return [self]
+
+    def viewable_children(self, viewer):
+        return [root for root in all_roots() if root.may_be_observed(viewer)]
+
+    def add_description(self, context):
+        pass
+
+    def bread_crumbs(self, navigator):
+        return bread_crumbs(navigator, [self], target=self)
+
+    def may_perform_task(self, viewer, task):
+        if task == 'view':
+            return viewer.may_observe
+        elif task == 'create':
+            return viewer.may_create_root
+        else:
+            return False
 
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
@@ -81,21 +122,6 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
 def all_roots():
     return sorted(Root.query.all(), key=name_is_key)
-
-
-def all_root_display_context(navigator, viewer):
-    context = CupboardDisplayContext(label="Home")
-    for root in all_roots():
-        if root.may_be_observed(viewer):
-            display_attributes = {
-                'description': True,
-                'url': True,
-            }
-            context.append_to_list('children', root.display_context(navigator, viewer, display_attributes))
-    if viewer.may_create_root:
-        context.add_task(navigator.url(Root, 'create'), label=Root.singular_label, task="create")
-    context['flavor'] = 'home'
-    return context
 
 
 def create_root(name, description):

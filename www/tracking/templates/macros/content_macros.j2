@@ -1,5 +1,5 @@
 {% macro home_nav_item(active_flavor) %}
-  {{ render_pill(endpoint='root_bp.root_list', label='Home', active_flavor=active_flavor, flavor='home') }}
+  {{ render_pill(endpoint='roots_bp.roots_view', label='Home', active_flavor=active_flavor, flavor='home') }}
 {% endmacro %}
 
 {% macro category_nav_item(active_flavor, category_list_url) %}

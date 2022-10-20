@@ -3,37 +3,19 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.forms.root_forms import RootCreateForm, create_root_from_form, RootUpdateForm
+from tracking.forms.root_forms import RootUpdateForm, update_root_from_form
 from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id
-from tracking.modelling.root_model import find_root_by_id, all_root_display_context, Root
+from tracking.modelling.root_model import find_root_by_id, Root, Roots
 from tracking.modelling.thing_model import find_thing_by_id
-from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 root_bp = Blueprint(
     'root_bp', __name__,
     template_folder='templates',
     static_folder='static',
 )
-
-
-@root_bp.route('/create', methods=['POST', 'GET'])
-@login_required
-def root_create():
-    if not current_user.may_create_root:
-        return home_redirect()
-    form = RootCreateForm()
-    navigator = create_cupboard_navigator()
-    if request.method == 'POST' and form.cancel_button.data:
-        return redirect(navigator.url(Root, 'list'))
-    if form.validate_on_submit():
-        root = create_root_from_form(form)
-        return redirect(navigator.url(root, 'view'))
-    else:
-        return CupboardDisplayContext().render_template("pages/form_page.j2", form=form, form_title="Create New Root")
 
 
 @root_bp.route('/delete/<int:root_id>')
@@ -44,7 +26,7 @@ def root_delete(root_id):
         navigator = DualNavigator(root=root)
         database.session.delete(root)
         database.session.commit()
-        return redirect(navigator.url(Root, 'list'))
+        return redirect(navigator.url(Roots, 'view'))
     else:
         return home_redirect()
 
@@ -70,17 +52,6 @@ def root_update(root_id):
         return home_redirect()
 
 
-def update_root_from_form(root, form):
-    form.populate_obj(root)
-
-
-@root_bp.route('/list')
-@login_required
-def root_list():
-    navigator = DualNavigator()
-    return all_root_display_context(navigator, current_user).render_template("pages/home_page.j2", active_flavor="home")
-
-
 @root_bp.route('/view/<int:root_id>/<int:place_id>/<int:thing_id>')
 @login_required
 def root_view(root_id, place_id, thing_id):
@@ -102,7 +73,7 @@ def root_view(root_id, place_id, thing_id):
                                 'url': True,
                                 'bread_crumbs': True,
                                 'children_attributes': {
-                                    'place' : {
+                                    'place': {
                                         'notation': True,
                                     },
                                 },

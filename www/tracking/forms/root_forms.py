@@ -19,3 +19,7 @@ class RootCreateForm(NameDescriptionBaseForm):
 
 class RootUpdateForm(NameDescriptionBaseForm):
     submit = SubmitField('Update Root')
+
+
+def update_root_from_form(root, form):
+    form.populate_obj(root)
