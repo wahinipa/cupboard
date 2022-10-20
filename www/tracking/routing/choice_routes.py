@@ -9,6 +9,7 @@ from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 choice_bp = Blueprint(
     'choice_bp', __name__,
@@ -24,7 +25,7 @@ def choice_delete(choice_id, place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
     if choice and place and thing and choice.may_delete(current_user):
-        navigator = DualNavigator(root=choice.root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         redirect_url = navigator.url(choice.category, 'view')
         database.session.delete(choice)
         database.session.commit()
@@ -40,7 +41,7 @@ def choice_view(choice_id, place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
     if choice and place and thing and choice.may_be_observed(current_user):
-        navigator = DualNavigator(root=choice.root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         display_attributes = {
             'description': True,
             'url': True,
@@ -59,7 +60,7 @@ def choice_update(choice_id, place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
     if choice and place and thing and choice.may_update(current_user):
-        navigator = DualNavigator(root=choice.root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         form = ChoiceUpdateForm(obj=choice)
         redirect_url = navigator.url(choice, 'view')
         if request.method == 'POST' and form.cancel_button.data:
@@ -69,7 +70,7 @@ def choice_update(choice_id, place_id, thing_id):
             database.session.commit()
             return redirect(redirect_url)
         else:
-            return choice.display_context(navigator, current_user).render_template(
+            return CupboardDisplayContext().render_template(
                 'pages/form_page.j2', form=form, form_title=f'Update {choice.name}')
     else:
         return home_redirect()

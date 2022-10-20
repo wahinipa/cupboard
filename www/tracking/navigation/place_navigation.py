@@ -11,4 +11,3 @@ def register_place_navigation(navigator):
     register('create')
     register('delete')
     register('update')
-    register('view')

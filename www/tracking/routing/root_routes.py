@@ -10,6 +10,7 @@ from tracking.modelling.root_model import find_root_by_id, Root, Roots
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 root_bp = Blueprint(
     'root_bp', __name__,
@@ -18,12 +19,14 @@ root_bp = Blueprint(
 )
 
 
-@root_bp.route('/delete/<int:root_id>')
+@root_bp.route('/delete/<int:root_id>/<int:place_id>/<int:thing_id>')
 @login_required
-def root_delete(root_id):
+def root_delete(root_id, place_id, thing_id):
     root = find_root_by_id(root_id)
-    if root and root.may_delete(current_user):
-        navigator = DualNavigator(root=root)
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if root and place and thing and root.may_delete(current_user):
+        navigator = DualNavigator(root=root, place=place, thing=thing)
         database.session.delete(root)
         database.session.commit()
         return redirect(navigator.url(Roots, 'view'))
@@ -31,12 +34,14 @@ def root_delete(root_id):
         return home_redirect()
 
 
-@root_bp.route('/update/<int:root_id>', methods=['GET', 'POST'])
+@root_bp.route('/update/<int:root_id>/<int:place_id>/<int:thing_id>', methods=['GET', 'POST'])
 @login_required
-def root_update(root_id):
+def root_update(root_id, place_id, thing_id):
     root = find_root_by_id(root_id)
-    if root and root.may_update(current_user):
-        navigator = DualNavigator(root=root)
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if root and place and thing and root.may_update(current_user):
+        navigator = DualNavigator(root=root, place=place, thing=thing)
         form = RootUpdateForm(obj=root)
         redirect_url = navigator.url(root, 'view')
         if request.method == 'POST' and form.cancel_button.data:
@@ -46,7 +51,7 @@ def root_update(root_id):
             database.session.commit()
             return redirect(redirect_url)
         else:
-            return root.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form,
+            return CupboardDisplayContext().render_template('pages/form_page.j2', form=form,
                                                                                  form_title=f'Update {root.name}')
     else:
         return home_redirect()

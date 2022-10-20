@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
-from tracking.forms.thing_forms import ThingUpdateForm, ThingCreateForm
+from tracking.forms.thing_forms import ThingUpdateForm, ThingCreateForm, update_thing_from_form
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
@@ -55,7 +55,7 @@ def thing_delete(thing_id):
 def thing_update(thing_id):
     thing = find_thing_by_id(thing_id)
     if thing and thing.may_update(current_user):
-        form = thing_update_form(thing)
+        form = ThingUpdateForm(obj=thing)
         navigator = create_cupboard_navigator()
         redirect_url = navigator.url(thing, 'view')
         if request.method == 'POST' and form.cancel_button.data:
@@ -70,21 +70,3 @@ def thing_update(thing_id):
         return home_redirect()
 
 
-def thing_update_form(thing):
-    return ThingUpdateForm(obj=thing)
-
-
-def update_thing_from_form(thing, form):
-    form.populate_obj(thing)
-
-
-@thing_bp.route('/view/<int:thing_id>')
-@login_required
-def thing_view(thing_id):
-    thing = find_thing_by_id(thing_id)
-    if thing is not None and thing.may_be_observed(current_user):
-        navigator = create_cupboard_navigator()
-        return thing.display_context(navigator, current_user, as_child=False, child_depth=1,
-                                     child_link_label=f'Thing').render_template('pages/thing_view.j2')
-    else:
-        return home_redirect()

@@ -11,3 +11,7 @@ class ThingCreateForm(NameDescriptionBaseForm):
 
 class ThingUpdateForm(NameDescriptionBaseForm):
     submit = SubmitField('Update Thing')
+
+
+def update_thing_from_form(thing, form):
+    form.populate_obj(thing)

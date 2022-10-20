@@ -11,6 +11,7 @@ from tracking.modelling.people_model import find_user_by_id, all_people_display_
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 people_bp = Blueprint(
     'people_bp', __name__,
@@ -71,7 +72,6 @@ def login():
         else:
             return home_redirect()
     else:
-        from tracking.viewing.cupboard_display_context import CupboardDisplayContext
         return CupboardDisplayContext().render_template('pages/login.j2', form=form)
 
 
@@ -85,13 +85,14 @@ def people_update(user_id):
         redirect_url = navigator.url(person, 'view')
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(redirect_url)
-        if form.validate_on_submit():
+        elif form.validate_on_submit():
             form.populate_obj(person)
             database.session.commit()
             return redirect(redirect_url)
+        else:
+            return CupboardDisplayContext().render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {person.name}')
     else:
         return home_redirect()
-    return render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {person.name}')
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -109,7 +110,7 @@ def change_password():
     if form.validate_on_submit():
         database.session.commit()
         return home_redirect()
-    return render_template('pages/change_password.j2', form=form)
+    return CupboardDisplayContext().render_template('pages/change_password.j2', form=form)
 
 
 @people_bp.route('/list')

@@ -43,7 +43,7 @@ def category_view(category_id, place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
     if category and place and thing and category.may_be_observed(current_user):
-        navigator = DualNavigator(root=category.root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         display_attributes = {
             'description': True,
             'url': True,
@@ -67,7 +67,7 @@ def category_update(category_id, place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
     if category and place and thing and category.may_update(current_user):
-        navigator = DualNavigator(root=category.root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         form = CategoryUpdateForm(obj=category)
         redirect_url = navigator.url(category, 'view')
         if request.method == 'POST' and form.cancel_button.data:
@@ -77,7 +77,7 @@ def category_update(category_id, place_id, thing_id):
             database.session.commit()
             return redirect(redirect_url)
         else:
-            return category.display_context(navigator, current_user).render_template(
+            return CupboardDisplayContext().render_template(
                 'pages/form_page.j2', form=form, form_title=f'Update {category.name}')
     else:
         return home_redirect()
@@ -91,7 +91,7 @@ def category_create(category_id, place_id, thing_id):
     thing = find_thing_by_id(thing_id)
     if category and place and thing and category.may_create_choice(current_user):
         form = ChoiceCreateForm()
-        navigator = DualNavigator(root=category.root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(navigator.url(category, 'view'))
         if form.validate_on_submit():

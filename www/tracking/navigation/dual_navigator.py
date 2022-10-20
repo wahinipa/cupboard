@@ -9,24 +9,32 @@ from tracking.modelling.thing_model import Thing
 from tracking.navigation.navigator import navigational_mark
 
 
-def root_url(root, place, thing):
-    return url_for('root_bp.root_view', root_id=root.id, place_id=place.id, thing_id=thing.id)
+def root_url(root, place=None, thing=None, task='view'):
+    if place is None:
+        place = root.place
+    if thing is None:
+        thing = root.thing
+    return url_for(f'root_bp.root_{task}', root_id=root.id, place_id=place.id, thing_id=thing.id)
 
 
-def categories_url(root, place, thing):
-    return url_for('categories_bp.categories_view', root_id=root.id, place_id=place.id, thing_id=thing.id)
-
-
-def category_url(category, place, thing):
-    return url_for('category_bp.category_view', category_id=category.id, place_id=place.id, thing_id=thing.id)
+def categories_url(root, place, thing, task='view'):
+    return url_for(f'categories_bp.categories_{task}', root_id=root.id, place_id=place.id, thing_id=thing.id)
 
 
 def category_url(category, place, thing, task='view'):
     return url_for(f'category_bp.category_{task}', category_id=category.id, place_id=place.id, thing_id=thing.id)
 
 
-def choice_url(choice: object, place: object, thing: object, task: object = 'view') -> object:
+def category_url(category, place, thing, task='view'):
+    return url_for(f'category_bp.category_{task}', category_id=category.id, place_id=place.id, thing_id=thing.id)
+
+
+def choice_url(choice, place, thing, task='view') -> object:
     return url_for(f'choice_bp.choice_{task}', choice_id=choice.id, place_id=place.id, thing_id=thing.id)
+
+
+def place_url(place, thing, task='view') -> object:
+    return url_for(f'place_bp.place_{task}', place_id=place.id, thing_id=thing.id)
 
 
 class DualNavigator:
@@ -40,12 +48,17 @@ class DualNavigator:
         self.category_mark = navigational_mark(Category)
         self.choice_mark = navigational_mark(Choice)
 
-        self.root = root
+        if root is None:
+            if place:
+                root = place.root
+            elif thing:
+                root = thing.root
         if place is None and root is not None:
             place = root.place
-        self.place = place
         if thing is None and root is not None:
             thing = root.thing
+        self.root = root
+        self.place = place
         self.thing = thing
 
     def url(self, target, task):
@@ -70,5 +83,9 @@ class DualNavigator:
             return category_url(target, self.place, self.thing, task=task)
         elif navigational_mark(target) == self.choice_mark:
             return choice_url(target, self.place, self.thing, task=task)
+        elif navigational_mark(target) == self.place_mark:
+            return place_url(target, self.thing, task=task)
+        elif navigational_mark(target) == self.root_mark:
+            return root_url(target, self.place, self.thing, task=task)
 
         return self.navigator.url(target, task)
