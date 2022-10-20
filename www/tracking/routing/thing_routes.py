@@ -4,7 +4,7 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.commons.cupboard_navigation import create_cupboard_navigator
+from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.thing_forms import ThingUpdateForm, ThingCreateForm
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator

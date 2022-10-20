@@ -3,8 +3,8 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.commons.cupboard_display_context import CupboardDisplayContext
-from tracking.commons.cupboard_navigation import create_cupboard_navigator
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form, RootUpdateForm
 from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id

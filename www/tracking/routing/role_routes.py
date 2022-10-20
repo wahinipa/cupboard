@@ -1,9 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, url_for, redirect, render_template
+from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 
-from tracking.commons.cupboard_display_context import display_context
-from tracking.roles.role_models import find_role_by_id
+from tracking.viewing.cupboard_display_context import display_context
+from tracking.modelling.role_models import find_role_by_id
 from tracking.routing.home_redirect import home_redirect
 
 role_bp = Blueprint(

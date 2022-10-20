@@ -9,9 +9,9 @@ from flask_admin.menu import MenuLink
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from tracking.commons.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
+from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 from tracking.commons.create_test_data import create_test_data
-from tracking.commons.cupboard_display_context import project_name
+from tracking.viewing.cupboard_display_context import project_name
 
 
 def request_info(prefix):

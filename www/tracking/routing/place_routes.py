@@ -4,7 +4,7 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.commons.cupboard_navigation import create_cupboard_navigator
+from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm
 from tracking.modelling.place_model import find_place_by_id
 from tracking.routing.home_redirect import home_redirect

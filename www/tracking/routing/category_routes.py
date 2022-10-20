@@ -1,9 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, redirect, request, url_for
+from flask import Blueprint, redirect, request
 from flask_login import current_user, login_required
 
 from tracking import database
-from tracking.commons.cupboard_display_context import CupboardDisplayContext
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.category_forms import CategoryUpdateForm
 from tracking.forms.choice_forms import ChoiceCreateForm
 from tracking.modelling.category_models import find_category_by_id, Categories

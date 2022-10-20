@@ -23,13 +23,13 @@ THINGS_PREFIX = my_url('/thing')
 
 def blueprint_registration(application):
     # Using local imports helps break circularity of dependencies
-    from tracking.admin.admin_routes import admin_bp
+    from tracking.routing.admin_routes import admin_bp
     application.register_blueprint(admin_bp, url_prefix=ADMIN_URL)
 
     from tracking.routing.home_routes import home_bp
     application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)
 
-    from tracking.home.fake_routes import fake_bp
+    from tracking.routing.fake_routes import fake_bp
     application.register_blueprint(fake_bp, url_prefix=FAKE_PREFIX)
 
     from tracking.routing.category_routes import category_bp

@@ -4,7 +4,7 @@ from old_testing.fixtures_for_testing import BOSSY_DATE, BOSSY_DESCRIPTION, BOSS
     curly_stooge_user, dunce, knights_of_the_round_table, larry_stooge_user, moe_stooge_user, \
     queens_of_the_round_table, \
     rainbow_place, wild_place
-from tracking.roles.role_models import assign_group_role, assign_place_role, assign_universal_role, \
+from tracking.modelling.role_models import assign_group_role, assign_place_role, assign_universal_role, \
     find_or_create_role, \
     find_or_create_standard_roles, find_role, Role
 

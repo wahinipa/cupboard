@@ -2,7 +2,7 @@
 from flask import url_for
 from werkzeug.utils import redirect
 
-from tracking.admin.administration import log_warn_about_request
+from tracking.commons.administration import log_warn_about_request
 
 
 def redirect_hackers():

@@ -2,7 +2,7 @@
 from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
-from tracking.commons.cupboard_display_context import CupboardDisplayContext
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.category_forms import CategoryCreateForm
 from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id

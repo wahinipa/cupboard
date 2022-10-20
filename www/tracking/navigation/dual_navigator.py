@@ -31,7 +31,7 @@ def choice_url(choice: object, place: object, thing: object, task: object = 'vie
 
 class DualNavigator:
     def __init__(self, root=None, place=None, thing=None):
-        from tracking.commons.cupboard_navigation import create_cupboard_navigator
+        from tracking.navigation.cupboard_navigation import create_cupboard_navigator
         self.navigator = create_cupboard_navigator()
         self.root_mark = navigational_mark(Root)
         self.place_mark = navigational_mark(Place)

@@ -10,7 +10,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from tracking.commons.blueprint_registration import blueprint_registration
+from tracking.navigation.blueprint_registration import blueprint_registration
 
 database = SQLAlchemy()
 migrate = Migrate()
@@ -26,7 +26,7 @@ def create_app():
     database.init_app(application)
     Bootstrap5(application)
     initialize_login_manager(application)
-    from tracking.admin.administration import add_flask_admin
+    from tracking.commons.administration import add_flask_admin
     add_flask_admin(application, database)
     with application.app_context():
         blueprint_registration(application)
@@ -60,7 +60,7 @@ def initialize_login_manager(application):
 
 def import_models_and_initialize_database(database):
     # Using local imports helps break circularity of dependencies
-    from tracking.admin.administration import initialize_database
+    from tracking.commons.administration import initialize_database
     if environ.get('DB_INIT') or environ.get('TESTING'):
         print('initializing data base')
         initialize_database(database)
