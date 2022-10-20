@@ -1,6 +1,7 @@
 :root {
     --flavor-admin-color: rgb(0, 0, 0);
     --flavor-category-color: rgb(10, 10, 253);
+    --flavor-choice-color: rgb(40, 40, 150);
     --flavor-home-color: rgb(100, 100, 100);
     --flavor-people-color: rgb(10, 90, 90);
     --flavor-place-color: rgb(50, 10, 100);
@@ -82,6 +83,32 @@ footer {
     color: white;
 }
 
+/* *** Choice Styling *** */
+
+.card-flavor-choice {
+    border-color: black;
+}
+
+.card-flavor-choice .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-choice-color);
+}
+
+.btn-flavor-choice {
+    border-color: var(--flavor-choice-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-choice.active {
+    color: white;
+    background-color: var(--flavor-choice-color);
+}
+
+.card-flavor-choice .card-header a {
+    color: white;
+}
 
 /* *** Home Styling *** */
 

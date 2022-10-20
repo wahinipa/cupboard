@@ -38,6 +38,9 @@ def blueprint_registration(application):
     from tracking.routing.categories_routes import categories_bp
     application.register_blueprint(categories_bp, url_prefix=CATEGORIES_PREFIX)
 
+    from tracking.routing.choice_routes import choice_bp
+    application.register_blueprint(choice_bp, url_prefix=CHOICE_PREFIX)
+
     from tracking.routing.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)
 

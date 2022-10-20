@@ -72,9 +72,22 @@ def create_test_data(database):
     gym_bags = containers.create_kind_of_thing("Gym Bags", description="")
 
     # Categories
-    our_test_group.create_category("Season", "Whether for summer or winter or either.")
-    our_test_group.create_category("Sex", "Whether for girl or boy or either.")
-    our_test_group.create_category("Age Appropriate", "Whether for infant, toddler, child, adult, or any.")
+    seasons = our_test_group.create_category("Season", "Whether for summer or winter or either.")
+    sexes = our_test_group.create_category("Sex", "Whether for girl or boy or either.")
+    ages = our_test_group.create_category("Age Appropriate", "Whether for infant, toddler, child, adult, or any.")
+
+    # Choices
+    winter_season = seasons.create_choice("Winter", "For when it is cold.")
+    summer_season = seasons.create_choice("Summer", "For when it is warm.")
+    all_season = seasons.create_choice("All Season", "For any time of year.")
+    girls = sexes.create_choice("Girl's", "Specific to girls.")
+    boys = sexes.create_choice("Boy's", "Specific to boys.")
+    either = sexes.create_choice("Either", "Not specific to either boys or girls.")
+    infant = ages.create_choice("Infant", "For 0 - 2 years old.")
+    toddler = ages.create_choice("Toddler", "For 2 - 5 years old.")
+    child = ages.create_choice("Child", "For 5 - 12 years old.")
+    teen = ages.create_choice("Teen", "For 13 - 19 years old.")
+    adult = ages.create_choice("Teen", "For adults.")
 
 
 def add_flask_admin(application, database):

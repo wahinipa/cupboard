@@ -60,8 +60,8 @@ class Categories(CupboardDisplayContextMixin):
 class Category(CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = 'Category'
     plural_label = 'Categories'
-    possible_tasks = ['update', 'delete']
-    label_prefixes = {}
+    possible_tasks = ['create', 'update', 'delete']
+    label_prefixes = {'create': 'Choice of '}
     flavor = "category"
 
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'), nullable=False)
@@ -69,7 +69,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
 
     def viewable_children(self, viewer):
-        return []
+        return [choice for choice in self.sorted_choices if choice.may_be_observed(viewer)]
 
     @property
     def parent_object(self):

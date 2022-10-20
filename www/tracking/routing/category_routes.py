@@ -66,9 +66,8 @@ def category_update(category_id, place_id, thing_id):
             database.session.commit()
             return redirect(redirect_url)
         else:
-            return category.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form,
-                                                                                     form_title=f'Update '
-                                                                                                f'{category.name}')
+            return category.display_context(navigator, current_user).render_template(
+                'pages/form_page.j2', form=form, form_title=f'Update {category.name}')
     else:
         return home_redirect()
 
@@ -81,9 +80,9 @@ def update_category_from_form(category, form):
     form.populate_obj(category)
 
 
-@category_bp.route('/create_choice/<int:category_id>/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
+@category_bp.route('/create/<int:category_id>/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
 @login_required
-def category_choice_create(category_id, place_id, thing_id):
+def category_create(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)

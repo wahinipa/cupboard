@@ -7,7 +7,7 @@ def register_category_navigation(navigator):
         endpoint = f'category_bp.category_{task}'
         navigator.register(Category, task, endpoint)
 
-    register('choice_create')
+    register('create')
     register('delete')
     register('update')
     register('view')

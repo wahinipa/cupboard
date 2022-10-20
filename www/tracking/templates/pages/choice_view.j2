@@ -1,5 +1,5 @@
 {% extends "pages/content.j2" %}
-{% from 'cardistry/cards.j2' import show_action_button, target_block, action_block, sequential_child_cards %}
+{% from 'cardistry/cards.j2' import show_action_button, target_block, action_block %}
 {% block bottom_header %}
  {% if has_tasks %}
     {{ show_action_button() }}
@@ -7,5 +7,4 @@
 {% endblock %}
 {% block innards %}
   {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) }}
-  {{ sequential_child_cards(children) }}
 {% endblock %}
