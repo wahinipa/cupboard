@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
-from flask import Blueprint, request, redirect, render_template
+from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database

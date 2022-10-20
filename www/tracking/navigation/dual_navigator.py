@@ -36,6 +36,9 @@ def choice_url(choice, place, thing, task='view') -> object:
 def place_url(place, thing, task='view') -> object:
     return url_for(f'place_bp.place_{task}', place_id=place.id, thing_id=thing.id)
 
+def thing_url(place, thing, task='view') -> object:
+    return url_for(f'thing_bp.thing_{task}', place_id=place.id, thing_id=thing.id)
+
 
 class DualNavigator:
     def __init__(self, root=None, place=None, thing=None):
@@ -79,13 +82,15 @@ class DualNavigator:
                         return categories_url(self.root, self.place, self.thing)
                     elif navigational_mark(target) == self.category_mark:
                         return category_url(target, self.place, self.thing)
-        if navigational_mark(target) == self.category_mark:
+        if navigational_mark(target) == self.root_mark:
+            return root_url(target, self.place, self.thing, task=task)
+        elif navigational_mark(target) == self.category_mark:
             return category_url(target, self.place, self.thing, task=task)
         elif navigational_mark(target) == self.choice_mark:
             return choice_url(target, self.place, self.thing, task=task)
         elif navigational_mark(target) == self.place_mark:
             return place_url(target, self.thing, task=task)
-        elif navigational_mark(target) == self.root_mark:
-            return root_url(target, self.place, self.thing, task=task)
+        elif navigational_mark(target) == self.thing_mark:
+            return thing_url(self.place, target, task=task)
 
         return self.navigator.url(target, task)
