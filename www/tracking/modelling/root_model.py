@@ -87,7 +87,11 @@ def all_root_display_context(navigator, viewer):
     context = CupboardDisplayContext(label="Home")
     for root in all_roots():
         if root.may_be_observed(viewer):
-            context.append_to_list('children', root.display_context(navigator, viewer))
+            display_attributes = {
+                'description': True,
+                'url': True,
+            }
+            context.append_to_list('children', root.display_context(navigator, viewer, display_attributes))
     if viewer.may_create_root:
         context.add_task(navigator.url(Root, 'create'), label=Root.singular_label, task="create")
     context['flavor'] = 'home'

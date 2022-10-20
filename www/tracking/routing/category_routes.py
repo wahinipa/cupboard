@@ -44,7 +44,17 @@ def category_view(category_id, place_id, thing_id):
     thing = find_thing_by_id(thing_id)
     if category and place and thing and category.may_be_observed(current_user):
         navigator = DualNavigator(root=category.root, place=place, thing=thing)
-        return category.display_context(navigator, current_user, as_child=False, child_depth=1).render_template(
+        display_attributes = {
+            'description': True,
+            'url': True,
+            'bread_crumbs': True,
+            'children_attributes': {
+                'choice': {
+                    'notation': True,
+                },
+            },
+        }
+        return category.display_context(navigator, current_user, display_attributes).render_template(
             "pages/category_view.j2")
     else:
         return home_redirect()

@@ -30,27 +30,34 @@ class CupboardDisplayContextMixin:
         prefix = self.label_prefixes.get(task, '')
         return f'{prefix}{self.name}'
 
-    def display_context(self, navigator, viewer, as_child=True, child_depth=0, children=None):
-        if children is None:
-            children = self.viewable_children(viewer)
+    def display_context(self, navigator, viewer, display_attributes):
+        children_attributes = display_attributes.get('children_attributes')
+        if children_attributes:
+            children = display_attributes.get('children', self.viewable_children(viewer))
+        else:
+            children = []
         context = CupboardDisplayContext(context={
             'label': self.name,
             'classification': self.singular_label,
+            'flavor': self.flavor,
         })
-        self.add_description(context)
-        if as_child:
+        if display_attributes.get('description'):
+            self.add_description(context)
+        if display_attributes.get('url'):
             context['url'] = navigator.url(self, 'view')
-        if child_depth > 0:
+        if display_attributes.get('bread_crumbs'):
             context.add_bread_crumbs(self.bread_crumbs(navigator))
-            for child in children:
-                if child_depth > 1:
-                    context.add_child_context(child.display_context(navigator, viewer, child_depth=child_depth - 1))
-                else:
+        for child in children:
+            child_attributes = children_attributes.get(child.flavor)
+            if child_attributes:
+                child_display_context_attributes = child_attributes.get('display_context')
+                if child_display_context_attributes is not None:
+                    context.add_child_context(child.display_context(navigator, viewer,child_display_context_attributes))
+                if child_attributes.get('notation'):
                     child_link_label = child.singular_label
                     context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
         for task in self.allowed_tasks(viewer):
             self.add_task(context, navigator, task)
-        context['flavor'] = self.flavor
         return context
 
     def allowed_tasks(self, viewer):

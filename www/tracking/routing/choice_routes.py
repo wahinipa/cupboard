@@ -41,7 +41,12 @@ def choice_view(choice_id, place_id, thing_id):
     thing = find_thing_by_id(thing_id)
     if choice and place and thing and choice.may_be_observed(current_user):
         navigator = DualNavigator(root=choice.root, place=place, thing=thing)
-        return choice.display_context(navigator, current_user, as_child=False, child_depth=1).render_template("pages/choice_view.j2")
+        display_attributes = {
+            'description': True,
+            'url': True,
+            'bread_crumbs': True,
+        }
+        return choice.display_context(navigator, current_user, display_attributes).render_template("pages/choice_view.j2")
     else:
         return home_redirect()
 

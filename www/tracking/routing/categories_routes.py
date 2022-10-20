@@ -48,6 +48,16 @@ def categories_view(root_id, place_id, thing_id):
     if root and place and thing and root.may_be_observed(current_user):
         navigator = DualNavigator(root=root, place=place, thing=thing)
         categories = Categories(root=root, place=place, thing=thing)
-        return categories.display_context(navigator, current_user, child_depth=1).render_template(
+        display_attributes = {
+            'description': True,
+            'url': True,
+            'bread_crumbs': True,
+            'children_attributes': {
+                'category': {
+                    'notation': True,
+                },
+            },
+        }
+        return categories.display_context(navigator, current_user, display_attributes).render_template(
             "pages/category_list.j2")
     return home_redirect()

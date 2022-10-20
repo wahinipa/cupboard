@@ -133,7 +133,11 @@ def people_view(user_id):
     person = find_user_by_id(user_id)
     if person and current_user.may_view_person(person):
         navigator = create_cupboard_navigator()
-        return person.display_context(navigator, current_user, as_child=False, child_depth=1).render_template(
+        display_attributes = {
+            'description': True,
+            'url': True,
+        }
+        return person.display_context(navigator, current_user, display_attributes).render_template(
             "pages/person_view.j2")
     else:
         return home_redirect()

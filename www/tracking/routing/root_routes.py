@@ -3,15 +3,15 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
-from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form, RootUpdateForm
 from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.root_model import find_root_by_id, all_root_display_context, Root
 from tracking.modelling.thing_model import find_thing_by_id
+from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 root_bp = Blueprint(
     'root_bp', __name__,
@@ -91,8 +91,38 @@ def root_view(root_id, place_id, thing_id):
         if place and place.root == root and place.may_be_observed(current_user):
             if thing and thing.root == root and thing.may_be_observed(current_user):
                 navigator = DualNavigator(root=root, place=place, thing=thing)
+                display_attributes = {
+                    'children': [place, thing],
+                    'description': True,
+                    'url': True,
+                    'children_attributes': {
+                        'place': {
+                            'display_context': {
+                                'description': True,
+                                'url': True,
+                                'bread_crumbs': True,
+                                'children_attributes': {
+                                    'place' : {
+                                        'notation': True,
+                                    },
+                                },
+                            },
+                        },
+                        'thing': {
+                            'display_context': {
+                                'description': True,
+                                'url': True,
+                                'bread_crumbs': True,
+                                'children_attributes': {
+                                    'thing': {
+                                        'notation': True,
+                                    },
+                                },
+                            },
+                        }
+                    }
+                }
                 category_list_url = navigator.url(Categories(root=root, place=place, thing=thing), 'view')
-                return root.display_context(navigator, current_user, as_child=False, child_depth=2,
-                                            children=[place, thing]).render_template('pages/root_view.j2',
-                                                                                     category_list_url=category_list_url)
+                return root.display_context(navigator, current_user, display_attributes).render_template(
+                    'pages/root_view.j2', category_list_url=category_list_url)
     return home_redirect()
