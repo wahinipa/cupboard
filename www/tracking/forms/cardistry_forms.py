@@ -16,6 +16,12 @@ def description_form_field(description=None):
     return TextAreaField('Description', description=description)
 
 
+def about_me_form_field(description=None):
+    if description is None:
+        description = 'More about the person.'
+    return TextAreaField('About Me', description=description)
+
+
 def cancel_button_field(label='Cancel'):
     return SubmitField(label=label, render_kw={'formnovalidate': True})
 

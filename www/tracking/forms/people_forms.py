@@ -6,7 +6,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Hidde
 from wtforms.validators import DataRequired
 
 from tracking import database
-from tracking.forms.cardistry_forms import cancel_button_field
+from tracking.forms.cardistry_forms import cancel_button_field, about_me_form_field
 from tracking.modelling.people_model import find_user_by_username, find_or_create_user
 
 
@@ -45,7 +45,7 @@ class LoginForm(FlaskForm):
 class UserProfileForm(FlaskForm):
     first_name = StringField('First Name', [DataRequired('First Name is required')])
     last_name = StringField('Last Name', [DataRequired('Last Name is required')])
-    about_me = StringField('About Me', [])
+    about_me = about_me_form_field()
     cancel_button = cancel_button_field()
     submit = SubmitField('Save')
 

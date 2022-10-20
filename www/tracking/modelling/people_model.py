@@ -35,9 +35,8 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     first_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
     last_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
     date_joined = database.Column(database.DateTime(), default=datetime.now())
-    about_me = database.Column(database.String(255), nullable=False, server_default=u'')
+    about_me = database.Column(database.Text(), nullable=False, server_default=u'')
 
-    # group_assignments = database.relationship('GroupAssignment', backref='person', lazy=True, cascade='all, delete')
     # place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
     # universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
     #                                               cascade='all, delete')

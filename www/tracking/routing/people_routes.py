@@ -7,8 +7,9 @@ from tracking import database
 from tracking.commons.redirect_hackers import redirect_hackers
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm, \
     create_user_from_form
-from tracking.modelling.people_model import find_user_by_id, all_people_display_context
+from tracking.modelling.people_model import find_user_by_id, all_people_display_context, AllPeople
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
+from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 
 people_bp = Blueprint(
@@ -23,14 +24,16 @@ people_bp = Blueprint(
 def people_create():
     if current_user.may_create_person:
         form = UserCreateForm()
+        navigator = DualNavigator()
+        redirect_url = navigator.url(AllPeople, 'view')
         if request.method == 'POST' and form.cancel_button.data:
-            return redirect(url_for('people_bp.people_list'))
+            return redirect(redirect_url)
         if form.validate_on_submit():
-            user = create_user_from_form(form)
-            if user:
-                return redirect(user.url)
+            person = create_user_from_form(form)
+            if person:
+                return redirect(navigator.url(person, 'view'))
             else:
-                return redirect(url_for('people_bp.people_list'))
+                return redirect(redirect_url)
         return render_template('pages/form_page.j2', form=form, form_title=f'Create New User Account')
     else:
         return home_redirect()
@@ -72,18 +75,23 @@ def login():
         return CupboardDisplayContext().render_template('pages/login.j2', form=form)
 
 
-@people_bp.route('/update', methods=['GET', 'POST'])
+@people_bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
 @login_required
-def people_update():
-    form = UserProfileForm(obj=current_user)
-    if request.method == 'POST' and form.cancel_button.data:
+def people_update(user_id):
+    person = find_user_by_id(user_id)
+    if person and current_user.may_update_person(person):
+        form = UserProfileForm(obj=person)
+        navigator = DualNavigator()
+        redirect_url = navigator.url(person, 'view')
+        if request.method == 'POST' and form.cancel_button.data:
+            return redirect(redirect_url)
+        if form.validate_on_submit():
+            form.populate_obj(person)
+            database.session.commit()
+            return redirect(redirect_url)
+    else:
         return home_redirect()
-    if form.validate_on_submit():
-        form.populate_obj(current_user)
-        database.session.commit()
-        return home_redirect()
-
-    return render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {current_user.name}')
+    return render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {person.name}')
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -121,6 +129,7 @@ def people_view(user_id):
         display_attributes = {
             'description': True,
             'url': True,
+            'bread_crumbs': True,
         }
         return person.display_context(navigator, current_user, display_attributes).render_template(
             "pages/person_view.j2")
