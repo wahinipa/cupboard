@@ -32,3 +32,7 @@ def create_choice_from_form(category, form):
     database.session.add(choice)
     database.session.commit()
     return choice
+
+
+def update_choice_from_form(choice, form):
+    form.populate_obj(choice)

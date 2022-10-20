@@ -5,8 +5,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, validators
 from wtforms.validators import DataRequired
 
+from tracking import database
 from tracking.forms.cardistry_forms import cancel_button_field
-from tracking.modelling.people_model import find_user_by_username
+from tracking.modelling.people_model import find_user_by_username, find_or_create_user
 
 
 class LoginForm(FlaskForm):
@@ -91,3 +92,18 @@ class ChangePasswordForm(FlaskForm):
             else:
                 self.password_old.errors.append('Incorrect Password')
         return False
+
+
+def create_user_from_form(form):
+    username = form.username.data
+    user = find_user_by_username(username)
+    if user is None:
+        find_or_create_user(
+            form.first_name.data,
+            form.last_name.data,
+            username,
+            form.password_new.data,
+            form.is_admin.data
+        )
+        database.session.commit()
+    return user

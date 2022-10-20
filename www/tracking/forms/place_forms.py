@@ -11,3 +11,7 @@ class PlaceCreateForm(NameDescriptionBaseForm):
 
 class PlaceUpdateForm(NameDescriptionBaseForm):
     submit = SubmitField('Update Place')
+
+
+def update_place_from_form(place, form):
+    form.populate_obj(place)

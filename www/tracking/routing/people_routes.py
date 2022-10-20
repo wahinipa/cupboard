@@ -5,10 +5,10 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.commons.redirect_hackers import redirect_hackers
+from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm, \
+    create_user_from_form
+from tracking.modelling.people_model import find_user_by_id, all_people_display_context
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
-from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
-from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username, \
-    all_people_display_context
 from tracking.routing.home_redirect import home_redirect
 
 people_bp = Blueprint(
@@ -34,21 +34,6 @@ def people_create():
         return render_template('pages/form_page.j2', form=form, form_title=f'Create New User Account')
     else:
         return home_redirect()
-
-
-def create_user_from_form(form):
-    username = form.username.data
-    user = find_user_by_username(username)
-    if user is None:
-        find_or_create_user(
-            form.first_name.data,
-            form.last_name.data,
-            username,
-            form.password_new.data,
-            form.is_admin.data
-        )
-        database.session.commit()
-    return user
 
 
 @people_bp.route('/delete/<int:user_id>')

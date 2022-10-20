@@ -31,3 +31,7 @@ def create_category_from_form(form):
     database.session.add(category)
     database.session.commit()
     return category
+
+
+def update_category_from_form(category, form):
+    form.populate_obj(category)

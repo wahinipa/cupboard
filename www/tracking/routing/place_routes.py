@@ -4,9 +4,9 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking import database
-from tracking.navigation.cupboard_navigation import create_cupboard_navigator
-from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm
+from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm, update_place_from_form
 from tracking.modelling.place_model import find_place_by_id
+from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.routing.home_redirect import home_redirect
 
 place_bp = Blueprint(
@@ -54,7 +54,7 @@ def place_delete(place_id):
 def place_update(place_id):
     place = find_place_by_id(place_id)
     if place and place.may_update(current_user):
-        form = place_update_form(place)
+        form = PlaceUpdateForm(obj=place)
         navigator = create_cupboard_navigator()
         redirect_url = navigator.url(place, 'view')
         if request.method == 'POST' and form.cancel_button.data:
@@ -67,14 +67,6 @@ def place_update(place_id):
             return place.display_context(navigator, current_user).render_template('pages/form_page.j2', form=form)
     else:
         return home_redirect()
-
-
-def place_update_form(place):
-    return PlaceUpdateForm(obj=place)
-
-
-def update_place_from_form(place, form):
-    form.populate_obj(place)
 
 
 @place_bp.route('/view/<int:place_id>')

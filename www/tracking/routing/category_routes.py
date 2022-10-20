@@ -3,14 +3,14 @@ from flask import Blueprint, redirect, request
 from flask_login import current_user, login_required
 
 from tracking import database
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
-from tracking.forms.category_forms import CategoryUpdateForm
+from tracking.forms.category_forms import CategoryUpdateForm, update_category_from_form
 from tracking.forms.choice_forms import ChoiceCreateForm
 from tracking.modelling.category_models import find_category_by_id, Categories
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 category_bp = Blueprint(
     'category_bp', __name__,
@@ -81,14 +81,6 @@ def category_update(category_id, place_id, thing_id):
                 'pages/form_page.j2', form=form, form_title=f'Update {category.name}')
     else:
         return home_redirect()
-
-
-def category_update_form(category):
-    return CategoryUpdateForm(category)
-
-
-def update_category_from_form(category, form):
-    form.populate_obj(category)
 
 
 @category_bp.route('/create/<int:category_id>/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])

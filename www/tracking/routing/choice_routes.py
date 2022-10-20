@@ -1,9 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, redirect, request, url_for
+from flask import Blueprint, redirect, request
 from flask_login import current_user, login_required
 
 from tracking import database
-from tracking.forms.choice_forms import ChoiceUpdateForm
+from tracking.forms.choice_forms import ChoiceUpdateForm, update_choice_from_form
 from tracking.modelling.choice_models import find_choice_by_id
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
@@ -46,7 +46,8 @@ def choice_view(choice_id, place_id, thing_id):
             'url': True,
             'bread_crumbs': True,
         }
-        return choice.display_context(navigator, current_user, display_attributes).render_template("pages/choice_view.j2")
+        return choice.display_context(navigator, current_user, display_attributes).render_template(
+            "pages/choice_view.j2")
     else:
         return home_redirect()
 
@@ -59,7 +60,7 @@ def choice_update(choice_id, place_id, thing_id):
     thing = find_thing_by_id(thing_id)
     if choice and place and thing and choice.may_update(current_user):
         navigator = DualNavigator(root=choice.root, place=place, thing=thing)
-        form = choice_update_form(choice)
+        form = ChoiceUpdateForm(obj=choice)
         redirect_url = navigator.url(choice, 'view')
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(redirect_url)
@@ -72,11 +73,3 @@ def choice_update(choice_id, place_id, thing_id):
                 'pages/form_page.j2', form=form, form_title=f'Update {choice.name}')
     else:
         return home_redirect()
-
-
-def choice_update_form(choice):
-    return ChoiceUpdateForm(obj=choice)
-
-
-def update_choice_from_form(choice, form):
-    form.populate_obj(choice)
