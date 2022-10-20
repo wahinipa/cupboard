@@ -8,7 +8,7 @@ from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
 from tracking import database
-from tracking.cardistry.models.cardistry_models import name_is_key, bread_crumbs
+from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
 from tracking.commons.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin
 

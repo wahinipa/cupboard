@@ -2,7 +2,7 @@
 from datetime import datetime
 from os import environ
 
-from flask import current_app, request, url_for
+from flask import current_app, request
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
@@ -10,6 +10,7 @@ from flask_login import current_user
 from werkzeug.utils import redirect
 
 from tracking.commons.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
+from tracking.commons.create_test_data import create_test_data
 from tracking.commons.cupboard_display_context import project_name
 
 
@@ -32,11 +33,6 @@ def log_warn_about_request(prefix):
     current_app.logger.warning(request_info(prefix))
 
 
-def redirect_hackers():
-    log_warn_about_request('Redirecting Hackers')
-    return redirect((url_for('fake_bp.fake')))
-
-
 def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
 
@@ -50,44 +46,6 @@ def initialize_database(database):
         create_test_data(database)
 
     database.session.commit()
-
-
-def create_test_data(database):
-    from tracking.modelling.root_model import create_root
-
-    # Roots
-    our_test_group = create_root(name="Our Test Group", description="For testing out the code.")
-    another_test_group = create_root(name="Yet Another Test Group", description="For really, really testing out the code.\nLike, a lot.")
-
-    # Places
-    metropolis = our_test_group.place.create_kind_of_place(name="Metropolis", description="Home of the Daily Planet")
-    smallville = our_test_group.place.create_kind_of_place(name="Smallville", description="Superboy's Home Town.\n Also, coincidentally, childhood home of Clark Kent.")
-    phone_booth = smallville.create_kind_of_place(name="Phone Booth", description="Those tall boxes that had phones back in the day.")
-
-    # Things
-    shoes = our_test_group.thing.create_kind_of_thing("Shoes", "Things to wear on your feet.")
-    clothing = our_test_group.thing.create_kind_of_thing("Clothing", "Things to wear\nOr lose in the closet.")
-    containers = our_test_group.thing.create_kind_of_thing("Containers", "Things to hold other things.")
-    backpacks = containers.create_kind_of_thing("Backpacks", "Containers that\nStrap to your back.")
-    gym_bags = containers.create_kind_of_thing("Gym Bags", description="")
-
-    # Categories
-    seasons = our_test_group.create_category("Season", "Whether for summer or winter or either.")
-    sexes = our_test_group.create_category("Sex", "Whether for girl or boy or either.")
-    ages = our_test_group.create_category("Age Appropriate", "Whether for infant, toddler, child, adult, or any.")
-
-    # Choices
-    winter_season = seasons.create_choice("Winter", "For when it is cold.")
-    summer_season = seasons.create_choice("Summer", "For when it is warm.")
-    all_season = seasons.create_choice("All Season", "For any time of year.")
-    girls = sexes.create_choice("Girl's", "Specific to girls.")
-    boys = sexes.create_choice("Boy's", "Specific to boys.")
-    either = sexes.create_choice("Either", "Not specific to either boys or girls.")
-    infant = ages.create_choice("Infant", "For 0 - 2 years old.")
-    toddler = ages.create_choice("Toddler", "For 2 - 5 years old.")
-    child = ages.create_choice("Child", "For 5 - 12 years old.")
-    teen = ages.create_choice("Teen", "For 13 - 19 years old.")
-    adult = ages.create_choice("Adult", "For adults.")
 
 
 def add_flask_admin(application, database):

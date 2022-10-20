@@ -4,7 +4,7 @@ from flask_admin.helpers import is_safe_url
 from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
-from tracking.admin.administration import redirect_hackers
+from tracking.commons.redirect_hackers import redirect_hackers
 from tracking.commons.cupboard_navigation import create_cupboard_navigator
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm
 from tracking.modelling.people_model import find_or_create_user, find_user_by_id, find_user_by_username, \

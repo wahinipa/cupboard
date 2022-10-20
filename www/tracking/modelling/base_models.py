@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import declared_attr
 
 from tracking import database
-from tracking.cardistry.models.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
+from tracking.modelling.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
 
 
 class IdModelMixin():

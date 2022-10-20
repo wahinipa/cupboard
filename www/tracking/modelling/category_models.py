@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.cardistry.models.cardistry_models import name_is_key, bread_crumbs
+from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
 from tracking.commons.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin, NamedBaseModel
 

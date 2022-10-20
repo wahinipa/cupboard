@@ -2,7 +2,7 @@
 
 from wtforms import SubmitField
 
-from tracking.cardistry.forms.cardistry_forms import NameDescriptionBaseForm
+from tracking.forms.cardistry_forms import NameDescriptionBaseForm
 
 
 class ThingCreateForm(NameDescriptionBaseForm):

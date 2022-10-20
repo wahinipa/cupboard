@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, validators
 from wtforms.validators import DataRequired
 
-from tracking.cardistry.forms.cardistry_forms import cancel_button_field
+from tracking.forms.cardistry_forms import cancel_button_field
 from tracking.modelling.people_model import find_user_by_username
 
 
