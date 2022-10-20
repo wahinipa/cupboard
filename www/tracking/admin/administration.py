@@ -87,7 +87,7 @@ def create_test_data(database):
     toddler = ages.create_choice("Toddler", "For 2 - 5 years old.")
     child = ages.create_choice("Child", "For 5 - 12 years old.")
     teen = ages.create_choice("Teen", "For 13 - 19 years old.")
-    adult = ages.create_choice("Teen", "For adults.")
+    adult = ages.create_choice("Adult", "For adults.")
 
 
 def add_flask_admin(application, database):

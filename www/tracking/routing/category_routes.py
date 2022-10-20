@@ -4,7 +4,8 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.commons.cupboard_display_context import CupboardDisplayContext
-from tracking.forms.category_forms import CategoryCreateForm, CategoryUpdateForm
+from tracking.forms.category_forms import CategoryUpdateForm
+from tracking.forms.choice_forms import ChoiceCreateForm
 from tracking.modelling.category_models import find_category_by_id, Categories
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
@@ -87,13 +88,13 @@ def category_create(category_id, place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
     if category and place and thing and category.may_create_choice(current_user):
-        form = CategoryCreateForm()
+        form = ChoiceCreateForm()
         navigator = DualNavigator(root=category.root, place=place, thing=thing)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(navigator.url(category, 'view'))
         if form.validate_on_submit():
             choice = category.create_choice(form.name.data, form.description.data)
-            return redirect(url_for('choice_bp.choice_view', choice_id=choice.id))
+            return redirect(navigator.url(choice, 'view'))
         else:
             return CupboardDisplayContext().render_template('pages/form_page.j2', form=form,
                                                             form_title=f'Create New Choice for {category.name}')
