@@ -1,5 +1,5 @@
-# Copyright (c) 2022, Wahinipa LLC
-from old_testing.fixtures_for_testing import pretend_application
+#  Copyright (c) 2022, Wahinipa LLC
+from testing.fixtures import pretend_application
 from tracking import blueprint_registration
 
 
@@ -12,22 +12,26 @@ def test_registration(pretend_application):
 
     expected_blueprints = [
         'admin_bp',
+        'categories_bp',
         'category_bp',
         'choice_bp',
         'fake_bp',
-        'group_bp',
         'home_bp',
         'people_bp',
         'place_bp',
-        'role_bp',
+        'root_bp',
+        'roots_bp',
+        # 'role_bp',
         'thing_bp',
     ]
     for blueprint_name in expected_blueprints:
         blueprint_prefix = blueprint_name.split("_")[0]  # "thing_bp" --> "things"
         registration = pretend_application.blueprints.get(blueprint_name)
-        assert registration is not None
+        if registration is None:
+            assert registration is not None
         blueprint = registration.get("blueprint")
-        assert blueprint is not None
+        if blueprint is None:
+            assert blueprint is not None
         assert blueprint.name == blueprint_name
         url_prefix = registration.get("url_prefix")
         assert url_prefix is not None

@@ -162,3 +162,28 @@ def wild_place(app, the_root):
                                 date_created=WILD_PLACE_DATE)
 
 
+##########################
+# Category Test Fixtures #
+##########################
+
+
+# PASTRY_NAME = "pastry"
+# PASTRY_DESCRIPTION = "Yummy!"
+# PASTRY_DATE = datetime(1989, 12, 13)
+#
+#
+# @pytest.fixture()
+# def pastry(app, ):
+#     return find_or_create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
+#
+#
+# COLORING_NAME = "coloring"
+# COLORING_DESCRIPTION = "hue and all that"
+# COLORING_DATE = datetime(1979, 2, 17)
+#
+#
+# @pytest.fixture()
+# def coloring(app):
+#     return find_or_create_category(COLORING_NAME, description=COLORING_DESCRIPTION, date_created=COLORING_DATE)
+#
+#
