@@ -1,4 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.modelling.refinement_model import refine_thing
+
+
 def create_test_data(database):
     from tracking.modelling.root_model import create_root
 
@@ -35,3 +38,15 @@ def create_test_data(database):
     child = ages.create_choice("Child", "For 5 - 12 years old.")
     teen = ages.create_choice("Teen", "For 13 - 19 years old.")
     adult = ages.create_choice("Adult", "For adults.")
+
+    # Refinements
+    refine_thing(clothing, seasons)
+    refine_thing(clothing, ages)
+    refine_thing(clothing, sexes)
+    refine_thing(shoes, seasons)
+    refine_thing(shoes, ages)
+    refine_thing(shoes, sexes)
+    refine_thing(containers, seasons)
+    refine_thing(backpacks, sexes)
+
+

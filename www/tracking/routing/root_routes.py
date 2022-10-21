@@ -90,6 +90,9 @@ def root_view(place_id, thing_id):
                                     'url': True,
                                     'bread_crumbs': True,
                                     'children_attributes': {
+                                        'category': {
+                                            'notation': True,
+                                        },
                                         'thing': {
                                             'notation': True,
                                         },

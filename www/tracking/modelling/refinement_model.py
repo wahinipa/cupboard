@@ -3,7 +3,6 @@ from datetime import datetime
 
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin
-from tracking.modelling.category_model import Category
 
 
 class Refinement(IdModelMixin, database.Model):

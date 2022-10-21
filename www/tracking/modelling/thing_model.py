@@ -5,6 +5,7 @@ from flask import url_for
 from sqlalchemy.orm import backref
 
 from tracking import database
+from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import UniqueNamedBaseModel, RootDescendantMixin
 
@@ -17,7 +18,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
     flavor="thing"
 
     roots = database.relationship('Root', backref='thing', lazy=True)
-    # refinements = database.relationship('Root', backref='thing', lazy=True)
+    refinements = database.relationship('Refinement', backref='thing', lazy=True)
 
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
@@ -29,6 +30,19 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
     @property
     def children(self):
         return self.kinds
+    
+    @property
+    def sorted_categories(self):
+        return sorted_by_name(self.category_list)
+
+    @property
+    def category_list(self):
+        category_list = [refinement.category for refinement in self.refinements]
+        if not self.is_top:
+            for category in self.parent_object.category_list:
+                if not category in category_list:
+                    category_list.append(category)            
+        return category_list
 
     def create_kind_of_thing(self, name, description, date_created=None):
         if date_created is None:
@@ -96,7 +110,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
         return url_for('thing_bp.thing_update', thing_id=self.id)
 
     def viewable_children(self, viewer):
-        return self.sorted_children
+        return self.sorted_categories + self.sorted_children
 
 
 def find_thing_by_id(thing_id):
