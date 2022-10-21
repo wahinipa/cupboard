@@ -4,7 +4,7 @@ from old_testing.fixtures_for_testing import RED_COLORING_DATE, RED_COLORING_DES
     red_coloring, coloring, \
     MUFFIN_NAME, MUFFIN_DESCRIPTION, MUFFIN_DATE, \
     ROLL_NAME, ROLL_DESCRIPTION, ROLL_DATE
-from tracking.modelling.choice_models import find_or_create_choice
+from tracking.modelling.choice_model import find_or_create_choice
 
 
 def _pycharm_please_keep_these_imports():

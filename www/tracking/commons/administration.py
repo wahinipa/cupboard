@@ -53,10 +53,10 @@ def add_flask_admin(application, database):
     admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
     # Using local imports helps break circularity of dependencies
     from tracking.modelling.people_model import User
-    from tracking.modelling.category_models import Category
+    from tracking.modelling.category_model import Category
     from tracking.modelling.place_model import Place
     from tracking.modelling.thing_model import Thing
-    from tracking.modelling.choice_models import Choice
+    from tracking.modelling.choice_model import Choice
     from tracking.modelling.root_model import Root
     admin.add_view(AdminModelView(Category, database.session))
     admin.add_view(AdminModelView(Choice, database.session))

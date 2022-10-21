@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 from tracking import database
 from tracking.forms.category_forms import CategoryUpdateForm, update_category_from_form
 from tracking.forms.choice_forms import ChoiceCreateForm
-from tracking.modelling.category_models import find_category_by_id, Categories
+from tracking.modelling.categories_model import Categories
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator

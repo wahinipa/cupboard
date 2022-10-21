@@ -1,8 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import url_for
 
-from tracking.modelling.category_models import Categories, Category
-from tracking.modelling.choice_models import Choice
+from tracking.modelling.category_model import Category
+from tracking.modelling.categories_model import Categories
+from tracking.modelling.choice_model import Choice
 from tracking.modelling.place_model import Place
 from tracking.modelling.root_model import Root
 from tracking.modelling.thing_model import Thing

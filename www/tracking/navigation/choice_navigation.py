@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.choice_models import Choice
+from tracking.modelling.choice_model import Choice
 
 
 def register_choice_navigation(navigator):

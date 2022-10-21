@@ -71,7 +71,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     def create_category(self, name, description, date_created=None):
         if date_created is None:
             date_created = datetime.now()
-        from tracking.modelling.category_models import Category
+        from tracking.modelling.category_model import Category
         category = Category(name=name, description=description, root=self, date_created=date_created)
         database.session.add(category)
         database.session.commit()

@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.forms.root_forms import RootUpdateForm, update_root_from_form
-from tracking.modelling.category_models import Categories
+from tracking.modelling.categories_model import Categories
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.root_model import Roots
 from tracking.modelling.thing_model import find_thing_by_id

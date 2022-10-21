@@ -6,7 +6,7 @@ from wtforms import SubmitField
 
 from tracking import database
 from tracking.forms.cardistry_forms import name_form_field, description_form_field, cancel_button_field
-from tracking.modelling.choice_models import Choice
+from tracking.modelling.choice_model import Choice
 
 
 class ChoiceBaseForm(FlaskForm):

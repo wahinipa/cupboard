@@ -17,6 +17,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
     flavor="thing"
 
     roots = database.relationship('Root', backref='thing', lazy=True)
+    # refinements = database.relationship('Root', backref='thing', lazy=True)
 
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))

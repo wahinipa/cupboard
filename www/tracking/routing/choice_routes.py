@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.forms.choice_forms import ChoiceUpdateForm, update_choice_from_form
-from tracking.modelling.choice_models import find_choice_by_id
+from tracking.modelling.choice_model import find_choice_by_id
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
