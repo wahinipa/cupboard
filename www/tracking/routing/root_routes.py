@@ -6,7 +6,7 @@ from tracking import database
 from tracking.forms.root_forms import RootUpdateForm, update_root_from_form
 from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id
-from tracking.modelling.root_model import find_root_by_id, Root, Roots
+from tracking.modelling.root_model import Roots
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
@@ -19,86 +19,86 @@ root_bp = Blueprint(
 )
 
 
-@root_bp.route('/delete/<int:root_id>/<int:place_id>/<int:thing_id>')
+@root_bp.route('/delete/<int:place_id>/<int:thing_id>')
 @login_required
-def root_delete(root_id, place_id, thing_id):
-    root = find_root_by_id(root_id)
+def root_delete(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if root and place and thing and root.may_delete(current_user):
-        navigator = DualNavigator(root=root, place=place, thing=thing)
-        database.session.delete(root)
-        database.session.commit()
-        return redirect(navigator.url(Roots, 'view'))
-    else:
-        return home_redirect()
-
-
-@root_bp.route('/update/<int:root_id>/<int:place_id>/<int:thing_id>', methods=['GET', 'POST'])
-@login_required
-def root_update(root_id, place_id, thing_id):
-    root = find_root_by_id(root_id)
-    place = find_place_by_id(place_id)
-    thing = find_thing_by_id(thing_id)
-    if root and place and thing and root.may_update(current_user):
-        navigator = DualNavigator(root=root, place=place, thing=thing)
-        form = RootUpdateForm(obj=root)
-        redirect_url = navigator.url(root, 'view')
-        if request.method == 'POST' and form.cancel_button.data:
-            return redirect(redirect_url)
-        if form.validate_on_submit():
-            update_root_from_form(root, form)
+    if place and thing and place.root == thing.root:
+        root = place.root
+        if root and root.may_delete(current_user):
+            navigator = DualNavigator(place=place, thing=thing)
+            database.session.delete(root)
             database.session.commit()
-            return redirect(redirect_url)
-        else:
-            return CupboardDisplayContext().render_template('pages/form_page.j2', form=form,
-                                                                                 form_title=f'Update {root.name}')
-    else:
-        return home_redirect()
+            return redirect(navigator.url(Roots, 'view'))
+    return home_redirect()
 
 
-@root_bp.route('/view/<int:root_id>/<int:place_id>/<int:thing_id>')
+@root_bp.route('/update/<int:place_id>/<int:thing_id>', methods=['GET', 'POST'])
 @login_required
-def root_view(root_id, place_id, thing_id):
-    root = find_root_by_id(root_id)
+def root_update(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if root and root.may_be_observed(current_user):
-        if place and place.root == root and place.may_be_observed(current_user):
-            if thing and thing.root == root and thing.may_be_observed(current_user):
-                navigator = DualNavigator(root=root, place=place, thing=thing)
-                display_attributes = {
-                    'children': [place, thing],
-                    'description': True,
-                    'url': True,
-                    'children_attributes': {
-                        'place': {
-                            'display_context': {
-                                'description': True,
-                                'url': True,
-                                'bread_crumbs': True,
-                                'children_attributes': {
-                                    'place': {
-                                        'notation': True,
+    if place and thing and place.root == thing.root:
+        root = place.root
+        if root and root.may_update(current_user):
+            navigator = DualNavigator(place=place, thing=thing)
+            form = RootUpdateForm(obj=root)
+            redirect_url = navigator.url(root, 'view')
+            if request.method == 'POST' and form.cancel_button.data:
+                return redirect(redirect_url)
+            if form.validate_on_submit():
+                update_root_from_form(root, form)
+                database.session.commit()
+                return redirect(redirect_url)
+            else:
+                return CupboardDisplayContext().render_template(
+                    'pages/form_page.j2', form=form, form_title=f'Update {root.name}')
+    return home_redirect()
+
+
+@root_bp.route('/view/<int:place_id>/<int:thing_id>')
+@login_required
+def root_view(place_id, thing_id):
+    place = find_place_by_id(place_id)
+    thing = find_thing_by_id(thing_id)
+    if place and thing and place.root == thing.root:
+        root = place.root
+        if root and root.may_be_observed(current_user):
+            if place and place.root == root and place.may_be_observed(current_user):
+                if thing and thing.root == root and thing.may_be_observed(current_user):
+                    navigator = DualNavigator(place=place, thing=thing)
+                    display_attributes = {
+                        'children': [place, thing],
+                        'description': True,
+                        'children_attributes': {
+                            'place': {
+                                'display_context': {
+                                    'description': True,
+                                    'url': True,
+                                    'bread_crumbs': True,
+                                    'children_attributes': {
+                                        'place': {
+                                            'notation': True,
+                                        },
                                     },
                                 },
                             },
-                        },
-                        'thing': {
-                            'display_context': {
-                                'description': True,
-                                'url': True,
-                                'bread_crumbs': True,
-                                'children_attributes': {
-                                    'thing': {
-                                        'notation': True,
+                            'thing': {
+                                'display_context': {
+                                    'description': True,
+                                    'url': True,
+                                    'bread_crumbs': True,
+                                    'children_attributes': {
+                                        'thing': {
+                                            'notation': True,
+                                        },
                                     },
                                 },
-                            },
+                            }
                         }
                     }
-                }
-                category_list_url = navigator.url(Categories(root=root, place=place, thing=thing), 'view')
-                return root.display_context(navigator, current_user, display_attributes).render_template(
-                    'pages/root_view.j2', category_list_url=category_list_url)
+                    category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')
+                    return root.display_context(navigator, current_user, display_attributes).render_template(
+                        'pages/root_view.j2', category_list_url=category_list_url)
     return home_redirect()

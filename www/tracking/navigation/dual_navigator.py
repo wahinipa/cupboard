@@ -7,6 +7,7 @@ from tracking.modelling.place_model import Place
 from tracking.modelling.root_model import Root
 from tracking.modelling.thing_model import Thing
 from tracking.navigation.navigator import navigational_mark
+from tracking.navigation.root_holder import RootHolder
 
 
 def root_url(root, place=None, thing=None, task='view'):
@@ -17,8 +18,9 @@ def root_url(root, place=None, thing=None, task='view'):
     return url_for(f'root_bp.root_{task}', root_id=root.id, place_id=place.id, thing_id=thing.id)
 
 
-class DualNavigator:
-    def __init__(self, root=None, place=None, thing=None):
+class DualNavigator(RootHolder):
+    def __init__(self, place=None, thing=None):
+        super().__init__(place=place, thing=thing)
         from tracking.navigation.cupboard_navigation import create_cupboard_navigator
         self.navigator = create_cupboard_navigator()
         self.translator = {
@@ -29,24 +31,12 @@ class DualNavigator:
             navigational_mark(Root): self.root_url,
             navigational_mark(Thing): self.thing_url,
         }
-        if root is None:
-            if place:
-                root = place.root
-            elif thing:
-                root = thing.root
-        if root:
-            place = place or root.place
-            thing = thing or root.thing
-        self.root_id = root.id if root else None
-        self.place_id = place.id if place else None
-        self.thing_id = thing.id if thing else None
 
     def default_url(self, target, task):
         return self.navigator.url(target, task)
 
     def categories_url(self, categories, task):
-        return url_for(f'categories_bp.categories_{task}', root_id=self.root_id, place_id=self.place_id,
-                       thing_id=self.thing_id)
+        return url_for(f'categories_bp.categories_{task}', place_id=self.place_id, thing_id=self.thing_id)
 
     def category_url(self, category, task):
         return url_for(f'category_bp.category_{task}', category_id=category.id, place_id=self.place_id,
@@ -63,7 +53,7 @@ class DualNavigator:
     def root_url(self, root, task, place_id=None, thing_id=None):
         place_id = place_id or self.place_id or root.place.id
         thing_id = thing_id or self.thing_id or root.thing.id
-        return url_for(f'root_bp.root_{task}', root_id=root.id, place_id=place_id, thing_id=thing_id)
+        return url_for(f'root_bp.root_{task}', place_id=place_id, thing_id=thing_id)
 
     def thing_url(self, thing, task):
         if task == 'view':

@@ -3,25 +3,17 @@ from datetime import datetime
 
 from tracking import database
 from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
+from tracking.navigation.root_holder import RootHolder
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin, NamedBaseModel
 
 
-class Categories(CupboardDisplayContextMixin):
+class Categories(RootHolder, CupboardDisplayContextMixin):
     flavor = 'category'
     label = 'Categories'
     label_prefixes = {}
     singular_label = 'Categories'
     possible_tasks = ['create', 'view']
-
-    def __init__(self, root, place=None, thing=None):
-        if place is None:
-            place = root.place
-        if thing is None:
-            thing = root.thing
-        self.root = root
-        self.place = place
-        self.thing = thing
 
     @property
     def identities(self):
@@ -73,7 +65,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def parent_object(self):
-        return Categories(root=self.root, place=self.root.place, thing=self.root.thing)
+        return Categories(place=self.root.place, thing=self.root.thing)
 
     @property
     def identities(self):

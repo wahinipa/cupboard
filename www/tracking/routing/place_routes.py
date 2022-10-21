@@ -23,7 +23,7 @@ place_bp = Blueprint(
 def place_create(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if place and thing and place.may_create_place(current_user):
+    if place and thing and place.root == thing.root and place.may_create_place(current_user):
         form = PlaceCreateForm()
         navigator = DualNavigator(place=place, thing=thing)
         if request.method == 'POST' and form.cancel_button.data:
@@ -43,7 +43,7 @@ def place_create(place_id, thing_id):
 def place_delete(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if place and thing and place.may_delete(current_user):
+    if place and thing and place.root == thing.root and place.may_delete(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         redirect_url = navigator.url(place.parent_object, 'view')
         database.session.delete(place)
@@ -58,7 +58,7 @@ def place_delete(place_id, thing_id):
 def place_update(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if place and thing and place.may_update(current_user):
+    if place and thing and place.root == thing.root and place.may_update(current_user):
         form = PlaceUpdateForm(obj=place)
         navigator = DualNavigator(place=place, thing=thing)
         redirect_url = navigator.url(place, 'view')

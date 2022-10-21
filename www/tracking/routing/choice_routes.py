@@ -24,7 +24,8 @@ def choice_delete(choice_id, place_id, thing_id):
     choice = find_choice_by_id(choice_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if choice and place and thing and choice.may_delete(current_user):
+    if choice and place and thing and place.root == choice.root \
+        and thing.root == choice.root and choice.may_delete(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         redirect_url = navigator.url(choice.category, 'view')
         database.session.delete(choice)
@@ -40,7 +41,8 @@ def choice_view(choice_id, place_id, thing_id):
     choice = find_choice_by_id(choice_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if choice and place and thing and choice.may_be_observed(current_user):
+    if choice and place and thing and place.root == choice.root \
+        and thing.root == choice.root and choice.may_be_observed(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         display_attributes = {
             'description': True,
@@ -59,7 +61,8 @@ def choice_update(choice_id, place_id, thing_id):
     choice = find_choice_by_id(choice_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if choice and place and thing and choice.may_update(current_user):
+    if choice and place and thing and place.root == choice.root \
+        and thing.root == choice.root and choice.may_update(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         form = ChoiceUpdateForm(obj=choice)
         redirect_url = navigator.url(choice, 'view')

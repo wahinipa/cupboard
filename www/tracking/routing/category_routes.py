@@ -25,9 +25,10 @@ def category_delete(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if category and place and thing and category.may_delete(current_user):
-        navigator = DualNavigator(root=category.root, place=place, thing=thing)
-        categories = Categories(root=category.root, place=category.root.place, thing=category.root.thing)
+    if category and place and thing and place.root == category.root \
+        and thing.root == category.root and category.may_delete(current_user):
+        navigator = DualNavigator(place=place, thing=thing)
+        categories = Categories(place=place, thing=thing)
         redirect_url = navigator.url(categories, 'view')
         database.session.delete(category)
         database.session.commit()
@@ -42,7 +43,8 @@ def category_view(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if category and place and thing and category.may_be_observed(current_user):
+    if category and place and thing and place.root == category.root \
+        and thing.root == category.root and category.may_be_observed(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         display_attributes = {
             'description': True,
@@ -66,7 +68,8 @@ def category_update(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if category and place and thing and category.may_update(current_user):
+    if category and place and thing and place.root == category.root \
+        and thing.root == category.root and category.may_update(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         form = CategoryUpdateForm(obj=category)
         redirect_url = navigator.url(category, 'view')
@@ -89,7 +92,8 @@ def category_create(category_id, place_id, thing_id):
     category = find_category_by_id(category_id)
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if category and place and thing and category.may_create_choice(current_user):
+    if category and place and thing and place.root == category.root \
+        and thing.root == category.root and category.may_create_choice(current_user):
         form = ChoiceCreateForm()
         navigator = DualNavigator(place=place, thing=thing)
         if request.method == 'POST' and form.cancel_button.data:

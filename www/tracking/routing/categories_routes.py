@@ -2,14 +2,13 @@
 from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.category_forms import CategoryCreateForm
 from tracking.modelling.category_models import Categories
 from tracking.modelling.place_model import find_place_by_id
-from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 categories_bp = Blueprint(
     'categories_bp', __name__,
@@ -18,19 +17,18 @@ categories_bp = Blueprint(
 )
 
 
-@categories_bp.route('/create/<int:root_id>/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
+@categories_bp.route('/create/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
 @login_required
-def categories_create(root_id, place_id, thing_id):
-    root = find_root_by_id(root_id)
+def categories_create(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if root and place and thing and root.may_create_category(current_user):
+    if place and thing and place.root == thing.root and place.root.may_create_category(current_user):
         form = CategoryCreateForm()
-        navigator = DualNavigator(root=root, place=place, thing=thing)
+        navigator = DualNavigator(place=place, thing=thing)
         if request.method == 'POST' and form.cancel_button.data:
-            return redirect(navigator.url(Categories(root, place, thing), 'view'))
+            return redirect(navigator.url(Categories(place, thing), 'view'))
         if form.validate_on_submit():
-            category = root.create_category(form.name.data, form.description.data)
+            category = place.root.create_category(form.name.data, form.description.data)
             return redirect(navigator.url(category, 'view'))
         else:
             return CupboardDisplayContext().render_template('pages/form_page.j2', form=form,
@@ -39,15 +37,14 @@ def categories_create(root_id, place_id, thing_id):
         return home_redirect()
 
 
-@categories_bp.route('/view/<int:root_id>/<int:place_id>/<int:thing_id>')
+@categories_bp.route('/view/<int:place_id>/<int:thing_id>')
 @login_required
-def categories_view(root_id, place_id, thing_id):
-    root = find_root_by_id(root_id)
+def categories_view(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if root and place and thing and root.may_be_observed(current_user):
-        navigator = DualNavigator(root=root, place=place, thing=thing)
-        categories = Categories(root=root, place=place, thing=thing)
+    if place and thing and place.root == thing.root and place.root.may_be_observed(current_user):
+        navigator = DualNavigator(place=place, thing=thing)
+        categories = Categories(place=place, thing=thing)
         display_attributes = {
             'description': True,
             'url': True,

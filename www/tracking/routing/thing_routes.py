@@ -23,7 +23,7 @@ thing_bp = Blueprint(
 def thing_create(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if place and thing is None or not thing.may_create_thing(current_user):
+    if place and thing and place.root == thing.root is None or not thing.may_create_thing(current_user):
         return home_redirect()
     form = ThingCreateForm()
     navigator = DualNavigator(place=place, thing=thing)
@@ -42,7 +42,7 @@ def thing_create(place_id, thing_id):
 def thing_delete(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if place and thing is not None and thing.may_delete(current_user):
+    if place and thing and place.root == thing.root is not None and thing.may_delete(current_user):
         navigator = DualNavigator(place=place, thing=thing)
         redirect_url = navigator.url(thing.parent_object, 'view')
         database.session.delete(thing)
@@ -57,7 +57,7 @@ def thing_delete(place_id, thing_id):
 def thing_update(place_id, thing_id):
     place = find_place_by_id(place_id)
     thing = find_thing_by_id(thing_id)
-    if place and thing and thing.may_update(current_user):
+    if place and thing and place.root == thing.root and thing.may_update(current_user):
         form = ThingUpdateForm(obj=thing)
         navigator = DualNavigator(place=place, thing=thing)
         redirect_url = navigator.url(thing, 'view')
