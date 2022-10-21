@@ -34,8 +34,9 @@ class DualNavigator:
                 root = place.root
             elif thing:
                 root = thing.root
-        place = place or root.place
-        thing = thing or root.thing
+        if root:
+            place = place or root.place
+            thing = thing or root.thing
         self.root_id = root.id if root else None
         self.place_id = place.id if place else None
         self.thing_id = thing.id if thing else None
