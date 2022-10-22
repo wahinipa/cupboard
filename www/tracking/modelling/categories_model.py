@@ -5,7 +5,7 @@ from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixi
 
 
 class Categories(RootHolder, CupboardDisplayContextMixin):
-    flavor = 'category'
+    flavor = 'categories'
     label = 'Categories'
     label_prefixes = {}
     singular_label = 'Categories'

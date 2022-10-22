@@ -1,7 +1,8 @@
 :root {
     --flavor-admin-color: rgb(0, 0, 0);
-    --flavor-category-color: rgb(10, 10, 253);
-    --flavor-choice-color: rgb(40, 40, 150);
+    --flavor-categories-color: rgb(150, 10, 150);
+    --flavor-category-color: rgb(100, 10, 100);
+    --flavor-choice-color: rgb(60, 10, 60);
     --flavor-home-color: rgb(100, 100, 100);
     --flavor-people-color: rgb(10, 90, 90);
     --flavor-place-color: rgb(50, 10, 100);
@@ -54,6 +55,33 @@ footer {
 .btn-flavor-admin.active {
     color: white;
     background-color: black;
+}
+
+/* *** Categories Styling *** */
+
+.card-flavor-categories {
+    border-color: black;
+}
+
+.card-flavor-categories .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-categories-color);
+}
+
+.btn-flavor-categories {
+    border-color: var(--flavor-categories-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-categories.active {
+    color: white;
+    background-color: var(--flavor-categories-color);
+}
+
+.card-flavor-categories .card-header a {
+    color: white;
 }
 
 /* *** Category Styling *** */
