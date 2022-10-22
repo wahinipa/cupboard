@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.refinement_model import refine_thing
+from tracking.modelling.refinement_model import add_refinement
 
 
 def create_test_data(database):
@@ -40,13 +40,13 @@ def create_test_data(database):
     adult = ages.create_choice("Adult", "For adults.")
 
     # Refinements
-    refine_thing(clothing, seasons)
-    refine_thing(clothing, ages)
-    refine_thing(clothing, sexes)
-    refine_thing(shoes, seasons)
-    refine_thing(shoes, ages)
-    refine_thing(shoes, sexes)
-    refine_thing(containers, seasons)
-    refine_thing(backpacks, sexes)
+    add_refinement(clothing, seasons)
+    add_refinement(clothing, ages)
+    add_refinement(clothing, sexes)
+    add_refinement(shoes, seasons)
+    add_refinement(shoes, ages)
+    add_refinement(shoes, sexes)
+    add_refinement(containers, seasons)
+    add_refinement(backpacks, sexes)
 
 

@@ -56,6 +56,7 @@ ROOT_DESCRIPTION = "Base Testing Object"
 ROOT_PLACE_NAME = "All of The Root Places"
 ROOT_THING_NAME = "All of The Root Things"
 
+
 @pytest.fixture()
 def the_root(app):
     return create_root(name=ROOT_NAME, description=ROOT_DESCRIPTION)
@@ -112,6 +113,7 @@ def moe_stooge_user(app):
     database.session.commit()
     return moe
 
+
 #######################
 # Thing Test Fixtures #
 #######################
@@ -124,7 +126,7 @@ LIGHT_SABER_THING_DATE = datetime(1984, 1, 1)
 @pytest.fixture()
 def light_saber(app, the_root):
     return the_root.thing.create_kind_of_thing(name=LIGHT_SABER_THING_NAME, description=LIGHT_SABER_THING_DESCRIPTION,
-                                date_created=LIGHT_SABER_THING_DATE)
+                                               date_created=LIGHT_SABER_THING_DATE)
 
 
 BUCKET_NAME = "Bucket"
@@ -135,6 +137,28 @@ BUCKET_DATE = datetime(1981, 5, 4)
 @pytest.fixture()
 def bucket(app, the_root):
     return the_root.thing.create_kind_of_thing(BUCKET_NAME, BUCKET_DESCRIPTION, date_created=BUCKET_DATE)
+
+
+SHARP_SABER_THING_NAME = "Sharp Light Saber"
+SHARP_SABER_THING_DESCRIPTION = "Useful for mostly defeating galactic tyranny."
+SHARP_SABER_THING_DATE = datetime(1984, 2, 3)
+
+
+@pytest.fixture()
+def sharp_saber(app, light_saber):
+    return light_saber.create_kind_of_thing(name=SHARP_SABER_THING_NAME, description=SHARP_SABER_THING_DESCRIPTION,
+                                            date_created=SHARP_SABER_THING_DATE)
+
+
+DULL_SABER_THING_NAME = "Dull Light Saber"
+DULL_SABER_THING_DESCRIPTION = "Useful for barely defeating galactic tyranny."
+DULL_SABER_THING_DATE = datetime(1984, 12, 3)
+
+
+@pytest.fixture()
+def dull_saber(app, light_saber):
+    return light_saber.create_kind_of_thing(name=DULL_SABER_THING_NAME, description=DULL_SABER_THING_DESCRIPTION,
+                                            date_created=DULL_SABER_THING_DATE)
 
 
 #######################
@@ -159,7 +183,7 @@ def rainbow_place(app, the_root):
 @pytest.fixture()
 def wild_place(app, the_root):
     return the_root.place.create_kind_of_place(WILD_PLACE_NAME, WILD_PLACE_DESCRIPTION,
-                                date_created=WILD_PLACE_DATE)
+                                               date_created=WILD_PLACE_DATE)
 
 
 ##########################
@@ -167,23 +191,21 @@ def wild_place(app, the_root):
 ##########################
 
 
-# PASTRY_NAME = "pastry"
-# PASTRY_DESCRIPTION = "Yummy!"
-# PASTRY_DATE = datetime(1989, 12, 13)
-#
-#
-# @pytest.fixture()
-# def pastry(app, ):
-#     return find_or_create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
-#
-#
-# COLORING_NAME = "coloring"
-# COLORING_DESCRIPTION = "hue and all that"
-# COLORING_DATE = datetime(1979, 2, 17)
-#
-#
-# @pytest.fixture()
-# def coloring(app):
-#     return find_or_create_category(COLORING_NAME, description=COLORING_DESCRIPTION, date_created=COLORING_DATE)
-#
-#
+PASTRY_NAME = "pastry"
+PASTRY_DESCRIPTION = "Yummy!"
+PASTRY_DATE = datetime(1989, 12, 13)
+
+
+@pytest.fixture()
+def pastry(app, the_root):
+    return the_root.create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
+
+
+COLORING_NAME = "coloring"
+COLORING_DESCRIPTION = "hue and all that"
+COLORING_DATE = datetime(1979, 2, 17)
+
+
+@pytest.fixture()
+def coloring(app, the_root):
+    return the_root.create_category(COLORING_NAME, description=COLORING_DESCRIPTION, date_created=COLORING_DATE)

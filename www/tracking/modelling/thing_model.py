@@ -5,17 +5,17 @@ from flask import url_for
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
+from tracking.modelling.base_models import RootDescendantMixin, NamedBaseModel
+from tracking.modelling.cardistry_models import sorted_by_name
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
-from tracking.modelling.base_models import UniqueNamedBaseModel, RootDescendantMixin
 
 
-class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseModel):
+class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = "Thing"
     plural_label = "Things"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Kind of '}
-    flavor="thing"
+    flavor = "thing"
 
     roots = database.relationship('Root', backref='thing', lazy=True)
     refinements = database.relationship('Refinement', backref='thing', lazy=True)
@@ -30,7 +30,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
     @property
     def children(self):
         return self.kinds
-    
+
     @property
     def sorted_categories(self):
         return sorted_by_name(self.category_list)
@@ -41,7 +41,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
         if not self.is_top:
             for category in self.parent_object.category_list:
                 if not category in category_list:
-                    category_list.append(category)            
+                    category_list.append(category)
         return category_list
 
     def create_kind_of_thing(self, name, description, date_created=None):
@@ -83,6 +83,25 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, UniqueNamedBaseMod
     @property
     def parent_object(self):
         return self.kind_of
+
+    @property
+    def parent_list(self):
+        if self.is_top:
+            return []
+        else:
+            return self.parent_object.parent_list + [self.parent_object]
+
+    def local_category_refinements(self, category):
+        return [refinement for refinement in self.refinements if refinement.category == category]
+
+    def deep_category_refinements(self, category):
+        refinements = []
+        for thing in self.kinds:
+            refinements += thing.local_category_refinements(category)
+        return refinements
+
+    def category_refinements(self, category):
+        return self.local_category_refinements(category) + self.deep_category_refinements(category)
 
     @property
     def root(self):
