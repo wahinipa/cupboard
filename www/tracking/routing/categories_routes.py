@@ -8,6 +8,7 @@ from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 categories_bp = Blueprint(
@@ -32,7 +33,7 @@ def categories_create(place_id, thing_id):
             return redirect(navigator.url(category, 'view'))
         else:
             return CupboardDisplayContext().render_template('pages/form_page.j2', form=form,
-                                                            form_title=f'Create New Category for {root.name}')
+                                                            form_title=f'Create New Category for {place.root.name}')
     else:
         return home_redirect()
 
@@ -47,14 +48,12 @@ def categories_view(place_id, thing_id):
         categories = Categories(place=place, thing=thing)
         display_attributes = {
             'description': True,
-            'url': True,
-            'bread_crumbs': True,
-            'children_attributes': {
-                'category': {
-                    'notation': True,
-                },
-            },
+            'children': [categories, thing],
+            'children_attributes': dual_view_childrens_attributes,
         }
-        return categories.display_context(navigator, current_user, display_attributes).render_template(
-            "pages/category_list.j2")
+        place_url = navigator.url(place.root, 'view')
+        category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')
+        return place.root.display_context(navigator, current_user, display_attributes).render_template(
+            "pages/category_list.j2", place_url=place_url, category_list_url=category_list_url,
+            active_flavor='category')
     return home_redirect()

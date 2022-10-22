@@ -10,6 +10,8 @@ from tracking.modelling.roots_model import Roots
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.card_display_attributes import place_display_attributes, thing_display_attributes, \
+    dual_view_childrens_attributes
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 root_bp = Blueprint(
@@ -69,39 +71,13 @@ def root_view(place_id, thing_id):
                 if thing and thing.root == root and thing.may_be_observed(current_user):
                     navigator = DualNavigator(place=place, thing=thing)
                     display_attributes = {
-                        'children': [place, thing],
                         'description': True,
-                        'children_attributes': {
-                            'place': {
-                                'display_context': {
-                                    'description': True,
-                                    'url': True,
-                                    'bread_crumbs': True,
-                                    'children_attributes': {
-                                        'place': {
-                                            'notation': True,
-                                        },
-                                    },
-                                },
-                            },
-                            'thing': {
-                                'display_context': {
-                                    'description': True,
-                                    'url': True,
-                                    'bread_crumbs': True,
-                                    'children_attributes': {
-                                        'category': {
-                                            'notation': True,
-                                        },
-                                        'thing': {
-                                            'notation': True,
-                                        },
-                                    },
-                                },
-                            }
-                        }
+                        'children': [place, thing],
+                        'children_attributes': dual_view_childrens_attributes,
                     }
+                    place_url = navigator.url(place.root, 'view')
                     category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')
                     return root.display_context(navigator, current_user, display_attributes).render_template(
-                        'pages/root_view.j2', category_list_url=category_list_url)
+                        'pages/root_view.j2', category_list_url=category_list_url, place_url=place_url,
+                        active_flavor='place')
     return home_redirect()

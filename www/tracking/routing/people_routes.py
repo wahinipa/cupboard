@@ -117,8 +117,8 @@ def change_password():
 @login_required
 def people_list():
     navigator = create_cupboard_navigator()
-    return all_people_display_context(navigator, current_user).render_template("pages/people_list.j2",
-                                                                               active_flavor="people")
+    return all_people_display_context(navigator, current_user).render_template(
+        "pages/people_list.j2", active_flavor="people")
 
 
 @people_bp.route('/view/<int:user_id>')
@@ -133,6 +133,6 @@ def people_view(user_id):
             'bread_crumbs': True,
         }
         return person.display_context(navigator, current_user, display_attributes).render_template(
-            "pages/person_view.j2")
+            "pages/person_view.j2", active_flavor="people")
     else:
         return home_redirect()

@@ -30,6 +30,10 @@ footer {
     color: black;
 }
 
+/* *** Navigation Pill Button Styling */
+.pill_button {
+    border-width: thick;
+}
 /* *** Action Button Styling *** */
 
 #action_check_button {
@@ -189,6 +193,18 @@ footer {
 }
 
 /* *** Place Styling *** */
+
+.btn-flavor-place {
+    border-color: var(--flavor-place-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-place.active {
+    color: white;
+    background-color: var(--flavor-place-color);
+}
+
 
 .card-flavor-place {
     border-color: black;

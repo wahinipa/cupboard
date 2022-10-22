@@ -12,6 +12,12 @@
   {{ render_pill(endpoint='people_bp.people_list', label='People', active_flavor=active_flavor, flavor='people') }}
 {% endmacro %}
 
+{% macro place_nav_item(active_flavor, place_url) %}
+  {% if place_url %}
+    {{ render_pill(url=place_url, label='Place', active_flavor=active_flavor, flavor='place') }}
+  {% endif %}
+{% endmacro %}
+
 {% macro admin_database_edit_nav_item(current_user) %}
   {% if current_user.may_edit_database %}
     {{ render_pill(endpoint='admin.index', label='Admin', flavor='admin') }}
@@ -20,6 +26,6 @@
 
 {% macro render_pill(label='', endpoint=None, url=None, active_flavor=None, flavor=None) %}
   <a href="{% if endpoint %}{{ url_for(endpoint) }}{% else %}{{ url }}{% endif %}" role="button"
-     class="btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
+     class="pill_button btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
 {% endmacro %}
 

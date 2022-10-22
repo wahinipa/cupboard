@@ -4,11 +4,13 @@ from flask_login import current_user, login_required
 
 from tracking import database
 from tracking.forms.choice_forms import ChoiceUpdateForm, update_choice_from_form
+from tracking.modelling.categories_model import Categories
 from tracking.modelling.choice_model import find_choice_by_id
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
+from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 choice_bp = Blueprint(
@@ -46,11 +48,14 @@ def choice_view(choice_id, place_id, thing_id):
         navigator = DualNavigator(place=place, thing=thing)
         display_attributes = {
             'description': True,
-            'url': True,
-            'bread_crumbs': True,
+            'children': [choice, thing],
+            'children_attributes': dual_view_childrens_attributes,
         }
-        return choice.display_context(navigator, current_user, display_attributes).render_template(
-            "pages/choice_view.j2")
+        place_url = navigator.url(place.root, 'view')
+        category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')
+        return place.root.display_context(navigator, current_user, display_attributes).render_template(
+            "pages/choice_view.j2", category_list_url=category_list_url, place_url=place_url,
+            active_flavor='category')
     else:
         return home_redirect()
 
