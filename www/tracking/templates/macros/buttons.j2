@@ -2,9 +2,14 @@
   {% if False %}{{ kwargs }}{% endif %}
   {% if task == 'create' %}
     {{ button_action(url=url, prefix='Create New ', label=label, column_width=column_width) }}
+  {% elif task == 'add' %}
+    {{ button_action(url=url, prefix='Add New ', label=label, column_width=column_width) }}
   {% elif task == 'delete' %}
     {{ button_action(url=url, prefix='DELETE ', label=label, column_width=column_width, button_color='danger'
     , on_submit="return confirm('Are you sure you wish to delete?');") }}
+  {% elif task == 'remove' %}
+    {{ button_action(url=url, prefix='REMOVE ', label=label, column_width=column_width, button_color='danger'
+    , on_submit="return confirm('Are you sure you wish to remove?');") }}
   {% elif task == 'duplicate' %}
     {{ button_action(url=url, prefix='Duplicate ', label=label, column_width=column_width) }}
   {% elif task == 'update' %}
