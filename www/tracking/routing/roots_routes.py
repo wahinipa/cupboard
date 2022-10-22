@@ -3,7 +3,7 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form
-from tracking.modelling.root_model import Roots
+from tracking.modelling.roots_model import Roots
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect

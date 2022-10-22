@@ -6,7 +6,7 @@ from tracking import database
 from tracking.forms.root_forms import RootUpdateForm, update_root_from_form
 from tracking.modelling.categories_model import Categories
 from tracking.modelling.place_model import find_place_by_id
-from tracking.modelling.root_model import Roots
+from tracking.modelling.roots_model import Roots
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
