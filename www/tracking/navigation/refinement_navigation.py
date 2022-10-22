@@ -7,5 +7,5 @@ def register_refinement_navigation(navigator):
         endpoint = f'refinement_bp.refinement_{task}'
         navigator.register(Refinement, task, endpoint)
 
-    register('delete')
-    register('create')
+    register('remove')
+    register('add')
