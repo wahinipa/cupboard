@@ -7,6 +7,7 @@ from sqlalchemy.orm import backref
 from tracking import database
 from tracking.modelling.base_models import RootDescendantMixin, NamedBaseModel
 from tracking.modelling.cardistry_models import sorted_by_name
+from tracking.modelling.particular_thing_model import find_or_create_particular_thing
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
@@ -22,6 +23,17 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
+
+    particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
+
+    @property
+    def generic(self):
+        return find_or_create_particular_thing(self, [])
+
+    def quantity_at_place(self, place):
+        return sum(particular_thing.quantity_at_place(place) for particular_thing in self.particular_things) + sum(
+            thing.quantity_at_place(place) for thing in self.kinds
+        )
 
     @property
     def identities(self):
@@ -135,3 +147,4 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
 def find_thing_by_id(thing_id):
     return Thing.query.filter(Thing.id == thing_id).first()
+

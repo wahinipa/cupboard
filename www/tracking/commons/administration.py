@@ -59,9 +59,11 @@ def add_flask_admin(application, database):
     from tracking.modelling.choice_model import Choice
     from tracking.modelling.refinement_model import Refinement
     from tracking.modelling.root_model import Root
+    from tracking.modelling.postioning_model import Positioning
     admin.add_view(AdminModelView(Category, database.session))
     admin.add_view(AdminModelView(Choice, database.session))
     admin.add_view(AdminModelView(Place, database.session))
+    admin.add_view(AdminModelView(Positioning, database.session))
     admin.add_view(AdminModelView(Refinement, database.session))
     admin.add_view(AdminModelView(Root, database.session))
     admin.add_view(AdminModelView(Thing, database.session))

@@ -14,8 +14,7 @@ class Choice(CupboardDisplayContextMixin, NamedBaseModel):
     flavor = "choice"
 
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'), nullable=False)
-
-    # particulars = database.relationship('Particular', backref='choice', lazy=True, cascade='all, delete')
+    particulars = database.relationship('Particular', backref='choice', lazy=True, cascade='all, delete')
 
     def viewable_children(self, viewer):
         return []

@@ -19,6 +19,7 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), index=True)
     places = database.relationship('Place', lazy='subquery', backref=backref('place_of', remote_side='Place.id'))
+    positionings = database.relationship('Positioning', backref='place', lazy=True, cascade='all, delete')
 
     @property
     def identities(self):
@@ -27,6 +28,14 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     @property
     def children(self):
         return self.places
+
+    def add_to_thing(self, particular_thing, quantity):
+        from tracking.modelling.postioning_model import add_quantity_of_things
+        return add_quantity_of_things(self, particular_thing, quantity)
+
+    def quantity_of_things(self, thing):
+        from tracking.modelling.postioning_model import find_quantity_of_things
+        return find_quantity_of_things(self, thing)
 
     def create_kind_of_place(self, name, description, date_created=None):
         if date_created is None:
