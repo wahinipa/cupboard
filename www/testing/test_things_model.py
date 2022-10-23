@@ -1,11 +1,11 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures import app, light_saber, bucket, LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION, \
-    LIGHT_SABER_THING_DATE, BUCKET_NAME, BUCKET_DESCRIPTION, BUCKET_DATE, the_root, ROOT_THING_NAME, \
+    LIGHT_SABER_THING_DATE, BUCKET_NAME, BUCKET_DESCRIPTION, BUCKET_DATE, knights_of_the_round_table, ROOT_THING_NAME, \
     SHARP_SABER_THING_NAME, SHARP_SABER_THING_DESCRIPTION, SHARP_SABER_THING_DATE, sharp_saber, dull_saber
 
 
 def _pycharm_please_keep_these_imports():
-    return app, the_root, light_saber, bucket, sharp_saber, dull_saber
+    return app, knights_of_the_round_table, light_saber, bucket, sharp_saber, dull_saber
 
 
 def test_thing_creation(light_saber, bucket, sharp_saber, dull_saber):

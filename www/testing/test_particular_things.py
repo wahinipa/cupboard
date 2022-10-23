@@ -1,13 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures import app, pastry, muffin, roll, red_coloring, coloring, light_saber, bucket, the_root
+from testing.fixtures import app, pastry, muffin, roll, red_coloring, coloring, light_saber, bucket, knights_of_the_round_table
 from tracking.modelling.particular_thing_model import find_or_create_particular_thing
 
 
 def _pycharm_please_keep_these_imports():
-    return app, pastry, muffin, roll, red_coloring, coloring, light_saber, bucket, the_root
+    return app, pastry, muffin, roll, red_coloring, coloring, light_saber, bucket, knights_of_the_round_table
 
 
-def test_creating_particulars(pastry, muffin, roll, red_coloring, coloring, light_saber, bucket, the_root):
+def test_creating_particulars(pastry, muffin, roll, red_coloring, coloring, light_saber, bucket, knights_of_the_round_table):
     particular_bucket = find_or_create_particular_thing(bucket, [red_coloring, muffin])
     assert particular_bucket is not None
     assert particular_bucket.thing == bucket
@@ -37,7 +37,7 @@ def test_creating_particulars(pastry, muffin, roll, red_coloring, coloring, ligh
     assert repeat_particular_bucket == particular_bucket
 
 
-def test_generic(light_saber, the_root):
+def test_generic(light_saber, knights_of_the_round_table):
     generic_light_saber = light_saber.generic
     assert generic_light_saber is not None
     assert len(generic_light_saber.choices) == 0

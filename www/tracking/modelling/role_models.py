@@ -7,7 +7,7 @@ from tracking import database
 from tracking.modelling.base_models import UniqueNamedBaseModel, IdModelMixin, DatedModelMixin
 
 class Role(UniqueNamedBaseModel):
-    group_assignments = database.relationship('GroupAssignment', backref='role', lazy=True, cascade='all, delete')
+    root_assignments = database.relationship('RootAssignment', backref='role', lazy=True, cascade='all, delete')
     place_assignments = database.relationship('PlaceAssignment', backref='role', lazy=True, cascade='all, delete')
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,
                                                   cascade='all, delete')
@@ -19,6 +19,9 @@ class Role(UniqueNamedBaseModel):
     @property
     def is_observer_role(self):
         return self.is_named(self.observer_role)
+
+    def is_named(self, name_of_role):
+        return self.name == name_of_role
 
 
 def find_role_by_id(id):
@@ -72,8 +75,8 @@ class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.
         return self.role.name
 
 
-class GroupAssignment(AssignmentBaseModel):
-    group_id = database.Column(database.Integer, database.ForeignKey('group.id'))
+class RootAssignment(AssignmentBaseModel):
+    root_id = database.Column(database.Integer, database.ForeignKey('root.id'))
 
 
 class PlaceAssignment(AssignmentBaseModel):
@@ -84,10 +87,10 @@ class UniversalAssignment(AssignmentBaseModel):
     pass
 
 
-def find_group_assignment(group, role, user):
-    for group_assignment in user.group_assignments:
-        if group_assignment.group == group and group_assignment.role == role:
-            return group_assignment
+def find_root_assignment(root, role, user):
+    for root_assignment in user.root_assignments:
+        if root_assignment.root == root and root_assignment.role == role:
+            return root_assignment
     return None
 
 
@@ -105,12 +108,12 @@ def find_universal_assignment(role, user):
     return None
 
 
-def assign_group_role(group, role, user, date_created=None):
-    assignment = find_group_assignment(group, role, user)
+def assign_root_role(root, role, user, date_created=None):
+    assignment = find_root_assignment(root, role, user)
     if assignment is None:
         if date_created is None:
             date_created = datetime.now()
-        assignment = GroupAssignment(group=group, role=role, person=user, date_created=date_created)
+        assignment = RootAssignment(root=root, role=role, person=user, date_created=date_created)
         database.session.add(assignment)
         database.session.commit()
     return assignment

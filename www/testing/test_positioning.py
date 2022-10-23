@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, the_root
+from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, knights_of_the_round_table
 from tracking import database
 from tracking.modelling.particular_thing_model import find_or_create_particular_thing
 from tracking.modelling.postioning_model import find_quantity_of_things, add_quantity_of_things, _find_positionings, \
@@ -7,10 +7,10 @@ from tracking.modelling.postioning_model import find_quantity_of_things, add_qua
 
 
 def _pycharm_please_keep_these_imports():
-    return app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, the_root
+    return app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, knights_of_the_round_table
 
 
-def test_quantities(rainbow_place, light_saber, the_root, muffin):
+def test_quantities(rainbow_place, light_saber, knights_of_the_round_table, muffin):
     particular_light_saber = find_or_create_particular_thing(light_saber, [muffin])
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 0
     assert add_quantity_of_things(rainbow_place, particular_light_saber, 3) == 3
@@ -32,7 +32,7 @@ def test_quantities(rainbow_place, light_saber, the_root, muffin):
     assert everything.quantity_at_place(rainbow_place) == 24
 
 
-def test_handles_redundant_quantities(rainbow_place, light_saber, roll, the_root):
+def test_handles_redundant_quantities(rainbow_place, light_saber, roll, knights_of_the_round_table):
     particular_light_saber = find_or_create_particular_thing(light_saber, [roll])
     assert len(_find_positionings(rainbow_place, particular_light_saber)) == 0
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 0
@@ -54,7 +54,7 @@ def test_handles_redundant_quantities(rainbow_place, light_saber, roll, the_root
     assert len(_find_positionings(rainbow_place, particular_light_saber)) == 1  # back to just one entry
 
 
-def test_change_of_place(rainbow_place, wild_place, light_saber, the_root, roll):
+def test_change_of_place(rainbow_place, wild_place, light_saber, knights_of_the_round_table, roll):
     particular_light_saber = find_or_create_particular_thing(light_saber, [roll])
     assert find_quantity_of_things(rainbow_place, particular_light_saber) == 0
     assert find_quantity_of_things(wild_place, particular_light_saber) == 0

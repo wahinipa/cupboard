@@ -4,8 +4,8 @@ from datetime import datetime
 from sqlalchemy.orm import backref
 
 from tracking import database
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import NamedBaseModel, RootDescendantMixin
+from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
@@ -13,13 +13,20 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     plural_label = "Places"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Place for '}
-    flavor="place"
+    flavor = "place"
 
     roots = database.relationship('Root', backref='place', lazy=True)
 
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), index=True)
     places = database.relationship('Place', lazy='subquery', backref=backref('place_of', remote_side='Place.id'))
     positionings = database.relationship('Positioning', backref='place', lazy=True, cascade='all, delete')
+    assignments = database.relationship('PlaceAssignment', backref='place', lazy=True, cascade='all, delete')
+
+    def has_role(self, person, name_of_role):
+        def yes(assignment):
+            return assignment.person == person and assignment.role.is_named(name_of_role)
+
+        return any(map(yes, self.assignments)) or self.ancestor.has_role(person, name_of_role)
 
     @property
     def identities(self):

@@ -1,22 +1,22 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures import app, the_root, ROOT_NAME, ROOT_DESCRIPTION, ROOT_PLACE_NAME, ROOT_THING_NAME
+from testing.fixtures import app, knights_of_the_round_table, ROOT_NAME, ROOT_DESCRIPTION, ROOT_PLACE_NAME, ROOT_THING_NAME
 
 
 def _pycharm_please_keep_these_imports():
-    return app, the_root
+    return app, knights_of_the_round_table
 
 
-def test_root_creation(the_root):
-    assert the_root is not None
-    assert the_root.name == ROOT_NAME
-    assert the_root.description == ROOT_DESCRIPTION
+def test_root_creation(knights_of_the_round_table):
+    assert knights_of_the_round_table is not None
+    assert knights_of_the_round_table.name == ROOT_NAME
+    assert knights_of_the_round_table.description == ROOT_DESCRIPTION
 
-    top_place = the_root.place
+    top_place = knights_of_the_round_table.place
     assert top_place is not None
-    assert top_place.root == the_root
+    assert top_place.root == knights_of_the_round_table
     assert top_place.name == ROOT_PLACE_NAME
 
-    top_thing = the_root.thing
+    top_thing = knights_of_the_round_table.thing
     assert top_thing is not None
-    assert top_thing.root == the_root
+    assert top_thing.root == knights_of_the_round_table
     assert top_thing.name == ROOT_THING_NAME

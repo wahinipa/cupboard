@@ -6,6 +6,7 @@ import pytest
 
 from tracking import create_app, database
 from tracking.modelling.choice_model import find_or_create_choice
+from tracking.modelling.role_models import find_or_create_role
 from tracking.modelling.root_model import create_root
 from tracking.modelling.people_model import find_or_create_user
 
@@ -58,9 +59,21 @@ ROOT_PLACE_NAME = "All of The Root Places"
 ROOT_THING_NAME = "All of The Root Things"
 
 
+ROUND_TABLE_DATE = datetime(1994, 6, 12)
+
+QUEENS_TABLE_GROUP_NAME = "Queens of the Square Table"
+QUEENS_TABLE_DESCRIPTION = "Bunch of Snoots"
+QUEENS_TABLE_DATE = datetime(1993, 5, 10)
+
+
 @pytest.fixture()
-def the_root(app):
-    return create_root(name=ROOT_NAME, description=ROOT_DESCRIPTION)
+def knights_of_the_round_table(app):
+    return create_root(name=ROOT_NAME, description=ROOT_DESCRIPTION, date_created=ROUND_TABLE_DATE)
+
+
+@pytest.fixture()
+def queens_of_the_round_table(app):
+    return create_root(name=QUEENS_TABLE_GROUP_NAME, description=QUEENS_TABLE_DESCRIPTION, date_created=QUEENS_TABLE_DATE)
 
 
 ######################
@@ -125,8 +138,8 @@ LIGHT_SABER_THING_DATE = datetime(1984, 1, 1)
 
 
 @pytest.fixture()
-def light_saber(app, the_root):
-    return the_root.thing.create_kind_of_thing(name=LIGHT_SABER_THING_NAME, description=LIGHT_SABER_THING_DESCRIPTION,
+def light_saber(app, knights_of_the_round_table):
+    return knights_of_the_round_table.thing.create_kind_of_thing(name=LIGHT_SABER_THING_NAME, description=LIGHT_SABER_THING_DESCRIPTION,
                                                date_created=LIGHT_SABER_THING_DATE)
 
 
@@ -136,8 +149,8 @@ BUCKET_DATE = datetime(1981, 5, 4)
 
 
 @pytest.fixture()
-def bucket(app, the_root):
-    return the_root.thing.create_kind_of_thing(BUCKET_NAME, BUCKET_DESCRIPTION, date_created=BUCKET_DATE)
+def bucket(app, knights_of_the_round_table):
+    return knights_of_the_round_table.thing.create_kind_of_thing(BUCKET_NAME, BUCKET_DESCRIPTION, date_created=BUCKET_DATE)
 
 
 SHARP_SABER_THING_NAME = "Sharp Light Saber"
@@ -176,14 +189,14 @@ WILD_PLACE_DATE = datetime(2020, 5, 18)
 
 
 @pytest.fixture()
-def rainbow_place(app, the_root):
-    return the_root.place.create_kind_of_place(RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION,
+def rainbow_place(app, knights_of_the_round_table):
+    return knights_of_the_round_table.place.create_kind_of_place(RAINBOW_PLACE_NAME, RAINBOW_PLACE_DESCRIPTION,
                                                date_created=RAINBOW_PLACE_DATE)
 
 
 @pytest.fixture()
-def wild_place(app, the_root):
-    return the_root.place.create_kind_of_place(WILD_PLACE_NAME, WILD_PLACE_DESCRIPTION,
+def wild_place(app, knights_of_the_round_table):
+    return knights_of_the_round_table.place.create_kind_of_place(WILD_PLACE_NAME, WILD_PLACE_DESCRIPTION,
                                                date_created=WILD_PLACE_DATE)
 
 
@@ -198,8 +211,8 @@ PASTRY_DATE = datetime(1989, 12, 13)
 
 
 @pytest.fixture()
-def pastry(app, the_root):
-    return the_root.create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
+def pastry(app, knights_of_the_round_table):
+    return knights_of_the_round_table.create_category(PASTRY_NAME, description=PASTRY_DESCRIPTION, date_created=PASTRY_DATE)
 
 
 COLORING_NAME = "coloring"
@@ -208,8 +221,9 @@ COLORING_DATE = datetime(1979, 2, 17)
 
 
 @pytest.fixture()
-def coloring(app, the_root):
-    return the_root.create_category(COLORING_NAME, description=COLORING_DESCRIPTION, date_created=COLORING_DATE)
+def coloring(app, knights_of_the_round_table):
+    return knights_of_the_round_table.create_category(COLORING_NAME, description=COLORING_DESCRIPTION, date_created=COLORING_DATE)
+
 
 ########################
 # Choice Test Fixtures #
@@ -229,16 +243,48 @@ RED_COLORING_DATE = datetime(1957, 11, 13)
 
 
 @pytest.fixture()
-def muffin(app, pastry, the_root):
+def muffin(app, pastry, knights_of_the_round_table):
     return find_or_create_choice(pastry, MUFFIN_NAME, description=MUFFIN_DESCRIPTION, date_created=MUFFIN_DATE)
 
 
 @pytest.fixture()
-def roll(app, pastry, the_root):
+def roll(app, pastry, knights_of_the_round_table):
     return find_or_create_choice(pastry, ROLL_NAME, description=ROLL_DESCRIPTION, date_created=ROLL_DATE)
 
 
 @pytest.fixture()
-def red_coloring(app, coloring, the_root):
+def red_coloring(app, coloring, knights_of_the_round_table):
     return find_or_create_choice(coloring, RED_COLORING_NAME, description=RED_COLORING_DESCRIPTION,
                                  date_created=RED_COLORING_DATE)
+
+
+#######################
+# Role Test Fixtures #
+#######################
+
+DUNCE_ROLE_NAME = "Dunce"
+DUNCE_DESCRIPTION = "Does really stupid things."
+DUNCE_DATE = datetime(1925, 2, 5)
+
+BUFFOON_ROLE_NAME = "Buffoon"
+BUFFOON_DESCRIPTION = "Does really silly things."
+BUFFOON_DATE = datetime(1926, 3, 6)
+
+BOSSY_ROLE_NAME = "Bossy"
+BOSSY_DESCRIPTION = "Does really bossy things."
+BOSSY_DATE = datetime(1927, 7, 17)
+
+
+@pytest.fixture()
+def dunce(app):
+    return find_or_create_role(DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE)
+
+
+@pytest.fixture()
+def buffoon(app):
+    return find_or_create_role(BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, BUFFOON_DATE)
+
+
+@pytest.fixture()
+def bossy(app):
+    return find_or_create_role(BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE)

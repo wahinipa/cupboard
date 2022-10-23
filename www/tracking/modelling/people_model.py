@@ -37,9 +37,10 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     date_joined = database.Column(database.DateTime(), default=datetime.now())
     about_me = database.Column(database.Text(), nullable=False, server_default=u'')
 
-    # place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
-    # universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
-    #                                               cascade='all, delete')
+    root_assignments = database.relationship('RootAssignment', backref='person', lazy=True, cascade='all, delete')
+    place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
+    universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
+                                                  cascade='all, delete')
 
     @property
     def identities(self):
@@ -82,7 +83,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     @property
     def assignments(self):
-        return self.universal_assignments + self.group_assignments + self.place_assignments
+        return self.universal_assignments + self.root_assignments + self.place_assignments
 
     @property
     def is_the_super_admin(self):
@@ -195,8 +196,8 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
         return self.is_an_admin or any(map(yes, self.assignments))
 
-    def has_role(self, group_or_place, name_of_role):
-        return self.has_universal_role(name_of_role) or group_or_place.has_role(self, name_of_role)
+    def has_role(self, root_or_place, name_of_role):
+        return self.has_universal_role(name_of_role) or root_or_place.has_role(self, name_of_role)
 
     def has_universal_role(self, name_of_role):
         def yes(assignment):

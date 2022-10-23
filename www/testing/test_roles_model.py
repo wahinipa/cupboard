@@ -1,17 +1,15 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from old_testing.fixtures_for_testing import BOSSY_DATE, BOSSY_DESCRIPTION, BOSSY_ROLE_NAME, BUFFOON_DATE, \
-    BUFFOON_DESCRIPTION, BUFFOON_ROLE_NAME, DUNCE_DATE, DUNCE_DESCRIPTION, DUNCE_ROLE_NAME, app, bossy, buffoon, \
-    curly_stooge_user, dunce, knights_of_the_round_table, larry_stooge_user, moe_stooge_user, \
-    queens_of_the_round_table, \
-    rainbow_place, wild_place
-from tracking.modelling.role_models import assign_group_role, assign_place_role, assign_universal_role, \
+from testing.fixtures import app, dunce, buffoon, bossy, rainbow_place, wild_place, curly_stooge_user, moe_stooge_user, \
+    larry_stooge_user, knights_of_the_round_table, DUNCE_ROLE_NAME, DUNCE_DESCRIPTION, DUNCE_DATE, BUFFOON_ROLE_NAME, BUFFOON_DESCRIPTION, \
+    BUFFOON_DATE, BOSSY_ROLE_NAME, BOSSY_DESCRIPTION, BOSSY_DATE, knights_of_the_round_table, queens_of_the_round_table
+from tracking.modelling.role_models import assign_root_role, assign_place_role, assign_universal_role, \
     find_or_create_role, \
     find_or_create_standard_roles, find_role, Role
 
 
 def _pycharm_please_keep_these_imports():
     return app, dunce, buffoon, bossy, dunce, buffoon, bossy, curly_stooge_user, moe_stooge_user, larry_stooge_user, \
-           knights_of_the_round_table, queens_of_the_round_table, rainbow_place, wild_place
+           knights_of_the_round_table, rainbow_place, wild_place, knights_of_the_round_table, queens_of_the_round_table
 
 
 def test_role_creation(dunce, buffoon, bossy):
@@ -33,73 +31,73 @@ def test_roles_are_unique(dunce):
     assert dunce == another_dunce
 
 
-def test_group_role_reassignment(knights_of_the_round_table, queens_of_the_round_table, dunce, buffoon, bossy,
+def test_root_role_reassignment(knights_of_the_round_table, queens_of_the_round_table, dunce, buffoon, bossy,
                                  curly_stooge_user, moe_stooge_user, larry_stooge_user):
-    assert len(dunce.group_assignments) == 0
-    role_a = assign_group_role(knights_of_the_round_table, dunce, curly_stooge_user)
-    assert len(dunce.group_assignments) == 1
-    role_b = assign_group_role(knights_of_the_round_table, dunce, curly_stooge_user)
-    assert len(dunce.group_assignments) == 1
+    assert len(dunce.root_assignments) == 0
+    role_a = assign_root_role(knights_of_the_round_table, dunce, curly_stooge_user)
+    assert len(dunce.root_assignments) == 1
+    role_b = assign_root_role(knights_of_the_round_table, dunce, curly_stooge_user)
+    assert len(dunce.root_assignments) == 1
     assert role_a == role_b
 
 
-def test_group_role_assignment(knights_of_the_round_table, queens_of_the_round_table, dunce, buffoon, bossy,
+def test_root_role_assignment(knights_of_the_round_table, queens_of_the_round_table, dunce, buffoon, bossy,
                                curly_stooge_user, moe_stooge_user, larry_stooge_user):
-    assert len(dunce.group_assignments) == 0
-    role_a = assign_group_role(knights_of_the_round_table, dunce, curly_stooge_user)
+    assert len(dunce.root_assignments) == 0
+    role_a = assign_root_role(knights_of_the_round_table, dunce, curly_stooge_user)
     assert role_a is not None
     assert role_a.person == curly_stooge_user
-    assert role_a.group == knights_of_the_round_table
+    assert role_a.root == knights_of_the_round_table
     assert role_a.role == dunce
-    assert len(dunce.group_assignments) == 1
-    assert role_a in dunce.group_assignments
+    assert len(dunce.root_assignments) == 1
+    assert role_a in dunce.root_assignments
 
-    assert len(buffoon.group_assignments) == 0
-    role_b = assign_group_role(queens_of_the_round_table, buffoon, curly_stooge_user)
-    assert role_b in buffoon.group_assignments
-    assert len(buffoon.group_assignments) == 1
+    assert len(buffoon.root_assignments) == 0
+    role_b = assign_root_role(queens_of_the_round_table, buffoon, curly_stooge_user)
+    assert role_b in buffoon.root_assignments
+    assert len(buffoon.root_assignments) == 1
     assert role_b is not None
     assert role_b.person == curly_stooge_user
-    assert role_b.group == queens_of_the_round_table
+    assert role_b.root == queens_of_the_round_table
     assert role_b.role == buffoon
 
-    role_c = assign_group_role(knights_of_the_round_table, buffoon, moe_stooge_user)
+    role_c = assign_root_role(knights_of_the_round_table, buffoon, moe_stooge_user)
     assert role_c is not None
     assert role_c.person == moe_stooge_user
-    assert role_c.group == knights_of_the_round_table
+    assert role_c.root == knights_of_the_round_table
     assert role_c.role == buffoon
 
-    role_d = assign_group_role(knights_of_the_round_table, buffoon, larry_stooge_user)
+    role_d = assign_root_role(knights_of_the_round_table, buffoon, larry_stooge_user)
     assert role_d is not None
     assert role_d.person == larry_stooge_user
-    assert role_d.group == knights_of_the_round_table
+    assert role_d.root == knights_of_the_round_table
     assert role_d.role == buffoon
 
-    role_e = assign_group_role(knights_of_the_round_table, bossy, moe_stooge_user)
+    role_e = assign_root_role(knights_of_the_round_table, bossy, moe_stooge_user)
     assert role_e is not None
     assert role_e.person == moe_stooge_user
-    assert role_e.group == knights_of_the_round_table
+    assert role_e.root == knights_of_the_round_table
     assert role_e.role == bossy
 
-    curly_assignments = curly_stooge_user.group_assignments
+    curly_assignments = curly_stooge_user.assignments
     assert len(curly_assignments) == 2
     assert role_a in curly_assignments
     assert role_b in curly_assignments
 
-    moe_assignments = moe_stooge_user.group_assignments
+    moe_assignments = moe_stooge_user.assignments
     assert len(moe_assignments) == 2
     assert role_c in moe_assignments
     assert role_e in moe_assignments
 
-    larry_assignments = larry_stooge_user.group_assignments
+    larry_assignments = larry_stooge_user.assignments
     assert len(larry_assignments) == 1
     assert role_d in larry_assignments
 
-    queen_assignments = queens_of_the_round_table.group_assignments
+    queen_assignments = queens_of_the_round_table.assignments
     assert len(queen_assignments) == 1
     assert role_b in queen_assignments
 
-    knight_assignments = knights_of_the_round_table.group_assignments
+    knight_assignments = knights_of_the_round_table.assignments
     assert len(knight_assignments) == 4
     assert role_a in knight_assignments
     assert role_b not in knight_assignments
@@ -174,11 +172,11 @@ def test_place_role_assignment(rainbow_place, wild_place, dunce, buffoon, bossy,
     assert len(larry_assignments) == 1
     assert role_d in larry_assignments
 
-    wild_place_assignments = wild_place.place_assignments
+    wild_place_assignments = wild_place.assignments
     assert len(wild_place_assignments) == 1
     assert role_b in wild_place_assignments
 
-    rainbow_assignments = rainbow_place.place_assignments
+    rainbow_assignments = rainbow_place.assignments
     assert len(rainbow_assignments) == 4
     assert role_a in rainbow_assignments
     assert role_b not in rainbow_assignments
@@ -205,9 +203,9 @@ def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place,
                                       curly_stooge_user):
     assert len(curly_stooge_user.assignments) == 0
 
-    role_a = assign_group_role(knights_of_the_round_table, dunce, curly_stooge_user)
+    role_a = assign_root_role(knights_of_the_round_table, dunce, curly_stooge_user)
     assert len(curly_stooge_user.assignments) == 1
-    assert role_a in curly_stooge_user.group_assignments
+    assert role_a in curly_stooge_user.root_assignments
     assert not curly_stooge_user.has_universal_role("Dunce")
     assert curly_stooge_user.has_role(knights_of_the_round_table, "Dunce")
     assert curly_stooge_user.has_role(rainbow_place, "Dunce")
@@ -231,7 +229,7 @@ def test_observer_role(curly_stooge_user, knights_of_the_round_table):
     find_or_create_standard_roles()
     observer_role = find_role(Role.observer_role)
     assert not curly_stooge_user.may_observe_things
-    assign_group_role(knights_of_the_round_table, observer_role, curly_stooge_user)
+    assign_root_role(knights_of_the_round_table, observer_role, curly_stooge_user)
     assert curly_stooge_user.may_observe_things
 
 

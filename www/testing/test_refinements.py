@@ -1,10 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures import app, light_saber, pastry, coloring, the_root, sharp_saber, dull_saber
+from testing.fixtures import app, light_saber, pastry, coloring, knights_of_the_round_table, sharp_saber, dull_saber
 from tracking.modelling.refinement_model import add_refinement, remove_refinement
 
 
 def _pycharm_please_keep_these_imports():
-    return app, pastry, light_saber, coloring, the_root, sharp_saber, dull_saber
+    return app, pastry, light_saber, coloring, knights_of_the_round_table, sharp_saber, dull_saber
 
 
 def test_refinement(light_saber, sharp_saber, pastry, coloring, dull_saber):

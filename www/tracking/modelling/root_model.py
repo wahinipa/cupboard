@@ -2,9 +2,9 @@
 from datetime import datetime
 
 from tracking import database
+from tracking.modelling.base_models import UniqueNamedBaseModel
 from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
-from tracking.modelling.base_models import UniqueNamedBaseModel
 
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
@@ -18,6 +18,13 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
 
     categories = database.relationship('Category', backref='root', lazy=True, cascade='all, delete')
+    assignments = database.relationship('RootAssignment', backref='root', lazy=True, cascade='all, delete')
+
+    def has_role(self, person, name_of_role):
+        def yes(assignment):
+            return assignment.person == person and assignment.role.is_named(name_of_role)
+
+        return any(map(yes, self.assignments))
 
     @property
     def identities(self):
@@ -83,20 +90,22 @@ def all_roots():
     return sorted(Root.query.all(), key=name_is_key)
 
 
-def create_root(name, description):
+def create_root(name, description, date_created=None):
+    if date_created is None:
+        date_created = datetime.now()
     from tracking.modelling.place_model import Place
     place_name = f'All of {name} Places'
     place_description = f'All of the top places for {name}'
-    place = Place(name=place_name, description=place_description)
+    place = Place(name=place_name, description=place_description, date_created=date_created)
     database.session.add(place)
 
     from tracking.modelling.thing_model import Thing
     thing_name = f'All of {name} Things'
     thing_description = f'All of the top things for {name}'
-    thing = Thing(name=thing_name, description=thing_description)
+    thing = Thing(name=thing_name, description=thing_description, date_created=date_created)
     database.session.add(thing)
 
-    root = Root(name=name, description=description, place=place, thing=thing)
+    root = Root(name=name, description=description, place=place, thing=thing, date_created=date_created)
     database.session.add(root)
     database.session.commit()
 
