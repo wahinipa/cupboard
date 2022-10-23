@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin
+from tracking.modelling.cardistry_models import bread_crumbs
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
@@ -23,8 +24,8 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
     particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
     positionings = database.relationship('Positioning', backref='particular_thing', lazy=True, cascade='all, delete')
 
-    singular_label = "Thing"
-    plural_label = "Things"
+    singular_label = "Particular Thing"
+    plural_label = "Particular Things"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Kind of '}
     flavor = "thing"
@@ -32,15 +33,68 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
     def add_description(self, context):
         return self.thing.add_description(context)
 
+    @property
+    def root_path(self):
+        path = self.thing.root_path
+        if not self.is_generic:
+            path.append(self)
+        return path
+
+    @property
+    def choice_label(self):
+        choices = self.choices
+        return (', ').join([f'{choice.name}' for choice in choices])
+
     def bread_crumbs(self, navigator):
-        return self.thing.bread_crumbs(navigator)
+        if self.is_generic:
+            target = self.thing
+        else:
+            target = self
+        return bread_crumbs(navigator, self.root_path, target=target)
+
+    @property
+    def label(self):
+        return self.name
 
     @property
     def name(self):
-        return self.thing.name
+        label = self.choice_label
+        if label:
+            return f'{label} {self.thing.name}'
+        else:
+            return self.thing.name
+
+    @property
+    def siblings(self):
+        return self.thing.particular_things
+
+    @property
+    def is_generic(self):
+        choices = self.choices
+        return len(choices) == 0
+
+    def has_choice(self, some_choice):
+        for choice in self.choices:
+            if choice.id == some_choice.id:
+                return True
+        return False
+
+    def is_refinement(self, particular_thing):
+        return self != particular_thing and self.thing == particular_thing.thing and self.has_refined_choices(particular_thing)
+
+    def has_refined_choices(self, particular_thing):
+        for choice in self.choices:
+            if not particular_thing.has_choice(choice):
+                return False
+        return True
+
+    @property
+    def refinements(self):
+        return [particular_thing for particular_thing in self.thing.particular_things if self.is_refinement(particular_thing)]
+
 
     def viewable_children(self, viewer):
-        return self.thing.viewable_children(viewer)
+        return self.thing.sorted_categories + self.refinements + self.thing.kinds
 
     @property
     def identities(self):

@@ -10,7 +10,7 @@ class ParticularInventory:
     def __init__(self, place, particular_thing):
         self.place = place
         self.particular_thing = particular_thing
-        self.quantity = self.particular_thing.total_quantity_at_place(self.place)
+        self.quantity = self.particular_thing.quantity_at_place(self.place)
 
     @property
     def name(self):
@@ -24,9 +24,9 @@ class ParticularInventory:
 class TotalInventory:
     flavor = "inventory"
 
-    def __init__(self, place, thing, singular_label='Total'):
+    def __init__(self, place, particular_thing, singular_label='Total'):
         self.place = place
-        self.thing = thing
+        self.thing = particular_thing
         self.singular_label = singular_label
         self.quantity = self.thing.all_quantity_at_place(self.place)
 
@@ -43,20 +43,22 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
 
     def __init__(self, place, thing=None, particular_thing=None):
         super().__init__(place=place, thing=thing, particular_thing=particular_thing)
-        self.total_inventory = TotalInventory(self.place, self.thing, singular_label='Grand Total')
-        particular_inventories = [ParticularInventory(self.place, particular_thing)
-                for particular_thing in self.thing.all_particular_things]
-        located_inventories = [TotalInventory(inner_place, self.thing, singular_label='Locale') for inner_place in self.place.places]
-        inventories = particular_inventories + [self.total_inventory] + located_inventories
+        self.refinements = self.particular_thing.refinements
+        refined_inventories = [ParticularInventory(place, refinement) for refinement in self.refinements]
+        # self.total_inventory = TotalInventory(self.place, self.particular_thing, singular_label='Grand Total')
+        # particular_inventories = [ParticularInventory(self.place, particular_thing)
+        #         for particular_thing in self.thing.all_particular_things]
+        # located_inventories = [TotalInventory(inner_place, self.thing, singular_label='Locale') for inner_place in self.place.places]
+        inventories = refined_inventories
         self.inventories = [inventory for inventory in inventories if inventory.quantity]
 
     @property
     def quantity(self):
-        return self.total_inventory.quantity
+        return self.particular_thing.quantity_at_place(self.place)
 
     @property
     def name(self):
-        return f'Quantity of {self.thing.name} at {self.place.name}'
+        return f'Quantity of {self.particular_thing.name} at {self.place.name}'
 
     def viewable_children(self, viewer):
         return self.inventories

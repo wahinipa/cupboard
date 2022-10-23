@@ -71,10 +71,7 @@ def root_view(place_id, particular_thing_id):
                 if particular_thing and particular_thing.root == root and particular_thing.may_be_observed(
                     current_user):
                     navigator = DualNavigator(place=place, particular_thing=particular_thing)
-                    inventories = [Inventory(place, kind) for kind in particular_thing.kinds] + [
-                        Inventory(place=place, particular_thing=particular_thing)]
-                    children = [place, particular_thing] + [inventory for inventory in inventories if
-                                                            inventory.quantity]
+                    children = [place, particular_thing, Inventory(place=place, particular_thing=particular_thing)]
                     display_attributes = {
                         'description': True,
                         'children': children,
