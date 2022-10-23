@@ -5,8 +5,8 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm, update_place_from_form
+from tracking.modelling.particular_thing_model import find_particular_thing_by_id
 from tracking.modelling.place_model import find_place_by_id
-from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
@@ -18,14 +18,14 @@ place_bp = Blueprint(
 )
 
 
-@place_bp.route('/create/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
+@place_bp.route('/create/<int:place_id>/<int:particular_thing_id>', methods=['POST', 'GET'])
 @login_required
-def place_create(place_id, thing_id):
+def place_create(place_id, particular_thing_id):
     place = find_place_by_id(place_id)
-    thing = find_thing_by_id(thing_id)
-    if place and thing and place.root == thing.root and place.may_create_place(current_user):
+    particular_thing = find_particular_thing_by_id(particular_thing_id)
+    if place and particular_thing and place.root == particular_thing.root and place.may_create_place(current_user):
         form = PlaceCreateForm()
-        navigator = DualNavigator(place=place, thing=thing)
+        navigator = DualNavigator(place=place, particular_thing=particular_thing)
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(navigator.url(place, 'view'))
         if form.validate_on_submit():
@@ -38,13 +38,13 @@ def place_create(place_id, thing_id):
         return home_redirect()
 
 
-@place_bp.route('/delete/<int:place_id>/<int:thing_id>')
+@place_bp.route('/delete/<int:place_id>/<int:particular_thing_id>')
 @login_required
-def place_delete(place_id, thing_id):
+def place_delete(place_id, particular_thing_id):
     place = find_place_by_id(place_id)
-    thing = find_thing_by_id(thing_id)
-    if place and thing and place.root == thing.root and place.may_delete(current_user):
-        navigator = DualNavigator(place=place, thing=thing)
+    particular_thing = find_particular_thing_by_id(particular_thing_id)
+    if place and particular_thing and place.root == particular_thing.root and place.may_delete(current_user):
+        navigator = DualNavigator(place=place, particular_thing=particular_thing)
         redirect_url = navigator.url(place.parent_object, 'view')
         database.session.delete(place)
         database.session.commit()
@@ -53,14 +53,14 @@ def place_delete(place_id, thing_id):
         return home_redirect()
 
 
-@place_bp.route('/update/<int:place_id>/<int:thing_id>', methods=['GET', 'POST'])
+@place_bp.route('/update/<int:place_id>/<int:particular_thing_id>', methods=['GET', 'POST'])
 @login_required
-def place_update(place_id, thing_id):
+def place_update(place_id, particular_thing_id):
     place = find_place_by_id(place_id)
-    thing = find_thing_by_id(thing_id)
-    if place and thing and place.root == thing.root and place.may_update(current_user):
+    particular_thing = find_particular_thing_by_id(particular_thing_id)
+    if place and particular_thing and place.root == particular_thing.root and place.may_update(current_user):
         form = PlaceUpdateForm(obj=place)
-        navigator = DualNavigator(place=place, thing=thing)
+        navigator = DualNavigator(place=place, particular_thing=particular_thing)
         redirect_url = navigator.url(place, 'view')
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(redirect_url)

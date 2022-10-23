@@ -1,6 +1,8 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin
+from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
+
 
 class Particular(IdModelMixin, database.Model):
     particular_thing_id = database.Column(database.Integer, database.ForeignKey('particular_thing.id'), index=True)
@@ -15,18 +17,65 @@ def _find_or_create_particular(particular_thing, choice):
         # Do not commit yet, else database could be corrupted by duplicates.
     return particular
 
-class ParticularThing(IdModelMixin, database.Model):
+
+class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model):
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     particulars = database.relationship('Particular', backref='particular_thing', lazy=True, cascade='all, delete')
     positionings = database.relationship('Positioning', backref='particular_thing', lazy=True, cascade='all, delete')
+
+    singular_label = "Thing"
+    plural_label = "Things"
+    possible_tasks = ['create', 'update', 'delete']
+    label_prefixes = {'create': 'Kind of '}
+    flavor = "thing"
+
+    def add_description(self, context):
+        return self.thing.add_description(context)
+
+    def bread_crumbs(self, navigator):
+        return self.thing.bread_crumbs(navigator)
+
+    @property
+    def name(self):
+        return self.thing.name
+
+    def viewable_children(self, viewer):
+        return self.thing.viewable_children(viewer)
+
+    @property
+    def identities(self):
+        return {'particular_thing_id': self.id}
+
+    @property
+    def kinds(self):
+        return self.thing.kinds
 
     @property
     def kind_of(self):
         return self.thing
 
     @property
+    def root(self):
+        return self.thing.root
+
+    @property
     def choices(self):
         return [particular.choice for particular in self.particulars]
+
+    def may_perform_task(self, viewer, task):
+        return self.thing.may_perform_task(viewer, task)
+
+    def may_be_observed(self, viewer):
+        return self.thing.may_be_observed(viewer)
+
+    def may_create_thing(self, viewer):
+        return self.thing.may_create_thing(viewer)
+
+    def may_delete(self, viewer):
+        return self.thing.may_delete(viewer)
+
+    def may_update(self, viewer):
+        return self.thing.may_update(viewer)
 
     def quantity_at_place(self, place):
         from tracking.modelling.postioning_model import find_quantity_of_things
@@ -85,3 +134,7 @@ def find_particular_thing(thing, choices=None):
         if has_same_choices(particular_thing):
             return particular_thing
     return None
+
+
+def find_particular_thing_by_id(particular_thing_id):
+    return ParticularThing.query.filter(ParticularThing.id == particular_thing_id).first()

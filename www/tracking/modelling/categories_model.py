@@ -13,7 +13,7 @@ class Categories(RootHolder, CupboardDisplayContextMixin):
 
     @property
     def identities(self):
-        return {'root_id': self.root.id, 'place_id': self.place.id, 'thing_id':self.thing.id}
+        return {'root_id': self.root.id, 'place_id': self.place.id, 'particular_thing_id':self.particular_thing_id.id}
 
     @property
     def name(self):

@@ -1,7 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from datetime import datetime
 
-from flask import url_for
 from sqlalchemy.orm import backref
 
 from tracking import database
@@ -43,10 +42,10 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         )
 
     def all_quantity_at_place(self, place):
-        return sum(particular_thing.total_quantity_at_place(place) for particular_thing in self.particular_things) + sum(
+        return sum(
+            particular_thing.total_quantity_at_place(place) for particular_thing in self.particular_things) + sum(
             thing.all_quantity_at_place(place) for thing in self.kinds
         )
-
 
     @property
     def identities(self):
@@ -80,7 +79,6 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         database.session.commit()
         return thing
 
-
     def may_perform_task(self, viewer, task):
         if task == 'view':
             return self.may_be_observed(viewer)
@@ -100,10 +98,10 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         return self.ancestor.may_create_thing(viewer)
 
     def may_delete(self, viewer):
-        return self.ancestor.may_delete(viewer)
+        return self.root.may_delete(viewer) and not self.is_top
 
     def may_update(self, viewer):
-        return self.ancestor.may_update(viewer)
+        return self.root.may_update(viewer) and not self.is_top
 
     @property
     def page_template(self):
@@ -141,26 +139,5 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     def top_place(self):
         return self.root.place
 
-    @property
-    def url(self):
-        return url_for('thing_bp.thing_view', thing_id=self.id)
-
-    @property
-    def url_create(self):
-        return url_for('thing_bp.thing_create', thing_id=self.id)
-
-    @property
-    def url_delete(self):
-        return url_for('thing_bp.thing_delete', thing_id=self.id)
-
-    @property
-    def url_update(self):
-        return url_for('thing_bp.thing_update', thing_id=self.id)
-
     def viewable_children(self, viewer):
         return self.sorted_categories + self.sorted_children
-
-
-def find_thing_by_id(thing_id):
-    return Thing.query.filter(Thing.id == thing_id).first()
-

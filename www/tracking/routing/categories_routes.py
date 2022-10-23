@@ -4,8 +4,8 @@ from flask_login import login_required, current_user
 
 from tracking.forms.category_forms import CategoryCreateForm
 from tracking.modelling.categories_model import Categories
+from tracking.modelling.particular_thing_model import find_particular_thing_by_id
 from tracking.modelling.place_model import find_place_by_id
-from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
@@ -18,16 +18,17 @@ categories_bp = Blueprint(
 )
 
 
-@categories_bp.route('/create/<int:place_id>/<int:thing_id>', methods=['POST', 'GET'])
+@categories_bp.route('/create/<int:place_id>/<int:particular_thing_id>', methods=['POST', 'GET'])
 @login_required
-def categories_create(place_id, thing_id):
+def categories_create(place_id, particular_thing_id):
     place = find_place_by_id(place_id)
-    thing = find_thing_by_id(thing_id)
-    if place and thing and place.root == thing.root and place.root.may_create_category(current_user):
+    particular_thing = find_particular_thing_by_id(particular_thing_id)
+    if place and particular_thing and place.root == particular_thing.root and place.root.may_create_category(
+        current_user):
         form = CategoryCreateForm()
-        navigator = DualNavigator(place=place, thing=thing)
+        navigator = DualNavigator(place=place, particular_thing=particular_thing)
         if request.method == 'POST' and form.cancel_button.data:
-            return redirect(navigator.url(Categories(place, thing), 'view'))
+            return redirect(navigator.url(Categories(place, particular_thing), 'view'))
         if form.validate_on_submit():
             category = place.root.create_category(form.name.data, form.description.data)
             return redirect(navigator.url(category, 'view'))
@@ -38,21 +39,21 @@ def categories_create(place_id, thing_id):
         return home_redirect()
 
 
-@categories_bp.route('/view/<int:place_id>/<int:thing_id>')
+@categories_bp.route('/view/<int:place_id>/<int:particular_thing_id>')
 @login_required
-def categories_view(place_id, thing_id):
+def categories_view(place_id, particular_thing_id):
     place = find_place_by_id(place_id)
-    thing = find_thing_by_id(thing_id)
-    if place and thing and place.root == thing.root and place.root.may_be_observed(current_user):
-        navigator = DualNavigator(place=place, thing=thing)
-        categories = Categories(place=place, thing=thing)
+    particular_thing = find_particular_thing_by_id(particular_thing_id)
+    if place and particular_thing and place.root == particular_thing.root and place.root.may_be_observed(current_user):
+        navigator = DualNavigator(place=place, particular_thing=particular_thing)
+        categories = Categories(place=place, particular_thing=particular_thing)
         display_attributes = {
             'description': True,
-            'children': [categories, thing],
+            'children': [categories, particular_thing],
             'children_attributes': dual_view_childrens_attributes(),
         }
         place_url = navigator.url(place.root, 'view')
-        category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')
+        category_list_url = navigator.url(Categories(place=place, particular_thing=particular_thing), 'view')
         return place.root.display_context(navigator, current_user, display_attributes).render_template(
             "pages/category_list.j2", place_url=place_url, category_list_url=category_list_url,
             active_flavor='category')

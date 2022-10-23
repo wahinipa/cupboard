@@ -58,9 +58,9 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         elif task == 'create':
             return self.may_create_place(viewer)
         elif task == 'delete':
-            return self.may_delete(viewer)
+            return self.may_delete(viewer) and not self.is_top
         elif task == 'update':
-            return self.may_update(viewer)
+            return self.may_update(viewer) and not self.is_top
         else:
             return False
 

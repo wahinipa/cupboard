@@ -31,6 +31,10 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         return {'root_id': self.id}
 
     @property
+    def generic(self):
+        return self.thing.generic
+
+    @property
     def sorted_categories(self):
         return sorted_by_name(self.categories)
 
