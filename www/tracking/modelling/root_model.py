@@ -105,6 +105,10 @@ def create_root(name, description, date_created=None):
     thing = Thing(name=thing_name, description=thing_description, date_created=date_created)
     database.session.add(thing)
 
+    from tracking.modelling.particular_thing_model import ParticularThing
+    particular_thing = ParticularThing(thing=thing)
+    database.session.add(particular_thing)
+
     root = Root(name=name, description=description, place=place, thing=thing, date_created=date_created)
     database.session.add(root)
     database.session.commit()

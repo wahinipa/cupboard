@@ -50,7 +50,9 @@ class ParticularThing(IdModelMixin, database.Model):
         return None
 
 
-def find_or_create_particular_thing(thing, choices):
+def find_or_create_particular_thing(thing, choices=None):
+    if choices is None:
+        choices = []
     particular_thing = find_particular_thing(thing, choices)
     if particular_thing is None:
         # Create ParticularThing...
@@ -64,7 +66,9 @@ def find_or_create_particular_thing(thing, choices):
     return particular_thing
 
 
-def find_particular_thing(thing, choices):
+def find_particular_thing(thing, choices=None):
+    if choices is None:
+        choices = []
     count = len(choices)
 
     def has_same_choices(particular_thing):
