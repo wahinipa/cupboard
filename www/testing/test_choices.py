@@ -1,14 +1,12 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from old_testing.fixtures_for_testing import RED_COLORING_DATE, RED_COLORING_DESCRIPTION, RED_COLORING_NAME, app, pastry, \
-    muffin, roll, \
-    red_coloring, coloring, \
-    MUFFIN_NAME, MUFFIN_DESCRIPTION, MUFFIN_DATE, \
-    ROLL_NAME, ROLL_DESCRIPTION, ROLL_DATE
+from testing.fixtures import app, pastry, coloring, muffin, roll, red_coloring, MUFFIN_NAME, MUFFIN_DESCRIPTION, \
+    MUFFIN_DATE, ROLL_NAME, ROLL_DESCRIPTION, ROLL_DATE, RED_COLORING_NAME, RED_COLORING_DESCRIPTION, RED_COLORING_DATE, \
+    the_root
 from tracking.modelling.choice_model import find_or_create_choice
 
 
 def _pycharm_please_keep_these_imports():
-    return app, pastry, muffin, roll, red_coloring, coloring
+    return app, pastry, muffin, roll, red_coloring, coloring, the_root
 
 
 def test_choice_creation(pastry, muffin, roll, red_coloring, coloring):
