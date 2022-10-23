@@ -9,6 +9,7 @@ from flask_admin.menu import MenuLink
 from flask_login import current_user
 from werkzeug.utils import redirect
 
+from tracking.modelling.role_models import PlaceAssignment, UniversalAssignment
 from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 from tracking.commons.create_test_data import create_test_data
 from tracking.viewing.cupboard_display_context import project_name
@@ -60,14 +61,22 @@ def add_flask_admin(application, database):
     from tracking.modelling.refinement_model import Refinement
     from tracking.modelling.root_model import Root
     from tracking.modelling.postioning_model import Positioning
+    from tracking.modelling.role_models import RootAssignment
+    from tracking.modelling.particular_thing_model import Particular
+    from tracking.modelling.particular_thing_model import ParticularThing
     admin.add_view(AdminModelView(Category, database.session))
     admin.add_view(AdminModelView(Choice, database.session))
     admin.add_view(AdminModelView(Place, database.session))
-    admin.add_view(AdminModelView(Positioning, database.session))
-    admin.add_view(AdminModelView(Refinement, database.session))
     admin.add_view(AdminModelView(Root, database.session))
     admin.add_view(AdminModelView(Thing, database.session))
+    admin.add_view(AdminModelView(Positioning, database.session))
+    admin.add_view(AdminModelView(Refinement, database.session))
+    admin.add_view(AdminModelView(ParticularThing, database.session))
+    admin.add_view(AdminModelView(Particular, database.session))
     admin.add_view(AdminModelView(User, database.session))
+    admin.add_view(AdminModelView(UniversalAssignment, database.session))
+    admin.add_view(AdminModelView(RootAssignment, database.session))
+    admin.add_view(AdminModelView(PlaceAssignment, database.session))
 
 
 class AdminModelView(ModelView):

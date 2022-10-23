@@ -1,4 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.modelling.particular_thing_model import find_or_create_particular_thing
+from tracking.modelling.postioning_model import add_quantity_of_things
 from tracking.modelling.refinement_model import add_refinement
 
 
@@ -48,5 +50,23 @@ def create_test_data(database):
     add_refinement(shoes, sexes)
     add_refinement(containers, seasons)
     add_refinement(backpacks, sexes)
+
+    # Particulars
+    girls_winter_clothing = find_or_create_particular_thing(clothing, [winter_season, girls])
+    girls_summer_clothing = find_or_create_particular_thing(clothing, [summer_season, girls])
+    toddler_summer_clothing = find_or_create_particular_thing(clothing, [summer_season, toddler])
+    mens_clothing = find_or_create_particular_thing(clothing, [boys, adult])
+    either_child_clothing = find_or_create_particular_thing(clothing, [either, child])
+    generic_clothing = clothing.generic
+
+    # Positioning
+    add_quantity_of_things(smallville, either_child_clothing, 2)
+    add_quantity_of_things(phone_booth, mens_clothing, 3)
+    add_quantity_of_things(smallville, girls_winter_clothing, 5)
+    add_quantity_of_things(smallville, girls_summer_clothing, 8)
+    add_quantity_of_things(metropolis, girls_winter_clothing, 13)
+    add_quantity_of_things(metropolis, toddler_summer_clothing, 21)
+    add_quantity_of_things(metropolis, generic_clothing, 35)
+
 
 
