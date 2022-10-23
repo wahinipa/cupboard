@@ -52,6 +52,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         database.session.commit()
         return thing
 
+
     def may_perform_task(self, viewer, task):
         if task == 'view':
             return self.may_be_observed(viewer)

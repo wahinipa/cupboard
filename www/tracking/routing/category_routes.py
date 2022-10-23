@@ -51,7 +51,7 @@ def category_view(category_id, place_id, thing_id):
         display_attributes = {
             'description': True,
             'children': [category, thing],
-            'children_attributes': dual_view_childrens_attributes,
+            'children_attributes': dual_view_childrens_attributes(thing=thing),
         }
         place_url = navigator.url(place.root, 'view')
         category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')

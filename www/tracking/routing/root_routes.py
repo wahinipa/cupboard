@@ -10,8 +10,7 @@ from tracking.modelling.roots_model import Roots
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.card_display_attributes import place_display_attributes, thing_display_attributes, \
-    dual_view_childrens_attributes
+from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
 
 root_bp = Blueprint(
@@ -73,7 +72,7 @@ def root_view(place_id, thing_id):
                     display_attributes = {
                         'description': True,
                         'children': [place, thing],
-                        'children_attributes': dual_view_childrens_attributes,
+                        'children_attributes': dual_view_childrens_attributes(),
                     }
                     place_url = navigator.url(place.root, 'view')
                     category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')

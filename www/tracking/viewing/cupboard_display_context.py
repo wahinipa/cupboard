@@ -23,8 +23,10 @@ class CupboardDisplayContext(DisplayContext):
 
 
 class CupboardDisplayContextMixin:
-    def add_task(self, context, navigator, task):
-        context.add_task(url=navigator.url(self, task), label=self.task_label(task), task=task)
+    def add_task(self, context, navigator, task, label=None):
+        if label is None:
+            label = self.task_label(task)
+        context.add_task(url=navigator.url(self, task), label=label, task=task)
 
     def task_label(self, task):
         prefix = self.label_prefixes.get(task, '')
@@ -52,12 +54,16 @@ class CupboardDisplayContextMixin:
             if child_attributes:
                 child_display_context_attributes = child_attributes.get('display_context')
                 if child_display_context_attributes is not None:
-                    context.add_child_context(child.display_context(navigator, viewer,child_display_context_attributes))
+                    context.add_child_context(
+                        child.display_context(navigator, viewer, child_display_context_attributes))
                 if child_attributes.get('notation'):
                     child_link_label = child.singular_label
                     context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
         for task in self.allowed_tasks(viewer):
             self.add_task(context, navigator, task)
+        extra_action_parameters = display_attributes.get('extra_action_parameters')
+        if extra_action_parameters:
+            self.add_extra_actions(context, navigator, viewer, **extra_action_parameters)
         return context
 
     def allowed_tasks(self, viewer):

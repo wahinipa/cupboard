@@ -49,7 +49,7 @@ def choice_view(choice_id, place_id, thing_id):
         display_attributes = {
             'description': True,
             'children': [choice, thing],
-            'children_attributes': dual_view_childrens_attributes,
+            'children_attributes': dual_view_childrens_attributes(),
         }
         place_url = navigator.url(place.root, 'view')
         category_list_url = navigator.url(Categories(place=place, thing=thing), 'view')

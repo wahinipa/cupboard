@@ -1,8 +1,8 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import url_for
 
-from tracking.modelling.category_model import Category
 from tracking.modelling.categories_model import Categories
+from tracking.modelling.category_model import Category
 from tracking.modelling.choice_model import Choice
 from tracking.modelling.place_model import Place
 from tracking.modelling.root_model import Root
@@ -40,8 +40,11 @@ class DualNavigator(RootHolder):
         return url_for(f'categories_bp.categories_{task}', place_id=self.place_id, thing_id=self.thing_id)
 
     def category_url(self, category, task):
-        return url_for(f'category_bp.category_{task}', category_id=category.id, place_id=self.place_id,
-                       thing_id=self.thing_id)
+        if task in ['add', 'remove']:
+            return self.refinement_url(category, task)
+        else:
+            return url_for(f'category_bp.category_{task}', category_id=category.id, place_id=self.place_id,
+                           thing_id=self.thing_id)
 
     def choice_url(self, choice, task):
         return url_for(f'choice_bp.choice_{task}', choice_id=choice.id, place_id=self.place_id, thing_id=self.thing_id)
@@ -50,6 +53,10 @@ class DualNavigator(RootHolder):
         if task == 'view':
             return self.root_url(place.root, task, place_id=place.id)
         url_for(f'place_bp.place_{task}', place_id=place.id, thing_id=self.thing_id)
+
+    def refinement_url(self, category, task):
+        return url_for(f'refinement_bp.refinement_{task}', category_id=category.id, place_id=self.place_id,
+                       thing_id=self.thing_id)
 
     def root_url(self, root, task, place_id=None, thing_id=None):
         place_id = place_id or self.place_id or root.place.id

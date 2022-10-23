@@ -1,11 +1,11 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.refinement_model import Refinement
+from tracking.modelling.category_model import Category
 
 
 def register_refinement_navigation(navigator):
     def register(task):
         endpoint = f'refinement_bp.refinement_{task}'
-        navigator.register(Refinement, task, endpoint)
+        navigator.register(Category, task, endpoint)
 
     register('remove')
     register('add')

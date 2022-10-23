@@ -1,10 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from tracking import database
+from tracking.modelling.base_models import NamedBaseModel
 from tracking.modelling.cardistry_models import name_is_key
 from tracking.modelling.categories_model import Categories
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
-from tracking.modelling.base_models import NamedBaseModel
 
 
 class Category(CupboardDisplayContextMixin, NamedBaseModel):
@@ -41,6 +41,16 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
         else:
             return False
 
+    def add_extra_actions(self, context, navigator, viewer, thing=None):
+        if thing and self.may_update(viewer):
+            if self in thing.category_list:
+                task = 'remove'
+                preposition = 'from'
+            else:
+                task = 'add'
+                preposition = 'to'
+            self.add_task(context, navigator, task, label=f' {self.name} {preposition} {thing.name}')
+
     def may_be_observed(self, viewer):
         return True  # TODO: refine this
 
@@ -65,5 +75,3 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
 def find_category_by_id(id):
     return Category.query.filter(Category.id == id).first()
-
-
