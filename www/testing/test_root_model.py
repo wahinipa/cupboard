@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures import app, knights_of_the_round_table, ROOT_NAME, ROOT_DESCRIPTION, ROOT_PLACE_NAME, ROOT_THING_NAME
+from testing.fixtures import app, knights_of_the_round_table, ROOT_NAME, ROOT_DESCRIPTION
 
 
 def _pycharm_please_keep_these_imports():
@@ -14,9 +14,9 @@ def test_root_creation(knights_of_the_round_table):
     top_place = knights_of_the_round_table.place
     assert top_place is not None
     assert top_place.root == knights_of_the_round_table
-    assert top_place.name == ROOT_PLACE_NAME
+    assert top_place.name == 'Everywhere'
 
     top_thing = knights_of_the_round_table.thing
     assert top_thing is not None
     assert top_thing.root == knights_of_the_round_table
-    assert top_thing.name == ROOT_THING_NAME
+    assert top_thing.name == 'Everything'

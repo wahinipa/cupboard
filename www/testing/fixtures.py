@@ -55,8 +55,6 @@ def pretend_application():
 
 ROOT_NAME = "The Root"
 ROOT_DESCRIPTION = "Base Testing Object"
-ROOT_PLACE_NAME = "All of The Root Places"
-ROOT_THING_NAME = "All of The Root Things"
 
 
 ROUND_TABLE_DATE = datetime(1994, 6, 12)

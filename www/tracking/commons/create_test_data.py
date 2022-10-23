@@ -59,6 +59,9 @@ def create_test_data(database):
     either_child_clothing = find_or_create_particular_thing(clothing, [either, child])
     generic_clothing = clothing.generic
 
+    boys_backpacks = find_or_create_particular_thing(backpacks, [boys])
+    girls_backpacks = find_or_create_particular_thing(backpacks, [girls])
+
     # Positioning
     add_quantity_of_things(smallville, either_child_clothing, 2)
     add_quantity_of_things(phone_booth, mens_clothing, 3)
@@ -66,7 +69,9 @@ def create_test_data(database):
     add_quantity_of_things(smallville, girls_summer_clothing, 8)
     add_quantity_of_things(metropolis, girls_winter_clothing, 13)
     add_quantity_of_things(metropolis, toddler_summer_clothing, 21)
-    add_quantity_of_things(metropolis, generic_clothing, 35)
+    add_quantity_of_things(metropolis, generic_clothing, 34)
+    add_quantity_of_things(smallville, boys_backpacks, 55)
+    add_quantity_of_things(smallville, girls_backpacks, 89)
 
 
 

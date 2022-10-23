@@ -32,6 +32,13 @@ class ParticularThing(IdModelMixin, database.Model):
         from tracking.modelling.postioning_model import find_quantity_of_things
         return find_quantity_of_things(place, self)
 
+    def total_quantity_at_place(self, place):
+        from tracking.modelling.postioning_model import find_quantity_of_things
+        sum = find_quantity_of_things(place, self)
+        for inner_place in place.places:
+            sum += self.total_quantity_at_place(inner_place)
+        return sum
+
     def add_to_place(self, place, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things
         return add_quantity_of_things(place, self, quantity)

@@ -27,6 +27,13 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
     @property
+    def all_particular_things(self):
+        all_particular_things = [particular_thing for particular_thing in self.particular_things]
+        for kind in self.kinds:
+            all_particular_things += kind.all_particular_things
+        return all_particular_things
+
+    @property
     def generic(self):
         return find_or_create_particular_thing(self, [])
 
@@ -34,6 +41,12 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         return sum(particular_thing.quantity_at_place(place) for particular_thing in self.particular_things) + sum(
             thing.quantity_at_place(place) for thing in self.kinds
         )
+
+    def all_quantity_at_place(self, place):
+        return sum(particular_thing.total_quantity_at_place(place) for particular_thing in self.particular_things) + sum(
+            thing.all_quantity_at_place(place) for thing in self.kinds
+        )
+
 
     @property
     def identities(self):

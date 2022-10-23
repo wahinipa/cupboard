@@ -94,13 +94,13 @@ def create_root(name, description, date_created=None):
     if date_created is None:
         date_created = datetime.now()
     from tracking.modelling.place_model import Place
-    place_name = f'All of {name} Places'
+    place_name = f'Everywhere'
     place_description = f'All of the top places for {name}'
     place = Place(name=place_name, description=place_description, date_created=date_created)
     database.session.add(place)
 
     from tracking.modelling.thing_model import Thing
-    thing_name = f'All of {name} Things'
+    thing_name = f'Everything'
     thing_description = f'All of the top things for {name}'
     thing = Thing(name=thing_name, description=thing_description, date_created=date_created)
     database.session.add(thing)

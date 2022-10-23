@@ -5,6 +5,7 @@ from flask_login import login_required, current_user
 from tracking import database
 from tracking.forms.root_forms import RootUpdateForm, update_root_from_form
 from tracking.modelling.categories_model import Categories
+from tracking.modelling.inventory_model import Inventory
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.roots_model import Roots
 from tracking.modelling.thing_model import find_thing_by_id
@@ -69,9 +70,11 @@ def root_view(place_id, thing_id):
             if place and place.root == root and place.may_be_observed(current_user):
                 if thing and thing.root == root and thing.may_be_observed(current_user):
                     navigator = DualNavigator(place=place, thing=thing)
+                    inventories = [Inventory(place, kind) for kind in thing.kinds] + [Inventory(place, thing)]
+                    children = [place, thing] + [inventory for inventory in inventories if inventory.quantity]
                     display_attributes = {
                         'description': True,
-                        'children': [place, thing],
+                        'children': children,
                         'children_attributes': dual_view_childrens_attributes(),
                     }
                     place_url = navigator.url(place.root, 'view')

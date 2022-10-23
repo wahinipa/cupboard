@@ -4,6 +4,7 @@
     --flavor-category-color: rgb(100, 10, 100);
     --flavor-choice-color: rgb(60, 10, 60);
     --flavor-home-color: rgb(100, 100, 100);
+    --flavor-inventory-color: rgb(100, 100, 100);
     --flavor-people-color: rgb(10, 90, 90);
     --flavor-place-color: rgb(50, 10, 100);
     --flavor-root-color: rgb(100, 50, 50);
@@ -163,6 +164,29 @@ footer {
 .btn-flavor-home.active {
     color: white;
     background-color: var(--flavor-home-color);
+}
+
+/* *** Inventory Styling *** */
+
+.card-flavor-inventory {
+    border-color: black;
+}
+
+.card-flavor-inventory .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-inventory-color);
+}
+
+.btn-flavor-inventory {
+    border-color: var(--flavor-inventory-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-inventory.active {
+    color: white;
+    background-color: var(--flavor-inventory-color);
 }
 
 /* *** People Styling *** */
