@@ -10,7 +10,7 @@ class ParticularInventory:
     def __init__(self, place, particular_thing):
         self.place = place
         self.particular_thing = particular_thing
-        self.quantity = self.particular_thing.quantity_at_place(self.place)
+        self.quantity = 99999
 
     @property
     def name(self):
@@ -28,7 +28,7 @@ class TotalInventory:
         self.place = place
         self.thing = particular_thing
         self.singular_label = singular_label
-        self.quantity = self.thing.all_quantity_at_place(self.place)
+        self.quantity = 12345
 
 
     @property

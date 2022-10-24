@@ -52,8 +52,8 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         return add_quantity_of_things(self, particular_thing, quantity)
 
     def quantity_of_things(self, thing):
-        from tracking.modelling.postioning_model import find_quantity_of_things
-        return find_quantity_of_things(self, thing)
+        from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
+        return find_exact_quantity_of_things_at_place(self, thing)
 
     def create_kind_of_place(self, name, description, date_created=None):
         if date_created is None:

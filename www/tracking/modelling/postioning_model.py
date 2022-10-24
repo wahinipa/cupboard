@@ -16,12 +16,12 @@ def _find_positionings(place, particular_thing):
                                     Positioning.particular_thing_id == particular_thing.id).all()
 
 
-def find_quantity_of_things(place, particular_thing):
+def find_exact_quantity_of_things_at_place(place, particular_thing):
     return sum(positioning.quantity for positioning in _find_positionings(place, particular_thing))
 
 
 def add_quantity_of_things(place, particular_thing, quantity):
-    requested_quantity = quantity + find_quantity_of_things(place, particular_thing)
+    requested_quantity = quantity + find_exact_quantity_of_things_at_place(place, particular_thing)
     positionings = _find_positionings(place, particular_thing)
     if len(positionings) == 0:
         positioning = Positioning(place=place, particular_thing=particular_thing, quantity=quantity)

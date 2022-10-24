@@ -99,8 +99,8 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
         return self.refinements + [self]
 
     def exact_quantity_at_place(self, place):
-        from tracking.modelling.postioning_model import find_quantity_of_things
-        return find_quantity_of_things(place, self)
+        from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
+        return find_exact_quantity_of_things_at_place(place, self)
 
     def exact_quantity_at_domain(self, place):
         return sum(self.exact_quantity_at_place(location) for location in place.complete_domain)
@@ -148,13 +148,6 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
 
     def may_update(self, viewer):
         return self.thing.may_update(viewer)
-
-    def total_quantity_at_place(self, place):
-        from tracking.modelling.postioning_model import find_quantity_of_things
-        sum = find_quantity_of_things(place, self)
-        for inner_place in place.places:
-            sum += self.total_quantity_at_place(inner_place)
-        return sum
 
     def add_to_place(self, place, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things

@@ -32,20 +32,22 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
             all_particular_things += kind.all_particular_things
         return all_particular_things
 
+    def exact_quantity_at_place(self, place):
+        from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
+        return find_exact_quantity_of_things_at_place(place, self)
+
+    def exact_quantity_at_domain(self, place):
+        return sum(self.exact_quantity_at_place(location) for location in place.complete_domain)
+
+    def overall_quantity_at_place(self, place):
+        return sum(refinement.exact_quantity_at_place(place) for refinement in self.complete_refinements)
+
+    def overall_quantity_at_domain(self, place):
+        return sum(self.overall_quantity_at_place(location) for location in place.complete_domain)
+
     @property
     def generic(self):
         return find_or_create_particular_thing(self, [])
-
-    def quantity_at_place(self, place):
-        return sum(particular_thing.exact_quantity_at_place(place) for particular_thing in self.particular_things) + sum(
-            thing.quantity_at_place(place) for thing in self.kinds
-        )
-
-    def all_quantity_at_place(self, place):
-        return sum(
-            particular_thing.total_quantity_at_place(place) for particular_thing in self.particular_things) + sum(
-            thing.all_quantity_at_place(place) for thing in self.kinds
-        )
 
     @property
     def identities(self):
