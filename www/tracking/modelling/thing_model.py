@@ -37,7 +37,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         return find_or_create_particular_thing(self, [])
 
     def quantity_at_place(self, place):
-        return sum(particular_thing.quantity_at_place(place) for particular_thing in self.particular_things) + sum(
+        return sum(particular_thing.exact_quantity_at_place(place) for particular_thing in self.particular_things) + sum(
             thing.quantity_at_place(place) for thing in self.kinds
         )
 

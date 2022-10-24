@@ -80,7 +80,8 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
         return False
 
     def is_refinement(self, particular_thing):
-        return self != particular_thing and self.thing == particular_thing.thing and self.has_refined_choices(particular_thing)
+        return self != particular_thing and self.thing == particular_thing.thing and self.has_refined_choices(
+            particular_thing)
 
     def has_refined_choices(self, particular_thing):
         for choice in self.choices:
@@ -90,8 +91,25 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
 
     @property
     def refinements(self):
-        return [particular_thing for particular_thing in self.thing.particular_things if self.is_refinement(particular_thing)]
+        return [particular_thing for particular_thing in self.thing.particular_things if
+                self.is_refinement(particular_thing)]
 
+    @property
+    def complete_refinements(self):
+        return self.refinements + [self]
+
+    def exact_quantity_at_place(self, place):
+        from tracking.modelling.postioning_model import find_quantity_of_things
+        return find_quantity_of_things(place, self)
+
+    def exact_quantity_at_domain(self, place):
+        return sum(self.exact_quantity_at_place(location) for location in place.complete_domain)
+
+    def overall_quantity_at_place(self, place):
+        return sum(refinement.exact_quantity_at_place(place) for refinement in self.complete_refinements)
+
+    def overall_quantity_at_domain(self, place):
+        return sum(self.overall_quantity_at_place(location) for location in place.complete_domain)
 
     def viewable_children(self, viewer):
         return self.thing.sorted_categories + self.refinements + self.thing.kinds
@@ -130,10 +148,6 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
 
     def may_update(self, viewer):
         return self.thing.may_update(viewer)
-
-    def quantity_at_place(self, place):
-        from tracking.modelling.postioning_model import find_quantity_of_things
-        return find_quantity_of_things(place, self)
 
     def total_quantity_at_place(self, place):
         from tracking.modelling.postioning_model import find_quantity_of_things

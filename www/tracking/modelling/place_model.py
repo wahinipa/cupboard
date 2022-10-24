@@ -36,6 +36,17 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     def children(self):
         return self.places
 
+    @property
+    def domain(self):
+        result = []
+        for place in self.places:
+            result += place.complete_domain
+        return result
+
+    @property
+    def complete_domain(self):
+        return self.domain + [self]
+
     def add_to_thing(self, particular_thing, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things
         return add_quantity_of_things(self, particular_thing, quantity)
