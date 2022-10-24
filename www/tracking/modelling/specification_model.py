@@ -21,3 +21,8 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
 
     def has_choice(self, choice):
         return choice in self.choices
+
+def find_specification_by_id(specification_id):
+    return Specification.query.filter(Specification.id == specification_id).first()
+
+

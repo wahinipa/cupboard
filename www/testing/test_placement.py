@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, \
     knights_of_the_round_table, queens_of_the_round_table
-from tracking.modelling.placement_model import Placement
+from tracking.modelling.placement_model import Placement, create_placement
 
 
 def _pycharm_please_keep_these_imports():
@@ -50,3 +50,14 @@ def test_construction(app, knights_of_the_round_table, rainbow_place, light_sabe
 
 def test_bad_construction(app, queens_of_the_round_table, knights_of_the_round_table, rainbow_place):
     assert not Placement(root=queens_of_the_round_table, place=rainbow_place).is_valid
+
+
+def test_create_placement(app, knights_of_the_round_table, rainbow_place, light_saber, muffin, roll):
+    specification = knights_of_the_round_table.find_or_create_specification({muffin, roll})
+    placement = create_placement(root_id=knights_of_the_round_table.id, place_id=rainbow_place.id,
+                                 thing_id=light_saber.id, specification_id=specification.id)
+    assert placement is not None
+    assert placement.root == knights_of_the_round_table
+    assert placement.place == rainbow_place
+    assert placement.thing == light_saber
+    assert placement.specification == specification

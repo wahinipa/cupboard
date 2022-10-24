@@ -141,3 +141,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
     def viewable_children(self, viewer):
         return self.sorted_categories + self.sorted_children
+
+
+def find_thing_by_id(thing_id):
+    return Thing.query.filter(Thing.id == thing_id).first()
