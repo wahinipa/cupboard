@@ -41,10 +41,10 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
     singular_label = 'Inventory'
     possible_tasks = []
 
-    def __init__(self, place, thing=None, particular_thing=None):
-        super().__init__(place=place, thing=thing, particular_thing=particular_thing)
+    def __init__(self, placement):
+        super().__init__(place=placement.place, thing=placement.thing, particular_thing=placement.particular_thing)
         self.refinements = self.particular_thing.refinements
-        refined_inventories = [ParticularInventory(place, refinement) for refinement in self.refinements]
+        refined_inventories = [ParticularInventory(placement.place, refinement) for refinement in self.refinements]
         # self.total_inventory = TotalInventory(self.place, self.particular_thing, singular_label='Grand Total')
         # particular_inventories = [ParticularInventory(self.place, particular_thing)
         #         for particular_thing in self.thing.all_particular_things]

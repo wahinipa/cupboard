@@ -8,6 +8,7 @@ from tracking.modelling.categories_model import Categories
 from tracking.modelling.inventory_model import Inventory
 from tracking.modelling.particular_thing_model import find_particular_thing_by_id
 from tracking.modelling.place_model import find_place_by_id
+from tracking.modelling.placement_model import create_placement
 from tracking.modelling.roots_model import Roots
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
@@ -62,25 +63,19 @@ def root_update(place_id, particular_thing_id):
 @root_bp.route('/view/<int:place_id>/<int:particular_thing_id>')
 @login_required
 def root_view(place_id, particular_thing_id):
-    place = find_place_by_id(place_id)
-    particular_thing = find_particular_thing_by_id(particular_thing_id)
-    if place and particular_thing and place.root == particular_thing.root:
-        root = place.root
-        if root and root.may_be_observed(current_user):
-            if place and place.root == root and place.may_be_observed(current_user):
-                if particular_thing and particular_thing.root == root and particular_thing.may_be_observed(
-                    current_user):
-                    navigator = DualNavigator(place=place, particular_thing=particular_thing)
-                    children = [place, particular_thing, Inventory(place=place, particular_thing=particular_thing)]
-                    display_attributes = {
-                        'description': True,
-                        'children': children,
-                        'children_attributes': dual_view_childrens_attributes(),
-                    }
-                    place_url = navigator.url(place.root, 'view')
-                    category_list_url = navigator.url(Categories(place=place, particular_thing=particular_thing),
-                                                      'view')
-                    return root.display_context(navigator, current_user, display_attributes).render_template(
-                        'pages/root_view.j2', category_list_url=category_list_url, place_url=place_url,
-                        active_flavor='place')
+    placement = create_placement(place_id=place_id, particular_thing_id=particular_thing_id)
+    if placement.may_be_observed(current_user):
+        navigator = placement.create_navigator()
+        children = [placement.place, placement.particular_thing, Inventory(placement)]
+        display_attributes = {
+            'description': True,
+            'children': children,
+            'children_attributes': dual_view_childrens_attributes(),
+        }
+        place_url = navigator.url(placement.root, 'view')
+        category_list_url = navigator.url(Categories(place=placement.place, particular_thing=placement.particular_thing),
+                                          'view')
+        return placement.root.display_context(navigator, current_user, display_attributes).render_template(
+            'pages/root_view.j2', category_list_url=category_list_url, place_url=place_url,
+            active_flavor='place')
     return home_redirect()
