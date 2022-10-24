@@ -2,7 +2,6 @@
 from testing.fixtures import app, light_saber, bucket, LIGHT_SABER_THING_NAME, LIGHT_SABER_THING_DESCRIPTION, \
     LIGHT_SABER_THING_DATE, BUCKET_NAME, BUCKET_DESCRIPTION, BUCKET_DATE, knights_of_the_round_table, \
     SHARP_SABER_THING_NAME, SHARP_SABER_THING_DESCRIPTION, SHARP_SABER_THING_DATE, sharp_saber, dull_saber
-from tracking.modelling.particular_thing_model import find_particular_thing
 
 
 def _pycharm_please_keep_these_imports():
@@ -17,7 +16,6 @@ def test_thing_creation(light_saber, bucket, sharp_saber, dull_saber):
     assert kind is not None
     assert kind.name == 'Everything'
     assert light_saber in kind.kinds
-    assert find_particular_thing(light_saber) is not None
 
     assert bucket.name == BUCKET_NAME
     assert bucket.description == BUCKET_DESCRIPTION

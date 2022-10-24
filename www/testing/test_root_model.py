@@ -1,6 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures import app, knights_of_the_round_table, ROOT_NAME, ROOT_DESCRIPTION
-from tracking.modelling.particular_thing_model import find_particular_thing
 
 
 def _pycharm_please_keep_these_imports():
@@ -21,4 +20,3 @@ def test_root_creation(knights_of_the_round_table):
     assert top_thing is not None
     assert top_thing.root == knights_of_the_round_table
     assert top_thing.name == 'Everything'
-    assert find_particular_thing(top_thing) is not None

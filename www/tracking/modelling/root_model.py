@@ -48,11 +48,13 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         database.session.commit()
         return category
 
-    def find_or_create_specification(self, choices=None, date_created=None):
+    def find_or_create_specification(self, choices=None, date_created=None, commit=True):
         from tracking.modelling.specification_model import Specification
         from tracking.modelling.specification_model import Specific
         if choices is None:
             choices = set()
+        else:
+            choices = set(choices)  # Allow any iterable
         if date_created is None:
             date_created = datetime.now()
         specification = self.find_specification(choices)
@@ -62,10 +64,15 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
                 specific = Specific(choice=choice, specification=specification)
                 database.session.add(specific)
             database.session.add(specification)
-            database.session.commit()
+            if commit:
+                database.session.commit()
         return specification
 
-    def find_specification(self, choices=None, date_created=None):
+    def find_specification(self, choices=None):
+        if choices is None:
+            choices = set()
+        else:
+            choices = set(choices)  # Allow any iterable
         for specification in self.specifications:
             if choices == specification.choices:
                 return specification
@@ -135,10 +142,6 @@ def create_root(name, description, date_created=None):
     thing_description = f'All of the top things for {name}'
     thing = Thing(name=thing_name, description=thing_description, date_created=date_created)
     database.session.add(thing)
-
-    from tracking.modelling.particular_thing_model import ParticularThing
-    particular_thing = ParticularThing(thing=thing)
-    database.session.add(particular_thing)
 
     root = Root(name=name, description=description, place=place, thing=thing, date_created=date_created)
     database.session.add(root)

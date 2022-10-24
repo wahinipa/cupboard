@@ -1,8 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, knights_of_the_round_table
+from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, \
+    knights_of_the_round_table
 from tracking import database
 from tracking.modelling.particular_thing_model import find_or_create_particular_thing
-from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place, add_quantity_of_things, _find_positionings, \
+from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place, add_quantity_of_things, \
+    _find_positionings, \
     Positioning, move_quantity_of_things
 
 
@@ -11,7 +13,7 @@ def _pycharm_please_keep_these_imports():
 
 
 def test_quantities(rainbow_place, wild_place, light_saber, knights_of_the_round_table, muffin, roll):
-    muffin_light_saber = find_or_create_particular_thing(light_saber, [muffin])
+    muffin_light_saber = find_or_create_particular_thing(light_saber, {muffin})
     assert find_exact_quantity_of_things_at_place(rainbow_place, muffin_light_saber) == 0
 
     assert add_quantity_of_things(rainbow_place, muffin_light_saber, 3) == 3
@@ -33,14 +35,15 @@ def test_quantities(rainbow_place, wild_place, light_saber, knights_of_the_round
     assert light_saber.generic.overall_quantity_at_place(rainbow_place) == 24
     everything = light_saber.kind_of
     assert everything is not None
-    # assert everything.generic.overall_quantity_at_place(rainbow_place) == 24
-    # assert everything.generic.overall_quantity_at_domain(rainbow_place) == 24
+    assert everything.generic.overall_quantity_at_place(rainbow_place) == 0
+    assert everything.generic.overall_quantity_at_domain(rainbow_place) == 0
+
 
 def test_domain_quantities(rainbow_place, wild_place, light_saber, knights_of_the_round_table, muffin, roll):
     round_table = knights_of_the_round_table.place
     generic_light_saber = light_saber.generic
-    muffin_light_saber = find_or_create_particular_thing(light_saber, [muffin])
-    roll_light_saber = find_or_create_particular_thing(light_saber, [roll])
+    muffin_light_saber = find_or_create_particular_thing(light_saber, {muffin})
+    roll_light_saber = find_or_create_particular_thing(light_saber, {roll})
 
     assert generic_light_saber.exact_quantity_at_place(round_table) == 0
     assert generic_light_saber.exact_quantity_at_place(rainbow_place) == 0
@@ -269,7 +272,6 @@ def test_domain_quantities(rainbow_place, wild_place, light_saber, knights_of_th
     assert roll_light_saber.overall_quantity_at_domain(round_table) == 2
     assert roll_light_saber.overall_quantity_at_domain(rainbow_place) == 0
     assert roll_light_saber.overall_quantity_at_domain(wild_place) == 2
-
 
 
 def test_handles_redundant_quantities(rainbow_place, light_saber, roll, knights_of_the_round_table):

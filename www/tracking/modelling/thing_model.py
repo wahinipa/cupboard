@@ -47,7 +47,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def generic(self):
-        return find_or_create_particular_thing(self, [])
+        return find_or_create_particular_thing(self, {})
 
     @property
     def identities(self):
@@ -74,9 +74,6 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         if date_created is None:
             date_created = datetime.now()
         thing = Thing(name=name, description=description, kind_of=self, date_created=date_created)
-        from tracking.modelling.particular_thing_model import ParticularThing
-        particular_thing = ParticularThing(thing=thing)
-        database.session.add(particular_thing)
         database.session.add(thing)
         database.session.commit()
         return thing

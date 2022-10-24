@@ -21,7 +21,8 @@ def test_generic_specification(app, knights_of_the_round_table):
     assert len(choices) == 0
 
 
-def test_busy_specification(app, knights_of_the_round_table, pastry, coloring, muffin, roll, red_coloring, blue_coloring):
+def test_busy_specification(app, knights_of_the_round_table, pastry, coloring, muffin, roll, red_coloring,
+                            blue_coloring):
     specification = knights_of_the_round_table.find_or_create_specification(choices={muffin, blue_coloring})
     assert specification is not None
     assert specification.root == knights_of_the_round_table
@@ -50,3 +51,16 @@ def test_busy_specification(app, knights_of_the_round_table, pastry, coloring, m
     assert another_specification is not None
     assert specification == another_specification
 
+
+def test_listed_choice_specification(app, knights_of_the_round_table, pastry, coloring, muffin, roll, red_coloring,
+                                     blue_coloring):
+    specification = knights_of_the_round_table.find_or_create_specification(choices={muffin, blue_coloring})
+    assert specification is not None
+
+    specification == knights_of_the_round_table.find_or_create_specification(choices=[muffin, blue_coloring])
+
+    def listing():
+        for choice in [blue_coloring, muffin]:
+            yield choice
+
+    specification == knights_of_the_round_table.find_or_create_specification(choices=listing())
