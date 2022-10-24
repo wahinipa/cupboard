@@ -251,6 +251,11 @@ def roll(app, pastry, knights_of_the_round_table):
 
 
 @pytest.fixture()
+def blue_coloring(app, coloring, knights_of_the_round_table):
+    return find_or_create_choice(coloring, "Blue Coloring", description="It is blue",
+                                 date_created=RED_COLORING_DATE)
+
+@pytest.fixture()
 def red_coloring(app, coloring, knights_of_the_round_table):
     return find_or_create_choice(coloring, RED_COLORING_NAME, description=RED_COLORING_DESCRIPTION,
                                  date_created=RED_COLORING_DATE)

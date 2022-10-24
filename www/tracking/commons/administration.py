@@ -64,6 +64,7 @@ def add_flask_admin(application, database):
     from tracking.modelling.role_models import RootAssignment
     from tracking.modelling.particular_thing_model import Particular
     from tracking.modelling.particular_thing_model import ParticularThing
+    from tracking.modelling.specification_model import Specification
     admin.add_view(AdminModelView(Category, database.session))
     admin.add_view(AdminModelView(Choice, database.session))
     admin.add_view(AdminModelView(Place, database.session))
@@ -73,6 +74,7 @@ def add_flask_admin(application, database):
     admin.add_view(AdminModelView(Refinement, database.session))
     admin.add_view(AdminModelView(ParticularThing, database.session))
     admin.add_view(AdminModelView(Particular, database.session))
+    admin.add_view(AdminModelView(Specification, database.session))
     admin.add_view(AdminModelView(User, database.session))
     admin.add_view(AdminModelView(UniversalAssignment, database.session))
     admin.add_view(AdminModelView(RootAssignment, database.session))

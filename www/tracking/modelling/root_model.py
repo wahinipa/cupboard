@@ -19,6 +19,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
     categories = database.relationship('Category', backref='root', lazy=True, cascade='all, delete')
     assignments = database.relationship('RootAssignment', backref='root', lazy=True, cascade='all, delete')
+    specifications = database.relationship('Specification', backref='root', lazy=True, cascade='all, delete')
 
     def has_role(self, person, name_of_role):
         def yes(assignment):
@@ -39,13 +40,39 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         return sorted_by_name(self.categories)
 
     def create_category(self, name, description, date_created=None):
+        from tracking.modelling.category_model import Category
         if date_created is None:
             date_created = datetime.now()
-        from tracking.modelling.category_model import Category
         category = Category(name=name, description=description, root=self, date_created=date_created)
         database.session.add(category)
         database.session.commit()
         return category
+
+    def find_or_create_specification(self, choices=None, date_created=None):
+        from tracking.modelling.specification_model import Specification
+        from tracking.modelling.specification_model import Specific
+        if choices is None:
+            choices = set()
+        if date_created is None:
+            date_created = datetime.now()
+        specification = self.find_specification(choices)
+        if specification is None:
+            specification = Specification(root=self, date_created=date_created)
+            for choice in choices:
+                specific = Specific(choice=choice, specification=specification)
+                database.session.add(specific)
+            database.session.add(specification)
+            database.session.commit()
+        return specification
+
+    def find_specification(self, choices=None, date_created=None):
+        for specification in self.specifications:
+            if choices == specification.choices:
+                return specification
+        return None
+
+
+
 
     def may_perform_task(self, viewer, task):
         if task == 'view':
