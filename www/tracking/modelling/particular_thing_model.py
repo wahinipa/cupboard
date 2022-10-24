@@ -8,7 +8,6 @@ from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixi
 class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model):
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     specification_id= database.Column(database.Integer, database.ForeignKey('specification.id'), index=True)
-    positionings = database.relationship('Positioning', backref='particular_thing', lazy=True, cascade='all, delete')
 
     singular_label = "Particular Thing"
     plural_label = "Particular Things"
@@ -86,7 +85,7 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
 
     def exact_quantity_at_place(self, place):
         from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
-        return find_exact_quantity_of_things_at_place(place, self)
+        return find_exact_quantity_of_things_at_place(place, self.thing, self.specification)
 
     def exact_quantity_at_domain(self, place):
         return sum(self.exact_quantity_at_place(location) for location in place.complete_domain)
@@ -137,7 +136,7 @@ class ParticularThing(IdModelMixin, CupboardDisplayContextMixin, database.Model)
 
     def add_to_place(self, place, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things
-        return add_quantity_of_things(place, self, quantity)
+        return add_quantity_of_things(place, self.thing, self.specification, quantity)
 
     def find_particular(self, choice):
         for particular in self.particulars:

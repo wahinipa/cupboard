@@ -12,6 +12,7 @@ class Specific(IdModelMixin, database.Model):
 class Specification(IdModelMixin, DatedModelMixin, database.Model):
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'))
     specifics = database.relationship('Specific', backref='specification', lazy=True, cascade='all, delete')
+    positionings = database.relationship('Positioning', backref='specification', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='specification', lazy=True)
 
     @property

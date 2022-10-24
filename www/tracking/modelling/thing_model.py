@@ -23,6 +23,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
 
+    positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
     particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
 
     @property

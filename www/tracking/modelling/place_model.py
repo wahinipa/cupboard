@@ -47,13 +47,13 @@ class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     def complete_domain(self):
         return self.domain + [self]
 
-    def add_to_thing(self, particular_thing, quantity):
+    def add_to_thing(self, thing, specification, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things
-        return add_quantity_of_things(self, particular_thing, quantity)
+        return add_quantity_of_things(self, thing, specification, quantity)
 
-    def quantity_of_things(self, thing):
+    def quantity_of_things(self, thing, specification):
         from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
-        return find_exact_quantity_of_things_at_place(self, thing)
+        return find_exact_quantity_of_things_at_place(self, thing, specification)
 
     def create_kind_of_place(self, name, description, date_created=None):
         if date_created is None:
