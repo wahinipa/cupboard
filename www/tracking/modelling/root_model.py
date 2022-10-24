@@ -32,8 +32,8 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         return {'root_id': self.id}
 
     @property
-    def generic(self):
-        return self.thing.generic
+    def generic_specification(self):
+        return self.find_or_create_specification()
 
     @property
     def sorted_categories(self):
