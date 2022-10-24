@@ -2,13 +2,12 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.modelling.base_models import IdModelMixin
+from tracking.modelling.base_models import IdModelMixin, DatedModelMixin
 
 
-class Refinement(IdModelMixin, database.Model):
+class Refinement(IdModelMixin, DatedModelMixin, database.Model):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'))
-    date_created = database.Column(database.DateTime(), default=datetime.now())
 
 
 def add_refinement(thing, category, date_created=None, commit=True):
