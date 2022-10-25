@@ -22,7 +22,8 @@ def root_url(root, place=None, particular_thing=None, task='view'):
 
 class DualNavigator(RootHolder):
     def __init__(self, root=None, place=None, thing=None, specification=None, particular_thing=None):
-        super().__init__(root=root, place=place, thing=thing, specification=specification, particular_thing=particular_thing)
+        super().__init__(root=root, place=place, thing=thing, specification=specification,
+                         particular_thing=particular_thing)
         from tracking.navigation.cupboard_navigation import create_cupboard_navigator
         self.navigator = create_cupboard_navigator()
         self.translator = {
@@ -47,7 +48,7 @@ class DualNavigator(RootHolder):
             return self.refinement_url(category, task)
         else:
             return url_for(f'category_bp.category_{task}', category_id=category.id, place_id=self.place_id,
-                           particular_thing_id=self.particular_thing_id)
+                           thing_id=self.thing_id, specification_id=self.specification_id)
 
     def choice_url(self, choice, task):
         return url_for(f'choice_bp.choice_{task}', choice_id=choice.id,
