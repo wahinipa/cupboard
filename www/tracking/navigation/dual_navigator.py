@@ -21,8 +21,8 @@ def root_url(root, place=None, particular_thing=None, task='view'):
 
 
 class DualNavigator(RootHolder):
-    def __init__(self, place=None, thing=None, particular_thing=None):
-        super().__init__(place=place, thing=thing, particular_thing=particular_thing)
+    def __init__(self, root=None, place=None, thing=None, specification=None, particular_thing=None):
+        super().__init__(root=root, place=place, thing=thing, specification=specification, particular_thing=particular_thing)
         from tracking.navigation.cupboard_navigation import create_cupboard_navigator
         self.navigator = create_cupboard_navigator()
         self.translator = {
@@ -35,19 +35,12 @@ class DualNavigator(RootHolder):
             navigational_mark(ParticularThing): self.particular_thing_url,
         }
 
-    @property
-    def specification_id(self):
-        if self.particular_thing:
-            return self.particular_thing.specification.id
-        else:
-            return None
-
     def default_url(self, target, task):
         return self.navigator.url(target, task)
 
     def categories_url(self, categories, task):
         return url_for(f'categories_bp.categories_{task}', place_id=self.place_id,
-                       particular_thing_id=self.particular_thing_id)
+                       thing_id=self.thing_id, specification_id=self.specification_id)
 
     def category_url(self, category, task):
         if task in ['add', 'remove']:

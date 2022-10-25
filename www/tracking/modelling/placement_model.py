@@ -5,28 +5,10 @@ from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.dual_navigator import DualNavigator
+from tracking.navigation.root_holder import RootHolder
 
 
-class Placement:
-    def __init__(self, root=None, place=None, thing=None, specification=None, particular_thing=None):
-        if root is None:
-            if place:
-                root = place.root
-            elif thing:
-                root = thing.root
-            elif specification:
-                root = specification.root
-        if root:
-            place = place or root.place
-            thing = thing or root.thing
-            specification = specification or root.generic_specification
-        if thing and specification and particular_thing is None:
-            particular_thing = find_or_create_particular_thing(thing, specification.choices)
-        self.root = root
-        self.place = place
-        self.thing = thing
-        self.specification = specification
-        self.particular_thing = particular_thing
+class Placement(RootHolder):
 
     @property
     def is_valid(self):
