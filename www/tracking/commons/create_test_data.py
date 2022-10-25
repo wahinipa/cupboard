@@ -51,6 +51,28 @@ def create_test_data(database):
     add_refinement(containers, seasons)
     add_refinement(backpacks, sexes)
 
+    # Specifications
+    girls_specification = our_test_group.find_or_create_specification([girls])
+    boys_specification = our_test_group.find_or_create_specification([boys])
+    girls_winter_specification = our_test_group.find_or_create_specification([winter_season, girls])
+    girls_summer_specification = our_test_group.find_or_create_specification([summer_season, girls])
+    toddler_summer_specification = our_test_group.find_or_create_specification([summer_season, toddler])
+    mens_specification = our_test_group.find_or_create_specification([boys, adult])
+    either_child_specification = our_test_group.find_or_create_specification([either, child])
+    generic_specification = our_test_group.find_or_create_specification([])
+
+    # Positioning
+    add_quantity_of_things(smallville, clothing, either_child_specification, 2)
+    add_quantity_of_things(phone_booth, clothing, mens_specification, 3)
+    add_quantity_of_things(smallville, clothing, girls_winter_specification, 5)
+    add_quantity_of_things(smallville, clothing, girls_summer_specification, 8)
+    add_quantity_of_things(metropolis, clothing, girls_winter_specification, 13)
+    add_quantity_of_things(metropolis, clothing, toddler_summer_specification, 21)
+    add_quantity_of_things(metropolis, clothing, generic_specification, 34)
+    add_quantity_of_things(smallville, backpacks, boys_specification, 55)
+    add_quantity_of_things(smallville, backpacks, girls_specification, 89)
+
+
     # Particulars
     girls_winter_clothing = find_or_create_particular_thing(clothing, [winter_season, girls])
     girls_summer_clothing = find_or_create_particular_thing(clothing, [summer_season, girls])
@@ -62,16 +84,6 @@ def create_test_data(database):
     boys_backpacks = find_or_create_particular_thing(backpacks, [boys])
     girls_backpacks = find_or_create_particular_thing(backpacks, [girls])
 
-    # Positioning
-    add_quantity_of_things(smallville, either_child_clothing, 2)
-    add_quantity_of_things(phone_booth, mens_clothing, 3)
-    add_quantity_of_things(smallville, girls_winter_clothing, 5)
-    add_quantity_of_things(smallville, girls_summer_clothing, 8)
-    add_quantity_of_things(metropolis, girls_winter_clothing, 13)
-    add_quantity_of_things(metropolis, toddler_summer_clothing, 21)
-    add_quantity_of_things(metropolis, generic_clothing, 34)
-    add_quantity_of_things(smallville, boys_backpacks, 55)
-    add_quantity_of_things(smallville, girls_backpacks, 89)
 
 
 

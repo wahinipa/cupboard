@@ -22,7 +22,7 @@ def roots_create():
     if not current_user.may_create_root:
         return home_redirect()
     form = RootCreateForm()
-    navigator = create_cupboard_navigator()
+    navigator = DualNavigator()
     if request.method == 'POST' and form.cancel_button.data:
         return redirect(navigator.url(Roots, 'view'))
     if form.validate_on_submit():
