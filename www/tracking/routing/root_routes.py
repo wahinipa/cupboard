@@ -19,10 +19,10 @@ root_bp = Blueprint(
 )
 
 
-@root_bp.route('/delete/<int:place_id>/<int:particular_thing_id>')
+@root_bp.route('/delete/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def root_delete(place_id, particular_thing_id):
-    placement = create_placement(place_id=place_id, particular_thing_id=particular_thing_id)
+def root_delete(place_id, thing_id, specification_id):
+    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
     if placement.may_be_observed(current_user):
         root = placement.root
         if root and root.may_delete(current_user):
@@ -34,10 +34,10 @@ def root_delete(place_id, particular_thing_id):
     return home_redirect()
 
 
-@root_bp.route('/update/<int:place_id>/<int:particular_thing_id>', methods=['GET', 'POST'])
+@root_bp.route('/update/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['GET', 'POST'])
 @login_required
-def root_update(place_id, particular_thing_id):
-    placement = create_placement(place_id=place_id, particular_thing_id=particular_thing_id)
+def root_update(place_id, thing_id, specification_id):
+    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
     if placement.may_be_observed(current_user):
         root = placement.root
         if root and root.may_update(current_user):
@@ -56,10 +56,10 @@ def root_update(place_id, particular_thing_id):
     return home_redirect()
 
 
-@root_bp.route('/view/<int:place_id>/<int:particular_thing_id>')
+@root_bp.route('/view/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def root_view(place_id, particular_thing_id):
-    placement = create_placement(place_id=place_id, particular_thing_id=particular_thing_id)
+def root_view(place_id, thing_id, specification_id):
+    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
     if placement.may_be_observed(current_user):
         navigator = placement.create_navigator()
         children = [placement.place, placement.particular_thing, Inventory(placement)]

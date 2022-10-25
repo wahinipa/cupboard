@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.particular_thing_model import find_particular_thing_by_id
+from tracking.modelling.particular_thing_model import find_particular_thing_by_id, find_or_create_particular_thing
 from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
@@ -20,6 +20,8 @@ class Placement:
             place = place or root.place
             thing = thing or root.thing
             specification = specification or root.generic_specification
+        if thing and specification and particular_thing is None:
+            particular_thing = find_or_create_particular_thing(thing, specification.choices)
         self.root = root
         self.place = place
         self.thing = thing
