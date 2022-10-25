@@ -11,7 +11,6 @@ def test_registration(pretend_application):
     blueprint_registration(pretend_application)
 
     expected_blueprints = [
-        'admin_bp',
         'categories_bp',
         'category_bp',
         'choice_bp',
