@@ -73,13 +73,15 @@ class DualNavigator(RootHolder):
     def thing_url(self, thing, task):
         if task == 'view':
             return self.root_url(thing.root, task, thing_id=thing.id)
-        return url_for(f'thing_bp.thing_{task}', place_id=self.place_id, particular_thing_id=thing.id)
+        return url_for(f'thing_bp.thing_{task}', place_id=self.place_id, thing_id=self.thing_id,
+                       specification_id=self.specification_id)
 
     def particular_thing_url(self, particular_thing, task):
         if task == 'view':
             return self.root_url(particular_thing.root, task, thing_id=particular_thing.thing.id,
                                  specification_id=particular_thing.specification.id)
-        return url_for(f'thing_bp.thing_{task}', place_id=self.place_id, particular_thing_id=particular_thing.id)
+        return url_for(f'thing_bp.thing_{task}', place_id=self.place_id,
+                       thing_id=particular_thing.thing.id, specification_id=particular_thing.specification.id)
 
     def url(self, target, task):
         return self.translator.get(navigational_mark(target), self.default_url)(target, task)
