@@ -63,7 +63,8 @@ class DualNavigator(RootHolder):
     def place_url(self, place, task):
         if task == 'view':
             return self.root_url(place.root, task, place_id=place.id)
-        return url_for(f'place_bp.place_{task}', place_id=place.id, particular_thing_id=self.particular_thing_id)
+        return url_for(f'place_bp.place_{task}', place_id=place.id, thing_id=self.thing_id,
+                       specification_id=self.specification_id)
 
     def refinement_url(self, category, task):
         return url_for(f'refinement_bp.refinement_{task}', category_id=category.id, place_id=self.place_id,
