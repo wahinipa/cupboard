@@ -6,9 +6,7 @@ from tracking import database
 from tracking.forms.choice_forms import ChoiceUpdateForm, update_choice_from_form
 from tracking.modelling.categories_model import Categories
 from tracking.modelling.choice_model import find_choice_by_id
-from tracking.modelling.particular_thing_model import find_particular_thing_by_id
-from tracking.modelling.place_model import find_place_by_id
-from tracking.navigation.dual_navigator import DualNavigator
+from tracking.modelling.placement_model import create_placement
 from tracking.routing.home_redirect import home_redirect
 from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
@@ -20,15 +18,14 @@ choice_bp = Blueprint(
 )
 
 
-@choice_bp.route('/delete/<int:choice_id>/<int:place_id>/<int:particular_thing_id>')
+@choice_bp.route('/delete/<int:choice_id>/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def choice_delete(choice_id, place_id, particular_thing_id):
+def choice_delete(choice_id, place_id, thing_id, specification_id):
     choice = find_choice_by_id(choice_id)
-    place = find_place_by_id(place_id)
-    particular_thing = find_particular_thing_by_id(particular_thing_id)
-    if choice and place and particular_thing and place.root == choice.root \
-        and particular_thing.root == choice.root and choice.may_delete(current_user):
-        navigator = DualNavigator(place=place, particular_thing=particular_thing)
+    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if choice and placement.may_be_observed(current_user) and placement.root == choice.root and choice.may_delete(
+        current_user):
+        navigator = placement.create_navigator()
         redirect_url = navigator.url(choice.category, 'view')
         database.session.delete(choice)
         database.session.commit()
@@ -37,38 +34,40 @@ def choice_delete(choice_id, place_id, particular_thing_id):
         return home_redirect()
 
 
-@choice_bp.route('/view/<int:choice_id>/<int:place_id>/<int:particular_thing_id>')
+@choice_bp.route('/view/<int:choice_id>/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def choice_view(choice_id, place_id, particular_thing_id):
+def choice_view(choice_id, place_id, thing_id, specification_id):
     choice = find_choice_by_id(choice_id)
-    place = find_place_by_id(place_id)
-    particular_thing = find_particular_thing_by_id(particular_thing_id)
-    if choice and place and particular_thing and place.root == choice.root \
-        and particular_thing.root == choice.root and choice.may_be_observed(current_user):
-        navigator = DualNavigator(place=place, particular_thing=particular_thing)
+    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if choice and placement.may_be_observed(current_user) and placement.root == choice.root and choice.may_be_observed(
+        current_user):
+        navigator = placement.create_navigator()
+        place = placement.place
+        thing = placement.thing
+        specification = placement.specification
         display_attributes = {
             'description': True,
-            'children': [choice, particular_thing],
+            'children': [choice, placement.particular_thing],
             'children_attributes': dual_view_childrens_attributes(),
         }
-        place_url = navigator.url(place.root, 'view')
-        category_list_url = navigator.url(Categories(place=place, particular_thing=particular_thing), 'view')
-        return place.root.display_context(navigator, current_user, display_attributes).render_template(
+        place_url = navigator.url(placement.root, 'view')
+        category_list_url = navigator.url(Categories(place=place, thing=thing, specification=specification), 'view')
+        return placement.root.display_context(navigator, current_user, display_attributes).render_template(
             "pages/choice_view.j2", category_list_url=category_list_url, place_url=place_url,
             active_flavor='category')
     else:
         return home_redirect()
 
 
-@choice_bp.route('/update/<int:choice_id>/<int:place_id>/<int:particular_thing_id>', methods=['GET', 'POST'])
+@choice_bp.route('/update/<int:choice_id>/<int:place_id>/<int:thing_id>/<int:specification_id>',
+                 methods=['GET', 'POST'])
 @login_required
-def choice_update(choice_id, place_id, particular_thing_id):
+def choice_update(choice_id, place_id, thing_id, specification_id):
     choice = find_choice_by_id(choice_id)
-    place = find_place_by_id(place_id)
-    particular_thing = find_particular_thing_by_id(particular_thing_id)
-    if choice and place and particular_thing and place.root == choice.root \
-        and particular_thing.root == choice.root and choice.may_update(current_user):
-        navigator = DualNavigator(place=place, particular_thing=particular_thing)
+    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if choice and placement.may_be_observed(current_user) and placement.root == choice.root and choice.may_update(
+        current_user):
+        navigator = placement.create_navigator()
         form = ChoiceUpdateForm(obj=choice)
         redirect_url = navigator.url(choice, 'view')
         if request.method == 'POST' and form.cancel_button.data:

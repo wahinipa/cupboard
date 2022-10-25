@@ -52,7 +52,7 @@ class DualNavigator(RootHolder):
 
     def choice_url(self, choice, task):
         return url_for(f'choice_bp.choice_{task}', choice_id=choice.id,
-                       place_id=self.place_id, particular_thing_id=self.particular_thing_id)
+                       place_id=self.place_id, thing_id=self.thing_id, specification_id=self.specification_id)
 
     def place_url(self, place, task):
         if task == 'view':

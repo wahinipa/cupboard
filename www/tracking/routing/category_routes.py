@@ -24,7 +24,7 @@ category_bp = Blueprint(
 def category_delete(category_id, place_id, thing_id, specification_id):
     category = find_category_by_id(category_id)
     placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if placement.may_be_observed(current_user) and placement.root == category.root and category.may_delete(
+    if category and placement.may_be_observed(current_user) and placement.root == category.root and category.may_delete(
         current_user):
         navigator = placement.create_navigator()
         place = placement.place
@@ -44,7 +44,8 @@ def category_delete(category_id, place_id, thing_id, specification_id):
 def category_view(category_id, place_id, thing_id, specification_id):
     category = find_category_by_id(category_id)
     placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if placement.may_be_observed(current_user) and placement.root == category.root and category.may_be_observed(
+    if category and placement.may_be_observed(
+        current_user) and placement.root == category.root and category.may_be_observed(
         current_user):
         navigator = placement.create_navigator()
         place = placement.place
@@ -70,7 +71,7 @@ def category_view(category_id, place_id, thing_id, specification_id):
 def category_update(category_id, place_id, thing_id, specification_id):
     category = find_category_by_id(category_id)
     placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if placement.may_be_observed(current_user) and placement.root == category.root and category.may_update(
+    if category and placement.may_be_observed(current_user) and placement.root == category.root and category.may_update(
         current_user):
         navigator = placement.create_navigator()
         form = CategoryUpdateForm(obj=category)
