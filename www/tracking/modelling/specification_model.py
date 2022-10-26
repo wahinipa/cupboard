@@ -2,6 +2,7 @@
 
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin, DatedModelMixin
+from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Specific(IdModelMixin, database.Model):
@@ -14,7 +15,7 @@ class UnknownSpecific(IdModelMixin, database.Model):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'), index=True)
 
 
-class Specification(IdModelMixin, DatedModelMixin, database.Model):
+class Specification(IdModelMixin, DatedModelMixin, CupboardDisplayContextMixin, database.Model):
     flavor = 'specification'
     label = 'Specification'
     label_prefixes = {}
@@ -26,6 +27,10 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
     unknown_specifics = database.relationship('UnknownSpecific', backref='specification', lazy=True,
                                               cascade='all, delete')
     positionings = database.relationship('Positioning', backref='specification', lazy=True, cascade='all, delete')
+
+    @property
+    def name(self):
+        return f'{self.choices_insertion}Specification'
 
     @property
     def choices(self):
@@ -81,6 +86,9 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
                 if not matching_choices:
                     return False
         return True
+
+    def viewable_children(self, viewer):
+        return []
 
 
 def find_specification_by_id(specification_id):

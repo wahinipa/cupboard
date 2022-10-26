@@ -80,6 +80,16 @@ inventory_display_attributes = {
     },
 }
 
+specification_display_attributes = {
+    'display_context': {
+        'children_attributes': {
+            'inventory': {
+                'notation': True,
+            },
+        },
+    },
+}
+
 
 def dual_view_childrens_attributes(thing=None):
     return {
@@ -88,5 +98,6 @@ def dual_view_childrens_attributes(thing=None):
         'choice': choice_display_attributes,
         'inventory': inventory_display_attributes,
         'place': place_display_attributes,
+        'specification': specification_display_attributes,
         'thing': thing_display_attributes,
     }

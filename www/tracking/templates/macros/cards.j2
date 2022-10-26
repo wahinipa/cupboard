@@ -119,7 +119,7 @@
       class="badge bg-primary">{{ label }}</span></label>
 {% endmacro %}
 
-{% macro sequential_child_cards(children) %}
+{% macro column_of_child_cards(children) %}
   {% if children %}
     {% for child in children %}
       <div class="row mt-2">
@@ -131,11 +131,17 @@
   {% endif %}
 {% endmacro %}
 
-{% macro paired_child_cards(children) %}
+{% macro row_of_2_child_cards(children) %}
+  {{ row_of_child_cards(children, column_width=6) }}
+{% endmacro %}
+{% macro row_of_3_child_cards(children) %}
+  {{ row_of_child_cards(children, column_width=4) }}
+{% endmacro %}
+{% macro row_of_child_cards(children, column_width=6) %}
   {% if children %}
     <div class="row mt-2">
       {% for child in children %}
-        <div class="col-md-6">
+        <div class="col-md-{{ column_width }}">
           <div class="row mt-2">
             <div class="col-md-12">
               {{ card_child(**child) }}

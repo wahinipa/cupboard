@@ -62,7 +62,7 @@ def root_view(place_id, thing_id, specification_id):
     placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
     if placement.may_be_observed(current_user):
         navigator = placement.create_navigator()
-        children = [placement.place, placement.thing, placement.specification, Inventory(placement)]
+        children = [placement.specification, placement.place, placement.thing, Inventory(placement)]
         display_attributes = {
             'description': True,
             'children': children,

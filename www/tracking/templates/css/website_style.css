@@ -8,6 +8,7 @@
     --flavor-people-color: rgb(10, 90, 90);
     --flavor-place-color: rgb(50, 10, 100);
     --flavor-root-color: rgb(100, 50, 50);
+    --flavor-specification-color: rgb(200, 100, 10);
     --flavor-tasks-color: rgb(10, 53, 253);
     --flavor-thing-color: rgb(20, 100, 20);
     --flavor-welcome-color: rgb(255, 255, 255);
@@ -258,6 +259,34 @@ footer {
 
 .card-flavor-root .card-header a {
     color: white;
+}
+
+/* *** Specification Styling *** */
+
+.btn-flavor-specification {
+    border-color: var(--flavor-specification-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-specification.active {
+    color: white;
+    background-color: var(--flavor-specification-color);
+}
+
+
+.card-flavor-specification {
+    border-color: black;
+}
+
+.card-flavor-specification .card-header a {
+    color: white;
+}
+
+.card-flavor-specification .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-specification-color);
 }
 
 /* *** Task Styling *** */
