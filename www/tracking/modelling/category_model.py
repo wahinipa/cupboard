@@ -17,6 +17,8 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'), nullable=False)
     choices = database.relationship('Choice', backref='category', lazy=True, cascade='all, delete')
     refinements = database.relationship('Refinement', backref='category', lazy=True, cascade='all, delete')
+    unknown_specifics = database.relationship('UnknownSpecific', backref='category', lazy=True,
+                                              cascade='all, delete')
 
     def viewable_children(self, viewer):
         return [choice for choice in self.sorted_choices if choice.may_be_observed(viewer)]

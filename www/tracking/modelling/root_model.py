@@ -48,38 +48,46 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         database.session.commit()
         return category
 
-    def find_or_create_specification(self, choices=None, date_created=None, commit=True):
+    def find_or_create_specification(self, choices=None, unknowns=None, date_created=None):
         from tracking.modelling.specification_model import Specification
         from tracking.modelling.specification_model import Specific
+        from tracking.modelling.specification_model import UnknownSpecific
         if choices is None:
             choices = set()
         else:
             choices = set(choices)  # Allow any iterable
+        if unknowns is None:
+            unknowns = set()
+        else:
+            unknowns = set(unknowns)  # Allow any iterable
         if date_created is None:
             date_created = datetime.now()
-        specification = self.find_specification(choices)
+        specification = self.find_specification(choices=choices, unknowns=unknowns)
         if specification is None:
             specification = Specification(root=self, date_created=date_created)
             for choice in choices:
                 specific = Specific(choice=choice, specification=specification)
                 database.session.add(specific)
+            for unknown in unknowns:
+                unknown = UnknownSpecific(category=unknown, specification=specification)
+                database.session.add(unknown)
             database.session.add(specification)
-            if commit:
-                database.session.commit()
+            database.session.commit()
         return specification
 
-    def find_specification(self, choices=None):
+    def find_specification(self, choices=None, unknowns=None):
         if choices is None:
             choices = set()
         else:
             choices = set(choices)  # Allow any iterable
+        if unknowns is None:
+            unknowns = set()
+        else:
+            unknowns = set(unknowns)  # Allow any iterable
         for specification in self.specifications:
-            if choices == specification.choices:
+            if choices == specification.choices and unknowns == specification.unknowns:
                 return specification
         return None
-
-
-
 
     def may_perform_task(self, viewer, task):
         if task == 'view':

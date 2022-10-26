@@ -151,7 +151,7 @@ def find_or_create_particular_thing(thing, choices=None):
     else:
         choices = set(choices)  # Allow any iterable
     root = thing.root
-    specification = root.find_or_create_specification(choices, commit=False)
+    specification = root.find_or_create_specification(choices)
     for some_particular_thing in specification.particular_things:
         if some_particular_thing.thing == thing:
             return some_particular_thing
