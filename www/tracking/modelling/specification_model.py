@@ -15,12 +15,17 @@ class UnknownSpecific(IdModelMixin, database.Model):
 
 
 class Specification(IdModelMixin, DatedModelMixin, database.Model):
+    flavor = 'specification'
+    label = 'Specification'
+    label_prefixes = {}
+    singular_label = 'Specification'
+    possible_tasks = []
+
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'))
     specifics = database.relationship('Specific', backref='specification', lazy=True, cascade='all, delete')
     unknown_specifics = database.relationship('UnknownSpecific', backref='specification', lazy=True,
                                               cascade='all, delete')
     positionings = database.relationship('Positioning', backref='specification', lazy=True, cascade='all, delete')
-    particular_things = database.relationship('ParticularThing', backref='specification', lazy=True)
 
     @property
     def choices(self):
@@ -37,6 +42,20 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
     @property
     def categories(self):
         return self.choice_categories | self.unknowns
+
+    @property
+    def choice_label(self):
+        choices = self.choices
+        return (', ').join([f'{choice.name}' for choice in choices])
+
+    @property
+    def choices_insertion(self):
+        label = self.choice_label
+        if label:
+            return f'{label} '
+        else:
+            return ''
+
 
     def selected_choices(self, categories):
         return {choice for choice in self.choices if choice.category in categories}

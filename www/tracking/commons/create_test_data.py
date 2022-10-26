@@ -1,5 +1,4 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.particular_thing_model import find_or_create_particular_thing
 from tracking.modelling.postioning_model import add_quantity_of_things
 from tracking.modelling.refinement_model import add_refinement
 
@@ -9,12 +8,16 @@ def create_test_data(database):
 
     # Roots
     our_test_group = create_root(name="Our Test Group", description="For testing out the code.")
-    another_test_group = create_root(name="Yet Another Test Group", description="For really, really testing out the code.\nLike, a lot.")
+    another_test_group = create_root(name="Yet Another Test Group",
+                                     description="For really, really testing out the code.\nLike, a lot.")
 
     # Places
     metropolis = our_test_group.place.create_kind_of_place(name="Metropolis", description="Home of the Daily Planet")
-    smallville = our_test_group.place.create_kind_of_place(name="Smallville", description="Superboy's Home Town.\n Also, coincidentally, childhood home of Clark Kent.")
-    phone_booth = smallville.create_kind_of_place(name="Phone Booth", description="Those tall boxes that had phones back in the day.")
+    smallville = our_test_group.place.create_kind_of_place(name="Smallville",
+                                                           description="Superboy's Home Town.\n Also, coincidentally, "
+                                                                       "childhood home of Clark Kent.")
+    phone_booth = smallville.create_kind_of_place(name="Phone Booth",
+                                                  description="Those tall boxes that had phones back in the day.")
 
     # Things
     shoes = our_test_group.thing.create_kind_of_thing("Shoes", "Things to wear on your feet.")
@@ -71,19 +74,3 @@ def create_test_data(database):
     add_quantity_of_things(metropolis, clothing, generic_specification, 34)
     add_quantity_of_things(smallville, backpacks, boys_specification, 55)
     add_quantity_of_things(smallville, backpacks, girls_specification, 89)
-
-
-    # Particulars
-    girls_winter_clothing = find_or_create_particular_thing(clothing, [winter_season, girls])
-    girls_summer_clothing = find_or_create_particular_thing(clothing, [summer_season, girls])
-    toddler_summer_clothing = find_or_create_particular_thing(clothing, [summer_season, toddler])
-    mens_clothing = find_or_create_particular_thing(clothing, [boys, adult])
-    either_child_clothing = find_or_create_particular_thing(clothing, [either, child])
-    generic_clothing = clothing.generic
-
-    boys_backpacks = find_or_create_particular_thing(backpacks, [boys])
-    girls_backpacks = find_or_create_particular_thing(backpacks, [girls])
-
-
-
-

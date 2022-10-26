@@ -47,7 +47,7 @@ def choice_view(choice_id, place_id, thing_id, specification_id):
         specification = placement.specification
         display_attributes = {
             'description': True,
-            'children': [choice, placement.particular_thing],
+            'children': [choice, placement.thing, placement.specification],
             'children_attributes': dual_view_childrens_attributes(),
         }
         place_url = navigator.url(placement.root, 'view')

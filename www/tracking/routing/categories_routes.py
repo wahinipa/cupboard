@@ -4,10 +4,7 @@ from flask_login import login_required, current_user
 
 from tracking.forms.category_forms import CategoryCreateForm
 from tracking.modelling.categories_model import Categories
-from tracking.modelling.particular_thing_model import find_particular_thing_by_id
-from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.placement_model import create_placement
-from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
 from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
 from tracking.viewing.cupboard_display_context import CupboardDisplayContext
@@ -54,7 +51,7 @@ def categories_view(place_id, thing_id, specification_id):
         categories = Categories(place=place, thing=thing, specification=specification)
         display_attributes = {
             'description': True,
-            'children': [categories, placement.particular_thing],
+            'children': [categories, placement.thing, placement.specification],
             'children_attributes': dual_view_childrens_attributes(),
         }
         place_url = navigator.url(place.root, 'view')

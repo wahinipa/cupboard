@@ -6,7 +6,6 @@ from sqlalchemy.orm import backref
 from tracking import database
 from tracking.modelling.base_models import RootDescendantMixin, NamedBaseModel
 from tracking.modelling.cardistry_models import sorted_by_name
-from tracking.modelling.particular_thing_model import find_or_create_particular_thing
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
@@ -24,14 +23,6 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
 
     positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
-    particular_things = database.relationship('ParticularThing', backref='thing', lazy=True, cascade='all, delete')
-
-    @property
-    def all_particular_things(self):
-        all_particular_things = [particular_thing for particular_thing in self.particular_things]
-        for kind in self.kinds:
-            all_particular_things += kind.all_particular_things
-        return all_particular_things
 
     def exact_quantity_at_place(self, place):
         from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
@@ -45,10 +36,6 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
     def overall_quantity_at_domain(self, place):
         return sum(self.overall_quantity_at_place(location) for location in place.complete_domain)
-
-    @property
-    def generic(self):
-        return find_or_create_particular_thing(self, {})
 
     @property
     def identities(self):
@@ -142,6 +129,9 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     def viewable_children(self, viewer):
         return self.sorted_categories + self.sorted_children
 
+    def add_to_place(self, place, specification, quantity):
+        from tracking.modelling.postioning_model import add_quantity_of_things
+        return add_quantity_of_things(place, self, specification, quantity)
 
 def find_thing_by_id(thing_id):
     return Thing.query.filter(Thing.id == thing_id).first()

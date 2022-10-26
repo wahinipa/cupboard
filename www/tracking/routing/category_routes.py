@@ -53,7 +53,7 @@ def category_view(category_id, place_id, thing_id, specification_id):
         specification = placement.specification
         display_attributes = {
             'description': True,
-            'children': [category, placement.particular_thing],
+            'children': [category, placement.thing, placement.specification],
             'children_attributes': dual_view_childrens_attributes(thing=thing),
         }
         place_url = navigator.url(place.root, 'view')

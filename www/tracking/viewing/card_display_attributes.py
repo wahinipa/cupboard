@@ -70,22 +70,6 @@ thing_display_attributes = {
     },
 }
 
-particular_thing_display_attributes = {
-    'display_context': {
-        'description': True,
-        'url': True,
-        'bread_crumbs': True,
-        'children_attributes': {
-            'category': {
-                'notation': True,
-            },
-            'thing': {
-                'notation': True,
-            },
-        },
-    },
-}
-
 inventory_display_attributes = {
     'display_context': {
         'children_attributes': {
@@ -105,5 +89,4 @@ def dual_view_childrens_attributes(thing=None):
         'inventory': inventory_display_attributes,
         'place': place_display_attributes,
         'thing': thing_display_attributes,
-        'particular_thing': particular_thing_display_attributes,
     }
