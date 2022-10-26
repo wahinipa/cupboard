@@ -54,6 +54,9 @@ class NamedBaseModel(IdModelMixin, NamedModelMixin, DescriptionModelMixin, Hiera
                      database.Model):
     __abstract__ = True
 
+    def __repr__(self):
+        return f'{self.__class__.__name__}-{self.name}-{self.id}'
+
 
 class UniqueNamedBaseModel(IdModelMixin, UniqueNamedModelMixin, DescriptionModelMixin, HierarchicalMixin,
                            DatedModelMixin, database.Model):
