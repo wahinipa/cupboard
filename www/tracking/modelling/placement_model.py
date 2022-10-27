@@ -3,6 +3,7 @@ from tracking.modelling.place_model import find_place_by_id
 from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import find_thing_by_id
+from tracking.modelling.thing_specification import ThingSpecification
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.navigation.root_holder import RootHolder
 
@@ -20,6 +21,10 @@ class Placement(RootHolder):
 
     def create_navigator(self):
         return DualNavigator(place=self.place, thing=self.thing, specification=self.specification)
+
+    @property
+    def thing_specification(self):
+        return ThingSpecification(self.thing, self.specification)
 
 
 def create_placement(root_id=None, place_id=None, thing_id=None, specification_id=None):

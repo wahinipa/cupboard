@@ -86,6 +86,9 @@ specification_display_attributes = {
             'inventory': {
                 'notation': True,
             },
+            'category_specification': {
+                'notation': True,
+            },
         },
     },
 }

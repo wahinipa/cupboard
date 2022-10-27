@@ -134,9 +134,11 @@
 {% macro row_of_2_child_cards(children) %}
   {{ row_of_child_cards(children, column_width=6) }}
 {% endmacro %}
+
 {% macro row_of_3_child_cards(children) %}
   {{ row_of_child_cards(children, column_width=4) }}
 {% endmacro %}
+
 {% macro row_of_child_cards(children, column_width=6) %}
   {% if children %}
     <div class="row mt-2">

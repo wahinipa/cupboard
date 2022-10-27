@@ -51,12 +51,12 @@ def categories_view(place_id, thing_id, specification_id):
         categories = Categories(place=place, thing=thing, specification=specification)
         display_attributes = {
             'description': True,
-            'children': [categories, placement.thing, placement.specification],
+            'children': [categories, placement.thing, placement.thing_specification],
             'children_attributes': dual_view_childrens_attributes(),
         }
         place_url = navigator.url(place.root, 'view')
         category_list_url = navigator.url(categories, 'view')
-        return place.root.display_context(navigator, current_user, display_attributes).render_template(
+        return placement.root.display_context(navigator, current_user, display_attributes).render_template(
             "pages/category_list.j2", place_url=place_url, category_list_url=category_list_url,
             active_flavor='category')
     return home_redirect()

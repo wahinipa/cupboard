@@ -2,6 +2,7 @@
 
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin, DatedModelMixin
+from tracking.modelling.cardistry_models import sorted_by_name
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
@@ -15,12 +16,7 @@ class UnknownSpecific(IdModelMixin, database.Model):
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'), index=True)
 
 
-class Specification(IdModelMixin, DatedModelMixin, CupboardDisplayContextMixin, database.Model):
-    flavor = 'specification'
-    label = 'Specification'
-    label_prefixes = {}
-    singular_label = 'Specification'
-    possible_tasks = []
+class Specification(IdModelMixin, DatedModelMixin, database.Model):
 
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'))
     specifics = database.relationship('Specific', backref='specification', lazy=True, cascade='all, delete')
@@ -30,11 +26,15 @@ class Specification(IdModelMixin, DatedModelMixin, CupboardDisplayContextMixin, 
 
     @property
     def name(self):
-        return f'{self.choices_insertion}Specification'
+        return describe_choices(self.choices)
 
     @property
     def choices(self):
         return {specific.choice for specific in self.specifics}
+
+    @property
+    def sorted_choices(self):
+        return sorted_by_name(self.choices)
 
     @property
     def choice_categories(self):
@@ -61,7 +61,6 @@ class Specification(IdModelMixin, DatedModelMixin, CupboardDisplayContextMixin, 
         else:
             return ''
 
-
     def selected_choices(self, categories):
         return {choice for choice in self.choices if choice.category in categories}
 
@@ -87,9 +86,14 @@ class Specification(IdModelMixin, DatedModelMixin, CupboardDisplayContextMixin, 
                     return False
         return True
 
-    def viewable_children(self, viewer):
-        return []
-
 
 def find_specification_by_id(specification_id):
     return Specification.query.filter(Specification.id == specification_id).first()
+
+
+def describe_choices(choices):
+    if choices:
+        sorted_choices = sorted_by_name(choices)
+        return (', ').join([f'{choice.name}' for choice in sorted_choices])
+    else:
+        return 'Any'

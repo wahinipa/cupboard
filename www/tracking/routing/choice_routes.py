@@ -52,7 +52,7 @@ def choice_view(choice_id, place_id, thing_id, specification_id):
         }
         place_url = navigator.url(placement.root, 'view')
         category_list_url = navigator.url(Categories(place=place, thing=thing, specification=specification), 'view')
-        return placement.root.display_context(navigator, current_user, display_attributes).render_template(
+        return placement.thing_specification.display_context(navigator, current_user, display_attributes).render_template(
             "pages/choice_view.j2", category_list_url=category_list_url, place_url=place_url,
             active_flavor='category')
     else:
