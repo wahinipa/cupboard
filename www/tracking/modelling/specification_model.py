@@ -97,13 +97,15 @@ def find_specification_by_id(specification_id):
 def describe_choices(choices, unknowns=None):
     if unknowns:
         sorted_unknowns = sorted_by_name(unknowns)
-        sorted_names = [f'Unknown {unknown.name}' for unknown in sorted_unknowns]
-        suffix = ' ' + ' '.join(sorted_names)
+        sorted_unknown_names = [f'Unknown {unknown.name}' for unknown in sorted_unknowns]
     else:
-        suffix = ''
+        sorted_unknown_names = []
     if choices:
-        sorted_choices = sorted_by_name(choices)
-        prefix =  (', ').join([f'{choice.name}' for choice in sorted_choices])
+        sorted_choice_names = [choice.name for choice in sorted_by_name(choices)]
     else:
-        prefix = 'Any'
-    return f'{prefix}{suffix}'
+        if unknowns:
+            sorted_choice_names = []
+        else:
+            sorted_choice_names = ['Any']
+    all_names = sorted_choice_names + sorted_unknown_names
+    return (', ').join([f'{choice_name}' for choice_name in all_names])
