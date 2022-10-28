@@ -7,6 +7,13 @@ from tracking import database
 from tracking.modelling.cardistry_models import NamedMixin, DescribedMixin, HierarchicalMixin
 
 
+class Descriptor:
+    def __init__(self, flavor, label, name):
+        self.flavor = flavor
+        self.singular_label = label
+        self.name = name
+
+
 class IdModelMixin():
     @declared_attr
     def id(cls):

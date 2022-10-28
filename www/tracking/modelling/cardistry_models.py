@@ -49,6 +49,17 @@ class HierarchicalMixin:
     def sorted_children(self):
         return sorted_by_name(self.children)
 
+    @property
+    def direct_set(self):
+        return {self}
+
+    @property
+    def full_set(self):
+        full_set = self.direct_set
+        for child in self.children:
+            full_set |= child.full_set
+        return full_set
+
 
 def bread_crumbs(navigator, path, target=None):
     def bread_crumb(item):

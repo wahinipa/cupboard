@@ -1,40 +1,16 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.modelling.base_models import Descriptor
+from tracking.modelling.positioning_mixin import filtered_positionings
+from tracking.modelling.specification_model import describe_choices
 from tracking.navigation.root_holder import RootHolder
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
-# class ParticularInventory:
-#     flavor = "inventory"
-#     singular_label = "Quantity"
-#
-#     def __init__(self, place, particular_thing):
-#         self.place = place
-#         self.particular_thing = particular_thing
-#         self.quantity = 99999
-#
-#     @property
-#     def name(self):
-#         choices = self.particular_thing.choices
-#         if choices:
-#             choice_description = (', ').join([f'{choice.name}' for choice in choices])
-#         else:
-#             choice_description = 'Generic'
-#         return f'{self.quantity} of {choice_description} {self.particular_thing.thing.name}'
-#
-# class TotalInventory:
-#     flavor = "inventory"
-#
-#     def __init__(self, place, particular_thing, singular_label='Total'):
-#         self.place = place
-#         self.thing = particular_thing
-#         self.singular_label = singular_label
-#         self.quantity = 12345
-#
-#
-#     @property
-#     def name(self):
-#         return f'{self.quantity} of {self.thing.name} at {self.place.name}'
-#
+class InventoryDescriptor(Descriptor):
+    def __init__(self, label, name, quantity):
+        super().__init__(flavor="inventory", label=label, name=name)
+        self.quantity = quantity
+
 
 class Inventory(RootHolder, CupboardDisplayContextMixin):
     flavor = "inventory"
@@ -44,13 +20,66 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
     def __init__(self, placement):
         super().__init__(place=placement.place, thing=placement.thing, specification=placement.specification)
         self.refinements = self.thing.refinements
-        # refined_inventories = [ParticularInventory(placement.place, refinement) for refinement in self.refinements]
-        # self.total_inventory = TotalInventory(self.place, self.particular_thing, singular_label='Grand Total')
-        # particular_inventories = [ParticularInventory(self.place, particular_thing)
-        #         for particular_thing in self.thing.all_particular_things]
-        # located_inventories = [TotalInventory(inner_place, self.thing, singular_label='Locale') for inner_place in self.place.places]
-        # inventories = refined_inventories
-        # self.inventories = [inventory for inventory in inventories if inventory.quantity]
+        self.where_is_what = {self.place: self.specified_positionings(self.place.direct_positionings)}
+        self.all_positioning = self.place.direct_positionings
+        for place in self.place.places:
+            positionings = self.specified_positionings(place.full_positionings)
+            self.where_is_what[place] = positionings
+            self.all_positioning |= positionings
+        self.top_thing_set = self.thing.direct_set
+        self.full_thing_set = self.thing.full_set
+        self.full_place_set = self.place.full_set
+        self.inventories = []
+        self.described_choices = describe_choices(specification=self.specification)
+        self.create_inventories()
+
+    def create_inventories(self):
+        place_list = [self.place] + self.place.sorted_children
+        thing_list = self.thing.sorted_children
+        choice_list = self.specification.sorted_choices
+        choices_insertion = f'{self.described_choices} for '
+
+        def inventory_name(place, thing, quantity, insert='', choice_insert=None):
+            if choice_insert is None:
+                choice_insert = choices_insertion
+            return f'{quantity} of {insert}{choice_insert}{thing.name} at {place.name}'
+
+        total_quantity = 0
+        for place in place_list:
+            quantity = self.full_quantity_for_place(place)
+            total_quantity += quantity
+            name = inventory_name(place, self.thing, quantity)
+            self.inventories.append(InventoryDescriptor("Place Count", name, quantity))
+
+        for thing in thing_list:
+            quantity = self.full_quantity_for_thing(thing)
+            name = inventory_name(self.place, thing, quantity)
+            self.inventories.append(InventoryDescriptor("Thing Count", name, quantity))
+
+        for choice in choice_list:
+            quantity = self.full_quantity_for_choice(choice)
+            name = inventory_name(self.place, self.thing, quantity, choice_insert=f'{choice.name} ')
+            self.inventories.append(InventoryDescriptor("Choice Count", name, quantity))
+
+        self.inventories.append(
+            InventoryDescriptor('Total', inventory_name(self.place, self.thing, total_quantity, insert='All '),
+                                total_quantity))
+
+    def specified_positionings(self, positionings):
+        return {positioning for positioning in positionings if self.specification.accepts(positioning.specification)}
+
+    def full_quantity_for_place(self, place):
+        return sum(position.quantity for position in
+                   filtered_positionings(self.where_is_what[place], things=self.full_thing_set))
+
+    def full_quantity_for_choice(self, choice):
+        return sum(position.quantity for position in
+                   filtered_positionings(self.all_positioning, things=self.full_thing_set) if
+                   position.specification.has_choice(choice))
+
+    def full_quantity_for_thing(self, thing):
+        return sum(position.quantity for position in
+                   filtered_positionings(self.all_positioning, things=thing.direct_set))
 
     @property
     def quantity(self):
@@ -58,7 +87,7 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
 
     @property
     def name(self):
-        return f'Quantity of {self.specification.choices_insertion}{self.thing.name} at {self.place.name}'
+        return f'Quantities of {self.described_choices} for {self.thing.name} at {self.place.name}'
 
     def viewable_children(self, viewer):
-        return []
+        return [inventory for inventory in self.inventories if inventory.quantity]

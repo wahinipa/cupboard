@@ -74,3 +74,5 @@ def create_test_data(database):
     add_quantity_of_things(metropolis, clothing, generic_specification, 34)
     add_quantity_of_things(smallville, backpacks, boys_specification, 55)
     add_quantity_of_things(smallville, backpacks, girls_specification, 89)
+    add_quantity_of_things(smallville, backpacks, boys_specification, 55)
+    add_quantity_of_things(smallville, gym_bags, girls_specification, 10)

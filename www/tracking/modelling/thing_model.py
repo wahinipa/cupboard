@@ -6,10 +6,11 @@ from sqlalchemy.orm import backref
 from tracking import database
 from tracking.modelling.base_models import RootDescendantMixin, NamedBaseModel
 from tracking.modelling.cardistry_models import sorted_by_name
+from tracking.modelling.positioning_mixin import PositioningMixin
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
+class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = "Thing"
     plural_label = "Things"
     possible_tasks = ['create', 'update', 'delete']
@@ -24,19 +25,6 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
 
     positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
 
-    def exact_quantity_at_place(self, place):
-        from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place
-        return find_exact_quantity_of_things_at_place(place, self)
-
-    def exact_quantity_at_domain(self, place):
-        return sum(self.exact_quantity_at_place(location) for location in place.complete_domain)
-
-    def overall_quantity_at_place(self, place):
-        return sum(refinement.exact_quantity_at_place(place) for refinement in self.complete_refinements)
-
-    def overall_quantity_at_domain(self, place):
-        return sum(self.overall_quantity_at_place(location) for location in place.complete_domain)
-
     @property
     def identities(self):
         return {'thing_id': self.id}
@@ -46,8 +34,23 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
         return self.kinds
 
     @property
+    def parent_set(self):
+        return set(self.parent_list)
+
+    @property
+    def complete_set(self):
+        return self.parent_set | self.full_set
+
+    @property
     def sorted_categories(self):
         return sorted_by_name(self.category_list)
+
+    @property
+    def complete_set_of_categories(self):
+        complete_set_of_categories = set()
+        for thing in self.complete_set:
+            complete_set_of_categories |= thing.categories
+        return complete_set_of_categories
 
     @property
     def category_list(self):
@@ -57,6 +60,10 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
                 if not category in category_list:
                     category_list.append(category)
         return category_list
+
+    @property
+    def categories(self):
+        return {refinement.category for refinement in self.refinements}
 
     def create_kind_of_thing(self, name, description, date_created=None):
         if date_created is None:
@@ -132,6 +139,7 @@ class Thing(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
     def add_to_place(self, place, specification, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things
         return add_quantity_of_things(place, self, specification, quantity)
+
 
 def find_thing_by_id(thing_id):
     return Thing.query.filter(Thing.id == thing_id).first()

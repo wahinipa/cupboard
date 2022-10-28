@@ -3,7 +3,6 @@
 from tracking import database
 from tracking.modelling.base_models import IdModelMixin, DatedModelMixin
 from tracking.modelling.cardistry_models import sorted_by_name
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Specific(IdModelMixin, database.Model):
@@ -17,7 +16,6 @@ class UnknownSpecific(IdModelMixin, database.Model):
 
 
 class Specification(IdModelMixin, DatedModelMixin, database.Model):
-
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'))
     specifics = database.relationship('Specific', backref='specification', lazy=True, cascade='all, delete')
     unknown_specifics = database.relationship('UnknownSpecific', backref='specification', lazy=True,
@@ -47,19 +45,6 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
     @property
     def categories(self):
         return self.choice_categories | self.unknowns
-
-    @property
-    def choice_label(self):
-        choices = self.choices
-        return (', ').join([f'{choice.name}' for choice in choices])
-
-    @property
-    def choices_insertion(self):
-        label = self.choice_label
-        if label:
-            return f'{label} '
-        else:
-            return ''
 
     def selected_choices(self, categories):
         return {choice for choice in self.choices if choice.category in categories}
@@ -94,19 +79,29 @@ def find_specification_by_id(specification_id):
     return Specification.query.filter(Specification.id == specification_id).first()
 
 
-def describe_choices(choices, unknowns=None):
-    if unknowns:
-        sorted_unknowns = sorted_by_name(unknowns)
-        sorted_unknown_names = [f'Unknown {unknown.name}' for unknown in sorted_unknowns]
-    else:
-        sorted_unknown_names = []
-    if choices:
-        sorted_choice_names = [choice.name for choice in sorted_by_name(choices)]
-    else:
-        if unknowns:
-            sorted_choice_names = []
+def describe_choices(choices=None, unknowns=None, specification=None):
+    if unknowns is None:
+        if specification:
+            unknowns = specification.unknowns
         else:
-            sorted_choice_names = ['Any']
-    all_names = sorted_choice_names + sorted_unknown_names
-    return (', ').join([f'{choice_name}' for choice_name in all_names])
-
+            unknowns = set()
+    if choices is None:
+        if specification:
+            choices = specification.choices
+        else:
+            choices = set()
+    label_pieces = []
+    categories_set = {choice.category for choice in choices}
+    categories = sorted_by_name(list(categories_set))
+    for category in categories:
+        sorted_choices = sorted_by_name([choice for choice in choices if choice.category == category])
+        sorted_names = [choice.name for choice in sorted_choices]
+        if category in unknowns:
+            sorted_names.append(f'Unknown')
+        choice_description = ' or '.join(sorted_names)
+        label_pieces.append(f'{choice_description} {category.name}')
+    full_label = ', '.join(label_pieces)
+    if full_label:
+        return full_label
+    else:
+        return 'All Choices'

@@ -5,10 +5,11 @@ from sqlalchemy.orm import backref
 
 from tracking import database
 from tracking.modelling.base_models import NamedBaseModel, RootDescendantMixin
+from tracking.modelling.positioning_mixin import PositioningMixin
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class Place(RootDescendantMixin, CupboardDisplayContextMixin, NamedBaseModel):
+class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = "Place"
     plural_label = "Places"
     possible_tasks = ['create', 'update', 'delete']

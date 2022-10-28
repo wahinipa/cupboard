@@ -14,7 +14,7 @@ class ThingSpecification(CupboardDisplayContextMixin):
     def __init__(self, thing, specification):
         self.thing = thing
         self.specification = specification
-        thing_categories = set(thing.category_list)
+        thing_categories = thing.complete_set_of_categories
         self.choices = {choice for choice in specification.choices if choice.category in thing_categories}
         self.unknowns = {unknown for unknown in specification.unknowns if unknown in thing_categories}
 
@@ -29,4 +29,4 @@ class ThingSpecification(CupboardDisplayContextMixin):
         return describe_choices(self.choices, self.unknowns)
 
     def viewable_children(self, viewer):
-        return [CategorySpecification(category, self) for category in self.thing.sorted_categories]
+        return [CategorySpecification(category, self) for category in self.thing.complete_set_of_categories]
