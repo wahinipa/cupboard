@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.navigation.categories_navigation import register_categories_navigation
 from tracking.navigation.category_navigation import register_category_navigation
+from tracking.navigation.category_specification_navigation import register_category_specification_navigation
 from tracking.navigation.choice_navigation import register_choice_navigation
 from tracking.navigation.navigator import Navigator
 from tracking.navigation.people_navigation import register_people_navigation
@@ -15,6 +16,7 @@ def create_cupboard_navigator():
     navigator = Navigator()
     register_categories_navigation(navigator)
     register_category_navigation(navigator)
+    register_category_specification_navigation(navigator)
     register_choice_navigation(navigator)
     register_people_navigation(navigator)
     register_place_navigation(navigator)

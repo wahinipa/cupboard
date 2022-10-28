@@ -26,7 +26,7 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
 
     @property
     def name(self):
-        return describe_choices(self.choices)
+        return describe_choices(self.choices, self.unknowns)
 
     @property
     def choices(self):
@@ -86,14 +86,24 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
                     return False
         return True
 
+    def may_update(self, viewer):
+        return self.root.may_be_observed(viewer)
+
 
 def find_specification_by_id(specification_id):
     return Specification.query.filter(Specification.id == specification_id).first()
 
 
-def describe_choices(choices):
+def describe_choices(choices, unknowns=None):
+    if unknowns:
+        sorted_unknowns = sorted_by_name(unknowns)
+        sorted_names = [f'Unknown {unknown.name}' for unknown in sorted_unknowns]
+        suffix = ' ' + ' '.join(sorted_names)
+    else:
+        suffix = ''
     if choices:
         sorted_choices = sorted_by_name(choices)
-        return (', ').join([f'{choice.name}' for choice in sorted_choices])
+        prefix =  (', ').join([f'{choice.name}' for choice in sorted_choices])
     else:
-        return 'Any'
+        prefix = 'Any'
+    return f'{prefix}{suffix}'

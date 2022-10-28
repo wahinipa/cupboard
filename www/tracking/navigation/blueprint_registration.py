@@ -20,6 +20,7 @@ REFINEMENT_PREFIX = my_url('/refinement')
 ROLES_PREFIX = my_url('/role')
 ROOT_PREFIX = my_url('/root')
 ROOTS_PREFIX = my_url('/roots')
+SPECIFICATIONS_PREFIX = my_url('/specifications')
 THINGS_PREFIX = my_url('/thing')
 
 
@@ -51,6 +52,9 @@ def blueprint_registration(application):
 
     from tracking.routing.roots_routes import roots_bp
     application.register_blueprint(roots_bp, url_prefix=ROOTS_PREFIX)
+
+    from tracking.routing.specification_routes import specification_bp
+    application.register_blueprint(specification_bp, url_prefix=SPECIFICATIONS_PREFIX)
 
     from tracking.routing.place_routes import place_bp
     application.register_blueprint(place_bp, url_prefix=PLACES_PREFIX)

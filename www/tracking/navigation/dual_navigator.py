@@ -3,6 +3,7 @@ from flask import url_for
 
 from tracking.modelling.categories_model import Categories
 from tracking.modelling.category_model import Category
+from tracking.modelling.category_specification import CategorySpecification
 from tracking.modelling.choice_model import Choice
 from tracking.modelling.place_model import Place
 from tracking.modelling.root_model import Root
@@ -22,6 +23,7 @@ class DualNavigator(RootHolder):
             navigational_mark(Choice): self.choice_url,
             navigational_mark(Place): self.place_url,
             navigational_mark(Root): self.root_url,
+            navigational_mark(CategorySpecification): self.specification_url,
             navigational_mark(Thing): self.thing_url,
         }
 
@@ -58,6 +60,11 @@ class DualNavigator(RootHolder):
         thing_id = thing_id or self.thing_id or root.thing.id
         specification_id = specification_id or self.specification_id or root.generic_specification.id
         return url_for(f'root_bp.root_{task}', place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+
+    def specification_url(self, category_specification, task):
+        # No matter the presumed task, do an update
+        return url_for(f'specification_bp.specification_update', category_id=category_specification.category.id,
+                       place_id=self.place_id, thing_id=self.thing_id, specification_id=self.specification_id)
 
     def thing_url(self, thing, task):
         if task == 'view':

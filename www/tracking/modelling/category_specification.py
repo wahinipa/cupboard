@@ -12,6 +12,10 @@ class CategorySpecification(CupboardDisplayContextMixin):
         self.category = category
         self.specification = specification
         self.choices = specification.choices_for(category)
+        if category in specification.unknowns:
+            self.unknowns = {category}
+        else:
+            self.unknowns = set()
 
     @property
     def singular_label(self):
@@ -19,4 +23,4 @@ class CategorySpecification(CupboardDisplayContextMixin):
 
     @property
     def name(self):
-        return describe_choices(self.choices)
+        return describe_choices(self.choices, self.unknowns)

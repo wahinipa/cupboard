@@ -16,6 +16,7 @@ class ThingSpecification(CupboardDisplayContextMixin):
         self.specification = specification
         thing_categories = set(thing.category_list)
         self.choices = {choice for choice in specification.choices if choice.category in thing_categories}
+        self.unknowns = {unknown for unknown in specification.unknowns if unknown in thing_categories}
 
     def add_description(self, context):
         pass
@@ -25,7 +26,7 @@ class ThingSpecification(CupboardDisplayContextMixin):
 
     @property
     def name(self):
-        return describe_choices(self.choices)
+        return describe_choices(self.choices, self.unknowns)
 
     def viewable_children(self, viewer):
         return [CategorySpecification(category, self) for category in self.thing.sorted_categories]

@@ -87,6 +87,7 @@ specification_display_attributes = {
                 'notation': True,
             },
             'category_specification': {
+                'url': True,
                 'notation': True,
             },
         },
