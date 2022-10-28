@@ -7,8 +7,12 @@ from tracking.modelling.base_models import IdModelMixin
 class Positioning(IdModelMixin, database.Model):
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
-    specification_id= database.Column(database.Integer, database.ForeignKey('specification.id'), index=True)
+    specification_id = database.Column(database.Integer, database.ForeignKey('specification.id'), index=True)
     quantity = database.Column(database.Integer, nullable=False, server_default='0')
+
+    @property
+    def name(self):
+        return f'{self.thing.name} at {self.place.name}'
 
 
 def _find_positionings(place, thing, specification):
