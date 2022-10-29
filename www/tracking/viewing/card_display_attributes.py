@@ -60,9 +60,6 @@ thing_display_attributes = {
         'url': True,
         'bread_crumbs': True,
         'children_attributes': {
-            'category': {
-                'notation': True,
-            },
             'thing': {
                 'notation': True,
             },

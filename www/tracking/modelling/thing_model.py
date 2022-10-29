@@ -134,7 +134,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
         return self.root.place
 
     def viewable_children(self, viewer):
-        return self.sorted_categories + self.sorted_children
+        return self.sorted_children
 
     def add_to_place(self, place, specification, quantity):
         from tracking.modelling.postioning_model import add_quantity_of_things
