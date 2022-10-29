@@ -14,6 +14,7 @@ CHOICE_PREFIX = my_url('/choice')
 FAKE_PREFIX = '/'  # note: not using my_url
 GROUP_PREFIX = my_url('/group')
 HOME_PREFIX = my_url('/home')
+INVENTORY_PREFIX = my_url('/inventory')
 USER_PREFIX = my_url('/people')
 PLACES_PREFIX = my_url('/place')
 REFINEMENT_PREFIX = my_url('/refinement')
@@ -40,6 +41,9 @@ def blueprint_registration(application):
 
     from tracking.routing.choice_routes import choice_bp
     application.register_blueprint(choice_bp, url_prefix=CHOICE_PREFIX)
+
+    from tracking.routing.inventory_routes import inventory_bp
+    application.register_blueprint(inventory_bp, url_prefix=INVENTORY_PREFIX)
 
     from tracking.routing.people_routes import people_bp
     application.register_blueprint(people_bp, url_prefix=USER_PREFIX)

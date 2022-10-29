@@ -91,7 +91,7 @@ def describe_choices(choices=None, unknowns=None, specification=None):
         else:
             choices = set()
     label_pieces = []
-    categories_set = {choice.category for choice in choices}
+    categories_set = {choice.category for choice in choices} | unknowns
     categories = sorted_by_name(list(categories_set))
     for category in categories:
         sorted_choices = sorted_by_name([choice for choice in choices if choice.category == category])

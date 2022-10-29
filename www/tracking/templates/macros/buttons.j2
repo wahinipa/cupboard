@@ -2,13 +2,19 @@
   {% if False %}{{ kwargs }}{% endif %}
   {% if task == 'create' %}
     {{ button_action(url=url, prefix='Create New ', label=label, column_width=column_width) }}
-  {% elif task == 'add' %}
+  {% elif task == 'add'%}
     {{ button_action(url=url, prefix='Add ', label=label, column_width=column_width, button_color='warning') }}
+  {% elif task == 'arriving' %}
+    {{ button_action(url=url, prefix='Add Arriving', label=label, column_width=column_width, button_color='primary') }}
   {% elif task == 'delete' %}
     {{ button_action(url=url, prefix='DELETE ', label=label, column_width=column_width, button_color='danger'
     , on_submit="return confirm('Are you sure you wish to delete?');") }}
   {% elif task == 'remove' %}
     {{ button_action(url=url, prefix='Remove ', label=label, column_width=column_width, button_color='warning' ) }}
+  {% elif task == 'departing' %}
+    {{ button_action(url=url, prefix='Remove Departing ', label=label, column_width=column_width, button_color='danger' ) }}
+  {% elif task == 'moving' %}
+    {{ button_action(url=url, prefix='Move ', label=label, column_width=column_width, button_color='warning' ) }}
   {% elif task == 'duplicate' %}
     {{ button_action(url=url, prefix='Duplicate ', label=label, column_width=column_width) }}
   {% elif task == 'update' %}

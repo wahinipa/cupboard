@@ -47,8 +47,9 @@ class DisplayContext(Context):
     def append_notation(self, notation):
         self.append_to_list('notations', notation)
 
-    def add_task(self, url, label, task):
-        self.context.setdefault('tasks', []).append({
+    def add_task(self, url, label, task, is_required=False):
+        list_name = 'required_tasks' if is_required else "tasks"
+        self.context.setdefault(list_name, []).append({
             'url': url,
             'label': label,
             'task': task,

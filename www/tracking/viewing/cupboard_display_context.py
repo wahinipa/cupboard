@@ -26,7 +26,8 @@ class CupboardDisplayContextMixin:
     def add_task(self, context, navigator, task, label=None):
         if label is None:
             label = self.task_label(task)
-        context.add_task(url=navigator.url(self, task), label=label, task=task)
+        is_required = task.endswith('ing')
+        context.add_task(url=navigator.url(self, task), label=label, task=task, is_required=is_required)
 
     def task_label(self, task):
         prefix = self.label_prefixes.get(task, '')

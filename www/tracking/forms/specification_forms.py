@@ -51,7 +51,7 @@ def create_specification_form_descriptor(category, specification):
             'field_name': 'choose_any',
             'label': "Any",
             'description': f'Include all items, regardless of choice of {category.name}',
-            'default': 'checked' if not currently_selected_choices else None,
+            'default': None if has_unknown or currently_selected_choices else 'checked',
         },
         'submit_label': f'Update {category.name} Search Options',
     }

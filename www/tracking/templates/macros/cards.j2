@@ -30,7 +30,7 @@
 {% endcall %}
 {% endmacro %}
 
-{% macro card_view(prefix=None, label=None, url=None, flavor=None, bread_crumb_list=None, tasks=None) %}
+{% macro card_view(prefix=None, label=None, url=None, flavor=None, bread_crumb_list=None, tasks=None, required_tasks=None) %}
   {% if False %}{{ kwargs }}{% endif %}
   <div class="card{% if flavor %} card-flavor-{{ flavor }}{% endif %}">
     <div class="card-header">
@@ -45,25 +45,38 @@
     <div class="card-body">
       {{ caller() }}
     </div>
-    {% if tasks %}
-      <div class="action_show_container">
-        <div class="card-footer">
-          <div class="row">
-            {% for task in tasks %}
-              <div class="col-md-4">
-                {{ button_task(column_width=None, **task) }}
-              </div>
-            {% endfor %}
+    {% if tasks or required_tasks %}
+      <div class="card-footer">
+        {% if required_tasks %}
+          <div class="always_show_container">
+            <div class="row">
+              {% for task in required_tasks %}
+                <div class="col-md-4">
+                  {{ button_task(column_width=None, **task) }}
+                </div>
+              {% endfor %}
+            </div>
           </div>
-        </div>
+        {% endif %}
+        {% if tasks %}
+          <div class="action_show_container">
+            <div class="row">
+              {% for task in tasks %}
+                <div class="col-md-4">
+                  {{ button_task(column_width=None, **task) }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
       </div>
     {% endif %}
   </div>
 {% endmacro %}
 
-{% macro card_child(classification=None, label=None, notations=None, flavor=None, url=None, bread_crumb_list=None, tasks=None) %}
+{% macro card_child(classification=None, label=None, notations=None, flavor=None, url=None, bread_crumb_list=None, tasks=None, required_tasks=None) %}
   {% if False %}{{ kwargs }}{% endif %}
-  {% call card_view(prefix=classification + ": ", label=label, url=url, flavor=flavor, bread_crumb_list=bread_crumb_list, tasks=tasks) %}
+  {% call card_view(prefix=classification + ": ", label=label, url=url, flavor=flavor, bread_crumb_list=bread_crumb_list, tasks=tasks, required_tasks=required_tasks) %}
     {{ render_notations(notations) }}
   {% endcall %}
 {% endmacro %}

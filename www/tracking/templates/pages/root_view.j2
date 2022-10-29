@@ -1,12 +1,13 @@
 {% extends "pages/content.j2" %}
 {% from 'macros/cards.j2' import show_action_button, target_block, row_of_3_child_cards, column_of_child_cards %}
 {% block bottom_header %}
- {% if has_tasks %}
+  {% if has_tasks %}
     {{ show_action_button() }}
   {% endif %}
 {% endblock %}
 {% block innards %}
-  {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) }}
+  {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations,
+   tasks=tasks, required_tasks=required_tasks) }}
   {{ row_of_3_child_cards(children[0:3]) }}
   {{ column_of_child_cards(children[3:]) }}
 {% endblock %}

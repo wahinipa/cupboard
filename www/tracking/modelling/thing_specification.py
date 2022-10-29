@@ -15,15 +15,25 @@ class ThingSpecification(CupboardDisplayContextMixin):
     def __init__(self, thing, specification):
         self.thing = thing
         self.specification = specification
-        thing_categories = thing.complete_set_of_categories
-        self.choices = {choice for choice in specification.choices if choice.category in thing_categories}
-        self.unknowns = {unknown for unknown in specification.unknowns if unknown in thing_categories}
+        self.thing_categories = thing.complete_set_of_categories
+        self.choices = {choice for choice in specification.choices if choice.category in self.thing_categories}
+        self.unknowns = {unknown for unknown in specification.unknowns if unknown in self.thing_categories}
 
     def add_description(self, context):
         pass
 
     def choices_for(self, category):
         return {choice for choice in self.choices if choice.category == category}
+
+    @property
+    def is_specific(self):
+        found_categories = self.unknowns
+        for choice in self.choices:
+            category = choice.category
+            if category in found_categories:
+                return False  # multiple choices for this category
+            found_categories.add(category)
+        return found_categories == self.thing_categories
 
     @property
     def name(self):
