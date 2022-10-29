@@ -1,0 +1,38 @@
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% macro generate_specification_form(descriptor, form) %}
+  <h3>{{ descriptor.form_title }}</h3>
+  <div class="card">
+    <form action="" method="post" class="form" role="form">
+      {{ form.csrf_token() }}
+      <input
+          {% if descriptor.any_field.default %}checked="" {% endif %}class="form-check-input" id="choose_any"
+          name="choose_any" type="checkbox" value="y">
+      <label class="form-check-label" for="choose_any">{{ descriptor.any_field.label }}</label>
+      <small class="form-text text-muted">{{ descriptor.any_field.description }}</small>
+      <div id="choose_any_show_place">
+        <div class="choose_any_show_container">
+          <p>
+            {{ form_checkbox(**descriptor.unknown_field) }}
+            {% for box in descriptor.choices %}
+              {{ form_checkbox(**box) }}
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+      <input class="btn btn-primary btn-md" formnovalidate="" id="cancel_button" name="cancel_button" type="submit"
+             value="Cancel">
+      <input class="btn btn-primary btn-md" id="submit" name="submit" type="submit"
+             value="Update Age Appropriate Search Options">
+    </form>
+  </div>
+{% endmacro %}
+
+
+{% macro form_checkbox(field_id, field_name, label, description, default) %}
+  <div class="mb-3 form-check"><input {% if default %}checked="" {% endif %}class="form-check-input"
+                                      id="{{ field_id }}" name="{{ field_name }}" type="checkbox" value="y">
+    <label class="form-check-label" for="choose_10">{{ label }}</label>
+    <small class="form-text text-muted">{{ description }}</small>
+  </div>
+{% endmacro %}

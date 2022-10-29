@@ -36,6 +36,7 @@ footer {
 .pill_button {
     border-width: thick;
 }
+
 /* *** Action Button Styling *** */
 
 #action_check_button {
@@ -48,6 +49,16 @@ footer {
 
 #action_check_button:checked ~ #action_show_place .action_show_container {
     display: block;
+}
+
+/* *** Any Button Styling *** */
+
+#choose_any_show_place .choose_any_show_container {
+    display: block;
+}
+
+#choose_any:checked ~ #choose_any_show_place .choose_any_show_container {
+    display: none;
 }
 
 /* *** Admin Styling *** */

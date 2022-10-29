@@ -1,4 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.modelling.cardistry_models import sorted_by_name
 from tracking.modelling.category_specification import CategorySpecification
 from tracking.modelling.specification_model import describe_choices
 from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
@@ -29,4 +30,5 @@ class ThingSpecification(CupboardDisplayContextMixin):
         return describe_choices(self.choices, self.unknowns)
 
     def viewable_children(self, viewer):
-        return [CategorySpecification(category, self) for category in self.thing.complete_set_of_categories]
+        sorted_categories = sorted_by_name(list(self.thing.complete_set_of_categories))
+        return [CategorySpecification(category, self) for category in sorted_categories]

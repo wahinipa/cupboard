@@ -1,0 +1,7 @@
+{% extends "pages/content.j2" %}
+{% from "macros/form_macros.j2" import generate_specification_form %}
+{% block innards %}
+  <div class="col-md-5 mx-auto">
+    {{ generate_specification_form(form_descriptor, form) }}
+  </div>
+{% endblock %}

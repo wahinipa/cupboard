@@ -24,40 +24,55 @@ def field_name_for_choice(choice):
     return f'choose_{choice.id}'
 
 
-def create_dynamic_specification_form(category, currently_selected_choices, has_unknown):
-    # Dynamically create a unique class derived from SpecificationBaseForm
-    form_class_name = unique_class_name_from_choices(category, currently_selected_choices, has_unknown)
-    new_class = type(form_class_name, (SpecificationBaseForm,), {})
+def create_specification_form_descriptor(category, specification):
+    currently_selected_choices = specification.choices_for(category)
+    has_unknown = category in specification.unknowns
+    def describe_choice_box(choice):
+        return {
+            'field_name': field_name_for_choice(choice),
+            'label': choice.name,
+            'description': f'Include {choice.name} {category.name}.',
+            'default': 'checked' if choice in currently_selected_choices else None,
+        }
 
-    def add_checkmark(name, label, description, current_value):
-        if current_value:
-            default = 'checked'
-        else:
-            default = None
-        setattr(new_class, name, BooleanField(label, validators=[], description=description, default=default))
-
-    current_has_any = not currently_selected_choices
-    any_label = "Any"
-    any_description = f'Include all items, regardless of choice of {category.name}'
-    add_checkmark('choose_any', any_label, any_description, current_has_any)
-
-    unknown_label = f'Unknown {category.name}'
-    unknown_description = f'Include items where choice of {category.name} is not known.'
-    add_checkmark('choose_unknown', unknown_label, unknown_description, has_unknown)
-
-    # Add checkbox fields to the class, one per choice
     sorted_category_choices = sorted_by_name(category.choices)
-    for choice in sorted_category_choices:
-        field_name = field_name_for_choice(choice)
-        label = choice.name
-        description = f'Include {choice.name} {category.name}.'
-        current_value = choice in currently_selected_choices
-        add_checkmark(name=field_name, label=label, description=description, current_value=current_value)
+
+    return {
+        'form_class_name': unique_class_name_from_choices(category, currently_selected_choices, has_unknown),
+        'form_title': f'Update {specification.name}',
+        'choices': [describe_choice_box(choice) for choice in sorted_category_choices],
+        'unknown_field': {
+            'field_name': 'choose_unknown',
+            'label': f'Unknown {category.name}',
+            'description': f'Include items where choice of {category.name} is not known.',
+            'default': 'checked' if has_unknown else None,
+        },
+        'any_field': {
+            'field_name': 'choose_any',
+            'label': "Any",
+            'description': f'Include all items, regardless of choice of {category.name}',
+            'default': 'checked' if not currently_selected_choices else None,
+        },
+        'submit_label': f'Update {category.name} Search Options',
+    }
+
+
+def create_dynamic_specification_form(form_descriptor):
+    # Dynamically create a unique class derived from SpecificationBaseForm
+    new_class = type(form_descriptor['form_class_name'], (SpecificationBaseForm,), {})
+
+    def add_checkmark(box):
+        setattr(new_class, box['field_name'],
+                BooleanField(box['label'], validators=[], description=box['description'], default=box['default']))
+
+    add_checkmark(form_descriptor['any_field'])
+    add_checkmark(form_descriptor['unknown_field'])
+    for box in form_descriptor['choices']:
+        add_checkmark(box)
 
     # Create and add cancel & submit button last, so it sorts to the end of the form when displayed.
     setattr(new_class, 'cancel_button', cancel_button_field())
-    submit = SubmitField(f'Update {category.name} Search Options')
-    setattr(new_class, 'submit', submit)
+    setattr(new_class, 'submit', SubmitField(form_descriptor['submit_label']))
     form = new_class()
     return form
 

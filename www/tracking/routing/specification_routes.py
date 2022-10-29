@@ -1,10 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
-from flask import Blueprint, url_for, request, redirect
+from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
-from tracking import database
-from tracking.forms.specification_forms import update_specification_form, update_specification
+from tracking.forms.specification_forms import update_specification, \
+    create_specification_form_descriptor, create_dynamic_specification_form
 from tracking.modelling.category_model import find_category_by_id
 from tracking.modelling.placement_model import create_placement, Placement
 from tracking.routing.home_redirect import home_redirect
@@ -26,7 +26,8 @@ def specification_update(category_id, place_id, thing_id, specification_id):
     if category and placement.may_be_observed(current_user) and placement.root == category.root \
         and placement.specification.may_update(current_user):
         specification = placement.specification
-        form = update_specification_form(category, specification)
+        form_descriptor = create_specification_form_descriptor(category, specification)
+        form = create_dynamic_specification_form(form_descriptor)
         if request.method == 'POST' and form.cancel_button.data:
             navigator = placement.create_navigator()
             redirect_url = navigator.url(placement.root, 'view')
@@ -40,6 +41,7 @@ def specification_update(category_id, place_id, thing_id, specification_id):
             return redirect(redirect_url)
         else:
             return CupboardDisplayContext().render_template(
-                'pages/form_page.j2', form=form, form_title=f'Update {specification.name}')
+                'pages/specification_update.j2', form_descriptor=form_descriptor, form=form,
+                form_title=f'Update {specification.name}')
     else:
         return home_redirect()
