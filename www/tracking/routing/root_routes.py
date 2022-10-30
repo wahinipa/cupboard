@@ -64,7 +64,6 @@ def root_view(place_id, thing_id, specification_id):
         navigator = placement.create_navigator()
         children = [placement.place, placement.thing, placement.thing_specification, Inventory(placement)]
         display_attributes = {
-            'description': True,
             'children': children,
             'children_attributes': dual_view_childrens_attributes(thing=placement.thing),
         }

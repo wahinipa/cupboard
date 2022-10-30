@@ -152,6 +152,26 @@
   {{ row_of_child_cards(children, column_width=4) }}
 {% endmacro %}
 
+{% macro row_of_4_child_cards(children) %}
+  {{ row_of_child_cards(children, column_width=3) }}
+{% endmacro %}
+
+{% macro row_of_varying_width_child_cards(children, widths) %}
+  {% if children %}
+    <div class="row mt-2">
+      {% for child in children %}
+        <div class="col-md-{{ widths[loop.index0] }}">
+          <div class="row mt-2">
+            <div class="col-md-12">
+              {{ card_child(**child) }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endmacro %}
+
 {% macro row_of_child_cards(children, column_width=6) %}
   {% if children %}
     <div class="row mt-2">
