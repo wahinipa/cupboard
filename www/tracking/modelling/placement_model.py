@@ -1,5 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.place_model import find_place_by_id
+from tracking.modelling.positioning_mixin import current_quantity
 from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import find_thing_by_id
@@ -25,6 +26,10 @@ class Placement(RootHolder):
     @property
     def thing_specification(self):
         return ThingSpecification(self.thing, self.specification)
+
+    @property
+    def current_quantity(self):
+        return current_quantity(self.place, self.thing, self.specification)
 
 
 def create_placement(root_id=None, place_id=None, thing_id=None, specification_id=None):

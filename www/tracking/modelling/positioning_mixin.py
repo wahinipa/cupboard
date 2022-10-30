@@ -13,6 +13,16 @@ class PositioningMixin:
         return full_positionings
 
 
+def current_quantity(place, thing, specification):
+    total = 0
+    for positioning in place.direct_positionings:
+        if positioning.thing == thing and specification.accepts(positioning.specification):
+            quantity = positioning.quantity
+            if quantity > 0:
+                total += quantity
+    return total
+
+
 def filtered_positioning_sum(positionings, places=None, things=None, specification=None):
     return sum_of_positioning_quantities(
         filtered_positionings(positionings=positionings, places=places, things=things, specification=specification))

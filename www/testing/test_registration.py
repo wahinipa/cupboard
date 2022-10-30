@@ -16,12 +16,14 @@ def test_registration(pretend_application):
         'choice_bp',
         'fake_bp',
         'home_bp',
+        'inventory_bp',
         'people_bp',
         'place_bp',
         'refinement_bp',
         'root_bp',
         'roots_bp',
         # 'role_bp',
+        'specification_bp',
         'thing_bp',
     ]
     for blueprint_name in expected_blueprints:

@@ -15,7 +15,8 @@ class InventoryDescriptor(Descriptor):
 class Inventory(RootHolder, CupboardDisplayContextMixin):
     flavor = "inventory"
     singular_label = 'Inventory'
-    possible_tasks = ['arriving', 'moving', 'departing']  # 'ing' suffix makes these required tasks that shows without 'Show Actions' click
+    # 'ing' suffix makes these required tasks that show without needing a 'Show Actions' click
+    possible_tasks = ['arriving', 'moving', 'departing']
     label_prefixes = {}
 
     def __init__(self, placement):
@@ -33,8 +34,7 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
         self.inventories = []
         self.described_choices = describe_choices(specification=self.specification)
         self.is_specific = placement.thing_specification.is_specific
-        self.removable_quantities = sum(position.quantity for position in
-                   filtered_positionings(self.where_is_what[self.place], things=self.top_thing_set))
+        self.current_quantity = placement.current_quantity
         self.create_inventories()
 
     @property
@@ -44,7 +44,7 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
     def may_perform_task(self, viewer, task):
         # TODO: actually check on viewer
         if self.is_specific:
-            return task == 'arriving' or self.removable_quantities > 0
+            return task == 'arriving' or self.current_quantity > 0
         else:
             return False
 

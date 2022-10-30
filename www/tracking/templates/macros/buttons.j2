@@ -5,7 +5,7 @@
   {% elif task == 'add'%}
     {{ button_action(url=url, prefix='Add ', label=label, column_width=column_width, button_color='warning') }}
   {% elif task == 'arriving' %}
-    {{ button_action(url=url, prefix='Add Arriving', label=label, column_width=column_width, button_color='primary') }}
+    {{ button_action(url=url, prefix='Add Arriving ', label=label, column_width=column_width, button_color='primary') }}
   {% elif task == 'delete' %}
     {{ button_action(url=url, prefix='DELETE ', label=label, column_width=column_width, button_color='danger'
     , on_submit="return confirm('Are you sure you wish to delete?');") }}
