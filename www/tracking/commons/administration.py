@@ -12,7 +12,7 @@ from werkzeug.utils import redirect
 from tracking.modelling.role_models import PlaceAssignment, UniversalAssignment
 from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 from tracking.commons.create_test_data import create_test_data
-from tracking.viewing.cupboard_display_context import project_name
+from tracking.contexts.cupboard_display_context import project_name
 
 
 def request_info(prefix):

@@ -9,8 +9,8 @@ from tracking.modelling.categories_model import Categories
 from tracking.modelling.category_model import find_category_by_id
 from tracking.modelling.placement_model import create_placement
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 category_bp = Blueprint(
     'category_bp', __name__,

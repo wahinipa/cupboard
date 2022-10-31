@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.specification_model import describe_choices
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class CategorySpecification(CupboardDisplayContextMixin):

@@ -7,7 +7,7 @@ from tracking import database
 from tracking.modelling.base_models import RootDescendantMixin, NamedBaseModel
 from tracking.modelling.cardistry_models import sorted_by_name
 from tracking.modelling.positioning_mixin import PositioningMixin
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):

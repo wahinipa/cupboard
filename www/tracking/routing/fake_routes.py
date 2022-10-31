@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import Blueprint, request, redirect
 
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.administration import log_info_about_request, log_warn_about_request
 
 fake_bp = Blueprint(

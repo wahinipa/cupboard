@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import render_template
 
-from tracking.viewing.context import Context
+from tracking.contexts.context import Context
 
 
 class DisplayContext(Context):

@@ -9,8 +9,8 @@ from tracking.modelling.inventory_model import Inventory
 from tracking.modelling.placement_model import create_placement
 from tracking.modelling.roots_model import Roots
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.card_display_attributes import dual_view_childrens_attributes
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 root_bp = Blueprint(
     'root_bp', __name__,

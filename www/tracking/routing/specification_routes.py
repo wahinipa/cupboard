@@ -8,7 +8,7 @@ from tracking.forms.specification_forms import update_specification, \
 from tracking.modelling.category_model import find_category_by_id
 from tracking.modelling.placement_model import create_placement, Placement
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 specification_bp = Blueprint(
     'specification_bp', __name__,

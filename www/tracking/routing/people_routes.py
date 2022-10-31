@@ -11,7 +11,7 @@ from tracking.modelling.people_model import find_user_by_id, all_people_display_
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 people_bp = Blueprint(
     'people_bp', __name__,

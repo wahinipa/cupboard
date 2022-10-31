@@ -3,7 +3,7 @@ from tracking.modelling.base_models import Descriptor
 from tracking.modelling.positioning_mixin import filtered_positionings
 from tracking.modelling.specification_model import describe_choices
 from tracking.navigation.root_holder import RootHolder
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class InventoryDescriptor(Descriptor):

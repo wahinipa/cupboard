@@ -7,7 +7,7 @@ from tracking import database
 from tracking.forms.thing_forms import ThingUpdateForm, ThingCreateForm, update_thing_from_form
 from tracking.modelling.placement_model import create_placement
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 thing_bp = Blueprint(
     'thing_bp', __name__,

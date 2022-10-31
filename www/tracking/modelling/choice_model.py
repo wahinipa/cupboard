@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from tracking import database
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import NamedBaseModel
 
 

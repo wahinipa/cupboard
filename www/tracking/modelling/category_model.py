@@ -4,7 +4,7 @@ from tracking import database
 from tracking.modelling.base_models import NamedBaseModel
 from tracking.modelling.cardistry_models import name_is_key
 from tracking.modelling.categories_model import Categories
-from tracking.viewing.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Category(CupboardDisplayContextMixin, NamedBaseModel):

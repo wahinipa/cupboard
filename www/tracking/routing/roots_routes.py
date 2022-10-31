@@ -7,7 +7,7 @@ from tracking.modelling.roots_model import Roots
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.routing.home_redirect import home_redirect
-from tracking.viewing.cupboard_display_context import CupboardDisplayContext
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 roots_bp = Blueprint(
     'roots_bp', __name__,
