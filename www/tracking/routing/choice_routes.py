@@ -6,7 +6,7 @@ from tracking import database
 from tracking.forms.choice_forms import ChoiceUpdateForm, update_choice_from_form
 from tracking.viewers.categories_model import Categories
 from tracking.modelling.choice_model import find_choice_by_id
-from tracking.viewers.placement_model import create_placement
+from tracking.viewers.platter import create_platter
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
@@ -22,10 +22,10 @@ choice_bp = Blueprint(
 @login_required
 def choice_delete(choice_id, place_id, thing_id, specification_id):
     choice = find_choice_by_id(choice_id)
-    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if choice and placement.may_be_observed(current_user) and placement.root == choice.root and choice.may_delete(
+    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if choice and platter.may_be_observed(current_user) and platter.root == choice.root and choice.may_delete(
         current_user):
-        navigator = placement.create_navigator()
+        navigator = platter.create_navigator()
         redirect_url = navigator.url(choice.category, 'view')
         database.session.delete(choice)
         database.session.commit()
@@ -38,21 +38,21 @@ def choice_delete(choice_id, place_id, thing_id, specification_id):
 @login_required
 def choice_view(choice_id, place_id, thing_id, specification_id):
     choice = find_choice_by_id(choice_id)
-    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if choice and placement.may_be_observed(current_user) and placement.root == choice.root and choice.may_be_observed(
+    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if choice and platter.may_be_observed(current_user) and platter.root == choice.root and choice.may_be_observed(
         current_user):
-        navigator = placement.create_navigator()
-        place = placement.place
-        thing = placement.thing
-        specification = placement.specification
+        navigator = platter.create_navigator()
+        place = platter.place
+        thing = platter.thing
+        specification = platter.specification
         display_attributes = {
             'description': True,
-            'children': [choice, placement.thing, placement.specification],
+            'children': [choice, platter.thing, platter.specification],
             'children_attributes': dual_view_childrens_attributes(),
         }
-        place_url = navigator.url(placement.root, 'view')
+        place_url = navigator.url(platter.root, 'view')
         category_list_url = navigator.url(Categories(place=place, thing=thing, specification=specification), 'view')
-        return placement.thing_specification.display_context(navigator, current_user, display_attributes).render_template(
+        return platter.thing_specification.display_context(navigator, current_user, display_attributes).render_template(
             "pages/choice_view.j2", category_list_url=category_list_url, place_url=place_url,
             active_flavor='category')
     else:
@@ -64,10 +64,10 @@ def choice_view(choice_id, place_id, thing_id, specification_id):
 @login_required
 def choice_update(choice_id, place_id, thing_id, specification_id):
     choice = find_choice_by_id(choice_id)
-    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if choice and placement.may_be_observed(current_user) and placement.root == choice.root and choice.may_update(
+    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if choice and platter.may_be_observed(current_user) and platter.root == choice.root and choice.may_update(
         current_user):
-        navigator = placement.create_navigator()
+        navigator = platter.create_navigator()
         form = ChoiceUpdateForm(obj=choice)
         redirect_url = navigator.url(choice, 'view')
         if request.method == 'POST' and form.cancel_button.data:

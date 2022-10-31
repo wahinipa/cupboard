@@ -9,7 +9,7 @@ from tracking.navigation.dual_navigator import DualNavigator
 from tracking.navigation.root_holder import RootHolder
 
 
-class Placement(RootHolder):
+class Platter(RootHolder):
 
     @property
     def is_valid(self):
@@ -32,7 +32,7 @@ class Placement(RootHolder):
         return current_quantity(self.place, self.thing, self.specification)
 
 
-def create_placement(root_id=None, place_id=None, thing_id=None, specification_id=None):
+def create_platter(root_id=None, place_id=None, thing_id=None, specification_id=None):
     if root_id:
         root = find_root_by_id(root_id)
     else:
@@ -49,4 +49,4 @@ def create_placement(root_id=None, place_id=None, thing_id=None, specification_i
         specification = find_specification_by_id(specification_id)
     else:
         specification = None
-    return Placement(root=root, place=place, thing=thing, specification=specification)
+    return Platter(root=root, place=place, thing=thing, specification=specification)

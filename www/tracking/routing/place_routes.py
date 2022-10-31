@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm, update_place_from_form
-from tracking.viewers.placement_model import create_placement
+from tracking.viewers.platter import create_platter
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
@@ -19,11 +19,11 @@ place_bp = Blueprint(
 @place_bp.route('/create/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
 def place_create(place_id, thing_id, specification_id):
-    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if placement.may_be_observed(current_user) and placement.place.may_create_place(current_user):
-        place = placement.place
+    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if platter.may_be_observed(current_user) and platter.place.may_create_place(current_user):
+        place = platter.place
         form = PlaceCreateForm()
-        navigator = placement.create_navigator()
+        navigator = platter.create_navigator()
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(navigator.url(place, 'view'))
         if form.validate_on_submit():
@@ -39,10 +39,10 @@ def place_create(place_id, thing_id, specification_id):
 @place_bp.route('/delete/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
 def place_delete(place_id, thing_id, specification_id):
-    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if placement.may_be_observed(current_user) and placement.place.may_delete(current_user):
-        place = placement.place
-        navigator = placement.create_navigator()
+    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if platter.may_be_observed(current_user) and platter.place.may_delete(current_user):
+        place = platter.place
+        navigator = platter.create_navigator()
         redirect_url = navigator.url(place.parent_object, 'view')
         database.session.delete(place)
         database.session.commit()
@@ -54,11 +54,11 @@ def place_delete(place_id, thing_id, specification_id):
 @place_bp.route('/update/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['GET', 'POST'])
 @login_required
 def place_update(place_id, thing_id, specification_id):
-    placement = create_placement(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if placement.may_be_observed(current_user) and placement.place.may_update(current_user):
-        place = placement.place
+    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
+    if platter.may_be_observed(current_user) and platter.place.may_update(current_user):
+        place = platter.place
         form = PlaceUpdateForm(obj=place)
-        navigator = placement.create_navigator()
+        navigator = platter.create_navigator()
         redirect_url = navigator.url(place, 'view')
         if request.method == 'POST' and form.cancel_button.data:
             return redirect(redirect_url)

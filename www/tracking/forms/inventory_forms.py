@@ -15,14 +15,14 @@ class InventoryArrivalForm(FlaskForm):
     submit = SubmitField('Add Arrival')
 
 
-def create_arrival_form(placement):
+def create_arrival_form(platter):
     return InventoryArrivalForm()
 
 
-def add_quantity_from_form(placement, form):
+def add_quantity_from_form(platter, form):
     quantity = form.quantity.data
     if quantity > 0:
-        add_quantity_of_things(placement.place, placement.thing, placement.specification, quantity)
+        add_quantity_of_things(platter.place, platter.thing, platter.specification, quantity)
 
 
 class InventoryDepartingForm(FlaskForm):
@@ -34,14 +34,14 @@ class InventoryDepartingForm(FlaskForm):
     submit = SubmitField('Remove Departing Items from Inventory')
 
 
-def remove_quantity_from_form(placement, form):
+def remove_quantity_from_form(platter, form):
     quantity = form.quantity.data
     if quantity > 0:
-        add_quantity_of_things(placement.place, placement.thing, placement.specification, -quantity)
+        add_quantity_of_things(platter.place, platter.thing, platter.specification, -quantity)
 
 
-def create_departure_form(placement):
-    max_value = placement.current_quantity
+def create_departure_form(platter):
+    max_value = platter.current_quantity
     class_name = f'InventoryDepartingForm_{max_value}'
     new_class = type(class_name, (FlaskForm,), {})
     quantity_field = IntegerField(label="Quantity Departing", default=1, validators=[

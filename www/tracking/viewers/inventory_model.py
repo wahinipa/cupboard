@@ -19,8 +19,8 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
     possible_tasks = ['arriving', 'moving', 'departing']
     label_prefixes = {}
 
-    def __init__(self, placement):
-        super().__init__(place=placement.place, thing=placement.thing, specification=placement.specification)
+    def __init__(self, platter):
+        super().__init__(place=platter.place, thing=platter.thing, specification=platter.specification)
         self.refinements = self.thing.refinements
         self.where_is_what = {self.place: self.specified_positionings(self.place.direct_positionings)}
         self.all_positioning = self.place.direct_positionings
@@ -33,8 +33,8 @@ class Inventory(RootHolder, CupboardDisplayContextMixin):
         self.full_place_set = self.place.full_set
         self.inventories = []
         self.described_choices = describe_choices(specification=self.specification)
-        self.is_specific = placement.thing_specification.is_specific
-        self.current_quantity = placement.current_quantity
+        self.is_specific = platter.thing_specification.is_specific
+        self.current_quantity = platter.current_quantity
         self.create_inventories()
 
     @property
