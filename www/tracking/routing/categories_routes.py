@@ -1,13 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, request, redirect
+from flask import Blueprint
 from flask_login import login_required, current_user
 
-from tracking.forms.category_forms import CategoryCreateForm
-from tracking.viewers.categories_model import Categories
-from tracking.viewers.platter import create_platter
+from tracking.page_handlers.categories_create_handler import CategoriesCreateHandler
+from tracking.page_handlers.categories_view_handler import CategoriesViewHandler
 from tracking.routing.home_redirect import home_redirect
-from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
-from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 categories_bp = Blueprint(
     'categories_bp', __name__,
@@ -19,44 +16,12 @@ categories_bp = Blueprint(
 @categories_bp.route('/create/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
 def categories_create(place_id, thing_id, specification_id):
-    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if platter.may_be_observed(current_user) and platter.root.may_create_category(
-        current_user):
-        place = platter.place
-        thing = platter.thing
-        specification = platter.specification
-        form = CategoryCreateForm()
-        navigator = platter.create_navigator()
-        if request.method == 'POST' and form.cancel_button.data:
-            return redirect(navigator.url(Categories(place, thing, specification), 'view'))
-        if form.validate_on_submit():
-            category = place.root.create_category(form.name.data, form.description.data)
-            return redirect(navigator.url(category, 'view'))
-        else:
-            return CupboardDisplayContext().render_template('pages/form_page.j2', form=form,
-                                                            form_title=f'Create New Category for {place.root.name}')
-    else:
-        return home_redirect()
+    handler = CategoriesCreateHandler(current_user, place_id, thing_id, specification_id)
+    return handler.render() or home_redirect()
 
 
 @categories_bp.route('/view/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
 def categories_view(place_id, thing_id, specification_id):
-    platter = create_platter(place_id=place_id, thing_id=thing_id, specification_id=specification_id)
-    if platter.may_be_observed(current_user) and platter.root.may_be_observed(current_user):
-        place = platter.place
-        thing = platter.thing
-        specification = platter.specification
-        navigator = platter.create_navigator()
-        categories = Categories(place=place, thing=thing, specification=specification)
-        display_attributes = {
-            'description': True,
-            'children': [categories, platter.thing, platter.thing_specification],
-            'children_attributes': dual_view_childrens_attributes(),
-        }
-        place_url = navigator.url(place.root, 'view')
-        category_list_url = navigator.url(categories, 'view')
-        return platter.root.display_context(navigator, current_user, display_attributes).render_template(
-            "pages/category_list.j2", place_url=place_url, category_list_url=category_list_url,
-            active_flavor='category')
-    return home_redirect()
+    handler = CategoriesViewHandler(current_user, place_id, thing_id, specification_id)
+    return handler.render() or home_redirect()

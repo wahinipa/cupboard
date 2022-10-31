@@ -7,8 +7,8 @@ from tracking.page_handlers.page_handler import PageHandler
 
 class FormPageHandler(PageHandler):
 
-    def __init__(self, viewer):
-        PageHandler.__init__(self, viewer)
+    def __init__(self):
+        PageHandler.__init__(self)
         self.navigator = None
         self.form = None
 

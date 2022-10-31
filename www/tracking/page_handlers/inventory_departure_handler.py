@@ -10,7 +10,7 @@ class InventoryDepartureHandler(InventoryBaseHandler):
 
     @property
     def form_title(self):
-        return f'Remove departing {self.description} from {self.platter.place.name}'
+        return f'Remove departing {self.description} from {self.place.name}'
 
     def submit_action(self):
         return remove_quantity_from_form(self.platter, self.form)

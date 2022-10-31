@@ -7,8 +7,8 @@ class InventoryBaseHandler(FormPageHandler, PlatterHoldingHandlerMixin):
     page_template = 'pages/form_page.j2'
 
     def __init__(self, viewer, place_id, thing_id, specification_id):
-        FormPageHandler.__init__(self, viewer)
-        PlatterHoldingHandlerMixin.__init__(self, place_id=place_id, thing_id=thing_id,
+        FormPageHandler.__init__(self)
+        PlatterHoldingHandlerMixin.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
                                               specification_id=specification_id)
 
     @property
@@ -17,15 +17,15 @@ class InventoryBaseHandler(FormPageHandler, PlatterHoldingHandlerMixin):
 
     @property
     def description(self):
-        return self.platter.thing_specification.name
+        return self.thing_specification.name
 
     @property
     def redirect_url(self):
-        return self.navigator.url(self.platter.root, 'view')
+        return self.navigator.url(self.root, 'view')
 
     def success_redirect_url(self, target):
         return self.redirect_url
 
     @property
     def viewer_has_permission(self):
-        return True
+        return self.may_be_observed

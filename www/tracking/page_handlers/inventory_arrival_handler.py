@@ -11,7 +11,7 @@ class InventoryArrivalHandler(InventoryBaseHandler):
 
     @property
     def form_title(self):
-        return f'Add arriving {self.description} at {self.platter.place.name}'
+        return f'Add arriving {self.description} at {self.place.name}'
 
     def submit_action(self):
         return add_quantity_from_form(self.platter, self.form)
