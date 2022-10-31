@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 from tracking.forms.specification_forms import update_specification, \
     create_specification_form_descriptor, create_dynamic_specification_form
 from tracking.modelling.category_model import find_category_by_id
-from tracking.modelling.placement_model import create_placement, Placement
+from tracking.viewers.placement_model import create_placement, Placement
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 

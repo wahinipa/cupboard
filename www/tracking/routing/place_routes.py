@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.forms.place_forms import PlaceCreateForm, PlaceUpdateForm, update_place_from_form
-from tracking.modelling.placement_model import create_placement
+from tracking.viewers.placement_model import create_placement
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 

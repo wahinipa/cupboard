@@ -3,8 +3,8 @@ from flask import Blueprint, request, redirect
 from flask_login import login_required, current_user
 
 from tracking.forms.category_forms import CategoryCreateForm
-from tracking.modelling.categories_model import Categories
-from tracking.modelling.placement_model import create_placement
+from tracking.viewers.categories_model import Categories
+from tracking.viewers.placement_model import create_placement
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext

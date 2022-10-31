@@ -4,7 +4,7 @@ from tracking.modelling.positioning_mixin import current_quantity
 from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import find_thing_by_id
-from tracking.modelling.thing_specification import ThingSpecification
+from tracking.viewers.thing_specification import ThingSpecification
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.navigation.root_holder import RootHolder
 

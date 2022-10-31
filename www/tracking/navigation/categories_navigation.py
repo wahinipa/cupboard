@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.categories_model import Categories
+from tracking.viewers.categories_model import Categories
 
 
 def register_categories_navigation(navigator):

@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.cardistry_models import sorted_by_name
-from tracking.modelling.category_specification import CategorySpecification
+from tracking.viewers.category_specification import CategorySpecification
 from tracking.modelling.specification_model import describe_choices
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 

@@ -4,7 +4,7 @@ from flask import Blueprint, redirect
 from flask_login import login_required, current_user
 
 from tracking.modelling.category_model import find_category_by_id
-from tracking.modelling.placement_model import create_placement
+from tracking.viewers.placement_model import create_placement
 from tracking.modelling.refinement_model import add_refinement, remove_refinement
 from tracking.routing.home_redirect import home_redirect
 

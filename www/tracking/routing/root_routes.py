@@ -4,10 +4,10 @@ from flask_login import login_required, current_user
 
 from tracking import database
 from tracking.forms.root_forms import RootUpdateForm, update_root_from_form
-from tracking.modelling.categories_model import Categories
-from tracking.modelling.inventory_model import Inventory
-from tracking.modelling.placement_model import create_placement
-from tracking.modelling.roots_model import Roots
+from tracking.viewers.categories_model import Categories
+from tracking.viewers.inventory_model import Inventory
+from tracking.viewers.placement_model import create_placement
+from tracking.viewers.roots_model import Roots
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext

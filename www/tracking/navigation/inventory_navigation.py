@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.inventory_model import Inventory
+from tracking.viewers.inventory_model import Inventory
 
 
 def register_inventory_navigation(navigator):

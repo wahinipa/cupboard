@@ -5,9 +5,9 @@ from flask_login import current_user, login_required
 from tracking import database
 from tracking.forms.category_forms import CategoryUpdateForm, update_category_from_form
 from tracking.forms.choice_forms import ChoiceCreateForm
-from tracking.modelling.categories_model import Categories
+from tracking.viewers.categories_model import Categories
 from tracking.modelling.category_model import find_category_by_id
-from tracking.modelling.placement_model import create_placement
+from tracking.viewers.placement_model import create_placement
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
