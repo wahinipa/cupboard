@@ -8,8 +8,12 @@ from tracking.commons.redirect_hackers import redirect_hackers
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm, \
     create_user_from_form
 from tracking.modelling.people_model import find_user_by_id, all_people_display_context, AllPeople
+from tracking.modelling.people_view_handler import PeopleViewHandler
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.navigation.dual_navigator import DualNavigator
+from tracking.page_handlers.people_create_handler import PeopleCreateHandler
+from tracking.page_handlers.people_delete_handler import PeopleDeleteHandler
+from tracking.page_handlers.people_update_handler import PeopleUpdateHandler
 from tracking.routing.home_redirect import home_redirect
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
@@ -23,33 +27,15 @@ people_bp = Blueprint(
 @people_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def people_create():
-    if current_user.may_create_person:
-        form = UserCreateForm()
-        navigator = DualNavigator()
-        redirect_url = navigator.url(AllPeople, 'view')
-        if request.method == 'POST' and form.cancel_button.data:
-            return redirect(redirect_url)
-        if form.validate_on_submit():
-            person = create_user_from_form(form)
-            if person:
-                return redirect(navigator.url(person, 'view'))
-            else:
-                return redirect(redirect_url)
-        return render_template('pages/form_page.j2', form=form, form_title=f'Create New User Account')
-    else:
-        return home_redirect()
+    handler = PeopleCreateHandler(current_user)
+    return handler.render() or home_redirect()
 
 
 @people_bp.route('/delete/<int:user_id>')
 @login_required
 def people_delete(user_id):
-    person = find_user_by_id(user_id)
-    if person and current_user.may_delete_person(person):
-        database.session.delete(person)
-        database.session.commit()
-        return redirect(url_for('people_bp.people_list'))
-    else:
-        return home_redirect()
+    handler = PeopleDeleteHandler(current_user, user_id=user_id)
+    return handler.render() or home_redirect()
 
 
 @people_bp.route('/login', methods=['GET', 'POST'])
@@ -78,21 +64,8 @@ def login():
 @people_bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def people_update(user_id):
-    person = find_user_by_id(user_id)
-    if person and current_user.may_update_person(person):
-        form = UserProfileForm(obj=person)
-        navigator = DualNavigator()
-        redirect_url = navigator.url(person, 'view')
-        if request.method == 'POST' and form.cancel_button.data:
-            return redirect(redirect_url)
-        elif form.validate_on_submit():
-            form.populate_obj(person)
-            database.session.commit()
-            return redirect(redirect_url)
-        else:
-            return CupboardDisplayContext().render_template('pages/form_page.j2', form=form, form_title=f'Update Profile for {person.name}')
-    else:
-        return home_redirect()
+    handler = PeopleUpdateHandler(current_user, user_id=user_id)
+    return handler.render() or home_redirect()
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -124,15 +97,5 @@ def people_list():
 @people_bp.route('/view/<int:user_id>')
 @login_required
 def people_view(user_id):
-    person = find_user_by_id(user_id)
-    if person and current_user.may_view_person(person):
-        navigator = create_cupboard_navigator()
-        display_attributes = {
-            'description': True,
-            'url': True,
-            'bread_crumbs': True,
-        }
-        return person.display_context(navigator, current_user, display_attributes).render_template(
-            "pages/person_view.j2", active_flavor="people")
-    else:
-        return home_redirect()
+    handler = PeopleViewHandler(current_user, user_id=user_id)
+    return handler.render() or home_redirect()

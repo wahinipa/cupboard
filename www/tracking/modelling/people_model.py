@@ -8,9 +8,9 @@ from sqlalchemy import event
 from werkzeug.security import generate_password_hash
 
 from tracking import database
-from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin
+from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
 
 
 class AllPeople:
@@ -120,6 +120,9 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     @property
     def may_create_person(self):
         return self.is_an_admin
+
+    def may_update(self, viewer):
+        return viewer.may_update_person(self)
 
     def may_update_person(self, person):
         return self.is_an_admin or self == person
