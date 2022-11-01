@@ -1,15 +1,17 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.forms.category_forms import CategoryCreateForm
-from tracking.page_handlers.form_page_handler import FormPageHandler
+from tracking.page_handlers.form_handler import FormHandler
+from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandlerMixin
 from tracking.viewers.categories_model import Categories
 
 
-class CategoriesCreateHandler(FormPageHandler, PlatterHoldingHandlerMixin):
+class CategoriesCreateHandler(FormHandler, PageHandler, PlatterHoldingHandlerMixin):
     page_template = 'pages/form_page.j2'
 
     def __init__(self, viewer, place_id, thing_id, specification_id):
-        FormPageHandler.__init__(self)
+        PageHandler.__init__(self)
+        FormHandler.__init__(self)
         PlatterHoldingHandlerMixin.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
                                             specification_id=specification_id)
 

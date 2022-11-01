@@ -35,3 +35,4 @@ def create_category_from_form(form):
 
 def update_category_from_form(category, form):
     form.populate_obj(category)
+    return category

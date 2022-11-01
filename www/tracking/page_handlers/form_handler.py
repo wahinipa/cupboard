@@ -5,10 +5,9 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 from tracking.page_handlers.page_handler import PageHandler
 
 
-class FormPageHandler(PageHandler):
+class FormHandler:
 
     def __init__(self):
-        PageHandler.__init__(self)
         self.navigator = None
         self.form = None
 

@@ -14,7 +14,6 @@ class CategoriesViewHandler(PageHandler, PlatterHoldingHandlerMixin):
                                             specification_id=specification_id)
 
     def validated_rendering(self):
-        self.navigator = self.create_navigator()
         categories = Categories(place=self.place, thing=self.thing, specification=self.specification)
         display_attributes = {
             'description': True,

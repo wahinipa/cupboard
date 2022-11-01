@@ -1,13 +1,15 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.page_handlers.form_page_handler import FormPageHandler
+from tracking.page_handlers.form_handler import FormHandler
+from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandlerMixin
 
 
-class InventoryBaseHandler(FormPageHandler, PlatterHoldingHandlerMixin):
+class InventoryBaseHandler(FormHandler, PageHandler, PlatterHoldingHandlerMixin):
     page_template = 'pages/form_page.j2'
 
     def __init__(self, viewer, place_id, thing_id, specification_id):
-        FormPageHandler.__init__(self)
+        PageHandler.__init__(self)
+        FormHandler.__init__(self)
         PlatterHoldingHandlerMixin.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
                                               specification_id=specification_id)
 
