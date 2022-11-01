@@ -3,9 +3,9 @@ from flask import Blueprint
 from flask_login import current_user, login_required
 
 from tracking.page_handlers.category_choice_create_handler import CategoryChoiceCreateHandler
+from tracking.page_handlers.category_delete_handler import CategoryDeleteHandler
 from tracking.page_handlers.category_update_handler import CategoryUpdateHandler
 from tracking.page_handlers.category_view_handler import CategoryViewHandler
-from tracking.routing.category_delete_handler import CategoryDeleteHandler
 from tracking.routing.home_redirect import home_redirect
 
 category_bp = Blueprint(

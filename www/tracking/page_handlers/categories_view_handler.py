@@ -2,15 +2,15 @@
 
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.page_handlers.page_handler import PageHandler
-from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandlerMixin
+from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 from tracking.viewers.categories_model import Categories
 
 
-class CategoriesViewHandler(PageHandler, PlatterHoldingHandlerMixin):
+class CategoriesViewHandler(PageHandler, PlatterHoldingHandler):
 
     def __init__(self, viewer, place_id, thing_id, specification_id):
         PageHandler.__init__(self)
-        PlatterHoldingHandlerMixin.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
+        PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
                                             specification_id=specification_id)
 
     def validated_rendering(self):
