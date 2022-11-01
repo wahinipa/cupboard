@@ -47,7 +47,7 @@ def choice_view(choice_id, place_id, thing_id, specification_id):
         specification = platter.specification
         display_attributes = {
             'description': True,
-            'children': [choice, platter.thing, platter.specification],
+            'children': [choice, platter.thing, platter.thing_specification],
             'children_attributes': dual_view_childrens_attributes(),
         }
         place_url = navigator.url(platter.root, 'view')
