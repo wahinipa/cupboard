@@ -2,7 +2,6 @@
 from flask import request, redirect
 
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
-from tracking.page_handlers.page_handler import PageHandler
 
 
 class FormHandler:
@@ -18,7 +17,7 @@ class FormHandler:
             return redirect(self.cancel_redirect_url)
         elif self.form.validate_on_submit():
             target = self.submit_action()
-            return redirect(self.success_redirect_url(target))
+            return target and redirect(self.success_redirect_url(target))
         else:
             return self.render_template()
 

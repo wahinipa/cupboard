@@ -33,20 +33,8 @@ class Platter(RootHolder):
 
 
 def create_platter(root_id=None, place_id=None, thing_id=None, specification_id=None):
-    if root_id:
-        root = find_root_by_id(root_id)
-    else:
-        root = None
-    if place_id:
-        place = find_place_by_id(place_id)
-    else:
-        place = None
-    if thing_id:
-        thing = find_thing_by_id(thing_id)
-    else:
-        thing = None
-    if specification_id:
-        specification = find_specification_by_id(specification_id)
-    else:
-        specification = None
+    root = root_id and find_root_by_id(root_id)
+    place = place_id and find_place_by_id(place_id)
+    thing = thing_id and find_thing_by_id(thing_id)
+    specification = specification_id and find_specification_by_id(specification_id)
     return Platter(root=root, place=place, thing=thing, specification=specification)

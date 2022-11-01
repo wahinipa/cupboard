@@ -3,8 +3,4 @@
 class PageHandler:
 
     def render(self):
-        if self.objects_are_valid and self.viewer_has_permission:
-            return self.validated_rendering()
-        else:
-            return None
-
+        return self.objects_are_valid and self.viewer_has_permission and self.validated_rendering()
