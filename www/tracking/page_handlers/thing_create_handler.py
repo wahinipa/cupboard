@@ -16,7 +16,7 @@ class ThingCreateHandler(ThingBaseHandler, FormHandler):
 
     @property
     def form_title(self):
-        return f'Create New Kind of {self.place.name}'
+        return f'Create New Kind of {self.thing.name}'
 
     def submit_action(self):
         return self.thing.create_kind_of_thing(name=self.form.name.data, description=self.form.description.data)
