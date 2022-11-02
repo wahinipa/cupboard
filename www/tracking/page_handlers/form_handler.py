@@ -10,6 +10,9 @@ class FormHandler:
         self.navigator = None
         self.form = None
 
+    def extra_render_template_args(self):
+        return {}
+
     def validated_rendering(self):
         self.navigator = self.create_navigator()
         self.form = self.create_form()
@@ -22,7 +25,8 @@ class FormHandler:
             return self.render_template()
 
     def render_template(self):
-        return self.display_context.render_template(self.page_template, form=self.form, form_title=self.form_title)
+        return self.display_context.render_template(self.page_template, form=self.form, form_title=self.form_title,
+                                                    **self.extra_render_template_args())
 
     @property
     def display_context(self):

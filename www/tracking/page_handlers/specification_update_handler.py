@@ -13,7 +13,7 @@ from tracking.viewers.platter import Platter
 
 class SpecificationUpdateHandler(PageHandler, PlatterHoldingHandler, TargetHandler, FormHandler, TargetUpdateHandler):
     active_flavor = 'place'  # This lights up the 'Place' button in the top menu.
-    page_template = 'pages/form_page.j2'
+    page_template = 'pages/specification_update.j2'
 
     def __init__(self, viewer, category_id, place_id, thing_id, specification_id):
         PageHandler.__init__(self)
@@ -27,6 +27,11 @@ class SpecificationUpdateHandler(PageHandler, PlatterHoldingHandler, TargetHandl
 
     def create_form(self):
         return create_dynamic_specification_form(self.form_descriptor)
+
+    def extra_render_template_args(self):
+        return {
+            'form_descriptor': self.form_descriptor,
+        }
 
     def submit_action(self):
         new_specification = update_specification(self.category, self.specification, self.form)
