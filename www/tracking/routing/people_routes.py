@@ -1,16 +1,14 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, request, url_for
 from flask_admin.helpers import is_safe_url
 from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.commons.redirect_hackers import redirect_hackers
-from tracking.forms.people_forms import ChangePasswordForm, LoginForm, UserCreateForm, UserProfileForm, \
-    create_user_from_form
-from tracking.modelling.people_model import find_user_by_id, all_people_display_context, AllPeople
-from tracking.modelling.people_view_handler import PeopleViewHandler
+from tracking.forms.people_forms import ChangePasswordForm, LoginForm
+from tracking.modelling.people_model import all_people_display_context
+from tracking.page_handlers.people_view_handler import PeopleViewHandler
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
-from tracking.navigation.dual_navigator import DualNavigator
 from tracking.page_handlers.people_create_handler import PeopleCreateHandler
 from tracking.page_handlers.people_delete_handler import PeopleDeleteHandler
 from tracking.page_handlers.people_update_handler import PeopleUpdateHandler
