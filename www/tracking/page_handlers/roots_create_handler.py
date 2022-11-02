@@ -4,7 +4,7 @@ from tracking.navigation.dual_navigator import DualNavigator
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
-from tracking.viewers.roots_model import Roots
+from tracking.viewers.roots_viewer import RootsViewer
 
 
 class RootsCreateHandler(PageHandler, FormHandler, ViewerHoldingHandler):
@@ -17,7 +17,7 @@ class RootsCreateHandler(PageHandler, FormHandler, ViewerHoldingHandler):
 
     @property
     def cancel_redirect_url(self):
-        return self.navigator.url(Roots, 'view')
+        return self.navigator.url(RootsViewer, 'view')
 
     def create_form(self):
         return RootCreateForm()

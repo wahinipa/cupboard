@@ -4,7 +4,7 @@ from tracking.modelling.root_model import all_roots
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class Roots(CupboardDisplayContextMixin):
+class RootsViewer(CupboardDisplayContextMixin):
     flavor = 'home'
     label = 'Home'
     label_prefixes = {}

@@ -2,7 +2,7 @@
 from tracking.navigation.dual_navigator import DualNavigator
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
-from tracking.viewers.roots_model import Roots
+from tracking.viewers.roots_viewer import RootsViewer
 
 
 class RootsViewHandler(PageHandler, ViewerHoldingHandler):
@@ -14,7 +14,7 @@ class RootsViewHandler(PageHandler, ViewerHoldingHandler):
 
     def validated_rendering(self):
         navigator = DualNavigator()
-        roots = Roots()
+        roots = RootsViewer()
         display_attributes = {
             'description': True,
             'url': True,
