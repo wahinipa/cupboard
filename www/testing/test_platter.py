@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, \
     knights_of_the_round_table, queens_of_the_round_table
-from tracking.viewers.platter import Platter, create_platter
+from tracking.viewers.platter import Platter, PlatterById
 
 
 def _pycharm_please_keep_these_imports():
@@ -54,8 +54,8 @@ def test_bad_construction(app, queens_of_the_round_table, knights_of_the_round_t
 
 def test_create_platter(app, knights_of_the_round_table, rainbow_place, light_saber, muffin, roll):
     specification = knights_of_the_round_table.find_or_create_specification({muffin, roll})
-    platter = create_platter(root_id=knights_of_the_round_table.id, place_id=rainbow_place.id,
-                                 thing_id=light_saber.id, specification_id=specification.id)
+    platter = PlatterById(root_id=knights_of_the_round_table.id, place_id=rainbow_place.id,
+                          thing_id=light_saber.id, specification_id=specification.id)
     assert platter is not None
     assert platter.root == knights_of_the_round_table
     assert platter.place == rainbow_place

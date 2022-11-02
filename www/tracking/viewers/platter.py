@@ -32,9 +32,10 @@ class Platter(RootHolder):
         return current_quantity(self.place, self.thing, self.specification)
 
 
-def create_platter(root_id=None, place_id=None, thing_id=None, specification_id=None):
-    root = root_id and find_root_by_id(root_id)
-    place = place_id and find_place_by_id(place_id)
-    thing = thing_id and find_thing_by_id(thing_id)
-    specification = specification_id and find_specification_by_id(specification_id)
-    return Platter(root=root, place=place, thing=thing, specification=specification)
+class PlatterById(Platter):
+    def __init__(self, root_id=None, place_id=None, thing_id=None, specification_id=None):
+        root = root_id and find_root_by_id(root_id)
+        place = place_id and find_place_by_id(place_id)
+        thing = thing_id and find_thing_by_id(thing_id)
+        specification = specification_id and find_specification_by_id(specification_id)
+        Platter.__init__(self, root=root, place=place, thing=thing, specification=specification)
