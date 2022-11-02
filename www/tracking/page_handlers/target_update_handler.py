@@ -3,18 +3,17 @@
 class TargetUpdateHandler:
     @property
     def cancel_redirect_url(self):
-        return self.redirect_url
+        return self.target_update_redirect()
 
     @property
     def form_title(self):
         return f'Update {self.target.name}'
 
-    @property
-    def redirect_url(self):
-        return self.navigator.url(self.target, 'view')
-
     def success_redirect_url(self, target):
-        return self.redirect_url
+        return self.target_update_redirect()
+
+    def target_update_redirect(self):
+        return self.navigator.url(self.target, 'view')
 
     @property
     def viewer_has_permission(self):

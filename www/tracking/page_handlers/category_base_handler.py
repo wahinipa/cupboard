@@ -13,7 +13,9 @@ class CategoryBaseHandler(PageHandler, PlatterHoldingHandler, TargetHandler):
         PageHandler.__init__(self)
         PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
                                        specification_id=specification_id)
-        TargetHandler.__init__(self, find_category_by_id(category_id))
+        category = find_category_by_id(category_id)
+        target = category and category.root == self.root and category
+        TargetHandler.__init__(self, target)
 
     @property
     def category(self):
