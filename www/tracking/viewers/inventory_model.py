@@ -2,7 +2,7 @@
 from tracking.modelling.base_models import Descriptor
 from tracking.modelling.positioning_mixin import filtered_positionings
 from tracking.modelling.specification_model import describe_choices
-from tracking.navigation.root_holder import RootHolder
+from tracking.navigation.platter_base import PlatterBase
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
@@ -12,7 +12,7 @@ class InventoryDescriptor(Descriptor):
         self.quantity = quantity
 
 
-class Inventory(RootHolder, CupboardDisplayContextMixin):
+class Inventory(PlatterBase, CupboardDisplayContextMixin):
     flavor = "inventory"
     singular_label = 'Inventory'
     # 'ing' suffix makes these required tasks that show without needing a 'Show Actions' click

@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from testing.fixtures import app, rainbow_place, wild_place, light_saber, muffin, roll, pastry, \
     knights_of_the_round_table, queens_of_the_round_table
-from tracking.viewers.platter import Platter, PlatterById
+from tracking.navigation.platter import Platter, PlatterById
 
 
 def _pycharm_please_keep_these_imports():

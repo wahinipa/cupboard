@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
 from tracking.viewers.categories_model import Categories
-from tracking.viewers.platter import PlatterById
+from tracking.navigation.platter import PlatterById
 
 
 class PlatterHoldingHandler(ViewerHoldingHandler):

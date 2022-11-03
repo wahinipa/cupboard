@@ -1,10 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.cardistry_models import bread_crumbs
-from tracking.navigation.root_holder import RootHolder
+from tracking.navigation.platter_base import PlatterBase
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class Categories(RootHolder, CupboardDisplayContextMixin):
+class Categories(PlatterBase, CupboardDisplayContextMixin):
     flavor = 'categories'
     label = 'Categories'
     label_prefixes = {}

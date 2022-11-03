@@ -6,10 +6,10 @@ from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.viewers.thing_specification import ThingSpecification
 from tracking.navigation.dual_navigator import DualNavigator
-from tracking.navigation.root_holder import RootHolder
+from tracking.navigation.platter_base import PlatterBase
 
 
-class Platter(RootHolder):
+class Platter(PlatterBase):
 
     @property
     def is_valid(self):

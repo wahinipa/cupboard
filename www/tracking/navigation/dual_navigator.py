@@ -9,10 +9,10 @@ from tracking.modelling.place_model import Place
 from tracking.modelling.root_model import Root
 from tracking.modelling.thing_model import Thing
 from tracking.navigation.navigator import navigational_mark
-from tracking.navigation.root_holder import RootHolder
+from tracking.navigation.platter_base import PlatterBase
 
 
-class DualNavigator(RootHolder):
+class DualNavigator(PlatterBase):
     def __init__(self, root=None, place=None, thing=None, specification=None):
         super().__init__(root=root, place=place, thing=thing, specification=specification)
         from tracking.navigation.cupboard_navigation import create_cupboard_navigator

@@ -8,7 +8,7 @@ from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 from tracking.page_handlers.target_handler import TargetHandler
 from tracking.page_handlers.target_update_handler import TargetUpdateHandler
-from tracking.viewers.platter import Platter
+from tracking.navigation.platter import Platter
 
 
 class SpecificationUpdateHandler(PageHandler, PlatterHoldingHandler, TargetHandler, FormHandler, TargetUpdateHandler):

@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 
-class RootHolder:
+class PlatterBase:
     def __init__(self, root=None, place=None, thing=None, specification=None):
         if root is None:
             if place:
