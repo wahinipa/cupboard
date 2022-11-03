@@ -7,14 +7,12 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 class FormHandler:
 
     def __init__(self):
-        self.navigator = None
         self.form = None
 
     def extra_render_template_args(self):
         return {}
 
     def validated_rendering(self):
-        self.navigator = self.create_navigator()
         self.form = self.create_form()
         if request.method == 'POST' and self.form.cancel_button.data:
             return redirect(self.cancel_redirect_url)

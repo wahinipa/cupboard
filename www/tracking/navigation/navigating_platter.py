@@ -12,7 +12,7 @@ from tracking.viewers.categories_model import Categories
 from tracking.viewers.category_specification import CategorySpecification
 
 
-class DualNavigator(PlatterBase):
+class NavigatingPlatter(PlatterBase):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         from tracking.navigation.cupboard_navigation import create_cupboard_navigator

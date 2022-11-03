@@ -1,5 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.navigation.dual_navigator import DualNavigator
+from tracking.navigation.navigating_platter import NavigatingPlatter
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
 from tracking.viewers.roots_viewer import RootsViewer
@@ -13,7 +13,7 @@ class RootsViewHandler(PageHandler, ViewerHoldingHandler):
         ViewerHoldingHandler.__init__(self, viewer)
 
     def validated_rendering(self):
-        navigator = DualNavigator()
+        navigator = NavigatingPlatter()
         roots = RootsViewer()
         display_attributes = {
             'description': True,

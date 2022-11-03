@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form
-from tracking.navigation.dual_navigator import DualNavigator
+from tracking.navigation.navigating_platter import NavigatingPlatter
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
@@ -14,6 +14,7 @@ class RootsCreateHandler(PageHandler, FormHandler, ViewerHoldingHandler):
 
     def __init__(self, viewer):
         ViewerHoldingHandler.__init__(self, viewer)
+        self.navigator = NavigatingPlatter()
 
     @property
     def cancel_redirect_url(self):
@@ -21,9 +22,6 @@ class RootsCreateHandler(PageHandler, FormHandler, ViewerHoldingHandler):
 
     def create_form(self):
         return RootCreateForm()
-
-    def create_navigator(self):
-        return DualNavigator()
 
     def submit_action(self):
         return create_root_from_form(self.form)

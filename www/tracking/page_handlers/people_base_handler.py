@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.people_model import find_user_by_id
-from tracking.navigation.dual_navigator import DualNavigator
+from tracking.navigation.navigating_platter import NavigatingPlatter
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
 
@@ -20,7 +20,4 @@ class PeopleBaseHandler(PageHandler, ViewerHoldingHandler):
             self.person = None
             self.objects_are_valid = True
         self.target = self.person
-        self.navigator = self.create_navigator()
-
-    def create_navigator(self):
-        return DualNavigator()
+        self.navigator = NavigatingPlatter()

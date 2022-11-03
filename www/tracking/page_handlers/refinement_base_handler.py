@@ -23,7 +23,6 @@ class RefinementBaseHandler(PageHandler, PlatterHoldingHandler):
         return self.category.may_update(self.viewer)
 
     def validated_rendering(self):
-        navigator = self.create_navigator()
-        redirect_url = navigator.url(self.category, 'view')
+        redirect_url = self.navigator.url(self.category, 'view')
         self.change_refinement()
         return redirect(redirect_url)

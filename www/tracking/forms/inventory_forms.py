@@ -22,7 +22,9 @@ def create_arrival_form(platter):
 def add_quantity_from_form(platter, form):
     quantity = form.quantity.data
     if quantity > 0:
-        add_quantity_of_things(platter.place, platter.thing, platter.specification, quantity)
+        return add_quantity_of_things(platter.place, platter.thing, platter.specification, quantity)
+    else:
+        return 0
 
 
 class InventoryDepartingForm(FlaskForm):

@@ -36,7 +36,6 @@ class SpecificationUpdateHandler(PageHandler, PlatterHoldingHandler, TargetHandl
         new_specification = update_specification(self.category, self.specification, self.form)
         self.platter = Platter(root=self.root, place=self.place, thing=self.thing,
                                specification=new_specification)
-        self.navigator = self.create_navigator()
         return self.root
 
     def target_update_redirect(self):
