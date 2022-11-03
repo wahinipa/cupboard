@@ -1,20 +1,18 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.forms.root_forms import RootCreateForm, create_root_from_form
-from tracking.navigation.navigating_platter import NavigatingPlatter
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.page_handler import PageHandler
-from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
+from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 from tracking.viewers.roots_viewer import RootsViewer
 
 
-class RootsCreateHandler(PageHandler, FormHandler, ViewerHoldingHandler):
+class RootsCreateHandler(PageHandler, FormHandler, PlatterHoldingHandler):
     page_template = "pages/form_page.j2"
     objects_are_valid = True
     form_title = "Create New Root"
 
     def __init__(self, viewer):
-        ViewerHoldingHandler.__init__(self, viewer)
-        self.navigator = NavigatingPlatter()
+        PlatterHoldingHandler.__init__(self, viewer)
 
     @property
     def cancel_redirect_url(self):
