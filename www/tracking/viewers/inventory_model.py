@@ -1,9 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import Descriptor
 from tracking.modelling.positioning_mixin import filtered_positionings
 from tracking.modelling.specification_model import describe_choices
 from tracking.navigation.platter_base import PlatterBase
-from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class InventoryDescriptor(Descriptor):
@@ -20,7 +20,8 @@ class Inventory(PlatterBase, CupboardDisplayContextMixin):
     label_prefixes = {}
 
     def __init__(self, platter):
-        super().__init__(place=platter.place, thing=platter.thing, specification=platter.specification)
+        super().__init__(activity=platter.activity, place=platter.place, thing=platter.thing,
+                         specification=platter.specification)
         self.refinements = self.thing.refinements
         self.where_is_what = {self.place: self.specified_positionings(self.place.direct_positionings)}
         self.all_positioning = self.place.direct_positionings
@@ -39,7 +40,8 @@ class Inventory(PlatterBase, CupboardDisplayContextMixin):
 
     @property
     def identities(self):
-        return {'place_id': self.place.id, 'thing_id': self.thing.id, 'specification_id': self.specification.id}
+        return {'activity': self.activity, 'place_id': self.place.id, 'thing_id': self.thing.id,
+                'specification_id': self.specification.id}
 
     def may_perform_task(self, viewer, task):
         # TODO: actually check on viewer

@@ -13,7 +13,7 @@ class Categories(PlatterBase, CupboardDisplayContextMixin):
 
     @property
     def identities(self):
-        return {'place_id': self.place.id, 'thing_id': self.thing_id.id, 'specification_id': self.specification_id}
+        return {'activity': self.activity, 'place_id': self.place.id, 'thing_id': self.thing_id.id, 'specification_id': self.specification_id}
 
     @property
     def name(self):
