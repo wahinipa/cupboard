@@ -1,10 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from flask import Blueprint
-from flask_login import login_required, current_user
+from flask_login import current_user, login_required
 
 from tracking.page_handlers.specification_update_handler import SpecificationUpdateHandler
-from tracking.routing.home_redirect import home_redirect
 
 specification_bp = Blueprint(
     'specification_bp', __name__,
@@ -17,5 +16,4 @@ specification_bp = Blueprint(
                         methods=['GET', 'POST'])
 @login_required
 def specification_update(category_id, place_id, thing_id, specification_id):
-    handler = SpecificationUpdateHandler(current_user, category_id, place_id, thing_id, specification_id)
-    return handler.render() or home_redirect()
+    return SpecificationUpdateHandler(current_user, category_id, place_id, thing_id, specification_id).handle()

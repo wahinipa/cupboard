@@ -5,15 +5,15 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from tracking import database
 from tracking.commons.redirect_hackers import redirect_hackers
+from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm
 from tracking.modelling.people_model import all_people_display_context
-from tracking.page_handlers.people_view_handler import PeopleViewHandler
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.page_handlers.people_create_handler import PeopleCreateHandler
 from tracking.page_handlers.people_delete_handler import PeopleDeleteHandler
 from tracking.page_handlers.people_update_handler import PeopleUpdateHandler
+from tracking.page_handlers.people_view_handler import PeopleViewHandler
 from tracking.routing.home_redirect import home_redirect
-from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 people_bp = Blueprint(
     'people_bp', __name__,
@@ -25,15 +25,13 @@ people_bp = Blueprint(
 @people_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def people_create():
-    handler = PeopleCreateHandler(current_user)
-    return handler.render() or home_redirect()
+    return PeopleCreateHandler(current_user).handle()
 
 
 @people_bp.route('/delete/<int:user_id>')
 @login_required
 def people_delete(user_id):
-    handler = PeopleDeleteHandler(current_user, user_id=user_id)
-    return handler.render() or home_redirect()
+    return PeopleDeleteHandler(current_user, user_id=user_id).handle()
 
 
 @people_bp.route('/login', methods=['GET', 'POST'])
@@ -62,8 +60,7 @@ def login():
 @people_bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def people_update(user_id):
-    handler = PeopleUpdateHandler(current_user, user_id=user_id)
-    return handler.render() or home_redirect()
+    return PeopleUpdateHandler(current_user, user_id=user_id).handle()
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -95,5 +92,4 @@ def people_list():
 @people_bp.route('/view/<int:user_id>')
 @login_required
 def people_view(user_id):
-    handler = PeopleViewHandler(current_user, user_id=user_id)
-    return handler.render() or home_redirect()
+    return PeopleViewHandler(current_user, user_id=user_id).handle()
