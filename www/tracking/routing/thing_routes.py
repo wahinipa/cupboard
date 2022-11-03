@@ -16,20 +16,17 @@ thing_bp = Blueprint(
 
 @thing_bp.route('/create/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
-def thing_create(place_id, thing_id, specification_id):
-    return ThingCreateHandler(current_user, place_id=place_id, thing_id=thing_id,
-                              specification_id=specification_id).handle()
+def thing_create(**kwargs):
+    return ThingCreateHandler(current_user, **kwargs).handle()
 
 
 @thing_bp.route('/delete/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def thing_delete(place_id, thing_id, specification_id):
-    return ThingDeleteHandler(current_user, place_id=place_id, thing_id=thing_id,
-                              specification_id=specification_id).handle()
+def thing_delete(**kwargs):
+    return ThingDeleteHandler(current_user, **kwargs).handle()
 
 
 @thing_bp.route('/update/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['GET', 'POST'])
 @login_required
-def thing_update(place_id, thing_id, specification_id):
-    return ThingUpdateHandler(current_user, place_id=place_id, thing_id=thing_id,
-                              specification_id=specification_id).handle()
+def thing_update(**kwargs):
+    return ThingUpdateHandler(current_user, **kwargs).handle()

@@ -7,8 +7,7 @@ from tracking.page_handlers.target_handler import TargetHandler
 class PlaceBaseHandler(PageHandler, PlatterHoldingHandler, TargetHandler):
     active_flavor = 'place'  # This lights up the 'Place' button in the top menu.
 
-    def __init__(self, viewer, place_id, thing_id, specification_id):
+    def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)
-        PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
-                                       specification_id=specification_id)
+        PlatterHoldingHandler.__init__(self, viewer, **kwargs)
         TargetHandler.__init__(self, self.place)  # Depends on PlatterHoldingHandler to have created self.place

@@ -8,10 +8,9 @@ from tracking.viewers.categories_model import Categories
 
 class CategoriesViewHandler(PageHandler, PlatterHoldingHandler):
 
-    def __init__(self, viewer, place_id, thing_id, specification_id):
+    def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)
-        PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
-                                            specification_id=specification_id)
+        PlatterHoldingHandler.__init__(self, viewer, **kwargs)
 
     def validated_rendering(self):
         categories = Categories(place=self.place, thing=self.thing, specification=self.specification)

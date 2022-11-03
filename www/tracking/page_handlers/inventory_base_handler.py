@@ -7,11 +7,10 @@ from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 class InventoryBaseHandler(FormHandler, PageHandler, PlatterHoldingHandler):
     page_template = 'pages/form_page.j2'
 
-    def __init__(self, viewer, place_id, thing_id, specification_id):
+    def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)
         FormHandler.__init__(self)
-        PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, thing_id=thing_id,
-                                       specification_id=specification_id)
+        PlatterHoldingHandler.__init__(self, viewer, **kwargs)
 
     @property
     def cancel_redirect_url(self):

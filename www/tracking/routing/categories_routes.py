@@ -14,11 +14,11 @@ categories_bp = Blueprint(
 
 @categories_bp.route('/create/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
-def categories_create(place_id, thing_id, specification_id):
-    return CategoriesCreateHandler(current_user, place_id, thing_id, specification_id).handle()
+def categories_create(**kwargs):
+    return CategoriesCreateHandler(current_user, **kwargs).handle()
 
 
 @categories_bp.route('/view/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def categories_view(place_id, thing_id, specification_id):
-    return CategoriesViewHandler(current_user, place_id, thing_id, specification_id).handle()
+def categories_view(**kwargs):
+    return CategoriesViewHandler(current_user, **kwargs).handle()

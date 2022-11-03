@@ -15,5 +15,5 @@ specification_bp = Blueprint(
 @specification_bp.route('/update/<int:category_id>/<int:place_id>/<int:thing_id>/<int:specification_id>',
                         methods=['GET', 'POST'])
 @login_required
-def specification_update(category_id, place_id, thing_id, specification_id):
-    return SpecificationUpdateHandler(current_user, category_id, place_id, thing_id, specification_id).handle()
+def specification_update(category_id, **kwargs):
+    return SpecificationUpdateHandler(current_user, category_id, **kwargs).handle()

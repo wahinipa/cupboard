@@ -15,17 +15,17 @@ root_bp = Blueprint(
 
 @root_bp.route('/delete/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def root_delete(place_id, thing_id, specification_id):
-    return RootDeleteHandler(current_user, place_id, thing_id, specification_id).handle()
+def root_delete(**kwargs):
+    return RootDeleteHandler(current_user, **kwargs).handle()
 
 
 @root_bp.route('/update/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['GET', 'POST'])
 @login_required
-def root_update(place_id, thing_id, specification_id):
-    return RootUpdateHandler(current_user, place_id, thing_id, specification_id).handle()
+def root_update(**kwargs):
+    return RootUpdateHandler(current_user, **kwargs).handle()
 
 
 @root_bp.route('/view/<int:place_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def root_view(place_id, thing_id, specification_id):
-    return RootViewHandler(current_user, place_id, thing_id, specification_id).handle()
+def root_view(**kwargs):
+    return RootViewHandler(current_user, **kwargs).handle()

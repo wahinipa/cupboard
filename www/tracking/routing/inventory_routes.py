@@ -16,17 +16,17 @@ inventory_bp = Blueprint(
 
 @inventory_bp.route('/arriving/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
-def inventory_arriving(place_id, thing_id, specification_id):
-    return InventoryArrivalHandler(current_user, place_id, thing_id, specification_id).handle()
+def inventory_arriving(**kwargs):
+    return InventoryArrivalHandler(current_user, **kwargs).handle()
 
 
 @inventory_bp.route('/departing/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
-def inventory_departing(thing_id, place_id, specification_id):
-    return InventoryDepartureHandler(current_user, place_id, thing_id, specification_id).handle()
+def inventory_departing(**kwargs):
+    return InventoryDepartureHandler(current_user, **kwargs).handle()
 
 
 @inventory_bp.route('/moving/<int:place_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
-def inventory_moving(place_id, thing_id, specification_id):
+def inventory_moving(**kwargs):
     return home_redirect()
