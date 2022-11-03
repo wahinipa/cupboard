@@ -2,17 +2,17 @@
 from tracking.forms.category_forms import CategoryCreateForm
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.page_handler import PageHandler
-from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
+from tracking.page_handlers.active_platter_holding_handler import ActivePlatterHoldingHandler
 from tracking.viewers.categories_model import Categories
 
 
-class CategoriesCreateHandler(FormHandler, PageHandler, PlatterHoldingHandler):
+class CategoriesCreateHandler(FormHandler, PageHandler, ActivePlatterHoldingHandler):
     page_template = 'pages/form_page.j2'
 
     def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)
         FormHandler.__init__(self)
-        PlatterHoldingHandler.__init__(self, viewer, **kwargs)
+        ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
 
     @property
     def cancel_redirect_url(self):

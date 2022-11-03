@@ -4,7 +4,7 @@ from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
 from tracking.viewers.categories_model import Categories
 
 
-class PlatterHoldingHandler(ViewerHoldingHandler):
+class ActivePlatterHoldingHandler(ViewerHoldingHandler):
 
     def __init__(self, viewer, **kwargs):
         ViewerHoldingHandler.__init__(self, viewer)

@@ -3,14 +3,14 @@ from flask import redirect
 
 from tracking.modelling.category_model import find_category_by_id
 from tracking.page_handlers.page_handler import PageHandler
-from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
+from tracking.page_handlers.active_platter_holding_handler import ActivePlatterHoldingHandler
 
 
-class RefinementBaseHandler(PageHandler, PlatterHoldingHandler):
+class RefinementBaseHandler(PageHandler, ActivePlatterHoldingHandler):
 
     def __init__(self, viewer, category_id=None, **kwargs):
         PageHandler.__init__(self)
-        PlatterHoldingHandler.__init__(self, viewer, **kwargs)
+        ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
         category = find_category_by_id(category_id)
         self.category = category and category.root == self.root and category
 
