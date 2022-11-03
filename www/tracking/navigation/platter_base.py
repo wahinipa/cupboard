@@ -2,7 +2,7 @@
 
 
 class PlatterBase:
-    def __init__(self, root=None, place=None, thing=None, specification=None):
+    def __init__(self, activity='explore', root=None, place=None, thing=None, specification=None):
         if root is None:
             if place:
                 root = place.root
@@ -33,6 +33,7 @@ class PlatterBase:
         else:
             self.specification_id = None
 
+        self.activity = activity
         self.root = root
         self.place = place
         self.thing = thing
