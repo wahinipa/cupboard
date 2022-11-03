@@ -6,10 +6,9 @@ from tracking.navigation.platter import PlatterById
 
 class PlatterHoldingHandler(ViewerHoldingHandler):
 
-    def __init__(self, viewer, root_id=None, place_id=None, thing_id=None, specification_id=None):
+    def __init__(self, viewer, **kwargs):
         ViewerHoldingHandler.__init__(self, viewer)
-        self.platter = PlatterById(root_id=root_id, place_id=place_id, thing_id=thing_id,
-                                   specification_id=specification_id)
+        self.platter = PlatterById(**kwargs)
         self.navigator = self.create_navigator()
 
     @property

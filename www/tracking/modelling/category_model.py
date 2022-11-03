@@ -75,5 +75,5 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
         return find_or_create_choice(self, name, description)
 
 
-def find_category_by_id(id):
-    return Category.query.filter(Category.id == id).first()
+def find_category_by_id(category_id):
+    return category_id and Category.query.filter(Category.id == category_id).first()

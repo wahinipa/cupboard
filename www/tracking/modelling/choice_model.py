@@ -67,4 +67,4 @@ def find_choice(category, name):
 
 
 def find_choice_by_id(choice_id):
-    return Choice.query.filter(Choice.id == choice_id).first()
+    return choice_id and Choice.query.filter(Choice.id == choice_id).first()

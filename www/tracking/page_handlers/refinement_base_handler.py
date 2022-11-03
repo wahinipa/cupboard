@@ -8,7 +8,7 @@ from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 
 class RefinementBaseHandler(PageHandler, PlatterHoldingHandler):
 
-    def __init__(self, viewer, category_id, **kwargs):
+    def __init__(self, viewer, category_id=None, **kwargs):
         PageHandler.__init__(self)
         PlatterHoldingHandler.__init__(self, viewer, **kwargs)
         category = find_category_by_id(category_id)

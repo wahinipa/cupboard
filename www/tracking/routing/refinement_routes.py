@@ -16,8 +16,8 @@ refinement_bp = Blueprint(
 @refinement_bp.route('/add/<int:category_id>/<int:place_id>/<int:thing_id>/<int:specification_id>',
                      methods=['POST', 'GET'])
 @login_required
-def refinement_add(category_id, **kwargs):
-    return RefinementAddHandler(current_user, category_id, **kwargs).handle()
+def refinement_add(**kwargs):
+    return RefinementAddHandler(current_user, **kwargs).handle()
 
 
 @refinement_bp.route('/remove/<int:category_id>/<int:place_id>/<int:thing_id>/<int:specification_id>',
