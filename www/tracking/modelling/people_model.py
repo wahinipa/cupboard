@@ -11,6 +11,7 @@ from tracking import database
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin
 from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
+from tracking.modelling.linkage_model import Linkage
 
 
 class AllPeople:
@@ -37,6 +38,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     date_joined = database.Column(database.DateTime(), default=datetime.now())
     about_me = database.Column(database.Text(), nullable=False, server_default=u'')
 
+    linkages = database.relationship('Linkage', backref='person', lazy=True, cascade='all, delete')
     root_assignments = database.relationship('RootAssignment', backref='person', lazy=True, cascade='all, delete')
     place_assignments = database.relationship('PlaceAssignment', backref='person', lazy=True, cascade='all, delete')
     universal_assignments = database.relationship('UniversalAssignment', backref='person', lazy=True,
@@ -54,6 +56,27 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     def bread_crumbs(self, navigator):
         return bread_crumbs(navigator, [AllPeople, self], target=self)
+
+    def link_to_root(self, root):
+        if not self.is_linked(root):
+            link = Linkage(person=self, root=root)
+            database.session.add(link)
+            database.session.commit()
+
+    def unlink_from_root(self, root):
+        commit = False
+        for link in self.linkages:
+            if link.root == root:
+                database.session.delete(link)
+                commit = True
+        if commit:
+            database.session.commit()
+
+    def is_linked(self, root):
+        for link in self.linkages:
+            if link.root == root:
+                return True
+        return False
 
     def may_perform_task(self, viewer, task):
         if task == 'view':
@@ -227,9 +250,12 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
         return url_for('people_bp.people_delete', user_id=self.id)
 
     @property
-    def viewable_categories(self):
-        from tracking.modelling.category_model import all_categories
-        return [category.viewable_attributes(self) for category in all_categories() if category.user_may_view(self)]
+    def roots(self):
+        if self.is_the_super_admin:
+            from tracking.modelling.root_model import all_roots
+            return all_roots()
+        else:
+            return [link.root for link in self.linkages]
 
 
 @event.listens_for(User.password, 'set', retval=True)
@@ -256,21 +282,26 @@ def find_user_by_id(user_id):
 
 
 def create_test_users():
-    find_or_create_user('Curly', 'Stooge', 'curly', 'aaaaaa', is_admin=False, about_me='Bald headed stooge')
-    find_or_create_user('Moe', 'Stooge', 'moe', 'aaaaaa', is_admin=True, about_me="top stooge")
-    find_or_create_user('Larry', 'Stooge', 'larry', 'aaaaaa', is_admin=False, about_me="One\nOf\nThe\nThree Stooges")
+    return [
+        find_or_create_user('Curly', 'Stooge', 'curly', 'aaaaaa', is_admin=False, about_me='Bald headed stooge'),
+        find_or_create_user('Moe', 'Stooge', 'moe', 'aaaaaa', is_admin=True, about_me="top stooge"),
+        find_or_create_user('Larry', 'Stooge', 'larry', 'aaaaaa', is_admin=False,
+                            about_me="One\nOf\nThe\nThree Stooges"),
+    ]
 
 
 def create_initial_users():
     """ Create users """
-    create_initial_admin()
+    created_users = [create_initial_admin()]
 
     if environ.get('TEST_USERS') or environ.get('ADD_TEST_DATA'):
-        create_test_users()
+        created_users += create_test_users()
+
+    return created_users
 
 
 def create_initial_admin():
-    find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
+    return find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
 
 
 def find_or_create_user(first_name, last_name, username, password, is_admin=False, date_joined=None, about_me=''):

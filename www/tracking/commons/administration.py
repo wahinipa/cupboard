@@ -38,13 +38,13 @@ def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
 
     from tracking.modelling.people_model import create_initial_users
-    create_initial_users()
+    initial_users = create_initial_users()
 
     # from tracking.roles.role_models import find_or_create_standard_roles
     # find_or_create_standard_roles()
 
     if environ.get('ADD_TEST_DATA'):
-        create_test_data(database)
+        create_test_data(database, initial_users)
 
     database.session.commit()
 
@@ -55,6 +55,7 @@ def add_flask_admin(application, database):
     # Using local imports helps break circularity of dependencies
     from tracking.modelling.people_model import User
     from tracking.modelling.category_model import Category
+    from tracking.modelling.linkage_model import Linkage
     from tracking.modelling.place_model import Place
     from tracking.modelling.thing_model import Thing
     from tracking.modelling.choice_model import Choice
@@ -72,6 +73,7 @@ def add_flask_admin(application, database):
     admin.add_view(AdminModelView(Refinement, database.session))
     admin.add_view(AdminModelView(Specification, database.session))
     admin.add_view(AdminModelView(User, database.session))
+    admin.add_view(AdminModelView(Linkage, database.session))
     admin.add_view(AdminModelView(UniversalAssignment, database.session))
     admin.add_view(AdminModelView(RootAssignment, database.session))
     admin.add_view(AdminModelView(PlaceAssignment, database.session))

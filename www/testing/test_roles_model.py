@@ -9,7 +9,7 @@ from tracking.modelling.role_models import assign_root_role, assign_place_role, 
 
 def _pycharm_please_keep_these_imports():
     return app, dunce, buffoon, bossy, dunce, buffoon, bossy, curly_stooge_user, moe_stooge_user, larry_stooge_user, \
-           knights_of_the_round_table, rainbow_place, wild_place, knights_of_the_round_table, queens_of_the_round_table
+           knights_of_the_round_table, rainbow_place, wild_place, queens_of_the_round_table
 
 
 def test_role_creation(dunce, buffoon, bossy):

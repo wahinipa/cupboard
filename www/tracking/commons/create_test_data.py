@@ -3,13 +3,19 @@ from tracking.modelling.postioning_model import add_quantity_of_things
 from tracking.modelling.refinement_model import add_refinement
 
 
-def create_test_data(database):
+def create_test_data(database, initial_users):
     from tracking.modelling.root_model import create_root
 
     # Roots
     our_test_group = create_root(name="Our Test Group", description="For testing out the code.")
     another_test_group = create_root(name="Yet Another Test Group",
                                      description="For really, really testing out the code.\nLike, a lot.")
+
+    # Linkages
+    for user in initial_users:
+        user.link_to_root(our_test_group)
+    if len(initial_users) > 2:
+        initial_users[2].link_to_root(another_test_group)
 
     # Places
     metropolis = our_test_group.place.create_kind_of_place(name="Metropolis", description="Home of the Daily Planet")

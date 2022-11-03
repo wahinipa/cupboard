@@ -2,9 +2,9 @@
 from datetime import datetime
 
 from tracking import database
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import UniqueNamedBaseModel
 from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
-from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
@@ -17,6 +17,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
 
+    linkages = database.relationship('Linkage', backref='root', lazy=True, cascade='all, delete')
     categories = database.relationship('Category', backref='root', lazy=True, cascade='all, delete')
     assignments = database.relationship('RootAssignment', backref='root', lazy=True, cascade='all, delete')
     specifications = database.relationship('Specification', backref='root', lazy=True, cascade='all, delete')
@@ -34,6 +35,9 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     @property
     def generic_specification(self):
         return self.find_or_create_specification()
+
+    def is_linked(self, person):
+        return person.is_linked(self)
 
     @property
     def sorted_categories(self):
@@ -104,7 +108,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
             return False
 
     def may_be_observed(self, viewer):
-        return True
+        return viewer.is_the_super_admin or viewer.is_linked(self)
 
     def may_delete(self, viewer):
         return viewer.may_delete_root
