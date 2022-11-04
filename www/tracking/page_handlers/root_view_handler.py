@@ -3,6 +3,7 @@ from tracking.contexts.card_display_attributes import dual_view_childrens_attrib
 from tracking.page_handlers.root_base_handler import RootBaseHandler
 from tracking.page_handlers.view_handler import ViewHandler
 from tracking.viewers.inventory_viewer import InventoryViewer
+from tracking.viewers.model_viewer import ModelViewer
 
 
 class RootViewHandler(RootBaseHandler, ViewHandler):
@@ -11,7 +12,7 @@ class RootViewHandler(RootBaseHandler, ViewHandler):
 
     @property
     def display_context_maker(self):
-        return self.root
+        return ModelViewer(self.root)
 
     @property
     def display_attributes(self):

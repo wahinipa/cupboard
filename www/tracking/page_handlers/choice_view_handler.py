@@ -4,6 +4,7 @@
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.page_handlers.choice_base_handler import ChoiceBaseHandler
 from tracking.page_handlers.view_handler import ViewHandler
+from tracking.viewers.model_viewer import ModelViewer
 
 
 class ChoiceViewHandler(ChoiceBaseHandler, ViewHandler):
@@ -11,7 +12,7 @@ class ChoiceViewHandler(ChoiceBaseHandler, ViewHandler):
 
     @property
     def display_context_maker(self):
-        return self.thing_specification
+        return ModelViewer(self.thing_specification)
 
     @property
     def display_attributes(self):

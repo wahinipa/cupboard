@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.page_handlers.people_base_handler import PeopleBaseHandler
 from tracking.page_handlers.view_handler import ViewHandler
+from tracking.viewers.model_viewer import ModelViewer
 
 
 class PeopleViewHandler(PeopleBaseHandler, ViewHandler):
@@ -8,7 +9,7 @@ class PeopleViewHandler(PeopleBaseHandler, ViewHandler):
 
     @property
     def display_context_maker(self):
-        return self.person
+        return ModelViewer(self.person)
 
     @property
     def display_attributes(self):

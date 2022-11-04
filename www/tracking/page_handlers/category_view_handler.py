@@ -4,6 +4,7 @@
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
 from tracking.page_handlers.category_base_handler import CategoryBaseHandler
 from tracking.page_handlers.view_handler import ViewHandler
+from tracking.viewers.model_viewer import ModelViewer
 
 
 class CategoryViewHandler(CategoryBaseHandler, ViewHandler):
@@ -11,7 +12,7 @@ class CategoryViewHandler(CategoryBaseHandler, ViewHandler):
 
     @property
     def display_context_maker(self):
-        return self.root
+        return ModelViewer(self.root)
 
     @property
     def display_attributes(self):
