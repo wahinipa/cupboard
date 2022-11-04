@@ -12,7 +12,7 @@ from tracking.navigation.platter import Platter
 
 
 class SpecificationUpdateHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler, FormHandler, TargetUpdateHandler):
-    active_flavor = 'place'  # This lights up the 'Place' button in the top menu.
+    current_activity = 'place'  # This lights up the 'Place' button in the top menu.
     page_template = 'pages/specification_update.j2'
 
     def __init__(self, viewer, category_id=None, **kwargs):

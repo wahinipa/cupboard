@@ -32,7 +32,7 @@ def create_test_data(database, initial_users):
     backpacks = containers.create_kind_of_thing("Backpacks", "Containers that\nStrap to your back.")
     gym_bags = containers.create_kind_of_thing("Gym Bags", description="")
 
-    # Categories
+    # CategoriesViewer
     seasons = our_test_group.create_category("Season", "Whether for summer or winter or either.")
     sexes = our_test_group.create_category("Sex", "Whether for girl or boy or either.")
     ages = our_test_group.create_category("Age Appropriate", "Whether for infant, toddler, child, adult, or any.")

@@ -5,7 +5,7 @@ from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 
 
 class PeopleBaseHandler(PageHandler, PlatterHoldingHandler):
-    active_flavor = 'people'  # This lights up the 'People' button in the top menu.
+    current_activity = 'people'  # This lights up the 'People' button in the top menu.
     category_list_url = None
     place_url = None
 

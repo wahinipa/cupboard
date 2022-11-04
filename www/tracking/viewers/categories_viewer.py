@@ -4,7 +4,7 @@ from tracking.navigation.platter_base import PlatterBase
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class Categories(PlatterBase, CupboardDisplayContextMixin):
+class CategoriesViewer(PlatterBase, CupboardDisplayContextMixin):
     flavor = 'categories'
     label = 'Categories'
     label_prefixes = {}

@@ -1,7 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.navigation.platter import PlatterById
 from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
-from tracking.viewers.categories_model import Categories
+from tracking.viewers.categories_viewer import CategoriesViewer
 
 
 class PlatterHoldingHandler(ViewerHoldingHandler):
@@ -24,7 +24,7 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
 
     @property
     def category_list_url(self):
-        return self.navigator.url(Categories, 'view')
+        return self.navigator.url(CategoriesViewer, 'view')
 
     @property
     def current_quantity(self):

@@ -7,7 +7,7 @@ from tracking.page_handlers.target_handler import TargetHandler
 
 
 class CategoryBaseHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler):
-    active_flavor = 'category'  # This lights up the 'Categories' button in the top menu.
+    current_activity = 'category'  # This lights up the 'Categories' button in the top menu.
 
     def __init__(self, viewer, category_id=None, **kwargs):
         PageHandler.__init__(self)

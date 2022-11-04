@@ -3,7 +3,7 @@ from tracking.modelling.specification_model import describe_choices
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class CategorySpecification(CupboardDisplayContextMixin):
+class CategorySpecificationViewer(CupboardDisplayContextMixin):
     plural_label = 'Choices'
     possible_tasks = []
     label_prefixes = {}

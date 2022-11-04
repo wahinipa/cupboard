@@ -1,11 +1,11 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.cardistry_models import sorted_by_name
-from tracking.viewers.category_specification import CategorySpecification
+from tracking.viewers.category_specification_viewer import CategorySpecificationViewer
 from tracking.modelling.specification_model import describe_choices
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
-class ThingSpecification(CupboardDisplayContextMixin):
+class ThingSpecificationViewer(CupboardDisplayContextMixin):
     flavor = 'specification'
     label = 'Specification'
     label_prefixes = {}
@@ -41,4 +41,4 @@ class ThingSpecification(CupboardDisplayContextMixin):
 
     def viewable_children(self, viewer):
         sorted_categories = sorted_by_name(list(self.thing.complete_set_of_categories))
-        return [CategorySpecification(category, self) for category in sorted_categories]
+        return [CategorySpecificationViewer(category, self) for category in sorted_categories]

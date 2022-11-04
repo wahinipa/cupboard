@@ -1,43 +1,12 @@
-{% macro home_nav_item(active_flavor) %}
-  {{ render_pill(endpoint='roots_bp.roots_view', label='Home', active_flavor=active_flavor, flavor='home') }}
-{% endmacro %}
-
-{% macro category_nav_item(active_flavor, category_list_url) %}
-  {% if category_list_url %}
-    {{ render_pill(url=category_list_url, label='Categories', active_flavor=active_flavor, flavor='category') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro people_nav_item(active_flavor) %}
-  {{ render_pill(endpoint='people_bp.people_list', label='People', active_flavor=active_flavor, flavor='people') }}
-{% endmacro %}
-
-{% macro place_nav_item(active_flavor, place_url) %}
-  {% if place_url %}
-    {{ render_pill(url=place_url, label='Place', active_flavor=active_flavor, flavor='place') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro admin_database_edit_nav_item(current_user) %}
-  {% if current_user.may_edit_database %}
-    {{ render_pill(endpoint='admin.index', label='Admin', flavor='admin') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro render_pill(label='', endpoint=None, url=None, active_flavor=None, flavor=None) %}
-  <a href="{% if endpoint %}{{ url_for(endpoint) }}{% else %}{{ url }}{% endif %}" role="button"
-     class="pill_button btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
-{% endmacro %}
-
-{% macro render_top_menu_item(active_flavor=None, label='', url=None, flavor=None) %}
+{% macro render_top_menu_item(current_activity=None, label='', url=None, flavor=None, activity=None) %}
   <a href="{{ url }}" role="button"
-     class="pill_button btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
+     class="pill_button btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if current_activity==activity %} active{% endif %}">{{ label }}</a>
 {% endmacro %}
 
-{% macro top_menu(active_flavor=None, top_menu_items=None) %}
+{% macro top_menu(current_activity=None, top_menu_items=None) %}
   {% if top_menu_items %}
     {% for menu_item in top_menu_items %}
-      {{ render_top_menu_item(active_flavor=active_flavor, **menu_item) }}
+      {{ render_top_menu_item(current_activity=current_activity, **menu_item) }}
     {% endfor %}
     {% else %}
   {% endif %}

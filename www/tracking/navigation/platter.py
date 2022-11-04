@@ -5,8 +5,8 @@ from tracking.modelling.root_model import find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import find_thing_by_id
 from tracking.navigation.navigating_platter import NavigatingPlatter
-from tracking.viewers.categories_model import Categories
-from tracking.viewers.thing_specification import ThingSpecification
+from tracking.viewers.categories_viewer import CategoriesViewer
+from tracking.viewers.thing_specification_viewer import ThingSpecificationViewer
 
 
 class Platter(NavigatingPlatter):
@@ -22,7 +22,7 @@ class Platter(NavigatingPlatter):
 
     @property
     def thing_specification(self):
-        return ThingSpecification(self.thing, self.specification)
+        return ThingSpecificationViewer(self.thing, self.specification)
 
     @property
     def current_quantity(self):
@@ -30,7 +30,7 @@ class Platter(NavigatingPlatter):
 
     @property
     def categories(self):
-        return Categories(place=self.place, thing=self.thing, specification=self.specification)
+        return CategoriesViewer(place=self.place, thing=self.thing, specification=self.specification)
 
 
 class PlatterById(Platter):

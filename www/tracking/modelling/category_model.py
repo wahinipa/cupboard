@@ -3,7 +3,7 @@
 from tracking import database
 from tracking.modelling.base_models import NamedBaseModel
 from tracking.modelling.cardistry_models import name_is_key
-from tracking.viewers.categories_model import Categories
+from tracking.viewers.categories_viewer import CategoriesViewer
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
@@ -25,7 +25,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def parent_object(self):
-        return Categories(place=self.root.place, thing=self.root.thing)
+        return CategoriesViewer(place=self.root.place, thing=self.root.thing)
 
     @property
     def identities(self):

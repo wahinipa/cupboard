@@ -9,7 +9,7 @@ class RootsViewHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
     page_template = "pages/home_page.j2"
     viewer_has_permission = True
     objects_are_valid = True
-    active_flavor = "home"
+    current_activity = "home"
 
     def __init__(self, viewer):
         PlatterHoldingHandler.__init__(self, viewer)

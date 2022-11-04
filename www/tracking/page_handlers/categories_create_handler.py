@@ -3,7 +3,7 @@ from tracking.forms.category_forms import CategoryCreateForm
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.active_platter_holding_handler import ActivePlatterHoldingHandler
-from tracking.viewers.categories_model import Categories
+from tracking.viewers.categories_viewer import CategoriesViewer
 
 
 class CategoriesCreateHandler(FormHandler, PageHandler, ActivePlatterHoldingHandler):
@@ -16,7 +16,7 @@ class CategoriesCreateHandler(FormHandler, PageHandler, ActivePlatterHoldingHand
 
     @property
     def cancel_redirect_url(self):
-        return self.navigator.url(Categories, 'view')
+        return self.navigator.url(CategoriesViewer, 'view')
 
     @property
     def description(self):

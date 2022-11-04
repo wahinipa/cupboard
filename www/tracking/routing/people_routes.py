@@ -86,7 +86,7 @@ def change_password():
 def people_list():
     navigator = create_cupboard_navigator()
     return all_people_display_context(navigator, current_user).render_template(
-        "pages/people_list.j2", active_flavor="people")
+        "pages/people_list.j2", current_activity="people")
 
 
 @people_bp.route('/view/<int:user_id>')

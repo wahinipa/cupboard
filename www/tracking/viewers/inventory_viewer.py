@@ -12,7 +12,7 @@ class InventoryDescriptor(Descriptor):
         self.quantity = quantity
 
 
-class Inventory(PlatterBase, CupboardDisplayContextMixin):
+class InventoryViewer(PlatterBase, CupboardDisplayContextMixin):
     flavor = "inventory"
     singular_label = 'Inventory'
     # 'ing' suffix makes these required tasks that show without needing a 'Show Actions' click

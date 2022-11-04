@@ -8,7 +8,7 @@ from tracking.page_handlers.view_handler import ViewHandler
 
 class CategoriesViewHandler(PageHandler, ViewHandler, ActivePlatterHoldingHandler):
     page_template = "pages/category_list.j2"
-    active_flavor = 'category'
+    current_activity = 'category'
 
     def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)

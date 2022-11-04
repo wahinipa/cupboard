@@ -8,8 +8,8 @@ from tracking.modelling.root_model import Root
 from tracking.modelling.thing_model import Thing
 from tracking.navigation.navigator import navigational_mark
 from tracking.navigation.platter_base import PlatterBase
-from tracking.viewers.categories_model import Categories
-from tracking.viewers.category_specification import CategorySpecification
+from tracking.viewers.categories_viewer import CategoriesViewer
+from tracking.viewers.category_specification_viewer import CategorySpecificationViewer
 
 
 class NavigatingPlatter(PlatterBase):
@@ -18,12 +18,12 @@ class NavigatingPlatter(PlatterBase):
         from tracking.navigation.cupboard_navigation import create_cupboard_navigator
         self.navigator = create_cupboard_navigator()
         self.translator = {
-            navigational_mark(Categories): self.categories_url_maker,
+            navigational_mark(CategoriesViewer): self.categories_url_maker,
             navigational_mark(Category): self.category_url_maker,
             navigational_mark(Choice): self.choice_url_maker,
             navigational_mark(Place): self.place_url_maker,
             navigational_mark(Root): self.root_url_maker,
-            navigational_mark(CategorySpecification): self.specification_url_maker,
+            navigational_mark(CategorySpecificationViewer): self.specification_url_maker,
             navigational_mark(Thing): self.thing_url_maker,
         }
 
