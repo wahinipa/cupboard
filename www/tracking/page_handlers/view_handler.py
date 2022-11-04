@@ -26,10 +26,12 @@ class ViewHandler:
         display_context.add_top_menu_item('Home', url_for('roots_bp.roots_view'), 'home')
 
     def add_categories_button(self, display_context):
-        display_context.add_top_menu_item('Categories', self.category_list_url, 'category')
+        if self.root:
+            display_context.add_top_menu_item('Categories', self.category_list_url, 'category')
 
     def add_place_button(self, display_context):
-        display_context.add_top_menu_item('Place', self.place_url, 'place')
+        if self.root:
+            display_context.add_top_menu_item('Place', self.place_url, 'place')
 
     def add_people_button(self, display_context):
         display_context.add_top_menu_item('People', url_for('people_bp.people_list'), 'people')
