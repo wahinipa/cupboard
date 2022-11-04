@@ -35,19 +35,8 @@ website_logo %}
       {{ website_logo(project_name) }}
     </div>
     <div class="col-md-8 text-center">
-      <div class="card card-flavor-welcome">
-        <div class="card-header">
-          {% block top_title %}Welcome{% endblock %}
-        </div>
-        <div class="card-body">
-          <div class="row">
-            {% block top_header %}{% endblock %}
-          </div>
-          <div class="row">
-            {% block bottom_header %}{% endblock %}
-          </div>
-        </div>
-      </div>
+      {% block central_header %}
+      {% endblock %}
     </div>
     <div class="col-md-2">
       {{ user_options(current_user) }}

@@ -5,13 +5,21 @@ home_nav_item,
 people_nav_item,
 place_nav_item,
 admin_database_edit_nav_item %}
-iv
-{% block top_header %}
-<div class="col-md-12">
-  {{ home_nav_item(active_flavor) }}
-  {{ category_nav_item(active_flavor, category_list_url) }}
-  {{ place_nav_item(active_flavor, place_url) }}
-  {{ people_nav_item(active_flavor) }}
-  {{ admin_database_edit_nav_item(current_user) }}
-</div>
+{% block central_header %}
+  <div class="card card-flavor-welcome">
+    <div class="card-header">
+      <h2>Welcome</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          {{ home_nav_item(active_flavor) }}
+          {{ category_nav_item(active_flavor, category_list_url) }}
+          {{ place_nav_item(active_flavor, place_url) }}
+          {{ people_nav_item(active_flavor) }}
+          {{ admin_database_edit_nav_item(current_user) }}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
