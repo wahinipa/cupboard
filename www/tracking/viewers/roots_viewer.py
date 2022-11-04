@@ -37,9 +37,7 @@ class RootsViewer(CupboardDisplayContextMixin):
         return bread_crumbs(navigator, [self], target=self)
 
     def may_perform_task(self, viewer, task):
-        if task == 'view':
-            return viewer.may_observe
-        elif task == 'create':
+        if task == 'create':
             return viewer.may_create_root
         else:
             return False
