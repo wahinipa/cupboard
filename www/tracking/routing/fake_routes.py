@@ -1,5 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import Blueprint, request, redirect
+from flask_login import current_user
 
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 from tracking.commons.administration import log_info_about_request, log_warn_about_request
@@ -16,7 +17,7 @@ def fake():
     log_info_about_request('Root Request')
     if 'wahinipa' not in request.host and '127.0.0.1' not in request.host and 'localhost' not in request.host:
         return rickroll()
-    return CupboardDisplayContext().render_template('pages/fake_front.j2')
+    return CupboardDisplayContext(current_user).render_template('pages/fake_front.j2')
 
 
 # Find hacker urls with:

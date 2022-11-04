@@ -28,4 +28,4 @@ class FormHandler:
 
     @property
     def display_context(self):
-        return CupboardDisplayContext()
+        return CupboardDisplayContext(self.viewer)

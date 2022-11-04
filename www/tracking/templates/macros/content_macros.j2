@@ -29,3 +29,16 @@
      class="pill_button btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
 {% endmacro %}
 
+{% macro render_top_menu_item(active_flavor=None, label='', url=None, flavor=None) %}
+  <a href="{{ url }}" role="button"
+     class="pill_button btn{% if flavor %} btn-flavor-{{ flavor }}{% endif %}{% if active_flavor==flavor %} active{% endif %}">{{ label }}</a>
+{% endmacro %}
+
+{% macro top_menu(active_flavor=None, top_menu_items=None) %}
+  {% if top_menu_items %}
+    {% for menu_item in top_menu_items %}
+      {{ render_top_menu_item(active_flavor=active_flavor, **menu_item) }}
+    {% endfor %}
+    {% else %}
+  {% endif %}
+{% endmacro %}

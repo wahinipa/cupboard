@@ -338,7 +338,7 @@ def all_people():
 
 
 def all_people_display_context(navigator, viewer):
-    context = CupboardDisplayContext()
+    context = CupboardDisplayContext(viewer)
     context['flavor'] = User.flavor
     context['label'] = User.plural_label
     if viewer.may_observe_people:

@@ -13,13 +13,24 @@ def project_title():
 
 
 class CupboardDisplayContext(DisplayContext):
-    def __init__(self, context=None, **kwargs):
+    def __init__(self, viewer, context=None, **kwargs):
         super().__init__(
             context=context,
             title=project_title(),
             project_name=project_name(),
             **kwargs
         )
+        self.viewer = viewer
+
+    def add_top_menu_item(self, label, url, flavor):
+        self.append_to_list('top_menu_items', {
+            'label': label,
+            'url': url,
+            'flavor': flavor,
+        })
+
+    def set_active_flavor(self, active_flavor):
+        self['active_flavor'] = active_flavor
 
 
 class CupboardDisplayContextMixin:
@@ -39,7 +50,7 @@ class CupboardDisplayContextMixin:
             children = display_attributes.get('children', self.viewable_children(viewer))
         else:
             children = []
-        context = CupboardDisplayContext(context={
+        context = CupboardDisplayContext(viewer, context={
             'label': self.name,
             'classification': self.singular_label,
             'flavor': self.flavor,

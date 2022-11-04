@@ -19,6 +19,10 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
         return self.platter
 
     @property
+    def categories(self):
+        return self.platter.categories
+
+    @property
     def category_list_url(self):
         return self.navigator.url(Categories, 'view')
 

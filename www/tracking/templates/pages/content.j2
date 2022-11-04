@@ -1,10 +1,6 @@
 {% extends "pages/website.j2" %}
-{% from 'macros/content_macros.j2' import
-category_nav_item,
-home_nav_item,
-people_nav_item,
-place_nav_item,
-admin_database_edit_nav_item %}
+{% from 'macros/content_macros.j2' import top_menu %}
+{% from "macros/cards.j2" import show_action_button %}
 {% block central_header %}
   <div class="card card-flavor-welcome">
     <div class="card-header">
@@ -13,11 +9,7 @@ admin_database_edit_nav_item %}
     <div class="card-body">
       <div class="row">
         <div class="col-md-12">
-          {{ home_nav_item(active_flavor) }}
-          {{ category_nav_item(active_flavor, category_list_url) }}
-          {{ place_nav_item(active_flavor, place_url) }}
-          {{ people_nav_item(active_flavor) }}
-          {{ admin_database_edit_nav_item(current_user) }}
+          {{ top_menu(active_flavor, top_menu_items) }}
         </div>
       </div>
       <div class="row">

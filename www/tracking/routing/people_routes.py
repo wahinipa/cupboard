@@ -54,7 +54,7 @@ def login():
         else:
             return home_redirect()
     else:
-        return CupboardDisplayContext().render_template('pages/login.j2', form=form)
+        return CupboardDisplayContext(None).render_template('pages/login.j2', form=form)
 
 
 @people_bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
@@ -78,7 +78,7 @@ def change_password():
     if form.validate_on_submit():
         database.session.commit()
         return home_redirect()
-    return CupboardDisplayContext().render_template('pages/change_password.j2', form=form)
+    return CupboardDisplayContext(current_user).render_template('pages/change_password.j2', form=form)
 
 
 @people_bp.route('/list')

@@ -1,29 +1,30 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from tracking.contexts.card_display_attributes import dual_view_childrens_attributes
-from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.active_platter_holding_handler import ActivePlatterHoldingHandler
-from tracking.viewers.categories_model import Categories
+from tracking.page_handlers.page_handler import PageHandler
+from tracking.page_handlers.view_handler import ViewHandler
 
 
-class CategoriesViewHandler(PageHandler, ActivePlatterHoldingHandler):
+class CategoriesViewHandler(PageHandler, ViewHandler, ActivePlatterHoldingHandler):
+    page_template = "pages/category_list.j2"
+    active_flavor = 'category'
 
     def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
 
-    def validated_rendering(self):
-        categories = Categories(place=self.place, thing=self.thing, specification=self.specification)
-        display_attributes = {
+    @property
+    def display_context_maker(self):
+        return self.root
+
+    @property
+    def display_attributes(self):
+        return {
             'description': True,
-            'children': [categories, self.thing, self.thing_specification],
+            'children': [self.categories, self.thing, self.thing_specification],
             'children_attributes': dual_view_childrens_attributes(),
         }
-        place_url = self.navigator.url(self.root, 'view')
-        category_list_url = self.navigator.url(categories, 'view')
-        return self.root.display_context(self.navigator, self.viewer, display_attributes).render_template(
-            "pages/category_list.j2", place_url=place_url, category_list_url=category_list_url,
-            active_flavor='category')
 
     @property
     def viewer_has_permission(self):
