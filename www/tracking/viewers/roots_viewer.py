@@ -9,7 +9,7 @@ class RootsViewer(CupboardDisplayContextMixin):
     label = 'Home'
     label_prefixes = {}
     singular_label = 'home'
-    possible_tasks = ['create', 'view']
+    possible_tasks = ['create']
 
     @property
     def identities(self):
