@@ -20,6 +20,11 @@ admin_database_edit_nav_item %}
           {{ admin_database_edit_nav_item(current_user) }}
         </div>
       </div>
+      <div class="row">
+        {% if has_tasks %}
+          {{ show_action_button() }}
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}
