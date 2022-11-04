@@ -257,6 +257,14 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
         else:
             return [link.root for link in self.linkages]
 
+    @property
+    def only_root(self):
+        if not self.is_the_super_admin:
+            roots = self.roots
+            if len(roots) == 1:
+                return roots[0]
+        return None
+
 
 @event.listens_for(User.password, 'set', retval=True)
 def hash_user_password(target, value, oldvalue, initiator):
