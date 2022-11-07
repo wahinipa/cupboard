@@ -1,34 +1,6 @@
-{% from 'macros/buttons.j2' import button_task %}
-
-{% macro card_tasks(label, tasks, prefix="Actions on ") %}
-  {% if False %}{{ kwargs }}{% endif %}
-  {% if tasks %}
-    <div class="action_show_container">
-      {% call card_view(prefix=prefix, label=label, flavor='tasks') %}
-        <div class="row">
-          {% for task in tasks %}
-            <div class="col-md-4">
-              {{ button_task(column_width=None, **task) }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endcall %}
-    </div>
-  {% endif %}
-{% endmacro %}
-
-{% macro card_target(prefix=None, label=None, flavor=None, url=None, bread_crumb_list=None, notations=None, tasks=None) %}
-{% if False %}{{ kwargs }}{% endif %}
-{% set card_content %}
-{% if caller %}{{ caller() }}{% endif %}
-{% endset %}
-{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, bread_crumb_list=bread_crumb_list, tasks=tasks) %}
-  {% if notations %}
-    {{ render_notations(notations) }}
-  {% endif %}
-  {{ card_content }}
-{% endcall %}
-{% endmacro %}
+{% from 'macros/button_macros.j2' import button_task %}
+{% from 'macros/notation_macros.j2' import render_notations %}
+{% from 'macros/bread_crumb_macros.j2' import render_bread_crumbs %}
 
 {% macro card_view(prefix=None, label=None, url=None, flavor=None, bread_crumb_list=None, tasks=None, required_tasks=None) %}
   {% if False %}{{ kwargs }}{% endif %}
@@ -79,57 +51,6 @@
   {% call card_view(prefix=classification + ": ", label=label, url=url, flavor=flavor, bread_crumb_list=bread_crumb_list, tasks=tasks, required_tasks=required_tasks) %}
     {{ render_notations(notations) }}
   {% endcall %}
-{% endmacro %}
-
-{% macro render_notations(notations=None) %}
-  {% if notations %}
-    {% for notation in notations %}
-      {{ render_notation(**notation) }}
-    {% endfor %}
-  {% endif %}
-{% endmacro %}
-
-{% macro render_notation(label=None, url=None, value=None, tag=None, lines=None) %}
-  {% if label %}<b>{{ label }}: </b>{% endif %}
-  {% if tag %}<i>{{ tag }} - </i>{% endif %}
-  {% if url %}<a href="{{ url }}">{% endif %}
-{% if value %}{{ value }}{% endif %}
-{% if label or value or tag %}<br>{% endif %}
-{% if url %}</a>{% endif %}
-  {% if lines %}{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
-{% endmacro %}
-
-{% macro render_bread_crumbs(bread_crumb_list=None) %}
-  {% if bread_crumb_list %}
-    <nav aria-label="breadcrumb">
-      <ul class="breadcrumb">
-        {% for crumb in bread_crumb_list %}
-          {{ bread_crumb_item(**crumb) }}
-        {% endfor %}
-      </ul>
-    </nav>
-  {% endif %}
-{% endmacro %}
-
-{% macro bread_crumb_item(label, url=None) %}
-  <li class="breadcrumb-item">
-    {% if url %}<a href="{{ url }}">{% endif %}{{ label }}{% if url %}</a>{% endif %}
-  </li>
-{% endmacro %}
-
-{% macro action_block(label=None, tasks=None) %}
-  {% if tasks %}
-    <div class="row">
-      <div class="col-md-12">
-        {{ card_tasks(label=label, tasks=tasks, flavor=flavor) }}
-      </div>
-    </div>
-  {% endif %}
-{% endmacro %}
-
-{% macro show_action_button(label="Show Actions") %}
-  <label class="action-toggle" for="action_check_button"><span
-      class="badge bg-primary">{{ label }}</span></label>
 {% endmacro %}
 
 {% macro column_of_child_cards(children) %}
@@ -188,12 +109,3 @@
   {% endif %}
 {% endmacro %}
 
-{% macro target_block(label=None, flavor=None, url=None, bread_crumb_list=None, notations=None, tasks=None) %}
-  {% if False %}{{ kwargs }}{% endif %}
-  <div class="row mt-2">
-    <div class="col-md-12">
-      {% call card_target(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) %}
-      {% endcall %}
-    </div>
-  </div>
-{% endmacro %}

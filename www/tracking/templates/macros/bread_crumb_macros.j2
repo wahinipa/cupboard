@@ -1,0 +1,18 @@
+{% macro render_bread_crumbs(bread_crumb_list=None) %}
+  {% if bread_crumb_list %}
+    <nav aria-label="breadcrumb">
+      <ul class="breadcrumb">
+        {% for crumb in bread_crumb_list %}
+          {{ bread_crumb_item(**crumb) }}
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
+
+{% macro bread_crumb_item(label, url=None) %}
+  <li class="breadcrumb-item">
+    {% if url %}<a href="{{ url }}">{% endif %}{{ label }}{% if url %}</a>{% endif %}
+  </li>
+{% endmacro %}
+

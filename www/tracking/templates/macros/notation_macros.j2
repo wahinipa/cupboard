@@ -1,0 +1,18 @@
+{% macro render_notations(notations=None) %}
+  {% if notations %}
+    {% for notation in notations %}
+      {{ render_notation(**notation) }}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro render_notation(label=None, url=None, value=None, tag=None, lines=None) %}
+  {% if label %}<b>{{ label }}: </b>{% endif %}
+  {% if tag %}<i>{{ tag }} - </i>{% endif %}
+  {% if url %}<a href="{{ url }}">{% endif %}
+{% if value %}{{ value }}{% endif %}
+{% if label or value or tag %}<br>{% endif %}
+{% if url %}</a>{% endif %}
+  {% if lines %}{% for line in lines %}{{ line }}<br>{% endfor %}{% endif %}
+{% endmacro %}
+

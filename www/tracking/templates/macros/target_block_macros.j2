@@ -1,0 +1,26 @@
+{% from 'macros/notation_macros.j2' import render_notations %}
+{%  from "macros/card_macros.j2" import card_view %}
+
+{% macro target_block(label=None, flavor=None, url=None, bread_crumb_list=None, notations=None, tasks=None) %}
+  {% if False %}{{ kwargs }}{% endif %}
+  <div class="row mt-2">
+    <div class="col-md-12">
+      {% call card_target(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) %}
+      {% endcall %}
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro card_target(prefix=None, label=None, flavor=None, url=None, bread_crumb_list=None, notations=None, tasks=None) %}
+{% if False %}{{ kwargs }}{% endif %}
+{% set card_content %}
+{% if caller %}{{ caller() }}{% endif %}
+{% endset %}
+{% call card_view(prefix=prefix, flavor=flavor, label=label, url=url, bread_crumb_list=bread_crumb_list, tasks=tasks) %}
+  {% if notations %}
+    {{ render_notations(notations) }}
+  {% endif %}
+  {{ card_content }}
+{% endcall %}
+{% endmacro %}
+

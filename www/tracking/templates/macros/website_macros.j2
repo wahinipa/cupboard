@@ -22,32 +22,3 @@
   </div>
 {% endmacro %}
 
-{% macro user_options(current_user) %}
-  <div class="card">
-    {% if current_user.is_authenticated %}
-      {{ user_options_logged_in(current_user) }}
-    {% else %}
-      {{ user_options_logged_out() }}
-    {% endif %}
-  </div>
-{% endmacro %}
-
-{% macro user_options_logged_out() %}
-  <div class="card-body bg-warning text-center">
-    Not logged in.
-  </div>
-{% endmacro %}
-
-{% macro user_options_logged_in(current_user) %}
-  <div class="card-header">
-    Logged in as {{ current_user.username }}
-  </div>
-  <div class="card-body bg-light">
-    <a class="btn-md btn-primary" href="{{ url_for('people_bp.logout') }}" role="button"><span
-        class="badge bg-primary">Sign Out</span></a>
-    <a class="btn-md btn-warning" href="{{ url_for('people_bp.change_password') }}" role="button"><span
-        class="badge bg-warning">Change Password</span></a>
-    <a class="btn-md btn-warning" href="{{ url_for('people_bp.people_update', user_id=current_user.id) }}" role="button"><span
-        class="badge bg-warning">Change User Profile</span></a>
-  </div>
-{% endmacro %}
