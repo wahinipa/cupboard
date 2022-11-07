@@ -8,7 +8,6 @@ from tracking.viewers.model_viewer import ModelViewer
 
 class RootViewHandler(RootBaseHandler, ViewHandler):
     page_template = 'pages/root_view.j2'
-    current_activity = 'place'
 
     @property
     def display_context_maker(self):

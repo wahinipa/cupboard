@@ -35,6 +35,26 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
         return self.platter.place
 
     @property
+    def observe_url(self):
+        return self.navigator.url(self.root, 'view', activity='observe')
+
+    @property
+    def inbound_url(self):
+        return self.navigator.url(self.root, 'view', activity='inbound')
+
+    @property
+    def outbound_url(self):
+        return self.navigator.url(self.root, 'view', activity='outbound')
+
+    @property
+    def transfer_url(self):
+        return self.navigator.url(self.root, 'view', activity='transfer')
+
+    @property
+    def adjust_url(self):
+        return self.navigator.url(self.root, 'view', activity='adjust')
+
+    @property
     def place_url(self):
         return self.navigator.url(self.root, 'view')
 
@@ -53,3 +73,7 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
     @property
     def thing_specification(self):
         return self.platter.thing_specification
+
+    @property
+    def activity(self):
+        return self.platter.activity

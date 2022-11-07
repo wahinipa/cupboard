@@ -14,13 +14,13 @@ class PeopleCreateHandler(PeopleBaseHandler, FormHandler):
 
     @property
     def cancel_redirect_url(self):
-        return self.navigator.url(AllPeople, 'view')
+        return self.navigator.url(AllPeople, 'view', activity=self.activity)
 
     def submit_action(self):
         return create_user_from_form(self.form)
 
     def success_redirect_url(self, person):
-        return self.navigator.url(person, 'view')
+        return self.navigator.url(person, 'view', activity=self.activity)
 
     @property
     def viewer_has_permission(self):

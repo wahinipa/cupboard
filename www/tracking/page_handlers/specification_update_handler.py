@@ -12,7 +12,6 @@ from tracking.navigation.platter import Platter
 
 
 class SpecificationUpdateHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler, FormHandler, TargetUpdateHandler):
-    current_activity = 'place'  # This lights up the 'Place' button in the top menu.
     page_template = 'pages/specification_update.j2'
 
     def __init__(self, viewer, category_id=None, **kwargs):
@@ -23,6 +22,10 @@ class SpecificationUpdateHandler(PageHandler, ActivePlatterHoldingHandler, Targe
         TargetHandler.__init__(self, self.category and self.specification)
         self.form_descriptor = self.category and self.specification and create_specification_form_descriptor(
             self.category, self.specification)
+
+    @property
+    def current_activity(self):
+        return self.activity
 
     def create_form(self):
         return create_dynamic_specification_form(self.form_descriptor)
@@ -35,8 +38,8 @@ class SpecificationUpdateHandler(PageHandler, ActivePlatterHoldingHandler, Targe
     def submit_action(self):
         new_specification = update_specification(self.category, self.specification, self.form)
         self.platter = Platter(root=self.root, place=self.place, thing=self.thing,
-                               specification=new_specification)
+                               specification=new_specification, activity=self.activity)
         return self.root
 
     def target_update_redirect(self):
-        return self.navigator.url(self.root, 'view')
+        return self.navigator.url(self.root, 'view', activity=self.activity)

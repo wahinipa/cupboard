@@ -16,14 +16,14 @@ class CategoriesCreateHandler(FormHandler, PageHandler, ActivePlatterHoldingHand
 
     @property
     def cancel_redirect_url(self):
-        return self.navigator.url(CategoriesViewer, 'view')
+        return self.navigator.url(CategoriesViewer, 'view', activity=self.activity)
 
     @property
     def description(self):
         return self.thing_specification.name
 
     def success_redirect_url(self, target):
-        return self.navigator.url(target, 'view')
+        return self.navigator.url(target, 'view', activity=self.activity)
 
     @property
     def viewer_has_permission(self):

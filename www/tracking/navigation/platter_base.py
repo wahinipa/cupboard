@@ -1,8 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 
+DEFAULT_ACTIVITY = 'observe'
+
 class PlatterBase:
-    def __init__(self, activity='explore', root=None, place=None, thing=None, specification=None):
+    def __init__(self, activity=DEFAULT_ACTIVITY, root=None, place=None, thing=None, specification=None):
         if root is None:
             if place:
                 root = place.root

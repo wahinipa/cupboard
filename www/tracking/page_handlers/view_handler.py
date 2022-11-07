@@ -35,11 +35,11 @@ class ViewHandler:
 
     def add_observe_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Observe', self.place_url, 'place', 'observe')
+            display_context.add_top_menu_item('Observe', self.observe_url, 'place', 'observe')
 
     def add_inbound_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Inbound', self.place_url, 'place', 'inbound')
+            display_context.add_top_menu_item('Inbound', self.inbound_url, 'place', 'inbound')
 
     def add_place_button(self, display_context):
         if self.root:
@@ -47,15 +47,15 @@ class ViewHandler:
 
     def add_outbound_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Outbound', self.place_url, 'place', 'outbound')
+            display_context.add_top_menu_item('Outbound', self.outbound_url, 'place', 'outbound')
 
     def add_transfer_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Transfer', self.place_url, 'place', 'transfer')
+            display_context.add_top_menu_item('Transfer', self.transfer_url, 'place', 'transfer')
 
     def add_adjust_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Adjust', self.place_url, 'place', 'adjust')
+            display_context.add_top_menu_item('Adjust', self.adjust_url, 'place', 'adjust')
 
     def add_people_button(self, display_context):
         display_context.add_top_menu_item('People', url_for('people_bp.people_list'), 'people')

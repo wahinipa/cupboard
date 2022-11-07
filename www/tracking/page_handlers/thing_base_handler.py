@@ -5,9 +5,13 @@ from tracking.page_handlers.target_handler import TargetHandler
 
 
 class ThingBaseHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler):
-    current_activity = 'place'  # This lights up the 'Place' button in the top menu.
 
     def __init__(self, viewer, **kwargs):
         PageHandler.__init__(self)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
         TargetHandler.__init__(self, self.thing)  # Depends on ActivePlatterHoldingHandler to have created self.thing
+
+    @property
+    def current_activity(self):
+        return self.activity
+

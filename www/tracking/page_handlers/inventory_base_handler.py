@@ -22,7 +22,7 @@ class InventoryBaseHandler(FormHandler, PageHandler, ActivePlatterHoldingHandler
 
     @property
     def redirect_url(self):
-        return self.navigator.url(self.root, 'view')
+        return self.navigator.url(self.root, 'view', activity=self.activity)
 
     def success_redirect_url(self, target):
         return self.redirect_url
