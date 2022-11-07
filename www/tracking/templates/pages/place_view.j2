@@ -1,9 +1,0 @@
-{% extends "pages/content.j2" %}
-{% from 'macros/cards.j2' import card_view, card_child, card_target, card_tasks %}
-{% block innards %}
-  {% call card_target(label=label, purpose='target', url=url, bread_crumb_list=bread_crumb_list, notations=notations) %}
-  {% endcall %}
-  {% if tasks %}
-    {{ card_tasks(label=label, tasks=tasks) }}
-  {% endif %}
-{% endblock %}

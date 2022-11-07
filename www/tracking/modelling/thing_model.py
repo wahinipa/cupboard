@@ -98,10 +98,6 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
         return self.root.may_update(viewer) and not self.is_top
 
     @property
-    def page_template(self):
-        return "pages/thing_view.j2"
-
-    @property
     def parent_object(self):
         return self.kind_of
 

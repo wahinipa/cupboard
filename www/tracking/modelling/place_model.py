@@ -89,10 +89,6 @@ class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
         return self.ancestor.may_update(viewer)
 
     @property
-    def page_template(self):
-        return "pages/place_view.j2"
-
-    @property
     def parent_object(self):
         return self.place_of
 
