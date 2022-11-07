@@ -77,6 +77,16 @@ inventory_display_attributes = {
     },
 }
 
+person_display_attributes = {
+    'display_context': {
+        'children_attributes': {
+            'inventory': {
+                'notation': True,
+            },
+        },
+    },
+}
+
 specification_display_attributes = {
     'display_context': {
         'children_attributes': {
@@ -101,4 +111,6 @@ def dual_view_childrens_attributes(thing=None):
         'place': place_display_attributes,
         'specification': specification_display_attributes,
         'thing': thing_display_attributes,
+        'person': person_display_attributes,
+        'people': person_display_attributes,
     }

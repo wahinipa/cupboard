@@ -14,7 +14,11 @@ class ViewHandler:
     def add_top_menu(self, display_context):
         self.add_home_button(display_context)
         self.add_categories_button(display_context)
-        self.add_place_button(display_context)
+        self.add_observe_button(display_context)
+        self.add_inbound_button(display_context)
+        self.add_outbound_button(display_context)
+        self.add_transfer_button(display_context)
+        self.add_adjust_button(display_context)
         self.add_people_button(display_context)
         self.add_admin_button(display_context)
 
@@ -29,9 +33,29 @@ class ViewHandler:
         if self.root:
             display_context.add_top_menu_item('Categories', self.category_list_url, 'category')
 
+    def add_observe_button(self, display_context):
+        if self.root:
+            display_context.add_top_menu_item('Observe', self.place_url, 'place', 'observe')
+
+    def add_inbound_button(self, display_context):
+        if self.root:
+            display_context.add_top_menu_item('Inbound', self.place_url, 'place', 'inbound')
+
     def add_place_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Place', self.place_url, 'place')
+            display_context.add_top_menu_item('Place', self.place_url, 'place', 'place')
+
+    def add_outbound_button(self, display_context):
+        if self.root:
+            display_context.add_top_menu_item('Outbound', self.place_url, 'place', 'outbound')
+
+    def add_transfer_button(self, display_context):
+        if self.root:
+            display_context.add_top_menu_item('Transfer', self.place_url, 'place', 'transfer')
+
+    def add_adjust_button(self, display_context):
+        if self.root:
+            display_context.add_top_menu_item('Adjust', self.place_url, 'place', 'adjust')
 
     def add_people_button(self, display_context):
         display_context.add_top_menu_item('People', url_for('people_bp.people_list'), 'people')

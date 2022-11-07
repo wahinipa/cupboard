@@ -11,6 +11,7 @@ from tracking.modelling.people_model import all_people_display_context
 from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.page_handlers.people_create_handler import PeopleCreateHandler
 from tracking.page_handlers.people_delete_handler import PeopleDeleteHandler
+from tracking.page_handlers.people_list_handler import PeopleListHandler
 from tracking.page_handlers.people_update_handler import PeopleUpdateHandler
 from tracking.page_handlers.people_view_handler import PeopleViewHandler
 from tracking.routing.home_redirect import home_redirect
@@ -84,9 +85,7 @@ def change_password():
 @people_bp.route('/list')
 @login_required
 def people_list():
-    navigator = create_cupboard_navigator()
-    return all_people_display_context(navigator, current_user).render_template(
-        "pages/people_list.j2", current_activity="people")
+    return PeopleListHandler(current_user).handle()
 
 
 @people_bp.route('/view/<int:user_id>')
