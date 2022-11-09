@@ -16,11 +16,12 @@ class InventoryViewer(PlatterBase, CupboardDisplayContextMixin):
     flavor = "inventory"
     singular_label = 'Inventory'
     # 'ing' suffix makes these required tasks that show without needing a 'Show Actions' click
-    possible_tasks = ['arriving', 'moving', 'departing']
+    possible_tasks = ['arriving', 'moving', 'changing', 'departing']
     label_prefixes = {}
 
     def __init__(self, platter):
         super().__init__(activity=platter.activity, place=platter.place, thing=platter.thing,
+                         destination=platter.destination,
                          specification=platter.specification)
         self.refinements = self.thing.refinements
         self.where_is_what = {self.place: self.specified_positionings(self.place.direct_positionings)}
@@ -40,15 +41,25 @@ class InventoryViewer(PlatterBase, CupboardDisplayContextMixin):
 
     @property
     def identities(self):
-        return {'activity': self.activity, 'place_id': self.place.id, 'thing_id': self.thing.id,
-                'specification_id': self.specification.id}
+        return {
+            'activity': self.activity, 'place_id': self.place.id, 'thing_id': self.thing.id,
+            'destination_id': self.destination.id,
+            'specification_id': self.specification.id
+        }
 
     def may_perform_task(self, viewer, task):
         # TODO: actually check on viewer
         if self.is_specific:
-            return task == 'arriving' or self.current_quantity > 0
-        else:
-            return False
+            have_some = self.current_quantity > 0
+            if task == 'arriving':
+                return self.activity == 'inbound'
+            elif task == 'departing':
+                return have_some and self.activity == 'outbound'
+            elif task == 'moving':
+                return have_some and self.activity == 'transfer' and self.place.id != self.destination.id
+            elif task == 'changing':
+                return have_some and self.activity == 'adjust'
+        return False
 
     def create_inventories(self):
         place_list = [self.place] + self.place.sorted_children
@@ -104,7 +115,11 @@ class InventoryViewer(PlatterBase, CupboardDisplayContextMixin):
 
     @property
     def name(self):
-        return f'Quantities of {self.described_choices} for {self.thing.name} at {self.place.name}'
+        if self.activity == 'transfer':
+            return f'Quantities of {self.described_choices} for {self.thing.name} from {self.place.name} to ' \
+                   f'{self.destination.name}'
+        else:
+            return f'Quantities of {self.described_choices} for {self.thing.name} at {self.place.name}'
 
     def viewable_children(self, viewer):
         return [inventory for inventory in self.inventories if inventory.quantity]

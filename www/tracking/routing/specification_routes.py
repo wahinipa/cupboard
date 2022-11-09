@@ -12,7 +12,7 @@ specification_bp = Blueprint(
 )
 
 
-@specification_bp.route('/update/<activity>/<int:place_id>/<int:thing_id>/<int:specification_id>/<int:category_id>',
+@specification_bp.route('/update/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:category_id>',
                         methods=['GET', 'POST'])
 @login_required
 def specification_update(**kwargs):

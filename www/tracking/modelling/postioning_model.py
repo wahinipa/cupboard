@@ -26,23 +26,27 @@ def find_exact_quantity_of_things_at_place(place, thing, specification):
     return sum(positioning.quantity for positioning in _find_positionings(place, thing, specification))
 
 
-def add_quantity_of_things(place, thing, specification, quantity):
+def add_quantity_of_things(place, thing, specification, quantity, do_commit=True):
     requested_quantity = quantity + find_exact_quantity_of_things_at_place(place, thing, specification)
+    return change_quantity_of_things(place, thing, specification, requested_quantity, do_commit=do_commit)
+
+def change_quantity_of_things(place, thing, specification, requested_quantity, do_commit=True):
     positionings = _find_positionings(place, thing, specification)
     if len(positionings) == 0:
-        positioning = Positioning(place=place, thing=thing, specification=specification, quantity=quantity)
+        positioning = Positioning(place=place, thing=thing, specification=specification, quantity=requested_quantity)
         database.session.add(positioning)
     else:
         positioning = positionings[0]
         positioning.quantity = requested_quantity
         for excess_positioning in positionings[1:]:
             database.session.delete(excess_positioning)
-    database.session.commit()
+    if do_commit:
+        database.session.commit()
     return requested_quantity
 
 
 def move_quantity_of_things(destination_place, source_place, thing, specification, quantity):
     return (
-        add_quantity_of_things(destination_place, thing, specification, quantity),
-        add_quantity_of_things(source_place, thing, specification, -quantity),
+        add_quantity_of_things(destination_place.place_model, thing, specification, quantity, do_commit=False),
+        add_quantity_of_things(source_place, thing, specification, -quantity, do_commit=True),
     )

@@ -31,6 +31,10 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
         return self.platter.current_quantity
 
     @property
+    def destination(self):
+        return self.platter.destination
+
+    @property
     def place(self):
         return self.platter.place
 

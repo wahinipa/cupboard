@@ -35,7 +35,7 @@ class ViewHandler:
 
     def add_observe_button(self, display_context):
         if self.root:
-            display_context.add_top_menu_item('Observe', self.observe_url, 'place', 'observe')
+            display_context.add_top_menu_item('Find', self.observe_url, 'place', 'observe')
 
     def add_inbound_button(self, display_context):
         if self.root:

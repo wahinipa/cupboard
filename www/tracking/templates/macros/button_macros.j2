@@ -12,9 +12,11 @@
   {% elif task == 'remove' %}
     {{ button_action(url=url, prefix='Remove ', label=label, column_width=column_width, button_color='warning' ) }}
   {% elif task == 'departing' %}
-    {{ button_action(url=url, prefix='Remove Departing ', label=label, column_width=column_width, button_color='danger' ) }}
+    {{ button_action(url=url, prefix='Remove Departing ', label=label, column_width=column_width, button_color='primary' ) }}
+  {% elif task == 'changing' %}
+    {{ button_action(url=url, prefix='Adjust ', label=label, column_width=column_width, button_color='primary' ) }}
   {% elif task == 'moving' %}
-    {{ button_action(url=url, prefix='Move ', label=label, column_width=column_width, button_color='warning' ) }}
+    {{ button_action(url=url, prefix='Move ', label=label, column_width=column_width, button_color='primary' ) }}
   {% elif task == 'duplicate' %}
     {{ button_action(url=url, prefix='Duplicate ', label=label, column_width=column_width) }}
   {% elif task == 'update' %}

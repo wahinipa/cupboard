@@ -37,7 +37,7 @@ class SpecificationUpdateHandler(PageHandler, ActivePlatterHoldingHandler, Targe
 
     def submit_action(self):
         new_specification = update_specification(self.category, self.specification, self.form)
-        self.platter = Platter(root=self.root, place=self.place, thing=self.thing,
+        self.platter = Platter(root=self.root, place=self.place, thing=self.thing, destination=self.destination,
                                specification=new_specification, activity=self.activity)
         return self.root
 
