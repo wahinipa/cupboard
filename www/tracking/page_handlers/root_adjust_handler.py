@@ -3,9 +3,9 @@ from tracking.page_handlers.root_view_handler import RootViewHandler
 from tracking.viewers.inventory_viewer import InventoryViewer
 
 
-class RootObserveHandler(RootViewHandler):
+class RootAdjustHandler(RootViewHandler):
     page_template = 'pages/root_view.j2'
-    place_prefix = 'Searching at: '
+    place_prefix = 'Adjusting at: '
     destination_prefix = None
 
     @property

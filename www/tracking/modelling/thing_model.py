@@ -11,7 +11,7 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContextMix
 
 
 class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):
-    singular_label = "Thing"
+    singular_label = "What"
     plural_label = "Things"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Kind of '}
@@ -24,6 +24,9 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
 
     positionings = database.relationship('Positioning', backref='thing', lazy=True, cascade='all, delete')
+
+    def prefix(self):
+        return None
 
     @property
     def identities(self):

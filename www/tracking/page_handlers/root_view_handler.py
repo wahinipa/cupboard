@@ -14,5 +14,9 @@ class RootViewHandler(RootBaseHandler, ViewHandler):
     def display_attributes(self):
         return {
             'children': self.children,
-            'children_attributes': dual_view_childrens_attributes(thing=self.thing),
+            'children_attributes': dual_view_childrens_attributes(
+                thing=self.thing,
+                place_prefix=self.place_prefix,
+                destination_prefix=self.destination_prefix
+            ),
         }

@@ -1,9 +1,10 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
-def category_display_attributes(thing=None):
+def category_display_attributes(thing=None, **kwargs):
     attributes = {
         'display_context': {
             'description': True,
+            'prefix': 'Category: ',
             'url': True,
             'bread_crumbs': True,
             'children_attributes': {
@@ -23,6 +24,7 @@ def category_display_attributes(thing=None):
 categories_display_attributes = {
     'display_context': {
         'description': True,
+        'prefix': 'Categories: ',
         'url': True,
         'bread_crumbs': True,
         'children_attributes': {
@@ -36,23 +38,44 @@ categories_display_attributes = {
 choice_display_attributes = {
     'display_context': {
         'description': True,
+        'prefix': 'Choice: ',
         'url': True,
         'bread_crumbs': True,
     }
 }
 
-place_display_attributes = {
-    'display_context': {
-        'description': True,
-        'url': True,
-        'bread_crumbs': True,
-        'children_attributes': {
-            'place': {
-                'notation': True,
+
+def destination_display_attributes(destination_prefix=None, **kwargs):
+    return {
+        'display_context': {
+            'description': True,
+            'prefix': destination_prefix,
+            'url': True,
+            'bread_crumbs': True,
+            'children_attributes': {
+                'place': {
+                    'notation': True,
+                },
             },
-        },
+        }
     }
-}
+
+
+def place_display_attributes(place_prefix=None, **kwargs):
+    return {
+        'display_context': {
+            'description': True,
+            'prefix': place_prefix,
+            'url': True,
+            'bread_crumbs': True,
+            'children_attributes': {
+                'place': {
+                    'notation': True,
+                },
+            },
+        }
+    }
+
 
 thing_display_attributes = {
     'display_context': {
@@ -102,13 +125,14 @@ specification_display_attributes = {
 }
 
 
-def dual_view_childrens_attributes(thing=None):
+def dual_view_childrens_attributes(**kwargs):
     return {
         'categories': categories_display_attributes,
-        'category': category_display_attributes(thing),
+        'category': category_display_attributes(**kwargs),
         'choice': choice_display_attributes,
+        'destination': destination_display_attributes(**kwargs),
         'inventory': inventory_display_attributes,
-        'place': place_display_attributes,
+        'place': place_display_attributes(**kwargs),
         'specification': specification_display_attributes,
         'thing': thing_display_attributes,
         'person': person_display_attributes,

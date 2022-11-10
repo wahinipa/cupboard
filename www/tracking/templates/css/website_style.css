@@ -3,6 +3,7 @@
     --flavor-categories-color: rgb(150, 10, 150);
     --flavor-category-color: rgb(100, 10, 100);
     --flavor-choice-color: rgb(60, 10, 60);
+    --flavor-destination-color: rgb(70, 20, 110);
     --flavor-home-color: rgb(100, 100, 100);
     --flavor-inventory-color: rgb(100, 100, 100);
     --flavor-people-color: rgb(10, 90, 90);
@@ -155,6 +156,33 @@ footer {
     color: white;
 }
 
+/* *** Destination Styling *** */
+
+.btn-flavor-destination {
+    border-color: var(--flavor-destination-color);
+    color: black;
+    background-color: white;
+}
+
+.btn-flavor-destination.active {
+    color: white;
+    background-color: var(--flavor-destination-color);
+}
+
+
+.card-flavor-destination {
+    border-color: black;
+}
+
+.card-flavor-destination .card-header a {
+    color: white;
+}
+
+.card-flavor-destination .card-header {
+    border-color: black;
+    color: white;
+    background-color: var(--flavor-destination-color);
+}
 /* *** Home Styling *** */
 
 .card-flavor-home {

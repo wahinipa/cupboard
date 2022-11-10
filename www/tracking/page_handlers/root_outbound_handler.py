@@ -3,12 +3,12 @@ from tracking.page_handlers.root_view_handler import RootViewHandler
 from tracking.viewers.inventory_viewer import InventoryViewer
 
 
-class RootTransferHandler(RootViewHandler):
-    page_template = 'pages/root_transfer.j2'
+class RootOutboundHandler(RootViewHandler):
+    page_template = 'pages/root_view.j2'
     place_prefix = 'Departing From: '
-    destination_prefix = 'Arriving at: '
+    destination_prefix = None
 
     @property
     def children(self):
-        return [self.place, self.destination, self.thing, self.thing_specification, InventoryViewer(self.platter)]
+        return [self.place, self.thing, self.thing_specification, InventoryViewer(self.platter)]
 

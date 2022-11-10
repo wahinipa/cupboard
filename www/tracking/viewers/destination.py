@@ -4,8 +4,8 @@ from tracking.modelling.cardistry_models import bread_crumbs
 
 
 class Destination(CupboardDisplayContextMixin):
-    flavor = "place"
-    singular_label = "Destination"
+    flavor = "destination"
+    singular_label = "Place"
     plural_label = "Destinations"
     possible_tasks = []
     label_prefixes = {}

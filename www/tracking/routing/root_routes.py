@@ -2,8 +2,11 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
 
+from tracking.page_handlers.root_adjust_handler import RootAdjustHandler
+from tracking.page_handlers.root_inbound_handler import RootInboundHandler
 from tracking.page_handlers.root_observe_handler import RootObserveHandler
 from tracking.page_handlers.root_delete_handler import RootDeleteHandler
+from tracking.page_handlers.root_outbound_handler import RootOutboundHandler
 from tracking.page_handlers.root_transfer_handler import RootTransferHandler
 from tracking.page_handlers.root_update_handler import RootUpdateHandler
 
@@ -36,8 +39,8 @@ def root_view(activity, **kwargs):
 
 root_view_handler_selection = {
     'observe': RootObserveHandler,
-    'inbound': RootObserveHandler,
-    'outbound': RootObserveHandler,
+    'inbound': RootInboundHandler,
+    'outbound': RootOutboundHandler,
     'transfer': RootTransferHandler,
-    'adjust': RootObserveHandler,
+    'adjust': RootAdjustHandler,
 }

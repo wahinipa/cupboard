@@ -45,7 +45,11 @@ class CupboardDisplayContextMixin:
         prefix = self.label_prefixes.get(task, '')
         return f'{prefix}{self.name}'
 
+    def prefix(self):
+        return f'{self.singular_label}: '
+
     def display_context(self, navigator, viewer, display_attributes):
+        prefix = display_attributes.get('prefix', self.prefix())
         children_attributes = display_attributes.get('children_attributes')
         if children_attributes:
             children = display_attributes.get('children', self.viewable_children(viewer))
@@ -53,7 +57,7 @@ class CupboardDisplayContextMixin:
             children = []
         context = CupboardDisplayContext(viewer, context={
             'label': self.name,
-            'classification': self.singular_label,
+            'prefix': prefix,
             'flavor': self.flavor,
         })
         if display_attributes.get('description'):
