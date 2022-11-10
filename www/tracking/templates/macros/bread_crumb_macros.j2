@@ -11,8 +11,14 @@
 {% endmacro %}
 
 {% macro bread_crumb_item(label, url=None) %}
-  <li class="breadcrumb-item">
-    {% if url %}<a href="{{ url }}">{% endif %}{{ label }}{% if url %}</a>{% endif %}
-  </li>
+  {% if url %}
+    <li class="breadcrumb-item">
+      <a href="{{ url }}">{{ label }}</a>
+    </li>
+  {% else %}
+    <li class="breadcrumb-item h4">
+      {{ label }}
+    </li>
+  {% endif %}
 {% endmacro %}
 
