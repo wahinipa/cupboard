@@ -49,12 +49,14 @@ def destination_display_attributes(destination_prefix=None, **kwargs):
     return {
         'display_context': {
             'description': True,
+            'destination_quantity': True,
             'prefix': destination_prefix,
             'url': True,
             'bread_crumbs': True,
             'children_attributes': {
-                'place': {
+                'destination': {
                     'notation': True,
+                    'destination_quantity': True,
                 },
             },
         }
@@ -64,6 +66,7 @@ def destination_display_attributes(destination_prefix=None, **kwargs):
 def place_display_attributes(place_prefix=None, **kwargs):
     return {
         'display_context': {
+            'source_quantity': True,
             'description': True,
             'prefix': place_prefix,
             'url': True,
@@ -71,6 +74,7 @@ def place_display_attributes(place_prefix=None, **kwargs):
             'children_attributes': {
                 'place': {
                     'notation': True,
+                    'source_quantity' : True,
                 },
             },
         }
@@ -80,6 +84,7 @@ def place_display_attributes(place_prefix=None, **kwargs):
 thing_display_attributes = {
     'display_context': {
         'description': True,
+        'source_quantity': True,
         'url': True,
         'bread_crumbs': True,
         'children_attributes': {

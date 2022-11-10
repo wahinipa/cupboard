@@ -48,7 +48,7 @@ class CupboardDisplayContextMixin:
     def prefix(self):
         return f'{self.singular_label}: '
 
-    def display_context(self, navigator, viewer, display_attributes):
+    def display_context(self, navigator, viewer, display_attributes, source_inventory, destination_inventory):
         prefix = display_attributes.get('prefix', self.prefix())
         children_attributes = display_attributes.get('children_attributes')
         if children_attributes:
@@ -60,6 +60,11 @@ class CupboardDisplayContextMixin:
             'prefix': prefix,
             'flavor': self.flavor,
         })
+
+        if display_attributes.get('source_quantity'):
+            self.add_quantity(context, source_inventory)
+        if display_attributes.get('destination_quantity'):
+            self.add_quantity(context, destination_inventory)
         if display_attributes.get('description'):
             self.add_description(context)
         if display_attributes.get('url'):
@@ -72,10 +77,21 @@ class CupboardDisplayContextMixin:
                 child_display_context_attributes = child_attributes.get('display_context')
                 if child_display_context_attributes is not None:
                     context.add_child_context(
-                        child.display_context(navigator, viewer, child_display_context_attributes))
+                        child.display_context(navigator, viewer, child_display_context_attributes, source_inventory, destination_inventory))
                 if child_attributes.get('notation'):
                     child_link_label = child.singular_label
-                    context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=child.name)
+                    if child_attributes.get('source_quantity'):
+                        inventory = source_inventory.place_inventory(child)
+                    elif child_attributes.get('destination_quantity'):
+                        inventory = destination_inventory.place_inventory(child)
+                    else:
+                        inventory = None
+                    if inventory:
+                        quantity = inventory.quantity
+                        value = f'{child.name} has {quantity}'
+                    else:
+                        value = child.name
+                    context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=value)
         for task in self.allowed_tasks(viewer):
             self.add_task(context, navigator, task)
         extra_action_parameters = display_attributes.get('extra_action_parameters')
@@ -85,3 +101,7 @@ class CupboardDisplayContextMixin:
 
     def allowed_tasks(self, viewer):
         return [task for task in self.possible_tasks if self.may_perform_task(viewer, task)]
+
+    def add_quantity(self, context, inventory):
+        quantity = inventory.quantity
+        context.add_notation(label='Quantity', value=f'{quantity}')

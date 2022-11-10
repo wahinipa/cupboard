@@ -1,4 +1,5 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.viewers.Inventory_holder import create_inventory
 from tracking.viewers.destination import Destination
 
 DEFAULT_ACTIVITY = 'observe'
@@ -51,3 +52,6 @@ class PlatterBase:
         self.destination = destination
         self.thing = thing
         self.specification = specification
+
+        self.source_inventory = create_inventory(self.place, self.thing, self.specification)
+        self.destination_inventory = create_inventory(self.destination, self.thing, self.specification)

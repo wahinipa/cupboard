@@ -4,8 +4,8 @@ from flask import url_for
 
 class ViewHandler:
     def validated_rendering(self):
-        display_context = self.display_context_maker.display_context(self.navigator, self.viewer,
-                                                                     self.display_attributes)
+        display_context = self.display_context_maker.display_context(
+            self.navigator, self.viewer, self.display_attributes, self.source_inventory, self.destination_inventory)
         display_context.set_active_flavor(self.current_activity)
         if self.viewer:
             self.add_top_menu(display_context)

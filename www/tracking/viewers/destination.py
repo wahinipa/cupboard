@@ -38,7 +38,19 @@ class Destination(CupboardDisplayContextMixin):
 
     @property
     def root_path(self):
-        return  [Destination(destination) for destination in self.place_model.root_path]
+        return [Destination(destination) for destination in self.place_model.root_path]
 
     def viewable_children(self, viewer):
         return [Destination(destination) for destination in self.place_model.sorted_children]
+
+    @property
+    def full_set(self):
+        return self.place_model.full_set
+
+    @property
+    def full_positionings(self):
+        return self.place_model.full_positionings
+
+    @property
+    def positionings(self):
+        return self.place_model.positionings

@@ -39,6 +39,14 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
         return self.platter.place
 
     @property
+    def source_inventory(self):
+        return self.platter.source_inventory
+
+    @property
+    def destination_inventory(self):
+        return self.platter.destination_inventory
+
+    @property
     def observe_url(self):
         return self.navigator.url(self.root, 'view', activity='observe')
 
