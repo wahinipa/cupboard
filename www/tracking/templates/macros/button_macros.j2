@@ -21,6 +21,10 @@
     {{ button_action(url=url, prefix='Duplicate ', label=label, column_width=column_width) }}
   {% elif task == 'update' %}
     {{ button_action(url=url, prefix='Update ', label=label, column_width=column_width, button_color='warning') }}
+  {% elif task == 'enable' %}
+    {{ button_action(url=url, prefix='Enable ', label=label, column_width=column_width, button_color='warning') }}
+  {% elif task == 'disable' %}
+    {{ button_action(url=url, prefix='Disable ', label=label, column_width=column_width, button_color='danger') }}
   {% endif %}
 {% endmacro %}
 

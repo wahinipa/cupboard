@@ -11,6 +11,8 @@ def register_people_navigation(navigator):
 
     register('create')
     register('delete')
+    register('disable')
+    register('enable')
     register('list')
     register('update')
     register('view')

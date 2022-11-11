@@ -7,10 +7,10 @@ from tracking import database
 from tracking.commons.redirect_hackers import redirect_hackers
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 from tracking.forms.people_forms import ChangePasswordForm, LoginForm
-from tracking.modelling.people_model import all_people_display_context
-from tracking.navigation.cupboard_navigation import create_cupboard_navigator
 from tracking.page_handlers.people_create_handler import PeopleCreateHandler
 from tracking.page_handlers.people_delete_handler import PeopleDeleteHandler
+from tracking.page_handlers.people_disable_handler import PeopleDisableHandler
+from tracking.page_handlers.people_enable_handler import PeopleEnableHandler
 from tracking.page_handlers.people_list_handler import PeopleListHandler
 from tracking.page_handlers.people_update_handler import PeopleUpdateHandler
 from tracking.page_handlers.people_view_handler import PeopleViewHandler
@@ -33,6 +33,16 @@ def people_create():
 @login_required
 def people_delete(user_id):
     return PeopleDeleteHandler(current_user, user_id=user_id).handle()
+
+@people_bp.route('/enable/<int:user_id>')
+@login_required
+def people_enable(user_id):
+    return PeopleEnableHandler(current_user, user_id=user_id).handle()
+
+@people_bp.route('/disable/<int:user_id>')
+@login_required
+def people_disable(user_id):
+    return PeopleDisableHandler(current_user, user_id=user_id).handle()
 
 
 @people_bp.route('/login', methods=['GET', 'POST'])

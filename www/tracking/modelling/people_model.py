@@ -27,7 +27,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     singular_label = "Person"
     plural_label = "People"
-    possible_tasks = ['update', 'delete']
+    possible_tasks = ['update', 'delete', 'enable', 'disable']
     label_prefixes = {}
     flavor = "people"
 
@@ -90,6 +90,10 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
             return viewer.may_delete_person(self)
         elif task == 'update':
             return viewer.may_update_person(self)
+        elif task == 'enable':
+            return viewer.may_update_person(self) and not self.is_active
+        elif task == 'disable':
+            return viewer.may_update_person(self) and self.is_active
         elif task == 'create':
             return viewer.may_create_person
         else:
@@ -123,7 +127,10 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     @property
     def name(self):
-        return f'{self.first_name} {self.last_name}'
+        name = f'{self.first_name} {self.last_name}'
+        if not self.is_active:
+            name += ' (inactive)'
+        return name
 
     @property
     def may_edit_database(self):
@@ -154,6 +161,12 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     def may_update_person(self, person):
         return self.is_an_admin or self == person
+
+    def may_disable_person(self, person):
+        return self.may_delete_person(person)
+
+    def may_enable_person(self, person):
+        return self.may_disable_person(person)
 
     @property
     def may_create_thing(self):
