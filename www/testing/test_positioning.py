@@ -5,6 +5,7 @@ from tracking import database
 from tracking.modelling.postioning_model import find_exact_quantity_of_things_at_place, add_quantity_of_things, \
     _find_positionings, \
     Positioning, move_quantity_of_things
+from tracking.viewers.destination import Destination
 
 
 def _pycharm_please_keep_these_imports():
@@ -306,4 +307,4 @@ def test_change_of_place(rainbow_place, wild_place, light_saber, knights_of_the_
     assert find_exact_quantity_of_things_at_place(rainbow_place, light_saber, roll_specification) == 7
     assert find_exact_quantity_of_things_at_place(wild_place, light_saber, roll_specification) == 0
 
-    assert move_quantity_of_things(wild_place, rainbow_place, light_saber, roll_specification, 2) == (2, 5)
+    assert move_quantity_of_things(Destination(wild_place), rainbow_place, light_saber, roll_specification, 2) == (2, 5)
