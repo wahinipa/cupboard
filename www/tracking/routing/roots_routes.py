@@ -2,7 +2,7 @@
 from flask import Blueprint
 from flask_login import current_user, login_required
 
-from tracking.page_handlers.root_view_handler import RootViewHandler
+from tracking.page_handlers.root_observe_handler import RootObserveHandler
 from tracking.page_handlers.roots_create_handler import RootsCreateHandler
 from tracking.page_handlers.roots_view_handler import RootsViewHandler
 
@@ -24,7 +24,7 @@ def roots_create():
 def roots_view():
     root = current_user.only_root
     if root:
-        handler = RootViewHandler(current_user, root_id=root.id)
+        handler = RootObserveHandler(current_user, root_id=root.id)
     else:
         handler = RootsViewHandler(current_user)
     return handler.handle()
