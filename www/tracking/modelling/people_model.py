@@ -21,6 +21,10 @@ class AllPeople:
 class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin):
     """ User acts on behalf of various groups """
 
+    @property
+    def is_active(self):
+        return self.is_enabled
+
     singular_label = "Person"
     plural_label = "People"
     possible_tasks = ['update', 'delete']
@@ -32,6 +36,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     password = database.Column(database.String(255), nullable=False)
 
     # User fields
+    is_enabled = database.Column(database.Boolean(), nullable=False, default=True)
     is_admin = database.Column(database.Boolean(), nullable=False, default=False)
     first_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
     last_name = database.Column(database.Unicode(50), nullable=False, server_default=u'')
@@ -264,6 +269,12 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
             if len(roots) == 1:
                 return roots[0]
         return None
+
+    def disable(self):
+        self.is_enabled = False
+
+    def enable(self):
+        self.is_enabled = True
 
 
 @event.listens_for(User.password, 'set', retval=True)

@@ -23,6 +23,13 @@ def test_user_creation(curly_stooge_user):
 def test_stooge_user_again(curly_stooge_user):
     assert curly_stooge_user.id is not None
 
+def test_disable_user(curly_stooge_user):
+    assert curly_stooge_user.is_active
+    curly_stooge_user.disable()
+    assert not curly_stooge_user.is_active
+    curly_stooge_user.enable()
+    assert curly_stooge_user.is_active
+
 
 def test_find_or_create_user_no_user(app):
     new_user = find_or_create_user(u'Larry', u'Stooge', u'larry', 'YukYuk12345')
