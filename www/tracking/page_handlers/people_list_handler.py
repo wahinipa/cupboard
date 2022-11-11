@@ -30,6 +30,14 @@ class PeopleListHandler(PageHandler, ViewHandler, ViewerHoldingHandler):
             'children_attributes': {
                 'people': {
                     'notation': True,
-                    },
                 },
-            }
+            },
+        }
+
+    @property
+    def destination_inventory(self):
+        return None
+
+    @property
+    def source_inventory(self):
+        return None
