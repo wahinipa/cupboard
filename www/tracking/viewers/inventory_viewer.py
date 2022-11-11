@@ -16,7 +16,7 @@ class InventoryViewer(PlatterBase, CupboardDisplayContextMixin):
     flavor = "inventory"
     singular_label = 'Inventory'
     # 'ing' suffix makes these required tasks that show without needing a 'Show Actions' click
-    possible_tasks = ['arriving', 'moving', 'changing', 'departing']
+    possible_tasks = []
     label_prefixes = {}
 
     def __init__(self, platter):

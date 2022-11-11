@@ -10,5 +10,5 @@ class RootObserveHandler(RootViewHandler):
 
     @property
     def children(self):
-        return [self.place, self.thing, self.thing_specification, InventoryViewer(self.platter)]
+        return [self.place, self.thing, self.thing_specification]
 

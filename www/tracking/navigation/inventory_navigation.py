@@ -1,12 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.viewers.inventory_viewer import InventoryViewer
+from tracking.viewers.thing_specification_viewer import ThingSpecificationViewer
 
 
 def register_inventory_navigation(navigator):
     def register(task):
         endpoint = f'inventory_bp.inventory_{task}'
-        navigator.register(InventoryViewer, task, endpoint)
+        navigator.register(ThingSpecificationViewer, task, endpoint)
 
     register('arriving')
     register('departing')
     register('moving')
+    register('changing')

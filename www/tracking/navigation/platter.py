@@ -24,7 +24,7 @@ class Platter(NavigatingPlatter):
 
     @property
     def thing_specification(self):
-        return ThingSpecificationViewer(self.thing, self.specification)
+        return ThingSpecificationViewer(self.place, self.destination, self.thing, self.specification, self.activity)
 
     @property
     def current_quantity(self):

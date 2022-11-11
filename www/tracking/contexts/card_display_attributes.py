@@ -118,6 +118,7 @@ person_display_attributes = {
 
 specification_display_attributes = {
     'display_context': {
+        'source_quantity': True,
         'children_attributes': {
             'inventory': {
                 'notation': True,
