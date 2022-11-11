@@ -9,7 +9,6 @@ from flask_admin.menu import MenuLink
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from tracking.modelling.role_models import PlaceAssignment, UniversalAssignment, find_or_create_standard_roles
 from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 from tracking.commons.create_test_data import create_test_data
 from tracking.contexts.cupboard_display_context import project_name
@@ -40,6 +39,7 @@ def initialize_database(database):
     from tracking.modelling.people_model import create_initial_users
     initial_users = create_initial_users()
 
+    from tracking.modelling.role_models import find_or_create_standard_roles
     find_or_create_standard_roles()
 
     if environ.get('ADD_TEST_DATA'):
@@ -63,6 +63,9 @@ def add_flask_admin(application, database):
     from tracking.modelling.postioning_model import Positioning
     from tracking.modelling.role_models import RootAssignment
     from tracking.modelling.specification_model import Specification
+    from tracking.modelling.role_models import UniversalAssignment
+    from tracking.modelling.role_models import PlaceAssignment
+    from tracking.modelling.role_models import Role
     admin.add_view(AdminModelView(Category, database.session))
     admin.add_view(AdminModelView(Choice, database.session))
     admin.add_view(AdminModelView(Place, database.session))
@@ -76,6 +79,7 @@ def add_flask_admin(application, database):
     admin.add_view(AdminModelView(UniversalAssignment, database.session))
     admin.add_view(AdminModelView(RootAssignment, database.session))
     admin.add_view(AdminModelView(PlaceAssignment, database.session))
+    admin.add_view(AdminModelView(Role, database.session))
 
 
 class AdminModelView(ModelView):

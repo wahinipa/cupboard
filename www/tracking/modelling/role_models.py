@@ -30,13 +30,13 @@ class Role(UniqueNamedBaseModel):
         admin_role_name: "Within an organization, can assign roles to people.",
         linkage_role_name: "Can associate user accounts with an organization.",
         structuring_role_name: "Within an organization, can update the catalog of things, categories, and choices.",
-        location_manager_name: "For a given location, can create, delete, or update sub-locations",
-        inventory_manager_name: "For a given location, can assign inventory viewing and modification roles",
-        observer_role_name: "Observer",
-        inbound_role_name: "Receiving Agent",
-        outbound_role_name: "Shipping Agent",
-        transfer_role_name: "Transfer Agent",
-        adjust_role_name: "Auditing Agent",
+        location_manager_name: "For a given location, can create, delete, or update sub-locations.",
+        inventory_manager_name: "For a given location, can assign inventory viewing and modification roles.",
+        observer_role_name: "For a given location, can observe inventory.",
+        inbound_role_name: "For a given location, can add inbound items to inventory.",
+        outbound_role_name: "For a given location, can remove outbound items from inventory.",
+        transfer_role_name: "For a given location, can transfer items out of inventory to another location.",
+        adjust_role_name: "For a given location, can adjust inventory amounts to match hand counts.",
     }
 
     universal_role_name_set = {user_admin_role_name}
