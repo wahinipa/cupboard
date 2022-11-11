@@ -84,6 +84,8 @@ class CupboardDisplayContextMixin:
                         inventory = source_inventory.place_inventory(child)
                     elif child_attributes.get('destination_quantity'):
                         inventory = destination_inventory.place_inventory(child)
+                    elif child_attributes.get('thing_quantity'):
+                        inventory = source_inventory.thing_inventory(child)
                     else:
                         inventory = None
                     if inventory:

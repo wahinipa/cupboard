@@ -21,6 +21,9 @@ class InventoryHolder:
     def place_inventory(self, place):
         return create_inventory(place, self.thing, self.specification, positionings=self.positionings)
 
+    def thing_inventory(self, thing):
+        return create_inventory(self.place, thing, self.specification, positionings=self.positionings)
+
 
 def create_inventory(place, thing, specification, positionings=None):
     return InventoryHolder(place, thing, specification, positionings=positionings)

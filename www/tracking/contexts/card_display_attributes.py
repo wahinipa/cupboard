@@ -90,6 +90,7 @@ thing_display_attributes = {
         'children_attributes': {
             'thing': {
                 'notation': True,
+                'thing_quantity': True,
             },
         },
     },
