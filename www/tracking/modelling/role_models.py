@@ -6,19 +6,52 @@ from sqlalchemy.orm import declared_attr
 from tracking import database
 from tracking.modelling.base_models import UniqueNamedBaseModel, IdModelMixin, DatedModelMixin
 
+
 class Role(UniqueNamedBaseModel):
     root_assignments = database.relationship('RootAssignment', backref='role', lazy=True, cascade='all, delete')
     place_assignments = database.relationship('PlaceAssignment', backref='role', lazy=True, cascade='all, delete')
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,
                                                   cascade='all, delete')
 
-    observer_role = "Observer"
-    create_user_role = "Create User"
-    delete_user_role = "Delete User"
+    user_admin_role_name = "User Account Manager"
+    admin_role_name = "Organization Administrator"
+    linkage_role_name = "Linking People"
+    structuring_role_name = "Catalog Manager"
+    inventory_manager_name = "Inventory Manager"
+    location_manager_name = "Location Manager"
+    observer_role_name = "Observer"
+    inbound_role_name = "Receiving Agent"
+    outbound_role_name = "Shipping Agent"
+    transfer_role_name = "Transfer Agent"
+    adjust_role_name = "Auditing Agent"
+
+    role_descriptions = {
+        user_admin_role_name: "Can create, update, enable, disable, or delete user accounts.",
+        admin_role_name: "Within an organization, can assign roles to people.",
+        linkage_role_name: "Can associate user accounts with an organization.",
+        structuring_role_name: "Within an organization, can update the catalog of things, categories, and choices.",
+        location_manager_name: "For a given location, can create, delete, or update sub-locations",
+        inventory_manager_name: "For a given location, can assign inventory viewing and modification roles",
+        observer_role_name: "Observer",
+        inbound_role_name: "Receiving Agent",
+        outbound_role_name: "Shipping Agent",
+        transfer_role_name: "Transfer Agent",
+        adjust_role_name: "Auditing Agent",
+    }
+
+    universal_role_name_set = {user_admin_role_name}
+    root_role_name_set = {admin_role_name, linkage_role_name, structuring_role_name}
+    place_role_name_set = {location_manager_name, inventory_manager_name, observer_role_name, inbound_role_name,
+                           outbound_role_name, transfer_role_name, adjust_role_name}
+
+    universal_role_name_list = sorted(universal_role_name_set)
+    root_role_name_list = sorted(root_role_name_set)
+    place_role_name_list = sorted(place_role_name_set)
+    role_name_list = universal_role_name_list + root_role_name_list + place_role_name_list
 
     @property
     def is_observer_role(self):
-        return self.is_named(self.observer_role)
+        return self.is_named(self.observer_role_name)
 
     def is_named(self, name_of_role):
         return self.name == name_of_role
@@ -45,10 +78,10 @@ def find_or_create_role(name, description="", date_created=None):
 
 def find_or_create_standard_roles():
     return [
-        find_or_create_role(Role.create_user_role, "Can create new user account (i.e. login)."),
-        find_or_create_role(Role.delete_user_role, "Can delete current user account."),
-        find_or_create_role(Role.observer_role, "Can view, search, and generate reports."),
+        find_or_create_role(name=name, description=Role.role_descriptions[name])
+        for name in Role.role_name_list
     ]
+
 
 class KnowsOwnName:
     def is_named(self, name):

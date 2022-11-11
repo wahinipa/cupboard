@@ -227,7 +227,7 @@ def test_hierarchical_role_assignment(knights_of_the_round_table, rainbow_place,
 
 def test_observer_role(curly_stooge_user, knights_of_the_round_table):
     find_or_create_standard_roles()
-    observer_role = find_role(Role.observer_role)
+    observer_role = find_role(Role.observer_role_name)
     assert not curly_stooge_user.may_observe_things
     assign_root_role(knights_of_the_round_table, observer_role, curly_stooge_user)
     assert curly_stooge_user.may_observe_things
@@ -236,8 +236,16 @@ def test_observer_role(curly_stooge_user, knights_of_the_round_table):
 def test_standard_roles(app):
     standard_roles = {role.name: role for role in find_or_create_standard_roles()}
     for role_name in [
-        'Create User',
-        'Delete User',
-        'Observer',
+        "User Account Manager",
+        "Organization Administrator",
+        "Linking People",
+        "Catalog Manager",
+        "Inventory Manager",
+        "Location Manager",
+        "Observer",
+        "Receiving Agent",
+        "Shipping Agent",
+        "Transfer Agent",
+        "Auditing Agent",
     ]:
         assert standard_roles.get(role_name) is not None

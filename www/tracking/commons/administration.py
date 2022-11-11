@@ -9,7 +9,7 @@ from flask_admin.menu import MenuLink
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from tracking.modelling.role_models import PlaceAssignment, UniversalAssignment
+from tracking.modelling.role_models import PlaceAssignment, UniversalAssignment, find_or_create_standard_roles
 from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 from tracking.commons.create_test_data import create_test_data
 from tracking.contexts.cupboard_display_context import project_name
@@ -40,8 +40,7 @@ def initialize_database(database):
     from tracking.modelling.people_model import create_initial_users
     initial_users = create_initial_users()
 
-    # from tracking.roles.role_models import find_or_create_standard_roles
-    # find_or_create_standard_roles()
+    find_or_create_standard_roles()
 
     if environ.get('ADD_TEST_DATA'):
         create_test_data(database, initial_users)
