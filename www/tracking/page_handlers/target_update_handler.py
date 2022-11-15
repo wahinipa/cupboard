@@ -15,6 +15,3 @@ class TargetUpdateHandler:
     def target_update_redirect(self):
         return self.navigator.url(self.target, 'view', activity=self.activity)
 
-    @property
-    def viewer_has_permission(self):
-        return self.target.may_update(self.viewer)

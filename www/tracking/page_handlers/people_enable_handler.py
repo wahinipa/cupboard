@@ -2,10 +2,12 @@
 from flask import redirect
 
 from tracking import database
+from tracking.modelling.role_models import Role
 from tracking.page_handlers.people_base_handler import PeopleBaseHandler
 
 
 class PeopleEnableHandler(PeopleBaseHandler):
+    proper_role_names = [Role.super_role_name]
 
     def validated_rendering(self):
         redirect_url = self.navigator.url(self.person, 'view', activity=self.activity)
@@ -13,6 +15,3 @@ class PeopleEnableHandler(PeopleBaseHandler):
         database.session.commit()
         return redirect(redirect_url)
 
-    @property
-    def viewer_has_permission(self):
-        return self.target and self.viewer.may_enable_person(self.person)

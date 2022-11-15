@@ -7,8 +7,8 @@ from tracking.page_handlers.active_platter_holding_handler import ActivePlatterH
 class InventoryBaseHandler(FormHandler, PageHandler, ActivePlatterHoldingHandler):
     page_template = 'pages/form_page.j2'
 
-    def __init__(self, viewer, **kwargs):
-        PageHandler.__init__(self)
+    def __init__(self, endpoint, viewer, **kwargs):
+        PageHandler.__init__(self, endpoint)
         FormHandler.__init__(self)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
 
@@ -26,7 +26,3 @@ class InventoryBaseHandler(FormHandler, PageHandler, ActivePlatterHoldingHandler
 
     def success_redirect_url(self, target):
         return self.redirect_url
-
-    @property
-    def viewer_has_permission(self):
-        return self.may_be_observed

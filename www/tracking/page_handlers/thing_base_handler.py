@@ -6,8 +6,8 @@ from tracking.page_handlers.target_handler import TargetHandler
 
 class ThingBaseHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler):
 
-    def __init__(self, viewer, **kwargs):
-        PageHandler.__init__(self)
+    def __init__(self, endpoint, viewer, **kwargs):
+        PageHandler.__init__(self, endpoint)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
         TargetHandler.__init__(self, self.thing)  # Depends on ActivePlatterHoldingHandler to have created self.thing
 

@@ -7,7 +7,6 @@ from tracking.page_handlers.inventory_adjustment_handler import InventoryAdjustm
 from tracking.page_handlers.inventory_arrival_handler import InventoryArrivalHandler
 from tracking.page_handlers.inventory_departure_handler import InventoryDepartureHandler
 from tracking.page_handlers.inventory_transfer_handler import InventoryTransferHandler
-from tracking.routing.home_redirect import home_redirect
 
 inventory_bp = Blueprint(
     'inventory_bp', __name__,

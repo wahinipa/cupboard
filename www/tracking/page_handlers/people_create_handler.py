@@ -21,7 +21,3 @@ class PeopleCreateHandler(PeopleBaseHandler, FormHandler):
 
     def success_redirect_url(self, person):
         return self.navigator.url(person, 'view', activity=self.activity)
-
-    @property
-    def viewer_has_permission(self):
-        return self.viewer.may_create_person

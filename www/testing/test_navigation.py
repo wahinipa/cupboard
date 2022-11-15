@@ -39,11 +39,13 @@ def test_navigator_registration_key():
 def test_navigator():
     fuzz = Fuzz()
     navigator = Navigator()
-    navigator.register(Fuzz, 'list', 'list_endpoint')
-    navigator.register(Fuzz, 'view', 'view_endpoint')
+    navigator.register(Fuzz, 'list', 'list_endpoint', ['rock', 'roll'])
+    navigator.register(Fuzz, 'view', 'view_endpoint', ['zip', 'zap'])
     assert navigator.endpoint(Fuzz, 'list') == 'list_endpoint'
     assert navigator.endpoint(fuzz, 'list') == 'list_endpoint'
     assert navigator.endpoint(Fuzz, 'view') == 'view_endpoint'
     assert navigator.endpoint(fuzz, 'view') == 'view_endpoint'
     assert navigator.endpoint(Fuzz, 'nada') is None
     assert navigator.endpoint(fuzz, 'nada') is None
+    assert navigator.endpoint_role_names('list_endpoint') == ['rock', 'roll']
+    assert navigator.endpoint_role_names('view_endpoint') == ['zip', 'zap']

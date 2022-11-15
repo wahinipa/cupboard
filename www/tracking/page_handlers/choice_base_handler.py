@@ -9,8 +9,8 @@ from tracking.page_handlers.target_handler import TargetHandler
 class ChoiceBaseHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler):
     current_activity = 'category'  # This lights up the 'Categories' button in the top menu. There is no 'Choices' button
 
-    def __init__(self, viewer, choice_id=None, **kwargs):
-        PageHandler.__init__(self)
+    def __init__(self, endpoint, viewer, choice_id=None, **kwargs):
+        PageHandler.__init__(self, endpoint)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
         TargetHandler.__init__(self, find_choice_by_id(choice_id))
 

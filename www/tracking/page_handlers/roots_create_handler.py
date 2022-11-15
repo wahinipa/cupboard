@@ -11,7 +11,8 @@ class RootsCreateHandler(PageHandler, FormHandler, PlatterHoldingHandler):
     objects_are_valid = True
     form_title = "Create New Root"
 
-    def __init__(self, viewer):
+    def __init__(self, endpoint, viewer):
+        PageHandler.__init__(self, endpoint)
         PlatterHoldingHandler.__init__(self, viewer)
 
     @property
@@ -26,7 +27,3 @@ class RootsCreateHandler(PageHandler, FormHandler, PlatterHoldingHandler):
 
     def success_redirect_url(self, target):
         return self.navigator.url(target, 'view')
-
-    @property
-    def viewer_has_permission(self):
-        return self.viewer.may_create_root

@@ -28,17 +28,15 @@ def navigational_identities(target):
 class Navigator:
     def __init__(self):
         self.registrations = {}
+        self.role_names = {}
 
-    def register(self, target, task, endpoint):
+    def register(self, target, task, endpoint, role_names):
         self.registrations[navigator_registration_key(target, task)] = endpoint
+        self.role_names[endpoint] = role_names
 
     def endpoint(self, target, task):
         return self.registrations.get(navigator_registration_key(target, task))
 
-    def url(self, target, task, **kwargs):
-        endpoint = self.endpoint(target, task)
-        if endpoint:
-            identities = navigational_identities(target)
-            return url_for(endpoint, **identities, **kwargs)
-        else:
-            return None
+    def endpoint_role_names(self, endpoint):
+        return self.role_names[endpoint]
+

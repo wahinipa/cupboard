@@ -7,10 +7,6 @@ from tracking.page_handlers.thing_base_handler import ThingBaseHandler
 class ThingCreateHandler(ThingBaseHandler, FormHandler):
     page_template = 'pages/form_page.j2'
 
-    @property
-    def viewer_has_permission(self):
-        return self.thing.may_create_thing(self.viewer)
-
     def create_form(self):
         return ThingCreateForm()
 

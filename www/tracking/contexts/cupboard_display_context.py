@@ -94,15 +94,12 @@ class CupboardDisplayContextMixin:
                     else:
                         value = child.name
                     context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=value)
-        for task in self.allowed_tasks(viewer):
+        for task in self.possible_tasks:
             self.add_task(context, navigator, task)
         extra_action_parameters = display_attributes.get('extra_action_parameters')
         if extra_action_parameters:
             self.add_extra_actions(context, navigator, viewer, **extra_action_parameters)
         return context
-
-    def allowed_tasks(self, viewer):
-        return [task for task in self.possible_tasks if self.may_perform_task(viewer, task)]
 
     def add_quantity(self, context, inventory):
         quantity = inventory.quantity

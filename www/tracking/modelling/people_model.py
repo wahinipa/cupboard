@@ -83,34 +83,6 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
                 return True
         return False
 
-    def may_perform_task(self, viewer, task):
-        if task == 'view':
-            return viewer.may_observe_people
-        elif task == 'delete':
-            return viewer.may_delete_person(self)
-        elif task == 'update':
-            return viewer.may_update_person(self)
-        elif task == 'enable':
-            return viewer.may_update_person(self) and not self.is_active
-        elif task == 'disable':
-            return viewer.may_update_person(self) and self.is_active
-        elif task == 'create':
-            return viewer.may_create_person
-        else:
-            return False
-
-    @property
-    def may_create_root(self):
-        return self.is_the_super_admin
-
-    @property
-    def may_delete_root(self):
-        return self.is_the_super_admin
-
-    @property
-    def may_update_root(self):
-        return self.is_the_super_admin
-
     #### ????? ####
 
     @property
@@ -136,109 +108,6 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     def may_edit_database(self):
         return self.is_the_super_admin
 
-    @property
-    def may_assign_universal_roles(self):
-        return self.is_an_admin
-
-    @property
-    def may_create_place(self):
-        return self.is_an_admin
-
-    @property
-    def may_delete_place(self):
-        return self.is_an_admin
-
-    @property
-    def may_update_place(self):
-        return self.is_an_admin
-
-    @property
-    def may_create_person(self):
-        return self.is_an_admin
-
-    def may_update(self, viewer):
-        return viewer.may_update_person(self)
-
-    def may_update_person(self, person):
-        return self.is_an_admin or self == person
-
-    def may_disable_person(self, person):
-        return self.may_delete_person(person)
-
-    def may_enable_person(self, person):
-        return self.may_disable_person(person)
-
-    @property
-    def may_create_thing(self):
-        return self.is_an_admin
-
-    @property
-    def may_delete_thing(self):
-        return self.is_an_admin
-
-    @property
-    def may_update_thing(self):
-        return self.is_an_admin
-
-    @property
-    def may_create_category(self):
-        return self.is_an_admin
-
-    @property
-    def may_delete_category(self):
-        return self.is_an_admin
-
-    @property
-    def may_delete_choice(self):
-        return self.is_an_admin
-
-    @property
-    def may_update_category(self):
-        return self.is_an_admin
-
-    @property
-    def may_update_choice(self):
-        return self.is_an_admin
-
-    @property
-    def may_create_role(self):
-        return self.is_the_super_admin
-
-    def may_delete_person(self, person):
-        # Super admin cannot be deleted.
-        return self.is_an_admin and not person.is_the_super_admin
-
-    @property
-    def may_observe_people(self):
-        # TODO: refine this
-        return self.may_observe
-
-    @property
-    def may_observe_categories(self):
-        # TODO: refine this
-        return self.may_observe
-
-    @property
-    def may_observe_groups(self):
-        # TODO: refine this
-        return self.may_observe
-
-    @property
-    def may_observe_places(self):
-        # TODO: refine this
-        return self.may_observe
-
-    @property
-    def may_observe_things(self):
-        # TODO: refine this
-        return self.may_observe
-
-    @property
-    def may_observe(self):
-        def yes(assignment):
-            return assignment.is_observer
-
-        return self.is_an_admin or any(map(yes, self.assignments))
 
     def has_role(self, root_or_place, name_of_role):
         return self.has_universal_role(name_of_role) or root_or_place.has_role(self, name_of_role)
@@ -249,23 +118,9 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
         return any(map(yes, self.universal_assignments))
 
-    def may_view_person(self, user):
-        return self.is_the_super_admin or not user.is_the_super_admin
-
-    def may_be_observed(self, viewer):
-        return viewer.is_the_super_admin or not self.is_the_super_admin
-
     @property
     def label(self):
         return self.name
-
-    @property
-    def url(self):
-        return url_for('people_bp.people_view', user_id=self.id)
-
-    @property
-    def deletion_url(self):
-        return url_for('people_bp.people_delete', user_id=self.id)
 
     @property
     def roots(self):

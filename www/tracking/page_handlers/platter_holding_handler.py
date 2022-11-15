@@ -1,14 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.navigation.platter import PlatterById
-from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
 from tracking.viewers.categories_viewer import CategoriesViewer
 
 
-class PlatterHoldingHandler(ViewerHoldingHandler):
+class PlatterHoldingHandler:
 
     def __init__(self, viewer, **kwargs):
-        ViewerHoldingHandler.__init__(self, viewer)
-        self.platter = PlatterById(**kwargs)
+        self.viewer = viewer
+        self.platter = PlatterById(viewer=viewer, **kwargs)
 
     @property
     def platter_objects_are_valid(self):
@@ -33,6 +32,10 @@ class PlatterHoldingHandler(ViewerHoldingHandler):
     @property
     def destination(self):
         return self.platter.destination
+
+    @property
+    def person(self):
+        return self.platter.person
 
     @property
     def place(self):

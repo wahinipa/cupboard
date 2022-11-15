@@ -1,15 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.forms.choice_forms import ChoiceCreateForm
+from tracking.modelling.role_models import Role
 from tracking.page_handlers.category_base_handler import CategoryBaseHandler
 from tracking.page_handlers.form_handler import FormHandler
 
 
 class CategoryChoiceCreateHandler(CategoryBaseHandler, FormHandler):
+    required_role_name = Role.admin_role_name
     page_template = 'pages/form_page.j2'
-
-    @property
-    def viewer_has_permission(self):
-        return self.category.may_create_choice(self.viewer)
 
     def create_form(self):
         return ChoiceCreateForm()

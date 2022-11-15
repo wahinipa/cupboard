@@ -93,37 +93,8 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
                 return specification
         return None
 
-    def may_perform_task(self, viewer, task):
-        if task == 'view':
-            return self.may_be_observed(viewer)
-        elif task == 'delete':
-            return self.may_delete(viewer)
-        elif task == 'update':
-            return self.may_update(viewer)
-        elif task == 'create_place':
-            return self.may_create_place(viewer)
-        elif task == 'create_thing':
-            return self.may_create_thing(viewer)
-        else:
-            return False
-
     def may_be_observed(self, viewer):
         return viewer.is_the_super_admin or viewer.is_linked(self)
-
-    def may_delete(self, viewer):
-        return viewer.may_delete_root
-
-    def may_create_place(self, viewer):
-        return viewer.may_update_root
-
-    def may_create_category(self, viewer):
-        return viewer.may_update_root
-
-    def may_create_thing(self, viewer):
-        return viewer.may_update_root
-
-    def may_update(self, viewer):
-        return viewer.may_update_root
 
     @property
     def parent_object(self):

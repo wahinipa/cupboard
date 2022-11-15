@@ -9,8 +9,8 @@ from tracking.viewers.categories_viewer import CategoriesViewer
 class CategoriesCreateHandler(FormHandler, PageHandler, ActivePlatterHoldingHandler):
     page_template = 'pages/form_page.j2'
 
-    def __init__(self, viewer, **kwargs):
-        PageHandler.__init__(self)
+    def __init__(self, endpoint, viewer, **kwargs):
+        PageHandler.__init__(self, endpoint)
         FormHandler.__init__(self)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
 
@@ -24,10 +24,6 @@ class CategoriesCreateHandler(FormHandler, PageHandler, ActivePlatterHoldingHand
 
     def success_redirect_url(self, target):
         return self.navigator.url(target, 'view', activity=self.activity)
-
-    @property
-    def viewer_has_permission(self):
-        return True
 
     def create_form(self):
         return CategoryCreateForm()

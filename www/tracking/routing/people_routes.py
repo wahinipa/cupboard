@@ -26,23 +26,23 @@ people_bp = Blueprint(
 @people_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def people_create():
-    return PeopleCreateHandler(current_user).handle()
+    return PeopleCreateHandler('people_bp.people_create', current_user).handle()
 
 
 @people_bp.route('/delete/<int:user_id>')
 @login_required
 def people_delete(user_id):
-    return PeopleDeleteHandler(current_user, user_id=user_id).handle()
+    return PeopleDeleteHandler('people_bp.people_delete', current_user, user_id=user_id).handle()
 
 @people_bp.route('/enable/<int:user_id>')
 @login_required
 def people_enable(user_id):
-    return PeopleEnableHandler(current_user, user_id=user_id).handle()
+    return PeopleEnableHandler('people_bp.people_enable', current_user, user_id=user_id).handle()
 
 @people_bp.route('/disable/<int:user_id>')
 @login_required
 def people_disable(user_id):
-    return PeopleDisableHandler(current_user, user_id=user_id).handle()
+    return PeopleDisableHandler('people_bp.people_disable', current_user, user_id=user_id).handle()
 
 
 @people_bp.route('/login', methods=['GET', 'POST'])
@@ -71,7 +71,7 @@ def login():
 @people_bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def people_update(user_id):
-    return PeopleUpdateHandler(current_user, user_id=user_id).handle()
+    return PeopleUpdateHandler('people_bp.people_update', current_user, user_id=user_id).handle()
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -95,10 +95,10 @@ def change_password():
 @people_bp.route('/list')
 @login_required
 def people_list():
-    return PeopleListHandler(current_user).handle()
+    return PeopleListHandler('people_bp.people_list', current_user).handle()
 
 
 @people_bp.route('/view/<int:user_id>')
 @login_required
 def people_view(user_id):
-    return PeopleViewHandler(current_user, user_id=user_id).handle()
+    return PeopleViewHandler('people_bp.people_view', current_user, user_id=user_id).handle()

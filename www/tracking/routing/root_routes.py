@@ -34,8 +34,7 @@ def root_update(**kwargs):
 @login_required
 def root_view(activity, **kwargs):
     handler = root_view_handler_selection.get(activity, RootObserveHandler)
-    return handler(current_user, activity=activity, **kwargs).handle()
-
+    return handler('root_bp.root_view', current_user, activity=activity, **kwargs).handle()
 
 root_view_handler_selection = {
     'observe': RootObserveHandler,

@@ -9,8 +9,8 @@ from tracking.page_handlers.target_handler import TargetHandler
 class CategoryBaseHandler(PageHandler, ActivePlatterHoldingHandler, TargetHandler):
     current_activity = 'category'  # This lights up the 'Categories' button in the top menu.
 
-    def __init__(self, viewer, category_id=None, **kwargs):
-        PageHandler.__init__(self)
+    def __init__(self, endpoint, viewer, category_id=None, **kwargs):
+        PageHandler.__init__(self, endpoint)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
         category = find_category_by_id(category_id)
         target = category and category.root == self.root and category

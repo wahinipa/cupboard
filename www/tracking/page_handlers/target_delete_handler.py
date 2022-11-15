@@ -13,6 +13,3 @@ class TargetDeleteHandler:
         database.session.commit()
         return redirect(redirect_url)
 
-    @property
-    def viewer_has_permission(self):
-        return self.target.may_delete(self.viewer)

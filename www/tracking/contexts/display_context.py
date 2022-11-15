@@ -48,13 +48,14 @@ class DisplayContext(Context):
         self.append_to_list('notations', notation)
 
     def add_task(self, url, label, task, is_required=False):
-        list_name = 'required_tasks' if is_required else "tasks"
-        self.context.setdefault(list_name, []).append({
-            'url': url,
-            'label': label,
-            'task': task,
-        })
-        self.context['has_tasks'] = True
+        if url:
+            list_name = 'required_tasks' if is_required else "tasks"
+            self.context.setdefault(list_name, []).append({
+                'url': url,
+                'label': label,
+                'task': task,
+            })
+            self.context['has_tasks'] = True
 
     def render_template(self, template=None, **kwarg):
         if template is None:

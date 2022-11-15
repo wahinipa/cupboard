@@ -29,10 +29,8 @@ class PeopleListViewer(CupboardDisplayContextMixin):
         return [self]
 
     def viewable_children(self, viewer):
-        if viewer.may_observe_people:
-            return all_people()
-        else:
-            return []
+        # TODO: refine this test
+        return all_people()
 
     def add_description(self, context):
         pass

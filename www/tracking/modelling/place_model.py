@@ -64,30 +64,6 @@ class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
         database.session.commit()
         return place
 
-    def may_perform_task(self, viewer, task):
-        if task == 'view':
-            return self.may_be_observed(viewer)
-        elif task == 'create':
-            return self.may_create_place(viewer)
-        elif task == 'delete':
-            return self.may_delete(viewer) and not self.is_top
-        elif task == 'update':
-            return self.may_update(viewer) and not self.is_top
-        else:
-            return False
-
-    def may_be_observed(self, viewer):
-        return self.ancestor.may_be_observed(viewer)
-
-    def may_create_place(self, viewer):
-        return self.ancestor.may_create_place(viewer)
-
-    def may_delete(self, viewer):
-        return self.ancestor.may_delete(viewer)
-
-    def may_update(self, viewer):
-        return self.ancestor.may_update(viewer)
-
     @property
     def parent_object(self):
         return self.place_of

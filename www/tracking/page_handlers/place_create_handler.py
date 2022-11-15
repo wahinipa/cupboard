@@ -1,15 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.forms.place_forms import PlaceCreateForm
+from tracking.modelling.role_models import Role
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.place_base_handler import PlaceBaseHandler
 
 
 class PlaceCreateHandler(PlaceBaseHandler, FormHandler):
     page_template = 'pages/form_page.j2'
-
-    @property
-    def viewer_has_permission(self):
-        return self.place.may_create_place(self.viewer)
+    required_role_name= Role.location_manager_name
 
     def create_form(self):
         return PlaceCreateForm()

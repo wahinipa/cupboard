@@ -17,16 +17,16 @@ thing_bp = Blueprint(
 @thing_bp.route('/create/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
 def thing_create(**kwargs):
-    return ThingCreateHandler(current_user, **kwargs).handle()
+    return ThingCreateHandler('thing_bp.thing_create', current_user, **kwargs).handle()
 
 
 @thing_bp.route('/delete/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
 @login_required
 def thing_delete(**kwargs):
-    return ThingDeleteHandler(current_user, **kwargs).handle()
+    return ThingDeleteHandler('thing_bp.thing_delete', current_user, **kwargs).handle()
 
 
 @thing_bp.route('/update/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>', methods=['GET', 'POST'])
 @login_required
 def thing_update(**kwargs):
-    return ThingUpdateHandler(current_user, **kwargs).handle()
+    return ThingUpdateHandler('thing_bp.thing_update', current_user, **kwargs).handle()

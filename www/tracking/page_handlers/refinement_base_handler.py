@@ -8,8 +8,8 @@ from tracking.page_handlers.active_platter_holding_handler import ActivePlatterH
 
 class RefinementBaseHandler(PageHandler, ActivePlatterHoldingHandler):
 
-    def __init__(self, viewer, category_id=None, **kwargs):
-        PageHandler.__init__(self)
+    def __init__(self, endpoint, viewer, category_id=None, **kwargs):
+        PageHandler.__init__(self, endpoint)
         ActivePlatterHoldingHandler.__init__(self, viewer, **kwargs)
         category = find_category_by_id(category_id)
         self.category = category and category.root == self.root and category
@@ -17,10 +17,6 @@ class RefinementBaseHandler(PageHandler, ActivePlatterHoldingHandler):
     @property
     def objects_are_valid(self):
         return self.category
-
-    @property
-    def viewer_has_permission(self):
-        return self.category.may_update(self.viewer)
 
     def validated_rendering(self):
         redirect_url = self.navigator.url(self.category, 'view')

@@ -17,6 +17,7 @@ class Role(UniqueNamedBaseModel):
     admin_role_name = "Organization Administrator"
     linkage_role_name = "Linking People"
     structuring_role_name = "Catalog Manager"
+    structure_viewer_role_name = "Catalog Viewer"
     inventory_manager_name = "Inventory Manager"
     location_manager_name = "Location Manager"
     observer_role_name = "Observer"
@@ -24,12 +25,17 @@ class Role(UniqueNamedBaseModel):
     outbound_role_name = "Shipping Agent"
     transfer_role_name = "Transfer Agent"
     adjust_role_name = "Auditing Agent"
+    super_role_name = "Super Admin" # No actual Role created for this
+    self_role_name = "Viewer is Self" # No actual Role created for this
+    people_viewer_name = "Viewer of People" # No actual Role created for this
+    roots_observer_role_name = "Viewer of Roots" # No actual Role created for this
 
     role_descriptions = {
         user_admin_role_name: "Can create, update, enable, disable, or delete user accounts.",
         admin_role_name: "Within an organization, can assign roles to people.",
         linkage_role_name: "Can associate user accounts with an organization.",
         structuring_role_name: "Within an organization, can update the catalog of things, categories, and choices.",
+        structure_viewer_role_name: "Within an organization, can view the catalog of things, categories, and choices.",
         location_manager_name: "For a given location, can create, delete, or update sub-locations.",
         inventory_manager_name: "For a given location, can assign inventory viewing and modification roles.",
         observer_role_name: "For a given location, can observe inventory.",
@@ -40,7 +46,7 @@ class Role(UniqueNamedBaseModel):
     }
 
     universal_role_name_set = {user_admin_role_name}
-    root_role_name_set = {admin_role_name, linkage_role_name, structuring_role_name}
+    root_role_name_set = {admin_role_name, linkage_role_name, structuring_role_name, structure_viewer_role_name}
     place_role_name_set = {location_manager_name, inventory_manager_name, observer_role_name, inbound_role_name,
                            outbound_role_name, transfer_role_name, adjust_role_name}
 

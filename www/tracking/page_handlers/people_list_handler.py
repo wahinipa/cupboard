@@ -1,21 +1,22 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.navigation.cupboard_navigation import create_cupboard_navigator
+from tracking.modelling.role_models import Role
 from tracking.page_handlers.page_handler import PageHandler
+from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 from tracking.page_handlers.view_handler import ViewHandler
-from tracking.page_handlers.viewer_holding_handler import ViewerHoldingHandler
 from tracking.viewers.people_list_viewer import PeopleListViewer
 
 
-class PeopleListHandler(PageHandler, ViewHandler, ViewerHoldingHandler):
+class PeopleListHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
     page_template = "pages/people_list.j2"
-    viewer_has_permission = True
+    proper_role_names = [Role.observer_role_name, Role.super_role_name, Role.user_admin_role_name,
+                         Role.admin_role_name, Role.linkage_role_name]
+
     objects_are_valid = True
     current_activity = "people"
 
-    def __init__(self, viewer):
-        ViewerHoldingHandler.__init__(self, viewer)
-        self.navigator = create_cupboard_navigator()
-        self.root = None
+    def __init__(self, endpoint, viewer):
+        PageHandler.__init__(self, endpoint)
+        PlatterHoldingHandler.__init__(self, viewer)
 
     @property
     def display_context_maker(self):

@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking import database
 from tracking.forms.category_forms import update_category_from_form, CategoryUpdateForm
+from tracking.modelling.role_models import Role
 from tracking.page_handlers.category_base_handler import CategoryBaseHandler
 from tracking.page_handlers.form_handler import FormHandler
 from tracking.page_handlers.target_update_handler import TargetUpdateHandler
@@ -8,6 +9,7 @@ from tracking.page_handlers.target_update_handler import TargetUpdateHandler
 
 class CategoryUpdateHandler(CategoryBaseHandler, FormHandler, TargetUpdateHandler):
     page_template = 'pages/form_page.j2'
+    required_role_name = Role.admin_role_name
 
     def create_form(self):
         return CategoryUpdateForm(obj=self.category)

@@ -22,10 +22,6 @@ class ViewHandler:
         self.add_people_button(display_context)
         self.add_admin_button(display_context)
 
-    @property
-    def viewer_has_permission(self):
-        return self.target.may_be_observed(self.viewer)
-
     def add_home_button(self, display_context):
         display_context.add_top_menu_item('Home', url_for('roots_bp.roots_view'), 'home')
 
