@@ -17,7 +17,7 @@ class RootsCreateHandler(PageHandler, FormHandler, PlatterHoldingHandler):
 
     @property
     def cancel_redirect_url(self):
-        return self.navigator.url(RootsViewer, 'view')
+        return self.navigator.target_url(RootsViewer, 'view')
 
     def create_form(self):
         return RootCreateForm()
@@ -26,4 +26,4 @@ class RootsCreateHandler(PageHandler, FormHandler, PlatterHoldingHandler):
         return create_root_from_form(self.form)
 
     def success_redirect_url(self, target):
-        return self.navigator.url(target, 'view')
+        return self.navigator.target_url(target, 'view')

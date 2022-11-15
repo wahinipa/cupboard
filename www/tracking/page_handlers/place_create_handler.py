@@ -21,7 +21,7 @@ class PlaceCreateHandler(PlaceBaseHandler, FormHandler):
 
     @property
     def cancel_redirect_url(self):
-        return self.navigator.url(self.place, 'view', activity=self.activity)
+        return self.navigator.target_url(self.place, 'view', activity=self.activity)
 
     def success_redirect_url(self, target):
-        return self.navigator.url(target, 'view', activity=self.activity)
+        return self.navigator.target_url(target, 'view', activity=self.activity)

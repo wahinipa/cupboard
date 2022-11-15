@@ -9,5 +9,9 @@ def register_root_navigation(navigator):
         navigator.register(Root, task, endpoint, role_names)
 
     register('delete', [Role.super_role_name])
-    register('view', [Role.roots_observer_role_name, Role.linkage_role_name, Role.super_role_name])
+    register('view_observe', [Role.roots_observer_role_name, Role.linkage_role_name, Role.super_role_name])
+    register('view_inbound', [Role.roots_observer_role_name, Role.linkage_role_name, Role.super_role_name])
+    register('view_outbound', [Role.roots_observer_role_name, Role.linkage_role_name, Role.super_role_name])
+    register('view_transfer', [Role.roots_observer_role_name, Role.linkage_role_name, Role.super_role_name])
+    register('view_adjust', [Role.roots_observer_role_name, Role.linkage_role_name, Role.super_role_name])
     register('update', [Role.super_role_name])

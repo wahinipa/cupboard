@@ -8,7 +8,7 @@ def register_inventory_navigation(navigator):
         endpoint = f'inventory_bp.inventory_{task}'
         navigator.register(ThingSpecificationViewer, task, endpoint, role_names)
 
-    register('arriving', [Role.inbound_role_name])
-    register('departing', [Role.outbound_role_name])
-    register('moving', [Role.transfer_role_name])
-    register('changing', [Role.adjust_role_name])
+    register('arriving', [Role.inbound_role_name, Role.super_role_name])
+    register('departing', [Role.outbound_role_name, Role.super_role_name])
+    register('moving', [Role.transfer_role_name, Role.super_role_name])
+    register('changing', [Role.adjust_role_name, Role.super_role_name])

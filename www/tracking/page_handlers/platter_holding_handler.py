@@ -23,7 +23,7 @@ class PlatterHoldingHandler:
 
     @property
     def category_list_url(self):
-        return self.navigator.url(CategoriesViewer, 'view')
+        return self.navigator.target_url(CategoriesViewer, 'view')
 
     @property
     def current_quantity(self):
@@ -51,27 +51,27 @@ class PlatterHoldingHandler:
 
     @property
     def observe_url(self):
-        return self.navigator.url(self.root, 'view', activity='observe')
+        return self.navigator.target_url(self.root, 'view', activity='observe')
 
     @property
     def inbound_url(self):
-        return self.navigator.url(self.root, 'view', activity='inbound')
+        return self.navigator.target_url(self.root, 'view', activity='inbound')
 
     @property
     def outbound_url(self):
-        return self.navigator.url(self.root, 'view', activity='outbound')
+        return self.navigator.target_url(self.root, 'view', activity='outbound')
 
     @property
     def transfer_url(self):
-        return self.navigator.url(self.root, 'view', activity='transfer')
+        return self.navigator.target_url(self.root, 'view', activity='transfer')
 
     @property
     def adjust_url(self):
-        return self.navigator.url(self.root, 'view', activity='adjust')
+        return self.navigator.target_url(self.root, 'view', activity='adjust')
 
     @property
     def place_url(self):
-        return self.navigator.url(self.root, 'view')
+        return self.navigator.target_url(self.root, 'view')
 
     @property
     def root(self):

@@ -40,7 +40,7 @@ class CupboardDisplayContextMixin:
         if label is None:
             label = self.task_label(task)
         is_required = task.endswith('ing')
-        context.add_task(url=navigator.url(self, task), label=label, task=task, is_required=is_required)
+        context.add_task(url=navigator.target_url(self, task), label=label, task=task, is_required=is_required)
 
     def task_label(self, task):
         prefix = self.label_prefixes.get(task, '')
@@ -69,7 +69,7 @@ class CupboardDisplayContextMixin:
         if display_attributes.get('description'):
             self.add_description(context)
         if display_attributes.get('url'):
-            context['url'] = navigator.url(self, 'view')
+            context['url'] = navigator.target_url(self, 'view')
         if display_attributes.get('bread_crumbs'):
             context.add_bread_crumbs(self.bread_crumbs(navigator))
         for child in children:
@@ -94,7 +94,7 @@ class CupboardDisplayContextMixin:
                         value = f'{child.name} has {quantity}'
                     else:
                         value = child.name
-                    context.add_notation(label=child_link_label, url=navigator.url(child, 'view'), value=value)
+                    context.add_notation(label=child_link_label, url=navigator.target_url(child, 'view'), value=value)
         for task in self.possible_tasks:
             self.add_task(context, navigator, task)
         extra_action_parameters = display_attributes.get('extra_action_parameters')

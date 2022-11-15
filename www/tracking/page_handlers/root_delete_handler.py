@@ -8,4 +8,4 @@ class RootDeleteHandler(RootBaseHandler, TargetDeleteHandler):
 
     @property
     def delete_redirect_url(self):
-        return self.navigator.url(RootsViewer, 'view')
+        return self.navigator.target_url(RootsViewer, 'view')

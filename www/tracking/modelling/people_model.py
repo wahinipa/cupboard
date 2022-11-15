@@ -230,7 +230,7 @@ def all_people_display_context(navigator, viewer):
     context['label'] = User.plural_label
     if viewer.may_observe_people:
         for person in all_people():
-            context.add_notation(label=person.singular_label, url=navigator.url(person, 'view'), value=person.name)
+            context.add_notation(label=person.singular_label, url=navigator.target_url(person, 'view'), value=person.name)
     if viewer.may_create_person:
-        context.add_task(url=navigator.url(User, 'create'), label="User Account", task='create')
+        context.add_task(url=navigator.target_url(User, 'create'), label="User Account", task='create')
     return context

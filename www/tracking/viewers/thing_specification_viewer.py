@@ -11,7 +11,7 @@ class ThingSpecificationViewer(CupboardDisplayContextMixin, InventoryHolder):
     label = 'Specification'
     label_prefixes = {}
     singular_label = 'Specification'
-    possible_tasks = ['arriving', 'moving', 'changing', 'departing']
+    might_be_possible_tasks = ['arriving', 'moving', 'changing', 'departing']
 
     def __init__(self, place, destination, thing, specification, activity):
         InventoryHolder.__init__(self, place, thing, specification)
@@ -22,9 +22,12 @@ class ThingSpecificationViewer(CupboardDisplayContextMixin, InventoryHolder):
         self.unknowns = {unknown for unknown in specification.unknowns if unknown in self.thing_categories}
 
     @property
+    def possible_tasks(self):
+        return [task for task in self.might_be_possible_tasks if self.task_is_appropriate(task)]
+
+    @property
     def identities(self):
         return {
-            'activity': self.activity,
             'place_id': self.place.id,
             'thing_id': self.thing.id,
             'destination_id': self.destination.id,
@@ -55,10 +58,9 @@ class ThingSpecificationViewer(CupboardDisplayContextMixin, InventoryHolder):
         sorted_categories = sorted_by_name(list(self.thing.complete_set_of_categories))
         return [CategorySpecificationViewer(category, self) for category in sorted_categories]
 
-    def may_perform_task(self, viewer, task):
-        # TODO: actually check on viewer
+    def task_is_appropriate(self, task):
         if self.is_specific:
-            have_some = self.quantity > 0 or True
+            have_some = self.quantity > 0
             if task == 'arriving':
                 return self.activity == 'inbound'
             elif task == 'departing':

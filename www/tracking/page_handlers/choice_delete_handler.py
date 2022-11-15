@@ -9,4 +9,4 @@ class ChoiceDeleteHandler(ChoiceBaseHandler, TargetDeleteHandler):
 
     @property
     def delete_redirect_url(self):
-        return self.navigator.url(self.choice.category, 'view')
+        return self.navigator.target_url(self.choice.category, 'view')

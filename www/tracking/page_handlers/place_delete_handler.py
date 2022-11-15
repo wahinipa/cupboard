@@ -9,4 +9,4 @@ class PlaceDeleteHandler(PlaceBaseHandler, TargetDeleteHandler):
 
     @property
     def delete_redirect_url(self):
-        return self.navigator.url(self.place.parent_object, 'view')
+        return self.navigator.target_url(self.place.parent_object, 'view')

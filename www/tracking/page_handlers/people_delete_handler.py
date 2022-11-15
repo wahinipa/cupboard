@@ -10,4 +10,4 @@ class PeopleDeleteHandler(PeopleBaseHandler, TargetDeleteHandler):
 
     @property
     def delete_redirect_url(self):
-        return self.navigator.url(AllPeople, 'view')
+        return self.navigator.target_url(AllPeople, 'view')

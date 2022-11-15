@@ -13,5 +13,5 @@ class TargetUpdateHandler:
         return self.target_update_redirect()
 
     def target_update_redirect(self):
-        return self.navigator.url(self.target, 'view', activity=self.activity)
+        return self.navigator.target_url(self.target, 'view', activity=self.activity)
 

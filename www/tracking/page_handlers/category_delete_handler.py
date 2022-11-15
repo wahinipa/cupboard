@@ -10,4 +10,4 @@ class CategoryDeleteHandler(CategoryBaseHandler, TargetDeleteHandler):
 
     @property
     def delete_redirect_url(self):
-        return self.navigator.url(CategoriesViewer, 'view')
+        return self.navigator.target_url(CategoriesViewer, 'view')

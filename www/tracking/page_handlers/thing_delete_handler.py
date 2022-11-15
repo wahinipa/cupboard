@@ -7,4 +7,4 @@ class ThingDeleteHandler(ThingBaseHandler, TargetDeleteHandler):
 
     @property
     def delete_redirect_url(self):
-        return self.navigator.url(self.thing.parent_object, 'view')
+        return self.navigator.target_url(self.thing.parent_object, 'view')

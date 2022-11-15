@@ -84,6 +84,7 @@ class Platter:
             navigational_mark(Root): self.root_url_maker,
             navigational_mark(CategorySpecificationViewer): self.specification_url_maker,
             navigational_mark(Thing): self.thing_url_maker,
+            navigational_mark(ThingSpecificationViewer): self.thing_specification_url_maker,
         }
 
     def default_url_maker(self, target, task, activity=None):
@@ -133,9 +134,18 @@ class Platter:
         destination_id = destination_id or self.destination_id or root.place.id
         thing_id = thing_id or self.thing_id or root.thing.id
         specification_id = specification_id or self.specification_id or root.generic_specification.id
-        return self.valid_url_for(f'root_bp.root_{task}', activity=activity, place_id=place_id, thing_id=thing_id,
-                       destination_id=destination_id,
-                       specification_id=specification_id)
+        if task == 'view' and activity:
+            task = f'{task}_{activity}'
+            return self.valid_url_for(f'root_bp.root_{task}', place_id=place_id, thing_id=thing_id,
+                           destination_id=destination_id,
+                           specification_id=specification_id)
+        else:
+            return self.valid_url_for(f'root_bp.root_{task}', activity=activity, place_id=place_id, thing_id=thing_id,
+                           destination_id=destination_id,
+                           specification_id=specification_id)
+
+    def thing_specification_url_maker(self, thing_specification, task, activity=None):
+        return self.valid_url_for(f'inventory_bp.inventory_{task}', activity=activity, **thing_specification.identities)
 
     def specification_url_maker(self, category_specification, task, activity=None):
         # No matter the presumed task, do an update
@@ -151,7 +161,7 @@ class Platter:
                        destination_id=self.destination_id,
                        specification_id=self.specification_id)
 
-    def url(self, target, task, activity=None):
+    def target_url(self, target, task, activity=None):
         activity = activity or self.activity or DEFAULT_ACTIVITY
         return self.translator.get(navigational_mark(target), self.default_url_maker)(target, task, activity=activity)
 

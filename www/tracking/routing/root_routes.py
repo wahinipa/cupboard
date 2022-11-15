@@ -30,16 +30,28 @@ def root_update(**kwargs):
     return RootUpdateHandler('root_bp.root_update', current_user, **kwargs).handle()
 
 
-@root_bp.route('/view/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
+@root_bp.route('/view/observe/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
 @login_required
-def root_view(activity, **kwargs):
-    handler = root_view_handler_selection.get(activity, RootObserveHandler)
-    return handler('root_bp.root_view', current_user, activity=activity, **kwargs).handle()
+def root_view_observe(**kwargs):
+    return RootObserveHandler('root_bp.root_view_observe', current_user, activity='observe', **kwargs).handle()
 
-root_view_handler_selection = {
-    'observe': RootObserveHandler,
-    'inbound': RootInboundHandler,
-    'outbound': RootOutboundHandler,
-    'transfer': RootTransferHandler,
-    'adjust': RootAdjustHandler,
-}
+@root_bp.route('/view/inbound/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
+@login_required
+def root_view_inbound(**kwargs):
+    return RootInboundHandler('root_bp.root_view_inbound', current_user, activity='inbound', **kwargs).handle()
+
+@root_bp.route('/view/outbound/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
+@login_required
+def root_view_outbound(**kwargs):
+    return RootOutboundHandler('root_bp.root_view_outbound', current_user, activity='outbound', **kwargs).handle()
+
+@root_bp.route('/view/transfer/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
+@login_required
+def root_view_transfer(**kwargs):
+    return RootTransferHandler('root_bp.root_view_transfer', current_user, activity='transfer', **kwargs).handle()
+
+@root_bp.route('/view/adjust/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
+@login_required
+def root_view_adjust(**kwargs):
+    return RootAdjustHandler('root_bp.root_view_adjust', current_user, activity='adjust', **kwargs).handle()
+

@@ -43,4 +43,4 @@ class SpecificationUpdateHandler(PageHandler, ActivePlatterHoldingHandler, Targe
         return self.root
 
     def target_update_redirect(self):
-        return self.navigator.url(self.root, 'view', activity=self.activity)
+        return self.navigator.target_url(self.root, 'view', activity=self.activity)

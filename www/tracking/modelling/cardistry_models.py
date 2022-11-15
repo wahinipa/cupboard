@@ -64,7 +64,7 @@ class HierarchicalMixin:
 def bread_crumbs(navigator, path, target=None):
     def bread_crumb(item):
         crumb = {'label': item.label}
-        url = navigator.url(item, 'view')
+        url = navigator.target_url(item, 'view')
         if url and item != target:
             crumb['url'] = url
         return crumb
