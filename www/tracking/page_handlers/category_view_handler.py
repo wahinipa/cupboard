@@ -19,6 +19,7 @@ class CategoryViewHandler(CategoryBaseHandler, ViewHandler):
     @property
     def display_attributes(self):
         return {
+            'add_tasks': True,
             'description': True,
             'children': [self.category, self.thing, self.thing_specification],
             'children_attributes': dual_view_childrens_attributes(thing=self.thing),

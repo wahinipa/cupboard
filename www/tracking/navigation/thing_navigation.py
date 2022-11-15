@@ -7,7 +7,7 @@ def register_thing_navigation(navigator):
 
     def register(task):
         endpoint = f'thing_bp.thing_{task}'
-        navigator.register(Thing, task, endpoint, [Role.structuring_role_name])
+        navigator.register(Thing, task, endpoint, [Role.structuring_role_name, Role.super_role_name])
 
     register('create')
     register('delete')

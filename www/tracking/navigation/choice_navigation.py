@@ -8,6 +8,6 @@ def register_choice_navigation(navigator):
         endpoint = f'choice_bp.choice_{task}'
         navigator.register(Choice, task, endpoint, role_names)
 
-    register('delete', [Role.structuring_role_name])
-    register('update', [Role.structuring_role_name])
+    register('delete', [Role.structuring_role_name, Role.super_role_name])
+    register('update', [Role.structuring_role_name, Role.super_role_name])
     register('view', [Role.structure_viewer_role_name, Role.structuring_role_name, Role.super_role_name])

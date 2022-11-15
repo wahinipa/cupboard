@@ -7,7 +7,7 @@ def register_place_navigation(navigator):
 
     def register(task):
         endpoint = f'place_bp.place_{task}'
-        navigator.register(Place, task, endpoint, [Role.location_manager_name])
+        navigator.register(Place, task, endpoint, [Role.location_manager_name, Role.super_role_name])
 
     register('create')
     register('delete')

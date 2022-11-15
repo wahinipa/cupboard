@@ -10,7 +10,6 @@ from tracking.viewers.model_viewer import ModelViewer
 
 class ChoiceViewHandler(ChoiceBaseHandler, ViewHandler):
     page_template = 'pages/choice_view.j2'
-    required_role_name = Role.admin_role_name
 
     @property
     def display_context_maker(self):
@@ -19,6 +18,7 @@ class ChoiceViewHandler(ChoiceBaseHandler, ViewHandler):
     @property
     def display_attributes(self):
         return {
+            'add_tasks': True,
             'description': True,
             'children': [self.choice, self.thing, self.thing_specification],
             'children_attributes': dual_view_childrens_attributes(thing=self.thing),

@@ -21,12 +21,14 @@ class RootsViewHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
     @property
     def display_attributes(self):
         return {
+            'add_tasks': True,
             'description': True,
             'url': True,
             'bread_crumbs': True,
             'children_attributes': {
                 'root': {
                     'display_context': {
+                        'add_tasks': True,
                         'description': True,
                         'url': True,
                     },

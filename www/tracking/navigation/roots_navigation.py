@@ -8,5 +8,5 @@ def register_roots_navigation(navigator):
         endpoint = f'roots_bp.roots_{task}'
         navigator.register(RootsViewer, task, endpoint, role_names)
 
-    register('view', [Role.roots_observer_role_name])
+    register('view', [Role.roots_observer_role_name, Role.super_role_name])
     register('create', [Role.super_role_name])

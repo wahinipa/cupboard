@@ -2,7 +2,6 @@
 from datetime import datetime
 from os import environ
 
-from flask import url_for
 from flask_login import UserMixin
 from sqlalchemy import event
 from werkzeug.security import generate_password_hash
@@ -107,7 +106,6 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     @property
     def may_edit_database(self):
         return self.is_the_super_admin
-
 
     def has_role(self, root_or_place, name_of_role):
         return self.has_universal_role(name_of_role) or root_or_place.has_role(self, name_of_role)
@@ -230,7 +228,8 @@ def all_people_display_context(navigator, viewer):
     context['label'] = User.plural_label
     if viewer.may_observe_people:
         for person in all_people():
-            context.add_notation(label=person.singular_label, url=navigator.target_url(person, 'view'), value=person.name)
+            context.add_notation(label=person.singular_label, url=navigator.target_url(person, 'view'),
+                                 value=person.name)
     if viewer.may_create_person:
         context.add_task(url=navigator.target_url(User, 'create'), label="User Account", task='create')
     return context

@@ -3,6 +3,7 @@
 def category_display_attributes(thing=None, **kwargs):
     attributes = {
         'display_context': {
+            'add_tasks': True,
             'description': True,
             'prefix': 'Category: ',
             'url': True,
@@ -23,6 +24,7 @@ def category_display_attributes(thing=None, **kwargs):
 
 categories_display_attributes = {
     'display_context': {
+        'add_tasks': True,
         'description': True,
         'prefix': 'Categories: ',
         'url': True,
@@ -37,6 +39,7 @@ categories_display_attributes = {
 
 choice_display_attributes = {
     'display_context': {
+        'add_tasks': True,
         'description': True,
         'prefix': 'Choice: ',
         'url': True,
@@ -48,6 +51,7 @@ choice_display_attributes = {
 def destination_display_attributes(destination_prefix=None, **kwargs):
     return {
         'display_context': {
+            'add_tasks': True,
             'description': True,
             'destination_quantity': True,
             'prefix': destination_prefix,
@@ -67,6 +71,7 @@ def place_display_attributes(place_prefix=None, **kwargs):
     return {
         'display_context': {
             'source_quantity': True,
+            'add_tasks': True,
             'description': True,
             'prefix': place_prefix,
             'url': True,
@@ -83,6 +88,7 @@ def place_display_attributes(place_prefix=None, **kwargs):
 
 thing_display_attributes = {
     'display_context': {
+        'add_tasks': True,
         'description': True,
         'source_quantity': True,
         'url': True,

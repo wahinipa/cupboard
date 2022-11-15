@@ -25,6 +25,7 @@ class PeopleListHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
     @property
     def display_attributes(self):
         return {
+            'add_tasks': True,
             'description': True,
             'url': True,
             'bread_crumbs': True,

@@ -55,7 +55,8 @@ class DisplayContext(Context):
                 'label': label,
                 'task': task,
             })
-            self.context['has_tasks'] = True
+            if not is_required:
+                self.context['has_tasks'] = True
 
     def render_template(self, template=None, **kwarg):
         if template is None:
