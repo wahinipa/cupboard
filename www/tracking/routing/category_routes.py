@@ -17,24 +17,24 @@ category_bp = Blueprint(
 @category_bp.route('/delete/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:category_id>')
 @login_required
 def category_delete(**kwargs):
-    return CategoryDeleteHandler(current_user, **kwargs).handle()
+    return CategoryDeleteHandler('category_bp.category_delete'. current_user, **kwargs).handle()
 
 
 @category_bp.route('/view/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:category_id>')
 @login_required
 def category_view(**kwargs):
-    return CategoryViewHandler(current_user, **kwargs).handle()
+    return CategoryViewHandler('category_bp.category_view', current_user, **kwargs).handle()
 
 
 @category_bp.route('/update/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:category_id>',
                    methods=['GET', 'POST'])
 @login_required
 def category_update(**kwargs):
-    return CategoryUpdateHandler(current_user, **kwargs).handle()
+    return CategoryUpdateHandler('category_bp.category_update', current_user, **kwargs).handle()
 
 
 @category_bp.route('/create/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:category_id>',
                    methods=['POST', 'GET'])
 @login_required
 def category_create(**kwargs):
-    return CategoryChoiceCreateHandler(current_user, **kwargs).handle()
+    return CategoryChoiceCreateHandler('category_bp.category_create', current_user, **kwargs).handle()

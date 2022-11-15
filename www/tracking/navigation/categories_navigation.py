@@ -9,4 +9,4 @@ def register_categories_navigation(navigator):
         navigator.register(CategoriesViewer, task, endpoint, role_names)
 
     register('create', [Role.structuring_role_name])
-    register('view', [Role.structure_viewer_role_name, Role.structuring_role_name])
+    register('view', [Role.structure_viewer_role_name, Role.structuring_role_name, Role.super_role_name])

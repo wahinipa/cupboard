@@ -23,12 +23,13 @@ class CupboardDisplayContext(DisplayContext):
         self.viewer = viewer
 
     def add_top_menu_item(self, label, url, flavor, activity=None):
-        self.append_to_list('top_menu_items', {
-            'label': label,
-            'url': url,
-            'flavor': flavor,
-            'activity': activity or flavor,
-        })
+        if url:
+            self.append_to_list('top_menu_items', {
+                'label': label,
+                'url': url,
+                'flavor': flavor,
+                'activity': activity or flavor,
+            })
 
     def set_active_flavor(self, current_activity):
         self['current_activity'] = current_activity

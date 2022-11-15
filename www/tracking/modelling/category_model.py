@@ -21,7 +21,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
                                               cascade='all, delete')
 
     def viewable_children(self, viewer):
-        return [choice for choice in self.sorted_choices if choice.may_be_observed(viewer)]
+        return self.sorted_choices
 
     @property
     def parent_object(self):
@@ -31,20 +31,8 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
     def identities(self):
         return {'category_id': self.id}
 
-    def may_perform_task(self, viewer, task):
-        if task == 'view':
-            return self.may_be_observed(viewer)
-        elif task == 'delete':
-            return self.may_delete(viewer)
-        elif task == 'update':
-            return self.may_update(viewer)
-        elif task == 'create':
-            return self.may_create_choice(viewer)
-        else:
-            return False
-
     def add_extra_actions(self, context, navigator, viewer, thing=None):
-        if thing and self.may_update(viewer):
+        if False and thing and self.may_update(viewer): # TODO: fix this
             if self in thing.category_list:
                 task = 'remove'
                 preposition = 'from'
@@ -52,19 +40,6 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
                 task = 'add'
                 preposition = 'to'
             self.add_task(context, navigator, task, label=f' {self.name} {preposition} {thing.name}')
-
-    def may_be_observed(self, viewer):
-        return True  # TODO: refine this
-
-    def may_delete(self, viewer):
-        return viewer.may_delete_category
-
-    def may_update(self, viewer):
-        return viewer.may_update_category
-
-    def may_create_choice(self, viewer):
-        # TODO: refine this
-        return viewer.may_update_category
 
     @property
     def sorted_choices(self):

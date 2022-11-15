@@ -10,4 +10,4 @@ def register_choice_navigation(navigator):
 
     register('delete', [Role.structuring_role_name])
     register('update', [Role.structuring_role_name])
-    register('view', [Role.structure_viewer_role_name, Role.structuring_role_name])
+    register('view', [Role.structure_viewer_role_name, Role.structuring_role_name, Role.super_role_name])

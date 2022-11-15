@@ -16,4 +16,4 @@ specification_bp = Blueprint(
                         methods=['GET', 'POST'])
 @login_required
 def specification_update(**kwargs):
-    return SpecificationUpdateHandler(current_user, **kwargs).handle()
+    return SpecificationUpdateHandler('specification_bp.specification_update', current_user, **kwargs).handle()

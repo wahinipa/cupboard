@@ -31,26 +31,6 @@ class Choice(CupboardDisplayContextMixin, NamedBaseModel):
     def root(self):
         return self.category.root
 
-    def may_perform_task(self, viewer, task):
-        if task == 'view':
-            return self.may_be_observed(viewer)
-        elif task == 'delete':
-            return self.may_delete(viewer)
-        elif task == 'update':
-            return self.may_update(viewer)
-        else:
-            return False
-
-    def may_be_observed(self, viewer):
-        return True  # TODO: refine this
-
-    def may_delete(self, viewer):
-        return viewer.may_delete_category
-
-    def may_update(self, viewer):
-        return viewer.may_update_category
-
-
 def find_or_create_choice(category, name, description="", date_created=None):
     choice = find_choice(category, name)
     if choice is None:

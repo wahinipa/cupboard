@@ -89,16 +89,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
             return False
 
     def may_be_observed(self, viewer):
-        return self.ancestor.may_be_observed(viewer)
-
-    def may_create_thing(self, viewer):
-        return self.ancestor.may_create_thing(viewer)
-
-    def may_delete(self, viewer):
-        return self.root.may_delete(viewer) and not self.is_top
-
-    def may_update(self, viewer):
-        return self.root.may_update(viewer) and not self.is_top
+        return self.root.may_be_observed(viewer)
 
     @property
     def parent_object(self):

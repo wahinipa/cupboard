@@ -15,10 +15,10 @@ categories_bp = Blueprint(
 @categories_bp.route('/create/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>', methods=['POST', 'GET'])
 @login_required
 def categories_create(**kwargs):
-    return CategoriesCreateHandler(current_user, **kwargs).handle()
+    return CategoriesCreateHandler('categories_bp.categories_create', current_user, **kwargs).handle()
 
 
 @categories_bp.route('/view/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>')
 @login_required
 def categories_view(**kwargs):
-    return CategoriesViewHandler(current_user, **kwargs).handle()
+    return CategoriesViewHandler('categories_bp.categories_view', current_user, **kwargs).handle()

@@ -5,4 +5,4 @@ from tracking.viewers.category_specification_viewer import CategorySpecification
 def register_category_specification_navigation(navigator):
     endpoint = f'specification_bp.specification_update'
     # Actually does an update, but url generation defaults to 'view'
-    navigator.register(CategorySpecificationViewer, 'view', endpoint, [Role.observer_role_name])
+    navigator.register(CategorySpecificationViewer, 'view', endpoint, [Role.observer_role_name, Role.super_role_name])

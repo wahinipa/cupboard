@@ -24,7 +24,7 @@ def roots_create():
 def roots_view():
     root = current_user.only_root
     if root:
-        handler = RootObserveHandler(current_user, root_id=root.id)
+        handler = RootObserveHandler('roots_bp.roots_view', current_user, root_id=root.id)
     else:
-        handler = RootsViewHandler(current_user)
+        handler = RootsViewHandler('roots_bp.roots_view', current_user)
     return handler.handle()

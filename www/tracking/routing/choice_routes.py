@@ -16,17 +16,17 @@ choice_bp = Blueprint(
 @choice_bp.route('/delete/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:choice_id>')
 @login_required
 def choice_delete(**kwargs):
-    return ChoiceDeleteHandler(current_user, **kwargs).handle()
+    return ChoiceDeleteHandler('choice_bp.choice_delete', current_user, **kwargs).handle()
 
 
 @choice_bp.route('/view/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:choice_id>')
 @login_required
 def choice_view(**kwargs):
-    return ChoiceViewHandler(current_user, **kwargs).handle()
+    return ChoiceViewHandler('choice_bp.choice_view', current_user, **kwargs).handle()
 
 
 @choice_bp.route('/update/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:choice_id>',
                  methods=['GET', 'POST'])
 @login_required
 def choice_update(**kwargs):
-    return ChoiceUpdateHandler(current_user, **kwargs).handle()
+    return ChoiceUpdateHandler('choice_bp.choice_update', current_user, **kwargs).handle()

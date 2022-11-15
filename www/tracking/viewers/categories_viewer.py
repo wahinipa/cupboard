@@ -28,7 +28,7 @@ class CategoriesViewer(PlatterBase, CupboardDisplayContextMixin):
         return [self.root, self]
 
     def viewable_children(self, viewer):
-        return [category for category in self.root.sorted_categories if category.may_be_observed(viewer)]
+        return self.root.sorted_categories
 
     def add_description(self, context):
         pass

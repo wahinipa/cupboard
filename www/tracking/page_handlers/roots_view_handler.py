@@ -10,8 +10,8 @@ class RootsViewHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
     objects_are_valid = True
     current_activity = "home"
 
-    def __init__(self, viewer):
-        PageHandler.__init__(self, 'roots_bp.roots_view')
+    def __init__(self, endpoint, viewer):
+        PageHandler.__init__(self, endpoint)
         PlatterHoldingHandler.__init__(self, viewer)
 
     @property

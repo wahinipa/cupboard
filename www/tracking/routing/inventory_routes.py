@@ -19,25 +19,25 @@ inventory_bp = Blueprint(
                     methods=['POST', 'GET'])
 @login_required
 def inventory_arriving(**kwargs):
-    return InventoryArrivalHandler(current_user, **kwargs).handle()
+    return InventoryArrivalHandler('inventory_bp.inventory_arriving', current_user, **kwargs).handle()
 
 
 @inventory_bp.route('/departing/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>',
                     methods=['POST', 'GET'])
 @login_required
 def inventory_departing(**kwargs):
-    return InventoryDepartureHandler(current_user, **kwargs).handle()
+    return InventoryDepartureHandler('inventory_bp.inventory_departing', current_user, **kwargs).handle()
 
 
 @inventory_bp.route('/moving/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>',
                     methods=['POST', 'GET'])
 @login_required
 def inventory_moving(**kwargs):
-    return InventoryTransferHandler(current_user, **kwargs).handle()
+    return InventoryTransferHandler('inventory_bp.inventory_moving', current_user, **kwargs).handle()
 
 
 @inventory_bp.route('/changing/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>',
                     methods=['POST', 'GET'])
 @login_required
 def inventory_changing(**kwargs):
-    return InventoryAdjustmentHandler(current_user, **kwargs).handle()
+    return InventoryAdjustmentHandler('inventory_bp.inventory_changing', current_user, **kwargs).handle()

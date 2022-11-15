@@ -17,11 +17,11 @@ refinement_bp = Blueprint(
                      methods=['POST', 'GET'])
 @login_required
 def refinement_add(**kwargs):
-    return RefinementAddHandler(current_user, **kwargs).handle()
+    return RefinementAddHandler('refinement_bp.refinement_add', current_user, **kwargs).handle()
 
 
 @refinement_bp.route('/remove/<activity>/<int:place_id>/<int:destination_id>/<int:thing_id>/<int:specification_id>/<int:category_id>',
                      methods=['POST', 'GET'])
 @login_required
 def refinement_remove(category_id, **kwargs):
-    return RefinementRemoveHandler(current_user, category_id, **kwargs).handle()
+    return RefinementRemoveHandler('refinement_bp.refinement_remove', current_user, category_id, **kwargs).handle()
