@@ -20,6 +20,7 @@ class ViewHandler:
         self.add_transfer_button(display_context)
         self.add_adjust_button(display_context)
         self.add_people_button(display_context)
+        self.add_role_button(display_context)
         self.add_admin_button(display_context)
 
     def add_home_button(self, display_context):
@@ -55,6 +56,9 @@ class ViewHandler:
 
     def add_people_button(self, display_context):
         display_context.add_top_menu_item('People', url_for('people_bp.people_list'), 'people')
+
+    def add_role_button(self, display_context):
+        display_context.add_top_menu_item('Roles', url_for('role_bp.role_list'), 'role')
 
     def add_admin_button(self, display_context):
         if self.viewer.may_edit_database:

@@ -4,10 +4,28 @@ from datetime import datetime
 from sqlalchemy.orm import declared_attr
 
 from tracking import database
-from tracking.modelling.base_models import UniqueNamedBaseModel, IdModelMixin, DatedModelMixin
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.modelling.base_models import DatedModelMixin, IdModelMixin, UniqueNamedBaseModel
 
 
-class Role(UniqueNamedBaseModel):
+class AllRoles:
+    label = 'Roles'
+
+    @property
+    def identities(self):
+        return {}
+
+    @property
+    def root_path(self):
+        return [self]
+
+
+class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
+    singular_label = "Role"
+    plural_label = "Roles"
+    possible_tasks = []
+    label_prefixes = {}
+    flavor = 'role'
     root_assignments = database.relationship('RootAssignment', backref='role', lazy=True, cascade='all, delete')
     place_assignments = database.relationship('PlaceAssignment', backref='role', lazy=True, cascade='all, delete')
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,
@@ -25,10 +43,11 @@ class Role(UniqueNamedBaseModel):
     outbound_role_name = "Shipping Agent"
     transfer_role_name = "Transfer Agent"
     adjust_role_name = "Auditing Agent"
-    super_role_name = "Super Admin" # No actual Role created for this
-    self_role_name = "Viewer is Self" # No actual Role created for this
-    people_viewer_name = "Viewer of People" # No actual Role created for this
-    roots_observer_role_name = "Viewer of Roots" # No actual Role created for this
+    super_role_name = "Super Admin"  # No actual Role created for this
+    self_role_name = "Viewer is Self"  # No actual Role created for this
+    people_viewer_name = "Viewer of People"  # No actual Role created for this
+    roots_observer_role_name = "Viewer of Roots"  # No actual Role created for this
+    anybody_role_name = "Anybody"  # No actual Role created for this
 
     role_descriptions = {
         user_admin_role_name: "Can create, update, enable, disable, or delete user accounts.",
@@ -46,14 +65,16 @@ class Role(UniqueNamedBaseModel):
         super_role_name: "Has top level authority to make changes.",
         people_viewer_name: "Can view some user accounts.",
         roots_observer_role_name: "Can view organizations.",
-        self_role_name: "Can look at own user account",
+        self_role_name: "Can look at own user account.",
+        anybody_role_name: "Things anybody is allowed to do.",
     }
 
     universal_role_name_set = {user_admin_role_name}
     root_role_name_set = {admin_role_name, linkage_role_name, structuring_role_name, structure_viewer_role_name}
     place_role_name_set = {location_manager_name, inventory_manager_name, observer_role_name, inbound_role_name,
                            outbound_role_name, transfer_role_name, adjust_role_name}
-    pseudo_role_name_set = {super_role_name, self_role_name, people_viewer_name, roots_observer_role_name}
+    pseudo_role_name_set = {anybody_role_name, super_role_name, self_role_name, people_viewer_name,
+                            roots_observer_role_name}
 
     universal_role_name_list = sorted(universal_role_name_set)
     root_role_name_list = sorted(root_role_name_set)
@@ -63,11 +84,24 @@ class Role(UniqueNamedBaseModel):
     role_name_list = universal_role_name_list + root_role_name_list + place_role_name_list
 
     @property
+    def parent_object(self):
+        return AllRoles()
+
+    @property
+    def identities(self):
+        return {'role_id': self.id}
+
+    @property
     def is_observer_role(self):
         return self.is_named(self.observer_role_name)
 
     def is_named(self, name_of_role):
         return self.name == name_of_role
+
+
+def all_roles():
+    # Todo use all type query, then sort by name
+    return [find_role(name) for name in Role.role_name_list]
 
 
 def find_role_by_id(id):

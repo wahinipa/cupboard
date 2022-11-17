@@ -230,6 +230,8 @@ class Platter:
                 return self.viewer.is_the_super_admin or len(self.viewer.linkages) > 0
             elif required_role_name == Role.roots_observer_role_name:
                 return self.viewer.is_the_super_admin or len(self.viewer.linkages) > 0
+            elif required_role_name == Role.anybody_role_name:
+                return True
             raise ValueError("No such role")
         raise ValueError("Viewer is None")
 

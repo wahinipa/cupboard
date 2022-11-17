@@ -54,6 +54,9 @@ def blueprint_registration(application):
     from tracking.routing.root_routes import root_bp
     application.register_blueprint(root_bp, url_prefix=ROOT_PREFIX)
 
+    from tracking.routing.role_routes import role_bp
+    application.register_blueprint(role_bp, url_prefix=ROLES_PREFIX)
+
     from tracking.routing.roots_routes import roots_bp
     application.register_blueprint(roots_bp, url_prefix=ROOTS_PREFIX)
 

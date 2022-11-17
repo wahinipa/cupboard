@@ -8,6 +8,7 @@ from tracking.navigation.navigator import Navigator
 from tracking.navigation.people_navigation import register_people_navigation
 from tracking.navigation.place_navigation import register_place_navigation
 from tracking.navigation.refinement_navigation import register_refinement_navigation
+from tracking.navigation.role_navigation import register_role_navigation
 from tracking.navigation.roots_navigation import register_roots_navigation
 from tracking.navigation.root_navigation import register_root_navigation
 from tracking.navigation.thing_navigation import register_thing_navigation
@@ -23,6 +24,7 @@ def create_cupboard_navigator():
     register_people_navigation(navigator)
     register_place_navigation(navigator)
     register_refinement_navigation(navigator)
+    register_role_navigation(navigator)
     register_root_navigation(navigator)
     register_roots_navigation(navigator)
     register_thing_navigation(navigator)
