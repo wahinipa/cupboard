@@ -1,9 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.cardistry_models import sorted_by_name
+from tracking.modelling.specification_model import describe_choices
 from tracking.viewers.Inventory_holder import InventoryHolder
 from tracking.viewers.category_specification_viewer import CategorySpecificationViewer
-from tracking.modelling.specification_model import describe_choices
-from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class ThingSpecificationViewer(CupboardDisplayContextMixin, InventoryHolder):
@@ -33,6 +33,7 @@ class ThingSpecificationViewer(CupboardDisplayContextMixin, InventoryHolder):
             'destination_id': self.destination.id,
             'specification_id': self.specification.id
         }
+
     def add_description(self, context):
         pass
 
@@ -70,4 +71,3 @@ class ThingSpecificationViewer(CupboardDisplayContextMixin, InventoryHolder):
             elif task == 'changing':
                 return have_some and self.activity == 'adjust'
         return False
-
