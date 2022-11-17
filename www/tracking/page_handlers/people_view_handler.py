@@ -7,8 +7,8 @@ from tracking.viewers.model_viewer import ModelViewer
 
 class PeopleViewHandler(PeopleBaseHandler, ViewHandler):
     page_template = 'pages/person_view.j2'
-    proper_role_names = [Role.observer_role_name, Role.super_role_name, Role.user_admin_role_name,
-                          Role.admin_role_name, Role.linkage_role_name, Role.self_role_name]
+    proper_role_names = [Role.observer_role_name, Role.user_admin_role_name, Role.admin_role_name,
+                         Role.linkage_role_name, Role.self_role_name]
 
     @property
     def display_context_maker(self):

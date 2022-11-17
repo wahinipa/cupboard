@@ -8,7 +8,7 @@ from tracking.viewers.people_list_viewer import PeopleListViewer
 
 class PeopleListHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
     page_template = "pages/people_list.j2"
-    proper_role_names = [Role.observer_role_name, Role.super_role_name, Role.user_admin_role_name,
+    proper_role_names = [Role.observer_role_name, Role.user_admin_role_name,
                          Role.admin_role_name, Role.linkage_role_name]
 
     objects_are_valid = True
