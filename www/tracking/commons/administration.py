@@ -36,11 +36,13 @@ def log_warn_about_request(prefix):
 def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
 
+    # Create Roles first, so initial users can be assigned roles.
+    from tracking.modelling.role_models import find_or_create_standard_roles
+    find_or_create_standard_roles()
+
     from tracking.modelling.people_model import create_initial_users
     initial_users = create_initial_users()
 
-    from tracking.modelling.role_models import find_or_create_standard_roles
-    find_or_create_standard_roles()
 
     if environ.get('ADD_TEST_DATA'):
         create_test_data(database, initial_users)

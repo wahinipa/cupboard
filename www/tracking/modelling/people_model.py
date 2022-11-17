@@ -11,6 +11,7 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContext, C
 from tracking.modelling.base_models import IdModelMixin
 from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
 from tracking.modelling.linkage_model import Linkage
+from tracking.modelling.role_models import Role, assign_universal_role, find_or_create_role
 
 
 class AllPeople:
@@ -57,6 +58,11 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     def add_description(self, display_context):
         display_context.add_multiline_notation(label="About me", multiline=self.about_me)
+        if self.is_the_super_admin:
+            display_context.add_universal_role_description(Role.super_role_name)
+        for role_name in Role.universal_role_name_list:
+            if self.has_universal_role(role_name):
+                display_context.add_universal_role_description(role_name)
 
     def bread_crumbs(self, navigator):
         return bread_crumbs(navigator, [AllPeople, self], target=self)
@@ -186,7 +192,10 @@ def create_initial_users():
 
 
 def create_initial_admin():
-    return find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
+    super_admin = find_or_create_user(u'Website', u'Admin', u'admin', '23Skid00', is_admin=True)
+    user_admin_role = find_or_create_role(Role.user_admin_role_name)
+    assign_universal_role(user_admin_role, super_admin)
+    return super_admin
 
 
 def find_or_create_user(first_name, last_name, username, password, is_admin=False, date_joined=None, about_me=''):
