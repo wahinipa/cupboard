@@ -73,6 +73,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
         return [(root_name, sorted(roles_per_root[root_name])) for root_name in sorted_root_names]
 
     def add_description(self, display_context):
+        display_context.add_notation(label="Username", value=self.username)
         display_context.add_multiline_notation(label="About me", multiline=self.about_me)
         if self.is_the_super_admin:
             display_context.add_role_description(Role.super_role_name)
