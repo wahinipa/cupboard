@@ -45,8 +45,8 @@ class DisplayContext(Context):
             notation['lines'] = lines
         self.append_notation(notation)
 
-    def add_universal_role_description(self, role_name):
-        self.add_notation(label=role_name, value=Role.role_descriptions[role_name])
+    def add_role_description(self, role_name, suffix=''):
+        self.add_notation(label=f'{role_name}{suffix}', value=Role.role_descriptions[role_name])
 
     def append_notation(self, notation):
         self.append_to_list('notations', notation)

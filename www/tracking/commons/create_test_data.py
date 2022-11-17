@@ -1,10 +1,14 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.modelling.postioning_model import add_quantity_of_things
 from tracking.modelling.refinement_model import add_refinement
+from tracking.modelling.role_models import Role, assign_place_role, assign_root_role, assign_universal_role, \
+    find_or_create_role
 
 
 def create_test_data(database, initial_users):
     from tracking.modelling.root_model import create_root
+
+    admin, curly, moe, larry = initial_users
 
     # Roots
     our_test_group = create_root(name="Our Test Group", description="For testing out the code.")
@@ -15,7 +19,7 @@ def create_test_data(database, initial_users):
     for user in initial_users:
         user.link_to_root(our_test_group)
     if len(initial_users) > 2:
-        initial_users[2].link_to_root(another_test_group)
+        moe.link_to_root(another_test_group)
 
     # Places
     metropolis = our_test_group.place.create_kind_of_place(name="Metropolis", description="Home of the Daily Planet")
@@ -24,6 +28,16 @@ def create_test_data(database, initial_users):
                                                                        "childhood home of Clark Kent.")
     phone_booth = smallville.create_kind_of_place(name="Phone Booth",
                                                   description="Those tall boxes that had phones back in the day.")
+
+    # Roles
+    user_admin_role = find_or_create_role(Role.user_admin_role_name)
+    structuring_role = find_or_create_role(Role.structuring_role_name)
+    inventory_manager = find_or_create_role(Role.inventory_manager_name)
+    assign_universal_role(user_admin_role, larry)
+    assign_root_role(another_test_group, structuring_role, moe)
+    assign_root_role(our_test_group, structuring_role, larry)
+    assign_place_role(smallville, inventory_manager, curly)
+    assign_place_role(phone_booth, inventory_manager, larry)
 
     # Things
     shoes = our_test_group.thing.create_kind_of_thing("Shoes", "Things to wear on your feet.")

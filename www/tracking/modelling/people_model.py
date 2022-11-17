@@ -56,13 +56,38 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
     def viewable_children(self, viewer):
         return []
 
+    @property
+    def sorted_roles_per_place(self):
+        roles_per_place = {}
+        for assignment in self.place_assignments:
+            roles_per_place.setdefault(assignment.place.name, []).append(assignment.role.name)
+        sorted_place_names = sorted(roles_per_place.keys())
+        return [(place_name, sorted(roles_per_place[place_name])) for place_name in sorted_place_names]
+
+    @property
+    def sorted_roles_per_root(self):
+        roles_per_root = {}
+        for assignment in self.root_assignments:
+            roles_per_root.setdefault(assignment.root.name, []).append(assignment.role.name)
+        sorted_root_names = sorted(roles_per_root.keys())
+        return [(root_name, sorted(roles_per_root[root_name])) for root_name in sorted_root_names]
+
     def add_description(self, display_context):
         display_context.add_multiline_notation(label="About me", multiline=self.about_me)
         if self.is_the_super_admin:
-            display_context.add_universal_role_description(Role.super_role_name)
+            display_context.add_role_description(Role.super_role_name)
         for role_name in Role.universal_role_name_list:
             if self.has_universal_role(role_name):
-                display_context.add_universal_role_description(role_name)
+                display_context.add_role_description(role_name)
+        for root_name, role_name_list in self.sorted_roles_per_root:
+            for role_name in role_name_list:
+                suffix = f' for {root_name}'
+                display_context.add_role_description(role_name, suffix=suffix)
+        for place_name, role_name_list in self.sorted_roles_per_place:
+            for role_name in role_name_list:
+                suffix = f' at {place_name}'
+                display_context.add_role_description(role_name, suffix=suffix)
+
 
     def bread_crumbs(self, navigator):
         return bread_crumbs(navigator, [AllPeople, self], target=self)
