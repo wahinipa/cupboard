@@ -2,7 +2,6 @@
 from flask import render_template
 
 from tracking.contexts.context import Context
-from tracking.modelling.role_models import Role
 
 
 class DisplayContext(Context):
@@ -46,6 +45,7 @@ class DisplayContext(Context):
         self.append_notation(notation)
 
     def add_role_description(self, role_name, suffix=''):
+        from tracking.modelling.role_models import Role
         self.add_notation(label=f'{role_name}{suffix}', value=Role.role_descriptions[role_name])
 
     def append_notation(self, notation):
