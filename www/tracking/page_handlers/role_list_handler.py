@@ -1,9 +1,8 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.role_models import Role
+from tracking.viewers.all_roles import AllRoles
 from tracking.page_handlers.page_handler import PageHandler
 from tracking.page_handlers.platter_holding_handler import PlatterHoldingHandler
 from tracking.page_handlers.view_handler import ViewHandler
-from tracking.viewers.role_list_viewer import RoleListViewer
 
 
 class RoleListHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
@@ -18,7 +17,7 @@ class RoleListHandler(PageHandler, ViewHandler, PlatterHoldingHandler):
 
     @property
     def display_context_maker(self):
-        return RoleListViewer()
+        return AllRoles()
 
     @property
     def display_attributes(self):

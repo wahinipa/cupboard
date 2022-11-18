@@ -1,4 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from flask import url_for
+
 from tracking.navigation.platter import PlatterById
 from tracking.viewers.categories_viewer import CategoriesViewer
 
@@ -25,6 +27,7 @@ class PlatterHoldingHandler:
     def category_list_url(self):
         return self.navigator.target_url(CategoriesViewer, 'view')
 
+
     @property
     def current_quantity(self):
         return self.platter.current_quantity
@@ -38,8 +41,33 @@ class PlatterHoldingHandler:
         return self.platter.person
 
     @property
+    def role(self):
+        return self.platter.role
+
+    @property
+    def role_id(self):
+        role = self.role
+        return role.id if role else 0
+
+    @property
+    def person_id(self):
+        person = self.person
+        return person.id if person else 0
+
+    @property
     def place(self):
         return self.platter.place
+
+    @property
+    def place_id(self):
+        place = self.place
+        return place.id if place else 0
+
+    @property
+    def role_url(self):
+        role = getattr(self, 'role', None)
+        role_id = role.id if role else 0
+        return url_for('role_bp.role_view', role_id=role_id, place_id=self.place_id, person_id=self.person_id)
 
     @property
     def source_inventory(self):

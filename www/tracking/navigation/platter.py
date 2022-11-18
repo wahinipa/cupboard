@@ -3,10 +3,11 @@ from flask import url_for
 
 from tracking.modelling.category_model import Category
 from tracking.modelling.choice_model import Choice
-from tracking.modelling.people_model import find_user_by_id
+from tracking.modelling.people_model import find_user_by_id, User, AllPeople
 from tracking.modelling.place_model import Place, find_place_by_id
 from tracking.modelling.positioning_mixin import current_quantity
-from tracking.modelling.role_models import Role
+from tracking.modelling.role_models import Role, find_role_by_id
+from tracking.viewers.all_roles import AllRoles
 from tracking.modelling.root_model import Root, find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import Thing, find_thing_by_id
@@ -22,9 +23,10 @@ DEFAULT_ACTIVITY = 'observe'
 
 class Platter:
     def __init__(self, viewer=None, activity=DEFAULT_ACTIVITY, root=None, place=None, thing=None, specification=None,
-                 destination=None, person=None):
+                 destination=None, person=None, role=None):
         self.viewer = viewer
         self.person = person
+        self.role = role
         if root is None:
             if place:
                 root = place.root
@@ -47,6 +49,11 @@ class Platter:
             self.place_id = place.id
         else:
             self.place_id = None
+
+        if person:
+            self.person_id = person.id
+        else:
+            self.person_id = 0
 
         if destination:
             self.destination_id = destination.id
@@ -82,9 +89,13 @@ class Platter:
             navigational_mark(Destination): self.destination_url_maker,
             navigational_mark(Place): self.place_url_maker,
             navigational_mark(Root): self.root_url_maker,
+            navigational_mark(AllRoles): self.role_url_maker,
+            navigational_mark(Role): self.role_url_maker,
             navigational_mark(CategorySpecificationViewer): self.specification_url_maker,
             navigational_mark(Thing): self.thing_url_maker,
             navigational_mark(ThingSpecificationViewer): self.thing_specification_url_maker,
+            navigational_mark(AllPeople): self.user_url_maker,
+            navigational_mark(User): self.user_url_maker,
         }
         self.viewer_role_set = set()
         if self.viewer:
@@ -120,9 +131,24 @@ class Platter:
                                   destination_id=self.destination_id,
                                   thing_id=self.thing_id, specification_id=self.specification_id)
 
+    def role_url_maker(self, role, task, place_id=None, person_id=None, activity=None):
+        place_id = place_id or self.place_id or 0
+        if person_id is None:
+            person_id = self.person_id or 0
+        if role and isinstance(role, Role):
+            role_id = role.id
+        else:
+            role_id = 0
+        return self.valid_url_for(f'role_bp.role_{task}', role_id=role_id,
+                                  place_id=place_id,
+                                  person_id=person_id)
+
     def place_url_maker(self, place, task, activity=None):
         if task == 'view':
-            return self.root_url_maker(place.root, task, place_id=place.id, activity=activity)
+            if activity == 'role':
+                return self.role_url_maker(self.role, task, place_id=place.id, activity=activity)
+            else:
+                return self.root_url_maker(place.root, task, place_id=place.id, activity=activity)
         return self.valid_url_for(f'place_bp.place_{task}', activity=activity, place_id=place.id,
                                   thing_id=self.thing_id,
                                   destination_id=self.destination_id,
@@ -155,6 +181,15 @@ class Platter:
 
     def thing_specification_url_maker(self, thing_specification, task, activity=None):
         return self.valid_url_for(f'inventory_bp.inventory_{task}', activity=activity, **thing_specification.identities)
+
+    def user_url_maker(self, user, task, activity=None):
+        if activity=='role':
+            if task == 'view':
+                person_id = user.id if isinstance(user, User) else 0
+                return self.role_url_maker(self.role, task, activity=activity, person_id=person_id)
+            elif task == 'list':
+                return self.role_url_maker(self.role, task, activity=activity, person_id=0)
+        return self.valid_url_for(f'people_bp.people_{task}', activity=activity, user_id=user.id)
 
     def specification_url_maker(self, category_specification, task, activity=None):
         # No matter the presumed task, do an update
@@ -238,7 +273,8 @@ class Platter:
 
 class PlatterById(Platter):
     def __init__(self, viewer=None, activity=DEFAULT_ACTIVITY, root_id=None, place_id=None, thing_id=None,
-                 specification_id=None, destination_id=None, user_id=None):
+                 specification_id=None, destination_id=None, user_id=None, role_id=None):
+        role = role_id and find_role_by_id(role_id)
         root = root_id and find_root_by_id(root_id)
         place = place_id and find_place_by_id(place_id)
         person = user_id and find_user_by_id(user_id)
@@ -246,4 +282,4 @@ class PlatterById(Platter):
         thing = thing_id and find_thing_by_id(thing_id)
         specification = specification_id and find_specification_by_id(specification_id)
         Platter.__init__(self, viewer=viewer, activity=activity, root=root, place=place, thing=thing,
-                         specification=specification, destination=destination, person=person)
+                         specification=specification, destination=destination, person=person, role=role)

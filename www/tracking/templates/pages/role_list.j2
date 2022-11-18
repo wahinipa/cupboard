@@ -1,6 +1,8 @@
 {% extends "pages/content.j2" %}
 {% from 'macros/target_block_macros.j2' import target_block %}
+{% from 'macros/card_macros.j2' import row_of_varying_width_child_cards %}
 
 {% block innards %}
   {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) }}
+  {{ row_of_varying_width_child_cards(children[0:2], [6, 6]) }}
 {% endblock %}

@@ -8,18 +8,6 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContextMix
 from tracking.modelling.base_models import DatedModelMixin, IdModelMixin, UniqueNamedBaseModel
 
 
-class AllRoles:
-    label = 'Roles'
-
-    @property
-    def identities(self):
-        return {}
-
-    @property
-    def root_path(self):
-        return [self]
-
-
 class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     singular_label = "Role"
     plural_label = "Roles"
@@ -85,6 +73,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
     @property
     def parent_object(self):
+        from tracking.viewers.all_roles import AllRoles
         return AllRoles()
 
     @property
