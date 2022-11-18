@@ -1,7 +1,24 @@
 {% extends "pages/content.j2" %}
-{% from 'macros/target_block_macros.j2' import target_block %}
-{% from 'macros/card_macros.j2' import row_of_varying_width_child_cards %}
+{% from 'macros/target_block_macros.j2' import card_target %}
+{% from 'macros/card_macros.j2' import card_child %}
 {% block innards %}
-  {{ target_block(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) }}
-  {{ row_of_varying_width_child_cards(children[0:2], [6, 6]) }}
+  <div class="row mt-2">
+    <div class="col-md-4">
+      <div class="row mt-2">
+        <div class="col-md-12">
+          {% call card_child(label=label, flavor=flavor, url=url, bread_crumb_list=bread_crumb_list, notations=notations, tasks=tasks) %}
+          {% endcall %}
+        </div>
+      </div>
+    </div>
+    {% for child in children %}
+      <div class="col-md-4">
+        <div class="row mt-2">
+          <div class="col-md-12">
+            {{ card_child(**child) }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}
