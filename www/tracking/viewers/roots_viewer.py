@@ -6,7 +6,7 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContextMix
 
 class RootsViewer(CupboardDisplayContextMixin):
     flavor = 'home'
-    label = 'Home'
+    label = 'Organizational Association'
     label_prefixes = {}
     singular_label = 'home'
     possible_tasks = ['create']
