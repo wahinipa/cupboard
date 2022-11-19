@@ -33,6 +33,14 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         return {'root_id': self.id}
 
     @property
+    def children(self):
+        return []
+
+    @property
+    def full_positionings(self):
+        return set()
+
+    @property
     def generic_specification(self):
         return self.find_or_create_specification()
 

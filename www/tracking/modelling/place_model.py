@@ -7,6 +7,7 @@ from tracking import database
 from tracking.modelling.base_models import NamedBaseModel, RootDescendantMixin
 from tracking.modelling.positioning_mixin import PositioningMixin
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
+from tracking.viewers.roots_viewer import RootsViewer
 
 
 class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):
@@ -78,7 +79,7 @@ class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
         return self.root.thing
 
     def viewable_children(self, viewer):
-        return self.sorted_children
+        return [RootsViewer(), self.root] + self.sorted_children
 
 
 def find_place_by_id(place_id):

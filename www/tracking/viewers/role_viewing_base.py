@@ -43,7 +43,6 @@ class RoleViewingBase(CupboardDisplayContextMixin):
                 },
                 'home': {
                     'display_context': {
-                        'add_tasks': True,
                         'description': True,
                         'url': True,
                         'bread_crumbs': True,
@@ -57,7 +56,6 @@ class RoleViewingBase(CupboardDisplayContextMixin):
                 },
                 'place': {
                     'display_context': {
-                        'add_tasks': True,
                         'description': True,
                         'url': True,
                         'bread_crumbs': True,
@@ -66,12 +64,14 @@ class RoleViewingBase(CupboardDisplayContextMixin):
                             'place': {
                                 'notation': True,
                             },
+                            'home': {
+                                'notation': True,
+                            },
                         },
                     },
                 },
                 'people': {
                     'display_context': {
-                        'add_tasks': True,
                         'description': True,
                         'url': True,
                         'bread_crumbs': True,

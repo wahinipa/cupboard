@@ -16,6 +16,7 @@ from tracking.viewers.all_roles import AllRoles
 from tracking.viewers.categories_viewer import CategoriesViewer
 from tracking.viewers.category_specification_viewer import CategorySpecificationViewer
 from tracking.viewers.destination import Destination
+from tracking.viewers.roots_viewer import RootsViewer
 from tracking.viewers.thing_specification_viewer import ThingSpecificationViewer
 
 DEFAULT_ACTIVITY = 'observe'
@@ -89,6 +90,7 @@ class Platter:
             navigational_mark(Destination): self.destination_url_maker,
             navigational_mark(Place): self.place_url_maker,
             navigational_mark(Root): self.root_url_maker,
+            navigational_mark(RootsViewer): self.roots_url_maker,
             navigational_mark(AllRoles): self.role_url_maker,
             navigational_mark(Role): self.role_url_maker,
             navigational_mark(CategorySpecificationViewer): self.specification_url_maker,
@@ -131,8 +133,16 @@ class Platter:
                                   destination_id=self.destination_id,
                                   thing_id=self.thing_id, specification_id=self.specification_id)
 
+    def roots_url_maker(self, target, task, place_id=None, person_id=None, activity=None):
+        if activity == 'role' and task == 'view':
+            return self.role_url_maker(role=None, task=task, place_id=0, person_id=person_id,
+                                       activity=activity)
+        else:
+            return self.default_url_maker(target, task)
+
     def role_url_maker(self, role, task, place_id=None, person_id=None, activity=None):
-        place_id = place_id or self.place_id or 0
+        if place_id is None:
+            place_id = self.place_id or 0
         if person_id is None:
             person_id = self.person_id or 0
         if role and isinstance(role, Role):
