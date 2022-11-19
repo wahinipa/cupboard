@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.viewers.people_list_viewer import PeopleListViewer
+from tracking.viewers.roots_viewer import RootsViewer
 
 
 class RoleViewingBase(CupboardDisplayContextMixin):
@@ -25,6 +26,8 @@ class RoleViewingBase(CupboardDisplayContextMixin):
             children.append(PeopleListViewer())
         if self.place:
             children.append(self.place)
+        else:
+            children.append(RootsViewer())
         return children
 
     @property
@@ -37,6 +40,20 @@ class RoleViewingBase(CupboardDisplayContextMixin):
             'children_attributes': {
                 'role': {
                     'notation': True,
+                },
+                'home': {
+                    'display_context': {
+                        'add_tasks': True,
+                        'description': True,
+                        'url': True,
+                        'bread_crumbs': True,
+                        'prefix': None,
+                        'children_attributes': {
+                            'root': {
+                                'notation': True,
+                            },
+                        },
+                    },
                 },
                 'place': {
                     'display_context': {

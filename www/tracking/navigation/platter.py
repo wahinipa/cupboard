@@ -3,16 +3,16 @@ from flask import url_for
 
 from tracking.modelling.category_model import Category
 from tracking.modelling.choice_model import Choice
-from tracking.modelling.people_model import find_user_by_id, User, AllPeople
+from tracking.modelling.people_model import AllPeople, User, find_user_by_id
 from tracking.modelling.place_model import Place, find_place_by_id
 from tracking.modelling.positioning_mixin import current_quantity
 from tracking.modelling.role_models import Role, find_role_by_id
-from tracking.viewers.all_roles import AllRoles
 from tracking.modelling.root_model import Root, find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
 from tracking.modelling.thing_model import Thing, find_thing_by_id
-from tracking.navigation.navigator import navigational_mark, navigational_identities
+from tracking.navigation.navigator import navigational_identities, navigational_mark
 from tracking.viewers.Inventory_holder import create_inventory
+from tracking.viewers.all_roles import AllRoles
 from tracking.viewers.categories_viewer import CategoriesViewer
 from tracking.viewers.category_specification_viewer import CategorySpecificationViewer
 from tracking.viewers.destination import Destination
@@ -170,10 +170,15 @@ class Platter:
         thing_id = thing_id or self.thing_id or root.thing.id
         specification_id = specification_id or self.specification_id or root.generic_specification.id
         if task == 'view' and activity:
-            task = f'{task}_{activity}'
-            return self.valid_url_for(f'root_bp.root_{task}', place_id=place_id, thing_id=thing_id,
-                                      destination_id=destination_id,
-                                      specification_id=specification_id)
+            if activity == 'role':
+                place_id = root.place_id
+                return self.role_url_maker(self.role, task, place_id=place_id, activity=activity,
+                                           person_id=self.person_id)
+            else:
+                task = f'{task}_{activity}'
+                return self.valid_url_for(f'root_bp.root_{task}', place_id=place_id, thing_id=thing_id,
+                                          destination_id=destination_id,
+                                          specification_id=specification_id)
         else:
             return self.valid_url_for(f'root_bp.root_{task}', activity=activity, place_id=place_id, thing_id=thing_id,
                                       destination_id=destination_id,
@@ -183,7 +188,7 @@ class Platter:
         return self.valid_url_for(f'inventory_bp.inventory_{task}', activity=activity, **thing_specification.identities)
 
     def user_url_maker(self, user, task, activity=None):
-        if activity=='role':
+        if activity == 'role':
             if task == 'view':
                 person_id = user.id if isinstance(user, User) else 0
                 return self.role_url_maker(self.role, task, activity=activity, person_id=person_id)
