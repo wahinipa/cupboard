@@ -28,6 +28,11 @@ class Platter:
         self.viewer = viewer
         self.person = person
         self.role = role
+
+        if self.role:
+            self.role_id = self.role.id
+        else:
+            self.role_id = 0
         if root is None:
             if place:
                 root = place.root
@@ -133,14 +138,14 @@ class Platter:
                                   destination_id=self.destination_id,
                                   thing_id=self.thing_id, specification_id=self.specification_id)
 
-    def roots_url_maker(self, target, task, place_id=None, person_id=None, activity=None):
+    def roots_url_maker(self, target, task, activity=None):
         if activity == 'role' and task == 'view':
-            return self.role_url_maker(role=None, task=task, place_id=0, person_id=person_id,
+            return self.role_url_maker(role=self.role, task=task, place_id=0, person_id=self.person_id,
                                        activity=activity)
         else:
             return self.default_url_maker(target, task)
 
-    def role_url_maker(self, role, task, place_id=None, person_id=None, activity=None):
+    def role_url_maker(self, role, task, role_id=None, place_id=None, person_id=None, activity=None):
         if place_id is None:
             place_id = self.place_id or 0
         if person_id is None:
@@ -148,7 +153,7 @@ class Platter:
         if role and isinstance(role, Role):
             role_id = role.id
         else:
-            role_id = 0
+            role_id = role_id or 0
         return self.valid_url_for(f'role_bp.role_{task}', role_id=role_id,
                                   place_id=place_id,
                                   person_id=person_id)
