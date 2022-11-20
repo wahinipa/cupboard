@@ -104,11 +104,11 @@ class Platter:
             navigational_mark(AllPeople): self.user_url_maker,
             navigational_mark(User): self.user_url_maker,
         }
-        self.viewer_role_set = set()
+        self.viewer_role_name_set = set()
         if self.viewer:
-            for role in Role.role_name_list + Role.pseudo_role_name_list:
-                if self._viewer_has_role(role):
-                    self.viewer_role_set.add(role)
+            for role_name in Role.role_name_list + Role.pseudo_role_name_list:
+                if self._viewer_has_role(role_name):
+                    self.viewer_role_name_set.add(role_name)
 
     def default_url_maker(self, target, task, activity=None):
         endpoint = self.navigator.endpoint(target, task)
@@ -267,30 +267,32 @@ class Platter:
         return self.root and self.viewer and self.viewer.is_linked(self.root)
 
     def viewer_has_role(self, required_role_name):
-        return required_role_name in self.viewer_role_set
+        return required_role_name in self.viewer_role_name_set
 
     def _viewer_has_role(self, required_role_name):
-        if self.viewer:
-            if required_role_name in Role.universal_role_name_set:
-                return self.viewer.has_universal_role(required_role_name)
-            elif required_role_name in Role.root_role_name_set:
-                return self.viewer_is_linked and self.root.has_role(self.viewer, required_role_name)
-            elif required_role_name in Role.place_role_name_list:
-                return self.place and self.viewer_is_linked and self.place.has_role(self.viewer, required_role_name)
-            elif required_role_name == Role.super_role_name:
-                return self.viewer.is_the_super_admin
-            elif required_role_name == Role.self_role_name:
-                return self.person and self.person == self.viewer
-            elif required_role_name == Role.people_viewer_name:
-                return self.viewer.is_the_super_admin or len(self.viewer.linkages) > 0
-            elif required_role_name == Role.roots_observer_role_name:
-                return self.viewer.is_the_super_admin or len(self.viewer.linkages) > 0
-            elif required_role_name == Role.control_role_name:
-                return True
-            elif required_role_name == Role.anybody_role_name:
-                return True
-            raise ValueError("No such role")
-        raise ValueError("Viewer is None")
+        if required_role_name in Role.universal_role_name_set:
+            return self.viewer.has_universal_role(required_role_name)
+        elif required_role_name in Role.root_role_name_set:
+            return self.viewer_is_linked and self.root.has_role(self.viewer, required_role_name)
+        elif required_role_name in Role.place_role_name_list:
+            return self.place and self.viewer_is_linked and self.place.has_role(self.viewer, required_role_name)
+        elif required_role_name == Role.super_role_name:
+            return self.viewer.is_the_super_admin
+        elif required_role_name == Role.self_role_name:
+            return self.person and self.person == self.viewer
+        elif required_role_name == Role.people_viewer_name:
+            return self.viewer.is_the_super_admin or len(self.viewer.linkages) > 0
+        elif required_role_name == Role.roots_observer_role_name:
+            return self.viewer.is_the_super_admin or len(self.viewer.linkages) > 0
+        elif required_role_name == Role.control_role_name:
+            if self.role and self.person:
+                target_role_name = self.role.name
+                granting_role_names = Role.granting_powers.get(target_role_name, [])
+                return any(self._viewer_has_role(granting_role_name) for granting_role_name in granting_role_names)
+            return False
+        elif required_role_name == Role.anybody_role_name:
+            return True
+        raise ValueError("No such role")
 
 
 class PlatterById(Platter):
