@@ -9,7 +9,6 @@ from tracking.modelling.base_models import DatedModelMixin, IdModelMixin, Unique
 
 
 class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
-    singular_label = "Role"
     plural_label = "Roles"
     possible_tasks = []
     label_prefixes = {}
@@ -36,6 +35,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     people_viewer_name = "Viewer of People"  # No actual Role created for this
     roots_observer_role_name = "Viewer of Roots"  # No actual Role created for this
     anybody_role_name = "Anybody"  # No actual Role created for this
+    control_role_name = "Control"  # No actual Role created for this
 
     role_descriptions = {
         user_admin_role_name: "Can create, update, enable, disable, or delete user accounts.",
@@ -55,6 +55,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         roots_observer_role_name: "Can view organizations.",
         self_role_name: "Can look at own user account.",
         anybody_role_name: "Things anybody is allowed to do.",
+        control_role_name: "Control Pseudo Role.",
     }
 
     universal_role_name_set = {user_admin_role_name}
@@ -62,7 +63,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     place_role_name_set = {location_manager_name, inventory_manager_name, observer_role_name, inbound_role_name,
                            outbound_role_name, transfer_role_name, adjust_role_name}
     pseudo_role_name_set = {anybody_role_name, super_role_name, self_role_name, people_viewer_name,
-                            roots_observer_role_name}
+                            roots_observer_role_name, control_role_name}
 
     universal_role_name_list = sorted(universal_role_name_set)
     root_role_name_list = sorted(root_role_name_set)
@@ -70,6 +71,33 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     pseudo_role_name_list = sorted(pseudo_role_name_set)
 
     role_name_list = universal_role_name_list + root_role_name_list + place_role_name_list
+
+    granting_powers = {
+        user_admin_role_name: [super_role_name],
+        admin_role_name: [super_role_name],
+        linkage_role_name: [admin_role_name, super_role_name],
+        structuring_role_name: [admin_role_name, super_role_name],
+        structure_viewer_role_name: [admin_role_name, super_role_name],
+        location_manager_name: [admin_role_name, super_role_name],
+        inventory_manager_name: [location_manager_name, admin_role_name, super_role_name],
+        observer_role_name: [inventory_manager_name],
+        inbound_role_name: [inventory_manager_name],
+        outbound_role_name: [inventory_manager_name],
+        transfer_role_name: [inventory_manager_name],
+        adjust_role_name: [inventory_manager_name],
+    }
+
+    @property
+    def singular_label(self):
+        role_name = self.name
+        if role_name in self.universal_role_name_set:
+            return 'Universal Role'
+        elif role_name in self.root_role_name_set:
+            return 'Organization Role'
+        elif role_name in self.place_role_name_set:
+            return 'Place Role'
+        else:
+            return 'Role'
 
     @property
     def parent_object(self):
@@ -208,3 +236,25 @@ def assign_universal_role(role, user, date_created=None):
         database.session.add(assignment)
         database.session.commit()
     return assignment
+
+
+def remove_role(role, user, place=None, root=None):
+    root = root or (place and place.root)
+    place = place or (root and root.place)
+    for assignment in user.universal_assignments :
+        if assignment.role == role:
+            database.session.delete(assignment)
+            database.session.commit()
+            return
+    if root:
+        for assignment in user.root_assignments :
+            if assignment.role == role and assignment.root == root:
+                database.session.delete(assignment)
+                database.session.commit()
+                return
+    if place:
+        for assignment in user.place_assignments:
+            if assignment.role == role and assignment.place == place:
+                database.session.delete(assignment)
+                database.session.commit()
+                return

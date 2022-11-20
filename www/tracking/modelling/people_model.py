@@ -149,6 +149,22 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
         return any(map(yes, self.universal_assignments))
 
+    def has_exact_role(self, name_of_role, root=None, place=None):
+        for assignment in self.universal_assignments:
+            if assignment.role.name == name_of_role:
+                return True
+        root = root or (place and place.root)
+        if root:
+            for assignment in self.root_assignments:
+                if assignment.role.name == name_of_role and assignment.root == root:
+                    return True
+        place = place or (root and root.place)
+        if place:
+            for assignment in self.place_assignments:
+                if assignment.role.name == name_of_role and assignment.place == place:
+                    return True
+        return False
+
     @property
     def label(self):
         return self.name

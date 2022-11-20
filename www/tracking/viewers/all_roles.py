@@ -5,6 +5,7 @@ from tracking.viewers.role_viewing_base import RoleViewingBase
 
 
 class AllRoles(RoleViewingBase):
+    possible_tasks = []
 
     @property
     def identities(self):

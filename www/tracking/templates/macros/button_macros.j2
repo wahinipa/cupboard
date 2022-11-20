@@ -25,6 +25,10 @@
     {{ button_action(url=url, prefix='Enable ', label=label, column_width=column_width, button_color='warning') }}
   {% elif task == 'disable' %}
     {{ button_action(url=url, prefix='Disable ', label=label, column_width=column_width, button_color='danger') }}
+  {% elif task == 'grant' %}
+    {{ button_action(url=url, prefix='Grant ', label=label, column_width=column_width, button_color='warning') }}
+  {% elif task == 'deny' %}
+    {{ button_action(url=url, prefix='Deny ', label=label, column_width=column_width, button_color='danger') }}
   {% endif %}
 {% endmacro %}
 

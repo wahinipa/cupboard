@@ -8,7 +8,6 @@ class RoleViewingBase(CupboardDisplayContextMixin):
     page_template = 'pages/role_view.j2'
     singular_label = "Roles"
     plural_label = "Roles"
-    possible_tasks = []
     label_prefixes = {}
     flavor = "role"
     label = "Roles"
