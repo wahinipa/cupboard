@@ -35,7 +35,9 @@ def create_test_data(database, initial_users):
     inventory_manager = find_or_create_role(Role.inventory_manager_name)
     assign_universal_role(user_admin_role, larry)
     assign_root_role(another_test_group, structuring_role, moe)
+    assign_root_role(another_test_group, structuring_role, admin)
     assign_root_role(our_test_group, structuring_role, larry)
+    assign_root_role(our_test_group, structuring_role, admin)
     assign_place_role(smallville, inventory_manager, curly)
     assign_place_role(phone_booth, inventory_manager, larry)
 

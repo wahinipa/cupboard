@@ -16,6 +16,7 @@ from tracking.modelling.role_models import Role, assign_universal_role, find_or_
 
 class AllPeople:
     label = 'People'
+    id = 0
 
 
 class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin):
