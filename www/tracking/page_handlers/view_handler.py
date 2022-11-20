@@ -55,7 +55,7 @@ class ViewHandler:
             display_context.add_top_menu_item('Adjust', self.adjust_url, 'place', 'adjust')
 
     def add_people_button(self, display_context):
-        display_context.add_top_menu_item('People', url_for('people_bp.people_list'), 'people')
+        display_context.add_top_menu_item('People', self.people_url, 'people')
 
     def add_role_button(self, display_context):
         display_context.add_top_menu_item('Roles', self.role_url, 'role')

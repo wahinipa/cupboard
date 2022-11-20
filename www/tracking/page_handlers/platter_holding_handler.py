@@ -1,6 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask import url_for
 
+from tracking.modelling.people_model import AllPeople
 from tracking.navigation.platter import PlatterById
 from tracking.viewers.categories_viewer import CategoriesViewer
 
@@ -100,6 +101,14 @@ class PlatterHoldingHandler:
     @property
     def place_url(self):
         return self.navigator.target_url(self.root, 'view')
+
+    @property
+    def people_url(self):
+        person = self.person
+        if person:
+            return self.navigator.target_url(person, 'view', activity='people')
+        else:
+            return self.navigator.target_url(AllPeople, 'list', activity='people')
 
     @property
     def root(self):
