@@ -52,7 +52,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     @property
     def identities(self):
-        return {'user_id': self.id}
+        return {'person_id': self.id}
 
     def viewable_children(self, viewer):
         return []
@@ -207,12 +207,12 @@ def load_user(unicode_user_id):
         return None
 
 
-def find_user_by_username(username):
+def find_person_by_username(username):
     return User.query.filter(User.username == username).first()
 
 
-def find_user_by_id(user_id):
-    return User.query.filter(User.id == user_id).first()
+def find_person_by_id(person_id):
+    return User.query.filter(User.id == person_id).first()
 
 
 def create_test_users():

@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired
 
 from tracking import database
 from tracking.forms.cardistry_forms import cancel_button_field, about_me_form_field
-from tracking.modelling.people_model import find_user_by_username, find_or_create_user
+from tracking.modelling.people_model import find_person_by_username, find_or_create_user
 
 
 class LoginForm(FlaskForm):
@@ -25,7 +25,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign in')
 
     def found_user(self):
-        return find_user_by_username(self.username.data)
+        return find_person_by_username(self.username.data)
 
     def validate(self):
         # Validate field-validators
@@ -96,7 +96,7 @@ class ChangePasswordForm(FlaskForm):
 
 def create_user_from_form(form):
     username = form.username.data
-    user = find_user_by_username(username)
+    user = find_person_by_username(username)
     if user is None:
         find_or_create_user(
             form.first_name.data,

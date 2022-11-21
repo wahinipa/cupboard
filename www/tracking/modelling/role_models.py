@@ -160,7 +160,7 @@ class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.
         return database.Column(database.Integer, database.ForeignKey('role.id'))
 
     @declared_attr
-    def user_id(cls):
+    def person_id(cls):
         return database.Column(database.Integer, database.ForeignKey('user.id'))
 
     @property

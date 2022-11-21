@@ -10,5 +10,5 @@ class Linkage(IdModelMixin, DatedModelMixin, database.Model):
     Since most users will only link to one Root, the UI can eliminate
     unnecessary dialogs where the user chooses a root.
     """
-    user_id = database.Column(database.Integer, database.ForeignKey('user.id'))
+    person_id = database.Column(database.Integer, database.ForeignKey('user.id'))
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'))

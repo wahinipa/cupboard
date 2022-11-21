@@ -11,7 +11,7 @@ class RoleViewHandler(PageHandler, PlatterHoldingHandler, ViewHandler):
 
     def __init__(self, endpoint, viewer, role_id=None, place_id=None, person_id=None):
         PageHandler.__init__(self, endpoint)
-        PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, user_id=person_id, activity='role',
+        PlatterHoldingHandler.__init__(self, viewer, place_id=place_id, person_id=person_id, activity='role',
                                        role_id=role_id)
         if self.role:
             self.page_viewer = RoleViewer(place=self.place, person=self.person, role=self.role)

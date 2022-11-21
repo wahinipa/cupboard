@@ -3,7 +3,7 @@ from flask import url_for
 
 from tracking.modelling.category_model import Category
 from tracking.modelling.choice_model import Choice
-from tracking.modelling.people_model import AllPeople, User, find_user_by_id
+from tracking.modelling.people_model import AllPeople, User, find_person_by_id
 from tracking.modelling.place_model import Place, find_place_by_id
 from tracking.modelling.positioning_mixin import current_quantity
 from tracking.modelling.role_models import Role, find_role_by_id
@@ -209,7 +209,7 @@ class Platter:
                 return self.role_url_maker(self.role, task, activity=activity, person_id=person_id)
             elif task == 'list':
                 return self.role_url_maker(self.role, task, activity=activity, person_id=0)
-        return self.valid_url_for(f'people_bp.people_{task}', activity=activity, user_id=user.id)
+        return self.valid_url_for(f'people_bp.people_{task}', activity=activity, person_id=user.id)
 
     def specification_url_maker(self, category_specification, task, activity=None):
         # No matter the presumed task, do an update
@@ -297,11 +297,11 @@ class Platter:
 
 class PlatterById(Platter):
     def __init__(self, viewer=None, activity=DEFAULT_ACTIVITY, root_id=None, place_id=None, thing_id=None,
-                 specification_id=None, destination_id=None, user_id=None, role_id=None):
+                 specification_id=None, destination_id=None, person_id=None, role_id=None):
         role = role_id and find_role_by_id(role_id)
         root = root_id and find_root_by_id(root_id)
         place = place_id and find_place_by_id(place_id)
-        person = user_id and find_user_by_id(user_id)
+        person = person_id and find_person_by_id(person_id)
         destination = destination_id and Destination(find_place_by_id(destination_id))
         thing = thing_id and find_thing_by_id(thing_id)
         specification = specification_id and find_specification_by_id(specification_id)

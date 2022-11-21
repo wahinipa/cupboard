@@ -29,20 +29,20 @@ def people_create():
     return PeopleCreateHandler('people_bp.people_create', current_user).handle()
 
 
-@people_bp.route('/delete/<int:user_id>')
+@people_bp.route('/delete/<int:person_id>')
 @login_required
-def people_delete(user_id):
-    return PeopleDeleteHandler('people_bp.people_delete', current_user, user_id=user_id).handle()
+def people_delete(person_id):
+    return PeopleDeleteHandler('people_bp.people_delete', current_user, person_id=person_id).handle()
 
-@people_bp.route('/enable/<int:user_id>')
+@people_bp.route('/enable/<int:person_id>')
 @login_required
-def people_enable(user_id):
-    return PeopleEnableHandler('people_bp.people_enable', current_user, user_id=user_id).handle()
+def people_enable(person_id):
+    return PeopleEnableHandler('people_bp.people_enable', current_user, person_id=person_id).handle()
 
-@people_bp.route('/disable/<int:user_id>')
+@people_bp.route('/disable/<int:person_id>')
 @login_required
-def people_disable(user_id):
-    return PeopleDisableHandler('people_bp.people_disable', current_user, user_id=user_id).handle()
+def people_disable(person_id):
+    return PeopleDisableHandler('people_bp.people_disable', current_user, person_id=person_id).handle()
 
 
 @people_bp.route('/login', methods=['GET', 'POST'])
@@ -68,10 +68,10 @@ def login():
         return CupboardDisplayContext(None).render_template('pages/login.j2', form=form)
 
 
-@people_bp.route('/update/<int:user_id>', methods=['GET', 'POST'])
+@people_bp.route('/update/<int:person_id>', methods=['GET', 'POST'])
 @login_required
-def people_update(user_id):
-    return PeopleUpdateHandler('people_bp.people_update', current_user, user_id=user_id).handle()
+def people_update(person_id):
+    return PeopleUpdateHandler('people_bp.people_update', current_user, person_id=person_id).handle()
 
 
 @people_bp.route('/logout', methods=['GET', 'POST'])
@@ -98,7 +98,7 @@ def people_list():
     return PeopleListHandler('people_bp.people_list', current_user).handle()
 
 
-@people_bp.route('/view/<int:user_id>')
+@people_bp.route('/view/<int:person_id>')
 @login_required
-def people_view(user_id):
-    return PeopleViewHandler('people_bp.people_view', current_user, user_id=user_id).handle()
+def people_view(person_id):
+    return PeopleViewHandler('people_bp.people_view', current_user, person_id=person_id).handle()

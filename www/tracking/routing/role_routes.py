@@ -24,11 +24,11 @@ def role_view(role_id, place_id, person_id):
 @login_required
 def role_grant(role_id, place_id, person_id):
     return RoleGrantHandler('role_bp.role_grant', current_user, role_id=role_id, place_id=place_id,
-                           user_id=person_id).handle()
+                           person_id=person_id).handle()
 
 
 @role_bp.route('/deny/<int:role_id>/<int:place_id>/<int:person_id>')
 @login_required
 def role_deny(role_id, place_id, person_id):
     return RoleDenyHandler('role_bp.role_deny', current_user, role_id=role_id, place_id=place_id,
-                           user_id=person_id).handle()
+                           person_id=person_id).handle()
