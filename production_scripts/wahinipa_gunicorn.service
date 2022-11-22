@@ -1,0 +1,14 @@
+[Unit]
+Description=Flask Web Application Server using Gunicorn
+After=network.target
+
+[Service]
+User=willy
+Group=www-data
+WorkingDirectory=/home/willy/live/cupboard/www
+Environment="PATH=/home/willy/venv/guni/bin"
+ExecStart=/bin/bash -c 'source /home/willy/venv/guni/bin/activate; gunicorn -w 3 --bind unix:/tmp/wahinipa_gunicorn.sock --log-level=info wsgi:app'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
