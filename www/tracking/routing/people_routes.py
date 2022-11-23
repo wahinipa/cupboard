@@ -87,6 +87,7 @@ def change_password():
     if request.method == 'POST' and form.cancel_button.data:
         return home_redirect()
     if form.validate_on_submit():
+        current_user.password = form.password_new.data
         database.session.commit()
         return home_redirect()
     return CupboardDisplayContext(current_user).render_template('pages/change_password.j2', form=form)
