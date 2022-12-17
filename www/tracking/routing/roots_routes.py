@@ -16,7 +16,7 @@ roots_bp = Blueprint(
 @roots_bp.route('/create', methods=['POST', 'GET'])
 @login_required
 def roots_create():
-    return RootsCreateHandler(current_user).handle()
+    return RootsCreateHandler('roots_bp.roots_create', current_user).handle()
 
 
 @roots_bp.route('/view')
