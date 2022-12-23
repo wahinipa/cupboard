@@ -20,7 +20,7 @@ class RoleViewer(RoleViewingBase):
         person_id = self.person.id if self.person else 0
         place_id = self.place.id if self.place else 0
         return {
-            'role_id':role_id,
+            'role_id': role_id,
             'person_id': person_id,
             'place_id': place_id,
         }
@@ -39,6 +39,16 @@ class RoleViewer(RoleViewingBase):
 
     @property
     def possible_tasks(self):
+        tasks = self.possible_role_tasks
+        if self.place and self.place.root and self.person:
+            if self.person.is_linked(self.place.root):
+                tasks += ['unlink']
+            else:
+                tasks += ['link']
+        return tasks
+
+    @property
+    def possible_role_tasks(self):
         if self.role and self.person:
             role_name = self.role.name
             if role_name in Role.universal_role_name_set:

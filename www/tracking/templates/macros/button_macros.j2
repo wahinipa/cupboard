@@ -27,6 +27,10 @@
     {{ button_action(url=url, prefix='Disable ', label=label, column_width=column_width, button_color='danger') }}
   {% elif task == 'grant' %}
     {{ button_action(url=url, prefix='Grant ', label=label, column_width=column_width, button_color='warning') }}
+  {% elif task == 'link' %}
+    {{ button_action(url=url, prefix='Link ', label='User', column_width=column_width, button_color='warning') }}
+  {% elif task == 'unlink' %}
+    {{ button_action(url=url, prefix='Unlink ', label='User', column_width=column_width, button_color='warning') }}
   {% elif task == 'deny' %}
     {{ button_action(url=url, prefix='Deny ', label=label, column_width=column_width, button_color='danger') }}
   {% endif %}
