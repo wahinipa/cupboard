@@ -19,7 +19,6 @@ def test_registration(pretend_application):
         'inventory_bp',
         'people_bp',
         'place_bp',
-        'refinement_bp',
         'root_bp',
         'roots_bp',
         # 'role_bp',

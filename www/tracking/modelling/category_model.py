@@ -1,16 +1,16 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from tracking import database
+from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import NamedBaseModel
 from tracking.modelling.cardistry_models import name_is_key
 from tracking.viewers.categories_viewer import CategoriesViewer
-from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 
 
 class Category(CupboardDisplayContextMixin, NamedBaseModel):
     singular_label = 'Category'
     plural_label = 'Categories'
-    possible_tasks = ['create', 'update', 'delete']
+    possible_tasks = ['create', 'update', 'delete', 'add', 'remove']
     label_prefixes = {'create': 'Choice of '}
     flavor = "category"
 
@@ -32,7 +32,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
         return {'category_id': self.id}
 
     def add_extra_actions(self, context, navigator, viewer, thing=None):
-        if False and thing and self.may_update(viewer): # TODO: fix this
+        if False and thing and self.may_update(viewer):  # TODO: fix this
             if self in thing.category_list:
                 task = 'remove'
                 preposition = 'from'

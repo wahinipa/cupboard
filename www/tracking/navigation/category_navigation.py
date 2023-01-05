@@ -12,3 +12,5 @@ def register_category_navigation(navigator):
     register('delete', [Role.structuring_role_name])
     register('update', [Role.structuring_role_name])
     register('view', [Role.structure_viewer_role_name, Role.structuring_role_name])
+    register('add', [Role.structuring_role_name, Role.super_role_name])
+    register('remove', [Role.structuring_role_name, Role.super_role_name])

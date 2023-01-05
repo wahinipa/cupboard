@@ -6,6 +6,7 @@ from tracking.modelling.choice_model import Choice
 from tracking.modelling.people_model import AllPeople, User, find_person_by_id
 from tracking.modelling.place_model import Place, find_place_by_id
 from tracking.modelling.positioning_mixin import current_quantity
+from tracking.modelling.refinement_model import find_refinement
 from tracking.modelling.role_models import Role, find_role_by_id
 from tracking.modelling.root_model import Root, find_root_by_id
 from tracking.modelling.specification_model import find_specification_by_id
@@ -173,10 +174,12 @@ class Platter:
         return self.root_url_maker(destination.root, 'view', destination_id=destination.id, activity=activity)
 
     def refinement_url_maker(self, category, task, activity=None):
-        return self.valid_url_for(f'refinement_bp.refinement_{task}', category_id=category.id, activity=activity,
-                                  destination_id=self.destination_id,
-                                  place_id=self.place_id, thing_id=self.thing_id,
-                                  specification_id=self.specification_id)
+        refinement = find_refinement(self.thing, category)
+        valid = (task == 'add' and refinement is None) or (task == 'remove' and refinement)
+        return valid and self.valid_url_for(f'category_bp.category_{task}', category_id=category.id, activity=activity,
+                                            destination_id=self.destination_id,
+                                            place_id=self.place_id, thing_id=self.thing_id,
+                                            specification_id=self.specification_id)
 
     def root_url_maker(self, root, task, place_id=None, thing_id=None, specification_id=None, activity=None,
                        destination_id=None):
