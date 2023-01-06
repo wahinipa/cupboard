@@ -18,20 +18,9 @@ class ChoiceBaseForm(FlaskForm):
 class ChoiceCreateForm(ChoiceBaseForm):
     submit = SubmitField('Create New Choice')
 
+
 class ChoiceUpdateForm(ChoiceBaseForm):
     submit = SubmitField('Update Choice')
-
-
-def create_choice_from_form(category, form):
-    choice = Choice(
-        category_id=category.id,
-        name=form.name.data,
-        description=form.description.data,
-        date_created=datetime.now()
-    )
-    database.session.add(choice)
-    database.session.commit()
-    return choice
 
 
 def update_choice_from_form(choice, form):
