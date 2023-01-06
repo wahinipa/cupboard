@@ -36,3 +36,4 @@ def create_choice_from_form(category, form):
 
 def update_choice_from_form(choice, form):
     form.populate_obj(choice)
+    return choice
