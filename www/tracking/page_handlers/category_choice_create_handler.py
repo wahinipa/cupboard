@@ -24,4 +24,7 @@ class CategoryChoiceCreateHandler(CategoryBaseHandler, FormHandler):
         return self.navigator.target_url(self.category, 'view', activity=self.activity)
 
     def success_redirect_url(self, target):
-        return self.navigator.target_url(target, 'view', activity=self.activity)
+        # Usually the success redirect would be to view the object just created.
+        # However, the user is most often creating multiple choices for a category.
+        # By returning user instead to the category view the user is saved a step.
+        return self.navigator.target_url(self.category, 'view', activity=self.activity)
