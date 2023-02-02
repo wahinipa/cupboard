@@ -260,6 +260,12 @@ def find_or_create_user(first_name, last_name, username, password, is_admin=Fals
         database.session.add(user)
     return user
 
+def reset_pw(username, new_pw):
+    user = User.query.filter(User.username == username).first()
+    if user:
+        user.password = new_pw
+        database.session.commit()
+
 
 def generate_uncommitted_user(first_name, last_name, username, password, is_admin, about_me, date_joined):
     user = User(username=username,
