@@ -41,7 +41,7 @@ They can transfer items from one location to another if they have the agent role
 
 ### Catalog Role
 The catalog role allows a person to modify the hierarchy of Things.
-They can decide that Shoes needs to be further subdivided into Regular, Sandals and Snow Boots.
+They could decide that Shoes needs to be further subdivided into Regular, Sandals and Snow Boots.
 This role is a bit of a superpower, so it should be used carefully 
 because it will affect all groups and places.
 
@@ -71,7 +71,7 @@ You might start out by choosing Clothing, then Shoes, then Girl's Shoes and fina
 
 ### Categories and Choices
 While hierarchy is convenient, it is restrictive also.
-For example suppose Toys need to be further refined by whether it is an indoor toy or an outdoor toy
+For example suppose Toys might need to be further refined by whether it is an indoor toy or an outdoor toy
 but also what is the age appropriate safety classification.
 Should it be split first into indoor/outdoor and then by age?
 Or the other way around?
