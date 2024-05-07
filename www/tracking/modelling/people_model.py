@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash
 from tracking import database
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext, CupboardDisplayContextMixin
 from tracking.modelling.base_models import IdModelMixin
-from tracking.modelling.cardistry_models import name_is_key, bread_crumbs
+from tracking.modelling.cardistry_models import bread_crumbs, name_is_key
 from tracking.modelling.linkage_model import Linkage
 from tracking.modelling.role_models import Role, assign_universal_role, find_or_create_role
 
@@ -186,6 +186,10 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
             if len(roots) == 1:
                 return roots[0]
         return None
+
+    @property
+    def is_rootless(self):
+        return self.roots is None or 0 == len(self.roots)
 
     def disable(self):
         self.is_enabled = False

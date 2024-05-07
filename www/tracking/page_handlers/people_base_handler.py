@@ -8,6 +8,10 @@ class PeopleBaseHandler(PageHandler, PlatterHoldingHandler):
     category_list_url = None
     place_url = None
 
+    @property
+    def objects_are_valid(self):
+        return self.person and True
+
     def __init__(self, endpoint, viewer, person_id=None):
         PageHandler.__init__(self, endpoint)
         PlatterHoldingHandler.__init__(self, viewer, person_id=person_id)

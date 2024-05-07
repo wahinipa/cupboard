@@ -9,6 +9,10 @@ class PeopleCreateHandler(PeopleBaseHandler, FormHandler):
     page_template = 'pages/form_page.j2'
     form_title = f'Create New User Account'
 
+    @property
+    def objects_are_valid(self):
+        return True
+
     def create_form(self):
         return UserCreateForm()
 
