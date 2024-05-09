@@ -9,11 +9,12 @@ from flask_admin.menu import MenuLink
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 from tracking.commons.create_test_data import create_test_data
 from tracking.contexts.cupboard_display_context import project_name
+from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 
 
+# Assemble useful information about the current request for the purpose of logging certain requests.
 def request_info(prefix):
     url = request.url
     try:
@@ -25,14 +26,18 @@ def request_info(prefix):
     return f'{prefix}: {url} requested by {username} at {when} via {route}'
 
 
+# For logging certain requests.
 def log_info_about_request(prefix):
     current_app.logger.info(request_info(prefix))
 
 
+# For placing warning messages in the log.
 def log_warn_about_request(prefix):
     current_app.logger.warning(request_info(prefix))
 
 
+# Creates a clean new database.
+# Only used once, at start, or for testing.
 def initialize_database(database):
     database.create_all()  # Create sql tables for our data models
 
@@ -43,13 +48,14 @@ def initialize_database(database):
     from tracking.modelling.people_model import create_initial_users
     initial_users = create_initial_users()
 
-
     if environ.get('ADD_TEST_DATA'):
         create_test_data(database, initial_users)
 
     database.session.commit()
 
 
+# Only the super admin can access the admin views.
+# These are risky, as they directly access the database without the usual checking and constraints.
 def add_flask_admin(application, database):
     admin = Admin(application, project_name(), url=ADMIN_URL)
     admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
@@ -86,9 +92,11 @@ def add_flask_admin(application, database):
 
 class AdminModelView(ModelView):
 
+    # Determine whether user is allowed into the admin database editing views.
+    # If the routine returns False, the view is shown but with NO tabs for tables.
     def is_accessible(self):
         from flask_login import current_user
-        return current_user.is_authenticated
+        return current_user.is_authenticated and current_user.is_the_super_admin
 
     def inaccessible_callback(self, name, **kwargs):
         # redirect to login page if user doesn't have access
