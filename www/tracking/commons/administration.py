@@ -2,11 +2,12 @@
 from datetime import datetime
 from os import environ
 
-from flask import current_app, request
+from flask import Flask, current_app, request
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink
 from flask_login import current_user
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import redirect
 
 from tracking.commons.create_test_data import create_test_data
@@ -14,8 +15,12 @@ from tracking.contexts.cupboard_display_context import project_name
 from tracking.navigation.blueprint_registration import ADMIN_URL, HOME_PAGE_URL
 
 
-# Assemble useful information about the current request for the purpose of logging certain requests.
-def request_info(prefix):
+def request_info(prefix: str) -> str:
+    """
+    Assemble useful information about the current request for the purpose of logging certain requests.
+    :param prefix: Prefix for returned message
+    :return: assembled message
+    """
     url = request.url
     try:
         username = current_user.username if current_user else 'NO USER'
@@ -26,19 +31,28 @@ def request_info(prefix):
     return f'{prefix}: {url} requested by {username} at {when} via {route}'
 
 
-# For logging certain requests.
-def log_info_about_request(prefix):
+def log_info_about_request(prefix: str):
+    """
+    For logging certain requests.
+    :param prefix: Prefix for logged message
+    """
     current_app.logger.info(request_info(prefix))
 
 
-# For placing warning messages in the log.
-def log_warn_about_request(prefix):
+def log_warn_about_request(prefix: str):
+    """
+    For logging warnings about certain warning requests.
+    :param prefix: Prefix for logged message
+    """
     current_app.logger.warning(request_info(prefix))
 
 
-# Creates a clean new database.
-# Only used once, at start, or for testing.
-def initialize_database(database):
+def initialize_database(database: SQLAlchemy):
+    """
+    Creates a clean new database. Only used once, at start, or for testing.
+    :param database:
+    :return:
+    """
     database.create_all()  # Create sql tables for our data models
 
     # Create Roles first, so initial users can be assigned roles.
@@ -54,9 +68,17 @@ def initialize_database(database):
     database.session.commit()
 
 
-# Only the super admin can access the admin views.
-# These are risky, as they directly access the database without the usual checking and constraints.
-def add_flask_admin(application, database):
+def add_flask_admin(application: Flask, database: SQLAlchemy):
+    """
+    Create the admin view
+
+    Only the super admin can access the admin views.
+    These vuews are risky, as they directly access the database without the usual checking and constraints.
+
+    :param application:
+    :param database:
+    :return:
+    """
     admin = Admin(application, project_name(), url=ADMIN_URL)
     admin.add_link(MenuLink(name='Home Page', url=HOME_PAGE_URL))
     # Using local imports helps break circularity of dependencies
@@ -91,15 +113,27 @@ def add_flask_admin(application, database):
 
 
 class AdminModelView(ModelView):
+    """
+    Flask ModelView for presenting admin access to database.
+    """
 
-    # Determine whether user is allowed into the admin database editing views.
-    # If the routine returns False, the view is shown but with NO tabs for tables.
-    def is_accessible(self):
+    def is_accessible(self) -> bool:
+        """
+        Determine whether user is allowed into the admin database editing views.
+        If the routine returns False, the view is shown but with NO tabs for tables.
+
+        :return:
+        """
         from flask_login import current_user
         return current_user.is_authenticated and current_user.is_the_super_admin
 
     def inaccessible_callback(self, name, **kwargs):
-        # redirect to login page if user doesn't have access
+        """
+        redirect to login page if user doesn't have access
+        :param name:
+        :param kwargs:
+        :return:
+        """
         from flask import url_for
         from flask import request
         return redirect(url_for('login', next=request.url))
