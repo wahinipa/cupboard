@@ -1,5 +1,7 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
+# View generation, especially templates, use a display context dictionary to tune the page.
+
 def category_display_attributes(thing=None, **kwargs):
     attributes = {
         'display_context': {
@@ -79,7 +81,7 @@ def place_display_attributes(place_prefix=None, **kwargs):
             'children_attributes': {
                 'place': {
                     'notation': True,
-                    'source_quantity' : True,
+                    'source_quantity': True,
                 },
             },
         }

@@ -6,5 +6,9 @@ from tracking.commons.administration import log_warn_about_request
 
 
 def redirect_hackers():
+    """
+    Suspicious request urls result in redirection.
+    :return:
+    """
     log_warn_about_request('Redirecting Hackers')
     return redirect((url_for('fake_bp.fake')))

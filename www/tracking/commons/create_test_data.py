@@ -1,11 +1,20 @@
 #  Copyright (c) 2022, Wahinipa LLC
+from flask_sqlalchemy import SQLAlchemy
+
 from tracking.modelling.postioning_model import add_quantity_of_things
 from tracking.modelling.refinement_model import add_refinement
 from tracking.modelling.role_models import Role, assign_place_role, assign_root_role, assign_universal_role, \
     find_or_create_role
 
 
-def create_test_data(database, initial_users):
+def create_test_data(database: SQLAlchemy, initial_users):
+    """
+    Creates test data for unit testing purposes.
+
+    :param database:
+    :param initial_users: list of test users
+    :return:
+    """
     from tracking.modelling.root_model import create_root
 
     admin, curly, moe, larry = initial_users
