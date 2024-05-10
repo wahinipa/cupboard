@@ -1,6 +1,6 @@
 #  Copyright (c) 2022, Wahinipa LLC
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, validators, SubmitField
+from wtforms import IntegerField, SubmitField, validators
 
 from tracking.forms.cardistry_forms import cancel_button_field
 from tracking.modelling.postioning_model import add_quantity_of_things, change_quantity_of_things, \
@@ -8,6 +8,9 @@ from tracking.modelling.postioning_model import add_quantity_of_things, change_q
 
 
 class InventoryArrivalForm(FlaskForm):
+    """
+    Form class for handling incoming inventory.
+    """
     quantity = IntegerField(label="Quantity Arriving", default=1, validators=[
         validators.DataRequired(),
         validators.NumberRange(min=1)
@@ -35,6 +38,13 @@ def remove_quantity_from_form(platter, form):
 
 
 def create_departure_form(platter):
+    """
+    Creates a custom form class for departing inventory.
+    Form class is different depending on amount allowed to depart.
+
+    :param platter:
+    :return:
+    """
     max_value = platter.current_quantity
     class_name = f'InventoryDepartingForm_{max_value}'
     new_class = type(class_name, (FlaskForm,), {})
@@ -50,7 +60,10 @@ def create_departure_form(platter):
 
 
 class InventoryAdjustmentForm(FlaskForm):
-    quantity = IntegerField(label="Quantity Arriving", default=1, validators=[
+    """
+    Form class for handling adjustments to inventory.
+    """
+    quantity = IntegerField(label="Quantity Found", default=1, validators=[
         validators.DataRequired(),
         validators.NumberRange(min=0)
     ])
@@ -84,4 +97,5 @@ def create_transfer_form(platter):
 
 def move_quantity_from_form(platter, form):
     transfer_quantity = form.quantity.data
-    return move_quantity_of_things(platter.destination, platter.place, platter.thing, platter.specification, transfer_quantity)
+    return move_quantity_of_things(platter.destination, platter.place, platter.thing, platter.specification,
+                                   transfer_quantity)

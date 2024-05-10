@@ -2,12 +2,12 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from werkzeug.security import check_password_hash, generate_password_hash
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField, validators
+from wtforms import BooleanField, HiddenField, PasswordField, StringField, SubmitField, validators
 from wtforms.validators import DataRequired
 
 from tracking import database
-from tracking.forms.cardistry_forms import cancel_button_field, about_me_form_field
-from tracking.modelling.people_model import find_person_by_username, find_or_create_user
+from tracking.forms.cardistry_forms import about_me_form_field, cancel_button_field
+from tracking.modelling.people_model import find_or_create_user, find_person_by_username
 
 
 class LoginForm(FlaskForm):
@@ -43,6 +43,9 @@ class LoginForm(FlaskForm):
 
 
 class UserProfileForm(FlaskForm):
+    """
+    Form class for modifying user profile.
+    """
     first_name = StringField('First Name', [DataRequired('First Name is required')])
     last_name = StringField('Last Name', [DataRequired('Last Name is required')])
     about_me = about_me_form_field()
@@ -51,6 +54,9 @@ class UserProfileForm(FlaskForm):
 
 
 class UserCreateForm(FlaskForm):
+    """
+    Form class for creating a new user.
+    """
     username = StringField('Username', [DataRequired('Username is required')])
     first_name = StringField('First Name', [DataRequired('First Name is required')])
     last_name = StringField('Last Name', [DataRequired('Last Name is required')])
@@ -67,6 +73,9 @@ class UserCreateForm(FlaskForm):
 
 
 class ChangePasswordForm(FlaskForm):
+    """
+    Form class for changing password.
+    """
     password_old = PasswordField(label='Current Password', validators=[
         validators.Length(min=6, max=10)
     ])

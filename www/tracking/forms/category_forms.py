@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField
 
 from tracking import database
-from tracking.forms.cardistry_forms import name_form_field, description_form_field, cancel_button_field
+from tracking.forms.cardistry_forms import cancel_button_field, description_form_field, name_form_field
 from tracking.modelling.category_model import Category
 
 
@@ -16,9 +16,16 @@ class CategoryBaseForm(FlaskForm):
 
 
 class CategoryCreateForm(CategoryBaseForm):
+    """
+    Form class for creating a category.
+    """
     submit = SubmitField('Create New Category')
 
+
 class CategoryUpdateForm(CategoryBaseForm):
+    """
+    Form class for updating a category.
+    """
     submit = SubmitField('Update Category')
 
 

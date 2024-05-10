@@ -1,17 +1,29 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, BooleanField
+from wtforms import BooleanField, SubmitField
 
 from tracking.forms.cardistry_forms import cancel_button_field
 from tracking.modelling.cardistry_models import sorted_by_name
 
 
 class SpecificationBaseForm(FlaskForm):
+    """
+    Base class for creating Specification forms.
+    Derived forms are created dynamically as they are different for each set of choices.
+    """
     pass
 
 
 def unique_class_name_from_choices(category, choices, has_unknown):
+    """
+    If the form looks different it must have a unique name.
+
+    :param category:
+    :param choices:
+    :param has_unknown:
+    :return:
+    """
     new_class_name = f'Specification_Custom_Form_{category.id}'
     if has_unknown:
         new_class_name += '_u'
@@ -27,6 +39,7 @@ def field_name_for_choice(choice):
 def create_specification_form_descriptor(category, specification):
     currently_selected_choices = specification.choices_for(category)
     has_unknown = category in specification.unknowns
+
     def describe_choice_box(choice):
         return {
             'field_name': field_name_for_choice(choice),
@@ -51,7 +64,7 @@ def create_specification_form_descriptor(category, specification):
             'field_name': 'choose_any',
             'label': "Any",
             'description': f'Include all items, regardless of choice of {category.name}',
-            'default': None, # Always off since no user case for opening dialog and not making choices.
+            'default': None,  # Always off since no user case for opening dialog and not making choices.
         },
         'submit_label': f'Update {category.name} Search Options',
     }
