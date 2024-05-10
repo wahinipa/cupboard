@@ -5,6 +5,9 @@ from tracking.contexts.context import Context
 
 
 class DisplayContext(Context):
+    """
+    Extends Context class with methods needed for template rendering.
+    """
     def __init__(self, context=None, **kwargs):
         super().__init__()
         if context is not None:
@@ -63,6 +66,13 @@ class DisplayContext(Context):
                 self.context['has_tasks'] = True
 
     def render_template(self, template=None, **kwarg):
+        """
+        Render template using self as display context.
+
+        :param template:
+        :param kwarg:
+        :return:
+        """
         if template is None:
             template = self["page_template"]
         return render_template(template, **kwarg, **self.as_dictionary)
