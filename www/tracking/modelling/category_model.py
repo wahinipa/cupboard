@@ -8,6 +8,13 @@ from tracking.viewers.categories_viewer import CategoriesViewer
 
 
 class Category(CupboardDisplayContextMixin, NamedBaseModel):
+    """
+    a Category is used to specify a Thing.
+    It is shared by all the things and places of a Root.
+    It has a collection of choices particular to it.
+    Refinements are used to associate a Category with a Thing.
+    """
+
     singular_label = 'Category'
     plural_label = 'Categories'
     possible_tasks = ['create', 'update', 'delete', 'add', 'remove']
@@ -29,6 +36,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def identities(self):
+        """ returns dictionary needed when constructing urls for category task """
         return {'category_id': self.id}
 
     def add_extra_actions(self, context, navigator, viewer, thing=None):

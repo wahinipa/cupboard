@@ -106,6 +106,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
     @property
     def identities(self):
+        """ returns dictionary needed when constructing urls for role task """
         return {'role_id': self.id}
 
     @property
@@ -153,7 +154,7 @@ class KnowsOwnName:
 
 
 class AssignmentBaseModel(IdModelMixin, DatedModelMixin, KnowsOwnName, database.Model):
-    __abstract__ = True
+    __abstract__ = True  # Used as base class, not an actual database table.
 
     @declared_attr
     def role_id(cls):
@@ -241,13 +242,13 @@ def assign_universal_role(role, user, date_created=None):
 def remove_role(role, user, place=None, root=None):
     root = root or (place and place.root)
     place = place or (root and root.place)
-    for assignment in user.universal_assignments :
+    for assignment in user.universal_assignments:
         if assignment.role == role:
             database.session.delete(assignment)
             database.session.commit()
             return
     if root:
-        for assignment in user.root_assignments :
+        for assignment in user.root_assignments:
             if assignment.role == role and assignment.root == root:
                 database.session.delete(assignment)
                 database.session.commit()

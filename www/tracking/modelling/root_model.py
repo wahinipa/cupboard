@@ -4,25 +4,47 @@ from datetime import datetime
 from tracking import database
 from tracking.contexts.cupboard_display_context import CupboardDisplayContextMixin
 from tracking.modelling.base_models import UniqueNamedBaseModel
-from tracking.modelling.cardistry_models import name_is_key, sorted_by_name, bread_crumbs
+from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
 
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
+    """
+    A root is at the top of the places+things hierarchy.
+    It has no literal children but the viewable_children property
+    returns it's everywhere place and everything thing.
+
+    Different roots share nothing between them.
+
+    """
     singular_label = "Organizational Association"
     plural_label = "Organizational Associations"
     possible_tasks = ['update', 'delete']
     label_prefixes = {}
     flavor = "root"
 
+    # The unique everywhere place at the top of the place hierarchy.
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
+
+    # The unique everything thing at the top of the thing hierarchy.
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
 
+    # Linkages connect people to this root.
     linkages = database.relationship('Linkage', backref='root', lazy=True, cascade='all, delete')
+
+    # Categories are used to refine the types of things.
     categories = database.relationship('Category', backref='root', lazy=True, cascade='all, delete')
+
+    # Assignments give people roles within this root.
     assignments = database.relationship('RootAssignment', backref='root', lazy=True, cascade='all, delete')
+
+    # Specifications connect choices to this root.
+    # The mechanics ensure that if an identical set of choices is made
+    # then a unique specification object is returned.
     specifications = database.relationship('Specification', backref='root', lazy=True, cascade='all, delete')
 
     def has_role(self, person, name_of_role):
+        """ Whether a specific user has a specific role."""
+
         def yes(assignment):
             return assignment.person == person and assignment.role.is_named(name_of_role)
 
@@ -30,6 +52,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
     @property
     def identities(self):
+        """ returns dictionary needed when constructing urls for root task """
         return {'root_id': self.id}
 
     @property
@@ -146,10 +169,12 @@ def find_root_by_id(root_id):
 
 
 def place_root(place):
+    """ Return root object for a place. """
     top = place.top
     return Root.query.filter(Root.place_id == top.id).first()
 
 
 def thing_root(thing):
+    """ Return root object for a thing. """
     top = thing.top
     return Root.query.filter(Root.thing_id == top.id).first()

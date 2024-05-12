@@ -7,13 +7,22 @@ from tracking.modelling.base_models import NamedBaseModel
 
 
 class Choice(CupboardDisplayContextMixin, NamedBaseModel):
+    """
+    A choice belongs to a Category and is used in Speficiations.
+    For example "Winter Only" might be a Choice for the "Seasonal" Category
+    and be used in any Specification that has "Winter Only" as part of it.
+    """
+
     singular_label = 'Choice'
     plural_label = 'Choices'
     possible_tasks = ['update', 'delete']
     label_prefixes = {}
     flavor = "choice"
 
+    # A Choice is part of only one Category
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'), nullable=False)
+
+    # It is potentially included in multiple Specifications.
     specifications = database.relationship('Specific', backref='choice', lazy=True, cascade='all, delete')
 
     def viewable_children(self, viewer):
@@ -25,11 +34,13 @@ class Choice(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def identities(self):
+        """ returns dictionary needed when constructing urls for Choice task """
         return {'choice_id': self.id}
 
     @property
     def root(self):
         return self.category.root
+
 
 def find_or_create_choice(category, name, description="", date_created=None):
     choice = find_choice(category, name)

@@ -11,15 +11,35 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContextMix
 
 
 class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):
+    """
+    Models a "thing".
+    The whole purpose of the cupboard application is to track what things are where.
+
+    A Thing is not a specific object like the hat on your head.
+    It is more like what you mean when a clerk asks what you are looking for
+    and you answer "hats".
+
+    It has a name, a description for itself.
+    It is also in a hierarchy.
+    For example a shoe is kind of clothing which is a kind of everything.
+    It also has:
+        positionings that say how much is where
+        refinements that list the categories that might add further refinements such as season or size
+    """
+
     singular_label = "What"
     plural_label = "Things"
     possible_tasks = ['create', 'update', 'delete']
     label_prefixes = {'create': 'Kind of '}
     flavor = "thing"
 
+    # Not a database column but an establishment of the possible relationship
+    # between a root and that root's everything top thing.
     roots = database.relationship('Root', backref='thing', lazy=True)
+
     refinements = database.relationship('Refinement', backref='thing', lazy=True)
 
+    # These put a Thing into a tree of Things hierarchy.
     kind_of_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     kinds = database.relationship('Thing', lazy='subquery', backref=backref('kind_of', remote_side='Thing.id'))
 
@@ -30,6 +50,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
 
     @property
     def identities(self):
+        """ returns dictionary needed when constructing urls for place task """
         return {'thing_id': self.id}
 
     @property
@@ -57,6 +78,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
 
     @property
     def category_list(self):
+        """ List all categories that can be applied to this Thing or its ancestors """
         category_list = [refinement.category for refinement in self.refinements]
         if not self.is_top:
             for category in self.parent_object.category_list:
@@ -66,9 +88,18 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
 
     @property
     def categories(self):
+        """ Set of categories directly applicable to this Thing (ignores ancestor categories) """
         return {refinement.category for refinement in self.refinements}
 
     def create_kind_of_thing(self, name, description, date_created=None):
+        """
+        Create a child Thing of this Thing.
+
+        :param name:
+        :param description:
+        :param date_created:
+        :return:
+        """
         if date_created is None:
             date_created = datetime.now()
         thing = Thing(name=name, description=description, kind_of=self, date_created=date_created)
