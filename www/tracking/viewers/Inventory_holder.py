@@ -3,6 +3,9 @@ from tracking.modelling.positioning_mixin import filtered_positionings
 
 
 class InventoryHolder:
+    """
+    UI class for holding information about a specified Thing at a particular Place.
+    """
     def __init__(self, place, thing, specification, positionings=None):
         self.place = place
         self.thing = thing

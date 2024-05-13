@@ -4,10 +4,11 @@ def my_url(url):
     base_url = environ.get('BASE_URL', '/wahinipa')
     return f'{base_url}{url}'
 
-
+# URLs used to connect up routing logic.
 ADMIN_URL = my_url('/admin')
 HOME_PAGE_URL = my_url('/home')
 
+# URL prefixes used to connect up routing logic.
 CATEGORY_PREFIX = my_url('/category')
 CATEGORIES_PREFIX = my_url('/categories')
 CHOICE_PREFIX = my_url('/choice')
@@ -25,6 +26,11 @@ THINGS_PREFIX = my_url('/thing')
 
 
 def blueprint_registration(application):
+    """
+    Connect up routing methods with the application.
+    :param application:
+    :return:
+    """
     # Using local imports helps break circularity of dependencies
     from tracking.routing.home_routes import home_bp
     application.register_blueprint(home_bp, url_prefix=HOME_PREFIX)

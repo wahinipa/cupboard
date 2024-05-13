@@ -5,6 +5,10 @@ from tracking.viewers.role_viewing_base import RoleViewingBase
 
 
 class AllRoles(RoleViewingBase):
+    """
+    For UI purposes, acts as the parent object of all the Roles.
+    """
+
     possible_tasks = []
 
     @property

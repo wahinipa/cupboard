@@ -4,6 +4,9 @@ from tracking.modelling.cardistry_models import bread_crumbs
 
 
 class Destination(CupboardDisplayContextMixin):
+    """
+    Encapsulates display context defining a destination when moving things from place to place.
+    """
     flavor = "destination"
     singular_label = "Place"
     plural_label = "Destinations"

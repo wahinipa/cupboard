@@ -24,6 +24,19 @@ DEFAULT_ACTIVITY = 'observe'
 
 
 class Platter:
+    """
+    The Platter holds the objects being accessed by the UI.
+    It is generally built from the object ids contained in the url that loads the page.
+    The platter is created by the router via a page handler and then passed around to the viewers or action implementors
+    This base class initializes with the objects themselves, not their ids.
+
+    The UI allows the user to climb up or down two different trees: Place and Thing.
+    This class includes navigators for that complicated situation.
+    There is a pseduo user state retained by passing parameters in urls that specify location within those two trees.
+
+    See also class PlatterBase and PlatterrById
+    """
+
     def __init__(self, viewer=None, activity=DEFAULT_ACTIVITY, root=None, place=None, thing=None, specification=None,
                  destination=None, person=None, role=None):
         self.viewer = viewer

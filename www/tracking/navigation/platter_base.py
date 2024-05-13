@@ -6,6 +6,14 @@ DEFAULT_ACTIVITY = 'observe'
 
 
 class PlatterBase:
+    """
+    The PlatterBase holds the objects being accessed by the UI.
+    It is generally built from the object ids contained in the url that loads the page.
+    The platter is created by the router via a page handler and then passed around to the viewers or action implementors
+    This base class initializes with the objects themselves, not their ids.
+
+    See also class Platter and class PlatterById
+    """
     def __init__(self, activity=DEFAULT_ACTIVITY, root=None, place=None, thing=None, specification=None,
                  destination=None):
         if root is None:
