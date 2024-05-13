@@ -19,10 +19,11 @@ class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
 
     It has a name, a description for itself.
     It is also in a hierarchy.
-    For example a backroom place could be in a warehouse place part of a charity group part of an association of charitied.
+    For example a backroom place could be in a warehouse place which is
+    part of a charity group which is part of an association of charities.
     It also has:
-        positionings that say how much of which things
-        assignments that list associated people
+        positionings that say how much of which Things are at a Place
+        assignments that list of people associated with a Place
     """
     singular_label = "Place"
     plural_label = "Places"
@@ -56,7 +57,7 @@ class Place(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for Place task """
+        """ returns dictionary needed when constructing urls for Place tasks """
         return {'place_id': self.id}
 
     @property

@@ -1,6 +1,9 @@
 #  Copyright (c) 2022, Wahinipa LLC
 
 class PositioningMixin:
+    """
+    Mixin class for Thing and Place that provide utility methods for their Positionings
+    """
     @property
     def direct_positionings(self):
         return set(self.positionings)
@@ -14,6 +17,16 @@ class PositioningMixin:
 
 
 def current_quantity(place, thing, specification):
+    """
+    Determines how much of a Specified Thing is at particular Place.
+    It is smart about the Specification.
+    If the Specification is for shoes it will count all shoes of any size, etc.
+
+    :param place:
+    :param thing:
+    :param specification:
+    :return:
+    """
     total = 0
     for positioning in place.direct_positionings:
         if positioning.thing == thing and specification.accepts(positioning.specification):

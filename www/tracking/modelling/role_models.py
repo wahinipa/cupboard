@@ -9,6 +9,15 @@ from tracking.modelling.base_models import DatedModelMixin, IdModelMixin, Unique
 
 
 class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
+    """
+    A Role is a simple named and described object that is used to determine what a signed-in user may or may not do.
+    The critical part of a Role is its name.
+    The unique name is used in the logic that makes decisions about permissions.
+    A Role is assigned to a User in three different ways:
+        RootAssignment gives the user that Role for a particular Root and all of its Places.
+        PlaceAssignment gives the user that Role for a particular Place and all of its contained (child) Places.
+        UniversalAssignment gives the user that Role without regard to Root or Place.
+    """
     plural_label = "Roles"
     possible_tasks = []
     label_prefixes = {}
@@ -18,6 +27,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     universal_assignments = database.relationship('UniversalAssignment', backref='role', lazy=True,
                                                   cascade='all, delete')
 
+    # The following names are used to define roles in the actual application.
     user_admin_role_name = "User Account Manager"
     admin_role_name = "Organization Administrator"
     linkage_role_name = "Linking People"
@@ -30,6 +40,10 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     outbound_role_name = "Shipping Agent"
     transfer_role_name = "Transfer Agent"
     adjust_role_name = "Auditing Agent"
+
+    # These pseudo-role names do not refer to Role objects so do not appear in Assignments.
+    # They are convenient in the constuction of the user interface.
+    # For example self_role_name is used to allow a User to modify their own "About Me".
     super_role_name = "Super Admin"  # No actual Role created for this
     self_role_name = "Viewer is Self"  # No actual Role created for this
     people_viewer_name = "Viewer of People"  # No actual Role created for this
@@ -37,6 +51,7 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     anybody_role_name = "Anybody"  # No actual Role created for this
     control_role_name = "Control"  # No actual Role created for this
 
+    # This dictionary provides useful Role descriptions from the Role (or pseudo-role) names.
     role_descriptions = {
         user_admin_role_name: "Can create, update, enable, disable, or delete user accounts.",
         admin_role_name: "Within an organization, can assign roles to people.",
@@ -58,20 +73,30 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
         control_role_name: "Control Pseudo Role.",
     }
 
+    # Names of Roles that can be Universal
     universal_role_name_set = {user_admin_role_name}
+
+    # Names of Roles that can be attached to a Root.
     root_role_name_set = {admin_role_name, linkage_role_name, structuring_role_name, structure_viewer_role_name}
+
+    # Names of Roles that can be attached to a Place.
     place_role_name_set = {location_manager_name, inventory_manager_name, observer_role_name, inbound_role_name,
                            outbound_role_name, transfer_role_name, adjust_role_name}
+
+    # Names of Pseudo-roles that do not create Role objects.
     pseudo_role_name_set = {anybody_role_name, super_role_name, self_role_name, people_viewer_name,
                             roots_observer_role_name, control_role_name}
 
+    # The above sets of role names listed in alphabetical order.
     universal_role_name_list = sorted(universal_role_name_set)
     root_role_name_list = sorted(root_role_name_set)
     place_role_name_list = sorted(place_role_name_set)
     pseudo_role_name_list = sorted(pseudo_role_name_set)
 
+    # A list of all the role names for actual Roles (excludes pseudo-roles).
     role_name_list = universal_role_name_list + root_role_name_list + place_role_name_list
 
+    # For a given Role, which Roles allow a User to grant that power to another User?
     granting_powers = {
         user_admin_role_name: [super_role_name],
         admin_role_name: [super_role_name],
@@ -102,11 +127,11 @@ class Role(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     @property
     def parent_object(self):
         from tracking.viewers.all_roles import AllRoles
-        return AllRoles()
+        return AllRoles()  # Pseudo object that acts the parent to all the roles.
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for role task """
+        """ returns dictionary needed when constructing urls for role tasks """
         return {'role_id': self.id}
 
     @property

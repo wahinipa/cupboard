@@ -6,16 +6,28 @@ from tracking.modelling.cardistry_models import sorted_by_name
 
 
 class Specific(IdModelMixin, database.Model):
+    """
+    Associates a Specification with a Specific Choice
+    """
     specification_id = database.Column(database.Integer, database.ForeignKey('specification.id'), index=True)
     choice_id = database.Column(database.Integer, database.ForeignKey('choice.id'), index=True)
 
 
 class UnknownSpecific(IdModelMixin, database.Model):
+    """
+    Associates a Specification with an unknown Choice for some Category
+    """
     specification_id = database.Column(database.Integer, database.ForeignKey('specification.id'), index=True)
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'), index=True)
 
 
 class Specification(IdModelMixin, DatedModelMixin, database.Model):
+    """
+    A collection of Specific and UnkownSpecific Choices.
+    It is used to track a set of Choices (i.e. checked boxes)
+    The same choices should yield the same Specification.
+    A Specification is created but never altered.
+    """
     root_id = database.Column(database.Integer, database.ForeignKey('root.id'))
     specifics = database.relationship('Specific', backref='specification', lazy=True, cascade='all, delete')
     unknown_specifics = database.relationship('UnknownSpecific', backref='specification', lazy=True,
@@ -56,6 +68,13 @@ class Specification(IdModelMixin, DatedModelMixin, database.Model):
         return {choice for choice in self.choices if choice.category == category}
 
     def accepts(self, target_specification):
+        """
+        Returns whether the target Specification defines a subset of this Specification.
+        For example if this Specification is for Winter it will accept Winter+Adult but not Summer or Summer+Adult
+
+        :param target_specification:
+        :return:
+        """
         unknown_search_categories = self.unknowns
         choice_search_categories = self.choice_categories
         categories_of_concern = choice_search_categories | unknown_search_categories

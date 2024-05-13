@@ -52,7 +52,7 @@ class User(CupboardDisplayContextMixin, IdModelMixin, database.Model, UserMixin)
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for person task """
+        """ returns dictionary needed when constructing urls for person tasks """
         return {'person_id': self.id}
 
     def viewable_children(self, viewer):

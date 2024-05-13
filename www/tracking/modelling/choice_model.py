@@ -8,7 +8,7 @@ from tracking.modelling.base_models import NamedBaseModel
 
 class Choice(CupboardDisplayContextMixin, NamedBaseModel):
     """
-    A choice belongs to a Category and is used in Speficiations.
+    A choice belongs to a Category and is used in Specifications.
     For example "Winter Only" might be a Choice for the "Seasonal" Category
     and be used in any Specification that has "Winter Only" as part of it.
     """
@@ -34,7 +34,7 @@ class Choice(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for Choice task """
+        """ returns dictionary needed when constructing urls for Choice tasks """
         return {'choice_id': self.id}
 
     @property

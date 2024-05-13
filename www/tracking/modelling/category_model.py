@@ -11,6 +11,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
     """
     a Category is used to specify a Thing.
     It is shared by all the things and places of a Root.
+    It belongs to one and only one Root.
     It has a collection of choices particular to it.
     Refinements are used to associate a Category with a Thing.
     """
@@ -36,7 +37,7 @@ class Category(CupboardDisplayContextMixin, NamedBaseModel):
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for category task """
+        """ returns dictionary needed when constructing urls for category tasks """
         return {'category_id': self.id}
 
     def add_extra_actions(self, context, navigator, viewer, thing=None):

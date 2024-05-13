@@ -9,9 +9,9 @@ from tracking.modelling.cardistry_models import name_is_key, sorted_by_name
 
 class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     """
-    A root is at the top of the places+things hierarchy.
+    A Root is at the top of the Places+Things hierarchy.
     It has no literal children but the viewable_children property
-    returns it's everywhere place and everything thing.
+    returns it's everywhere Place and everything Thing.
 
     Different roots share nothing between them.
 
@@ -22,28 +22,28 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
     label_prefixes = {}
     flavor = "root"
 
-    # The unique everywhere place at the top of the place hierarchy.
+    # The unique everywhere Place at the top of this Roots Place hierarchy.
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'), unique=True, nullable=False)
 
-    # The unique everything thing at the top of the thing hierarchy.
+    # The unique everything Thing at the top of this Roots Thing hierarchy.
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), unique=True, nullable=False)
 
-    # Linkages connect people to this root.
+    # Linkages connect people to this Root.
     linkages = database.relationship('Linkage', backref='root', lazy=True, cascade='all, delete')
 
-    # Categories are used to refine the types of things.
+    # Categories are used to refine the types of Things.
     categories = database.relationship('Category', backref='root', lazy=True, cascade='all, delete')
 
-    # Assignments give people roles within this root.
+    # RootAssignments give people roles within this Root.
     assignments = database.relationship('RootAssignment', backref='root', lazy=True, cascade='all, delete')
 
-    # Specifications connect choices to this root.
-    # The mechanics ensure that if an identical set of choices is made
-    # then a unique specification object is returned.
+    # Specifications connect Choices to this Root.
+    # The mechanics ensure that if an identical set of Choices is made
+    # then a unique Specification object is returned.
     specifications = database.relationship('Specification', backref='root', lazy=True, cascade='all, delete')
 
     def has_role(self, person, name_of_role):
-        """ Whether a specific user has a specific role."""
+        """ Whether a specific user has a specific Role."""
 
         def yes(assignment):
             return assignment.person == person and assignment.role.is_named(name_of_role)
@@ -52,7 +52,7 @@ class Root(CupboardDisplayContextMixin, UniqueNamedBaseModel):
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for root task """
+        """ returns dictionary needed when constructing urls for root tasks """
         return {'root_id': self.id}
 
     @property

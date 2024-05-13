@@ -13,9 +13,9 @@ from tracking.contexts.cupboard_display_context import CupboardDisplayContextMix
 class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, NamedBaseModel):
     """
     Models a "thing".
-    The whole purpose of the cupboard application is to track what things are where.
+    The whole purpose of the cupboard application is to track what Things are where.
 
-    A Thing is not a specific object like the hat on your head.
+    A Thing is not a specific object like the hat on your head. It is a type of object.
     It is more like what you mean when a clerk asks what you are looking for
     and you answer "hats".
 
@@ -23,7 +23,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
     It is also in a hierarchy.
     For example a shoe is kind of clothing which is a kind of everything.
     It also has:
-        positionings that say how much is where
+        positionings that say how much of a Thing is at a Place
         refinements that list the categories that might add further refinements such as season or size
     """
 
@@ -34,7 +34,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
     flavor = "thing"
 
     # Not a database column but an establishment of the possible relationship
-    # between a root and that root's everything top thing.
+    # between a root and that root's everything top Thing.
     roots = database.relationship('Root', backref='thing', lazy=True)
 
     refinements = database.relationship('Refinement', backref='thing', lazy=True)
@@ -50,7 +50,7 @@ class Thing(RootDescendantMixin, PositioningMixin, CupboardDisplayContextMixin, 
 
     @property
     def identities(self):
-        """ returns dictionary needed when constructing urls for place task """
+        """ returns dictionary needed when constructing urls for place tasks """
         return {'thing_id': self.id}
 
     @property

@@ -6,6 +6,10 @@ from tracking.modelling.base_models import IdModelMixin, DatedModelMixin
 
 
 class Refinement(IdModelMixin, DatedModelMixin, database.Model):
+    """
+    A Refinement associates a Category with a Thing.
+    For example a seasonal Category might be associated with Clothing but not Toothpaste.
+    """
     category_id = database.Column(database.Integer, database.ForeignKey('category.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'))
 

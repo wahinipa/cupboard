@@ -5,6 +5,12 @@ from tracking.modelling.base_models import IdModelMixin
 
 
 class Positioning(IdModelMixin, database.Model):
+    """
+    A Positioning is the core information record that says:
+        How much (quantity)
+        of what kind of object (Thing + Specification)
+        is at a particular location (Place)
+    """
     place_id = database.Column(database.Integer, database.ForeignKey('place.id'))
     thing_id = database.Column(database.Integer, database.ForeignKey('thing.id'), index=True)
     specification_id = database.Column(database.Integer, database.ForeignKey('specification.id'), index=True)
