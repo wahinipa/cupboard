@@ -34,6 +34,8 @@ class Platter:
     This class includes navigators for that complicated situation.
     There is a pseduo user state retained by passing parameters in urls that specify location within those two trees.
 
+    The activity is either 'observe', 'transfer', 'inbound', or 'outbound'
+
     See also class PlatterBase and PlatterrById
     """
 
@@ -256,8 +258,8 @@ class Platter:
     @property
     def is_valid(self):
         return self.root and self.thing and self.place and self.specification and self.destination \
-               and self.thing.root == self.root and self.place.root == self.root \
-               and self.specification.root == self.root and self.destination.root == self.root
+            and self.thing.root == self.root and self.place.root == self.root \
+            and self.specification.root == self.root and self.destination.root == self.root
 
     def may_be_observed(self, viewer):
         return self.is_valid and self.root.may_be_observed(viewer)

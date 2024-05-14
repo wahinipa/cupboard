@@ -1,10 +1,13 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from flask import request, redirect
+from flask import redirect, request
 
 from tracking.contexts.cupboard_display_context import CupboardDisplayContext
 
 
 class FormHandler:
+    """
+    Mixin class for page handlers that produce forms.
+    """
 
     def __init__(self):
         self.form = None

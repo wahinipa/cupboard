@@ -1,9 +1,11 @@
 #  Copyright (c) 2022, Wahinipa LLC
-from tracking.modelling.role_models import Role
 from tracking.routing.home_redirect import home_redirect
 
 
 class PageHandler:
+    """
+    Base class for page handlers. There are unique different handlers for each routed method.
+    """
 
     def __init__(self, endpoint):
         self.endpoint = endpoint
@@ -16,8 +18,8 @@ class PageHandler:
 
     def action_is_allowed(self):
         return self.objects_are_valid and \
-               self.viewer_has_permission() and \
-               self.viewer_has_special_permissions()
+            self.viewer_has_permission() and \
+            self.viewer_has_special_permissions()
 
     def viewer_has_permission(self):
         return self.platter.viewer_has_endpoint_role(self.endpoint)
