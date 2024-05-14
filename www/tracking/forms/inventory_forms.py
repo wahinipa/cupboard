@@ -68,7 +68,7 @@ class InventoryAdjustmentForm(FlaskForm):
         validators.NumberRange(min=0)
     ])
     cancel_button = cancel_button_field()
-    submit = SubmitField('Add Arrival')
+    submit = SubmitField('Adjust Quantity')
 
 
 def create_adjustment_form(platter):
