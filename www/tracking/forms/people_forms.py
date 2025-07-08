@@ -27,9 +27,9 @@ class LoginForm(FlaskForm):
     def found_user(self):
         return find_person_by_username(self.username.data)
 
-    def validate(self):
+    def validate(self, extra_validators=None):
         # Validate field-validators
-        if super(LoginForm, self).validate():
+        if super(LoginForm, self).validate(extra_validators):
             # Find user
             user = self.found_user()
             if user:
@@ -89,9 +89,9 @@ class ChangePasswordForm(FlaskForm):
     cancel_button = cancel_button_field()
     submit = SubmitField('Save')
 
-    def validate(self):
+    def validate(self, extra_validators=None):
         # Validate field-validators
-        if super(ChangePasswordForm, self).validate():
+        if super(ChangePasswordForm, self).validate(extra_validators):
             if check_password_hash(current_user.password, self.password_old.data):
                 password_new_hash = generate_password_hash(self.password_new.data)
                 if check_password_hash(password_new_hash, self.password_confirm.data):
