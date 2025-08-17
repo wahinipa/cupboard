@@ -4,6 +4,7 @@ from os import environ, path, remove
 
 import pytest
 
+from flask import current_app, Flask
 from tracking import create_app, database
 from tracking.modelling.choice_model import find_or_create_choice
 from tracking.modelling.role_models import find_or_create_role
@@ -19,11 +20,15 @@ from tracking.modelling.people_model import find_or_create_user
 @pytest.fixture
 def app():
     app = create_app()
-    if environ.get('TEST_SQL_IN_MEMORY') != 'True':
-        basedir = path.abspath(path.dirname(__file__))
-        test_data_base = path.join(basedir, 'cupboard_test.db')
-        remove(test_data_base)
-    yield app
+    with app.app_context():
+        # if environ.get('TEST_SQL_IN_MEMORY') != 'True':
+        #     basedir = path.abspath(path.dirname(__file__))
+        #     test_data_base = path.join(basedir, 'cupboard_test.db')
+        #     yield app
+        #     remove(test_data_base)
+        # else:
+            yield app
+
 
 
 @pytest.fixture
@@ -63,8 +68,7 @@ QUEENS_TABLE_GROUP_NAME = "Queens of the Square Table"
 QUEENS_TABLE_DESCRIPTION = "Bunch of Snoots"
 QUEENS_TABLE_DATE = datetime(1993, 5, 10)
 
-
-@pytest.fixture()
+# @pytest.fixture()
 def knights_of_the_round_table(app):
     return create_root(name=ROOT_NAME, description=ROOT_DESCRIPTION, date_created=ROUND_TABLE_DATE)
 

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="cupboard_dev" uuid="051081df-dfc2-4304-8b85-d43e102ef0b6">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>d8876848-af02-4416-b9d8-e93ad035abbf</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/www/tracking/cupboard_dev.db</jdbc-url>
@@ -17,7 +17,7 @@
       </libraries>
     </data-source>
     <data-source source="LOCAL" name="old_cupboard_dev" uuid="81592116-157a-43bb-9c20-ba44c76f2a45">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>d8876848-af02-4416-b9d8-e93ad035abbf</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db_backups/old_cupboard_dev.db</jdbc-url>
@@ -26,6 +26,18 @@
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.34.0/sqlite-jdbc-3.34.0.jar</url>
         </library>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
+        </library>
+      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="cupboard_dev [2]" uuid="4332c00c-9dcb-4317-a45b-ef3951d3a1fa">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db_backups/cupboard_dev.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/sqlite-jdbc-3.25.1.jar</url>
         </library>
